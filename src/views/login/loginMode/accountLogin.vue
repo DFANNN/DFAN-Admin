@@ -1,12 +1,15 @@
 <template>
   <div class="w-full">
-    <div class="text-4xl">欢迎回来 👋🏻</div>
+    <div class="text-3xl">欢迎回来 👋🏻</div>
     <div class="text-sm text-gray-500 my-4">请输入您的帐户信息以开始管理您的项目</div>
     <a-form :model="loginForm" layout="vertical" autocomplete="off">
       <a-form-item label="用户名" name="username">
         <a-input v-model:value="loginForm.username" />
       </a-form-item>
       <a-form-item label="账号" name="password">
+        <a-input-password v-model:value="loginForm.password" />
+      </a-form-item>
+      <a-form-item label="验证码" name="password">
         <a-input-password v-model:value="loginForm.password" />
       </a-form-item>
       <a-form-item>
@@ -17,10 +20,10 @@
       </a-form-item>
       <a-form-item>
         <div class="flex flex-col">
-          <a-button type="primary" size="large">登录</a-button>
+          <a-button type="primary">登录</a-button>
           <div class="flex justify-between mt-4 gap-4">
-            <a-button class="flex-1" size="large">手机号登录</a-button>
-            <a-button class="flex-1" size="large">扫码登录</a-button>
+            <a-button class="flex-1">手机号登录</a-button>
+            <a-button class="flex-1">扫码登录</a-button>
           </div>
         </div>
       </a-form-item>

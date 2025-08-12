@@ -4,11 +4,13 @@
       <img src="@/assets/vite.svg" alt="logo" class="w-10 mr-2" />
       <div class="text-xl font-medium">Vite</div>
     </div>
-    <div class="absolute top-4 right-4 flex items-center bg-gray-200 p-2 rounded-3xl text-gray-500">
-      <BgColorsOutlined class="text-xl mx-2 cursor-pointer" />
-      <LayoutOutlined class="text-xl mx-2 cursor-pointer" />
-      <CameraOutlined class="text-xl mx-2 cursor-pointer" />
-      <CarOutlined class="text-xl mx-2 cursor-pointer" />
+    <div
+      class="absolute top-4 right-4 flex items-center bg-white p-3 rounded-3xl text-gray-700 shadow-lg border border-gray-200 z-20"
+    >
+      <BgColorsOutlined class="text-xl mx-2 cursor-pointer hover:text-blue-500 transition-colors" />
+      <LayoutOutlined class="text-xl mx-2 cursor-pointer hover:text-purple-500 transition-colors" />
+      <CameraOutlined class="text-xl mx-2 cursor-pointer hover:text-green-500 transition-colors" />
+      <CarOutlined class="text-xl mx-2 cursor-pointer hover:text-orange-500 transition-colors" />
     </div>
     <div
       class="flex-1 bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 flex items-center justify-center flex-col relative overflow-hidden"
@@ -22,12 +24,13 @@
       </div>
 
       <!-- 内容区域 -->
-      <div class="w-1/4 animate-floatUpDown relative z-10">
-        <img src="@/assets/images/logo-banner.png" alt="logo" class="w-full" />
-        <div class="text-4xl text-gray-700 font-bold drop-shadow-lg text-center">欢迎使用</div>
+      <div class="w-1/3 animate-floatUpDown relative z-10 px-8">
+        <img src="@/assets/images/logo-banner.png" alt="logo" class="w-full drop-shadow-2xl" />
+        <div class="text-4xl text-gray-700 font-bold drop-shadow-lg text-center mt-4">欢迎使用</div>
+        <!-- <div class="text-lg text-gray-600 text-center mt-2 opacity-80">DFAN Admin 管理系统</div> -->
       </div>
     </div>
-    <div class="w-1/3 px-20 flex items-center">
+    <div class="w-1/3 px-20 flex items-center bg-white/90 backdrop-blur-md shadow-xl border-l border-gray-100">
       <routerView />
     </div>
   </div>
