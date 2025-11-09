@@ -2,14 +2,7 @@
   "extends": "@vue/tsconfig/tsconfig.dom.json",
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-
-    /* 路径别名 */
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"],
-      "@api/*": ["./src/api/*"],
-      "@components/*": ["./src/components/*"]
-    },
+    "types": ["vite/client"],
 
     /* Linting */
     "strict": true,
