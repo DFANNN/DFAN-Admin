@@ -30,3 +30,9 @@ export default defineConfig({
   ],
 })
 ```
+
+在tsconfig.app.json 中添加
+
+```json
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "components.d.ts", "auto-imports.d.ts"],
+```

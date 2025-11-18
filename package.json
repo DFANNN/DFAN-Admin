@@ -16,6 +16,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.3.2",
     "element-plus": "^2.11.8",
     "pinia": "^3.0.3",
     "vue": "^3.5.22",
@@ -33,6 +34,7 @@
     "jiti": "^2.6.1",
     "npm-run-all2": "^8.0.4",
     "prettier": "3.6.2",
+    "sass": "^1.94.1",
     "typescript": "~5.9.0",
     "unplugin-auto-import": "^20.2.0",
     "unplugin-vue-components": "^30.0.0",
