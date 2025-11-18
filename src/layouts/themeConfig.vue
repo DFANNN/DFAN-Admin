@@ -17,7 +17,7 @@
             <div
               class="mode-chip"
               :class="{ active: themeStore.themeMode === 'light' }"
-              @click="themeStore.themeMode = 'light'"
+              @click="themeStore.toggleThemeMode('light')"
             >
               <el-icon><Sunny /></el-icon>
               <span>浅色模式</span>
@@ -28,7 +28,7 @@
             <div
               class="mode-chip"
               :class="{ active: themeStore.themeMode === 'dark' }"
-              @click="themeStore.themeMode = 'dark'"
+              @click="themeStore.toggleThemeMode('dark')"
             >
               <el-icon><Moon /></el-icon>
               <span>深色模式</span>
@@ -260,7 +260,6 @@ const handleHeaderModeChange = (mode: string | number | boolean | undefined) => 
   padding: 10px 12px;
   border-radius: 8px;
   border: 1px solid #e4e7ed;
-  background: #ffffff;
   font-size: 12px;
   color: #606266;
   cursor: pointer;
@@ -309,7 +308,6 @@ const handleHeaderModeChange = (mode: string | number | boolean | undefined) => 
       padding: 8px 12px;
       border-radius: 6px;
       border: 1px solid #dcdfe6;
-      background: #ffffff;
       transition: all 0.3s;
       font-size: 12px;
 
@@ -345,7 +343,6 @@ const handleHeaderModeChange = (mode: string | number | boolean | undefined) => 
   padding: 8px;
   border-radius: 8px;
   border: 1px solid #e4e7ed;
-  background: #fff;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 
   .layout-preview {

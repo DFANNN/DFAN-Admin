@@ -1,11 +1,24 @@
 import { defineStore } from 'pinia'
+import { useDark, useToggle } from '@vueuse/core'
 
 export const useThemeStore = defineStore('theme', () => {
-  // 布局方式: leftMode, topMode
-  const layout = ref<'leftMode' | 'topMode'>('leftMode')
+  const isDark = useDark()
+  const toggleDark = useToggle(isDark)
 
   // 主题模式: light, dark
-  const themeMode = ref<'light' | 'dark'>('light')
+  const themeMode = ref<'light' | 'dark'>(
+    (localStorage.getItem('themeMode') as 'light' | 'dark') || 'light',
+  )
+
+  // 切换主题模式
+  const toggleThemeMode = (newVal: 'light' | 'dark') => {
+    themeMode.value = newVal
+    toggleDark(newVal === 'dark')
+    localStorage.setItem('themeMode', newVal)
+  }
+
+  // 布局方式: leftMode, topMode
+  const layout = ref<'leftMode' | 'topMode'>('leftMode')
 
   // 主题颜色
   const primaryColor = ref('#409EFF')
@@ -35,5 +48,6 @@ export const useThemeStore = defineStore('theme', () => {
     showLogo,
     showTabs,
     themeConfigDrawerOpen,
+    toggleThemeMode,
   }
 })
