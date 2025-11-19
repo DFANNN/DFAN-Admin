@@ -33,16 +33,14 @@
       <el-dropdown @command="handleCommand" trigger="click" placement="bottom-end">
         <div class="user-card">
           <div class="avatar-wrapper">
-            <el-avatar :size="32" class="user-avatar">
+            <el-avatar :size="36" class="user-avatar">
               <el-icon><UserFilled /></el-icon>
             </el-avatar>
             <span class="status-badge"></span>
           </div>
           <div class="user-info">
-            <div class="name-row">
-              <span class="username">管理员</span>
-              <span class="pro-badge">Pro</span>
-            </div>
+            <span class="username">管理员</span>
+            <span class="user-role-badge">系统管理员</span>
           </div>
           <el-icon class="arrow-icon"><ArrowDown /></el-icon>
         </div>
@@ -59,7 +57,7 @@
               <div class="user-info">
                 <div class="name-row">
                   <span class="user-name">管理员</span>
-                  <span class="pro-badge">Pro</span>
+                  <span class="pro-badge">系统管理员</span>
                 </div>
                 <div class="user-email">admin@dfan.com</div>
               </div>
@@ -305,30 +303,31 @@ const handleCommand = (command: string) => {
   .user-info {
     flex: 1;
     min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
 
-    .name-row {
-      display: flex;
+    .username {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--el-text-color-primary);
+      line-height: 1.2;
+    }
+
+    .user-role-badge {
+      display: inline-flex;
       align-items: center;
-      gap: 6px;
-
-      .username {
-        font-size: 14px;
-        font-weight: 600;
-        color: var(--el-text-color-primary);
-        line-height: 1.2;
-      }
-
-      .pro-badge {
-        display: inline-flex;
-        align-items: center;
-        padding: 1px 6px;
-        background: #52c41a;
-        color: #fff;
-        font-size: 10px;
-        font-weight: 600;
-        border-radius: 10px;
-        line-height: 1.2;
-      }
+      padding: 2px 8px;
+      background: color-mix(in srgb, var(--el-color-primary) 10%, transparent);
+      color: var(--el-color-primary);
+      font-size: 11px;
+      font-weight: 500;
+      border-radius: 10px;
+      border: 1px solid color-mix(in srgb, var(--el-color-primary) 20%, transparent);
+      white-space: nowrap;
+      line-height: 1.2;
     }
   }
 
@@ -396,13 +395,14 @@ const handleCommand = (command: string) => {
       .pro-badge {
         display: inline-flex;
         align-items: center;
-        padding: 2px 8px;
-        background: #52c41a;
-        color: #fff;
+        padding: 3px 10px;
+        background: color-mix(in srgb, var(--el-color-primary) 10%, transparent);
+        color: var(--el-color-primary);
         font-size: 11px;
-        font-weight: 600;
+        font-weight: 500;
         border-radius: 12px;
         line-height: 1.2;
+        border: 1px solid color-mix(in srgb, var(--el-color-primary) 20%, transparent);
       }
     }
 
