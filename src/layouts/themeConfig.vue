@@ -15,7 +15,6 @@
           >
             <el-icon><Sunny /></el-icon>
             <span>浅色模式</span>
-            <el-icon v-if="themeStore.themeMode === 'light'" class="chip-check"><Check /></el-icon>
           </div>
           <div
             class="mode-chip"
@@ -24,7 +23,6 @@
           >
             <el-icon><Moon /></el-icon>
             <span>深色模式</span>
-            <el-icon v-if="themeStore.themeMode === 'dark'" class="chip-check"><Check /></el-icon>
           </div>
         </div>
       </div>
@@ -41,7 +39,7 @@
           <div
             class="layout-preview-item"
             :class="{ active: themeStore.layout === 'leftMode' }"
-            @click="themeStore.layout = 'leftMode'"
+            @click="themeStore.toggleLayout('leftMode')"
           >
             <div class="layout-preview left-layout">
               <div class="preview-sidebar"></div>
@@ -55,7 +53,7 @@
           <div
             class="layout-preview-item"
             :class="{ active: themeStore.layout === 'topMode' }"
-            @click="themeStore.layout = 'topMode'"
+            @click="themeStore.toggleLayout('topMode')"
           >
             <div class="layout-preview top-layout">
               <div class="preview-header"></div>
@@ -84,9 +82,6 @@
           >
             <span class="chip-dot" :style="{ backgroundColor: color.value }"></span>
             <span class="chip-name">{{ color.name }}</span>
-            <el-icon v-if="themeStore.primaryColor === color.value" class="chip-check">
-              <Check />
-            </el-icon>
           </div>
         </div>
         <div class="custom-color">
@@ -141,7 +136,7 @@
 </template>
 
 <script setup lang="ts">
-import { Sunny, Moon, Grid, Menu, Brush, Check, View } from '@element-plus/icons-vue'
+import { Sunny, Moon, Grid, Menu, Brush, View } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'ThemeConfig' })
 
@@ -185,6 +180,7 @@ const themeStore = useThemeStore()
   flex: 1;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   padding: 10px 12px;
   border-radius: 8px;
@@ -197,12 +193,6 @@ const themeStore = useThemeStore()
 
   .el-icon {
     font-size: 14px;
-  }
-
-  .chip-check {
-    margin-left: auto;
-    font-size: 12px;
-    color: var(--el-color-primary);
   }
 
   &:hover {
@@ -340,11 +330,12 @@ const themeStore = useThemeStore()
 .color-chip {
   min-width: 90px;
   padding: 6px 10px;
-  border-radius: 999px;
+  border-radius: 8px;
   border: 1px solid var(--el-border-color-lighter);
   background: var(--el-bg-color-overlay);
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   font-size: 12px;
   color: var(--el-text-color-regular);
@@ -356,11 +347,6 @@ const themeStore = useThemeStore()
     height: 14px;
     border-radius: 50%;
     border: 1px solid var(--el-border-color-lighter);
-  }
-
-  .chip-check {
-    font-size: 12px;
-    color: var(--el-color-primary);
   }
 
   &:hover {

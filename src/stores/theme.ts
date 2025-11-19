@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { useDark, useToggle, useCssVar } from '@vueuse/core'
+import { useDark, useToggle } from '@vueuse/core'
 
 export const useThemeStore = defineStore('theme', () => {
   const isDark = useDark()
@@ -19,29 +19,48 @@ export const useThemeStore = defineStore('theme', () => {
 
   // 主题颜色预设
   const primaryColorOptions = [
-    { value: '#409EFF', name: '蓝色' },
-    { value: '#67C23A', name: '绿色' },
-    { value: '#E6A23C', name: '橙色' },
-    { value: '#F56C6C', name: '红色' },
-    { value: '#909399', name: '灰色' },
-    { value: '#9C27B0', name: '紫色' },
-    { value: '#FF9800', name: '深橙' },
+    { value: '#8B5CF6', name: '紫色' },
+    { value: '#10B981', name: '绿色' },
+    { value: '#F59E0B', name: '橙色' },
+    { value: '#EF4444', name: '红色' },
+    { value: '#6366F1', name: '靛蓝' },
+    { value: '#1677FF', name: '蓝色' },
+    { value: '#0EA5E9', name: '天蓝' },
     { value: '#00BCD4', name: '青色' },
-    { value: '#795548', name: '棕色' },
+    { value: '#909399', name: '灰色' },
   ]
 
+  // 设置 Element Plus 主题色变量
+  const setPrimaryColor = (color: string) => {
+    const root = document.documentElement
+    root.style.setProperty('--el-color-primary', color)
+    root.style.setProperty('--el-color-primary-light-3', `color-mix(in srgb, ${color} 70%, white)`)
+    root.style.setProperty('--el-color-primary-light-5', `color-mix(in srgb, ${color} 50%, white)`)
+    root.style.setProperty('--el-color-primary-light-7', `color-mix(in srgb, ${color} 30%, white)`)
+    root.style.setProperty('--el-color-primary-light-8', `color-mix(in srgb, ${color} 20%, white)`)
+    root.style.setProperty('--el-color-primary-light-9', `color-mix(in srgb, ${color} 10%, white)`)
+    root.style.setProperty('--el-color-primary-dark-2', `color-mix(in srgb, ${color} 80%, black)`)
+  }
+
   // 主题颜色
-  const primaryColor = useCssVar('--el-color-primary')
-  primaryColor.value = localStorage.getItem('theme-color-primary') || '#409EFF'
+  const primaryColor = ref(localStorage.getItem('theme-color-primary') || '#8B5CF6')
+  setPrimaryColor(primaryColor.value)
 
   // 切换主题颜色
   const togglePrimaryColor = (colorValue: string) => {
     primaryColor.value = colorValue
     localStorage.setItem('theme-color-primary', colorValue)
+    setPrimaryColor(colorValue)
   }
 
   // 布局方式: leftMode, topMode
-  const layout = ref<'leftMode' | 'topMode'>('leftMode')
+  const layout = ref<'leftMode' | 'topMode'>(
+    (localStorage.getItem('layout') as 'leftMode' | 'topMode') || 'leftMode',
+  )
+  const toggleLayout = (newVal: 'leftMode' | 'topMode') => {
+    layout.value = newVal
+    localStorage.setItem('layout', newVal)
+  }
 
   // 侧边栏配色
   const sidebarMode = ref<'light' | 'dark'>('light')
@@ -65,6 +84,7 @@ export const useThemeStore = defineStore('theme', () => {
     themeConfigDrawerOpen,
     primaryColorOptions,
     toggleThemeMode,
+    toggleLayout,
     togglePrimaryColor,
   }
 })

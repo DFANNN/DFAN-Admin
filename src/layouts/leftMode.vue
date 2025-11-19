@@ -1,6 +1,6 @@
 <template>
   <el-container class="left-mode-container">
-    <el-aside width="200px" class="aside">Aside</el-aside>
+    <el-aside width="200px" class="aside"></el-aside>
     <el-container>
       <el-header class="header">
         <HeaderView />
