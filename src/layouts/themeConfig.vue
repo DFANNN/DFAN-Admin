@@ -1,164 +1,139 @@
 <template>
-  <el-drawer
-    v-model="themeStore.themeConfigDrawerOpen"
-    title="主题配置"
-    :size="360"
-    direction="rtl"
-  >
-    <div class="theme-config-content" :style="{ '--primary-color': themeStore.primaryColor }">
-      <!-- 主题模式 -->
-      <div class="config-section">
-        <div class="section-title">
-          <el-icon><Sunny /></el-icon>
-          <span>主题模式</span>
-        </div>
-        <div class="section-content">
-          <div class="mode-chip-group">
-            <div
-              class="mode-chip"
-              :class="{ active: themeStore.themeMode === 'light' }"
-              @click="themeStore.toggleThemeMode('light')"
-            >
-              <el-icon><Sunny /></el-icon>
-              <span>浅色模式</span>
-              <el-icon v-if="themeStore.themeMode === 'light'" class="chip-check"
-                ><Check
-              /></el-icon>
-            </div>
-            <div
-              class="mode-chip"
-              :class="{ active: themeStore.themeMode === 'dark' }"
-              @click="themeStore.toggleThemeMode('dark')"
-            >
-              <el-icon><Moon /></el-icon>
-              <span>深色模式</span>
-              <el-icon v-if="themeStore.themeMode === 'dark'" class="chip-check"><Check /></el-icon>
-            </div>
+  <el-drawer v-model="themeStore.themeConfigDrawerOpen" :size="360" title="主题配置">
+    <!-- 主题模式 -->
+    <div class="config-section">
+      <div class="section-title">
+        <el-icon><Sunny /></el-icon>
+        <span>主题模式</span>
+      </div>
+      <div class="section-content">
+        <div class="mode-chip-group">
+          <div
+            class="mode-chip"
+            :class="{ active: themeStore.themeMode === 'light' }"
+            @click="themeStore.toggleThemeMode('light')"
+          >
+            <el-icon><Sunny /></el-icon>
+            <span>浅色模式</span>
+            <el-icon v-if="themeStore.themeMode === 'light'" class="chip-check"><Check /></el-icon>
+          </div>
+          <div
+            class="mode-chip"
+            :class="{ active: themeStore.themeMode === 'dark' }"
+            @click="themeStore.toggleThemeMode('dark')"
+          >
+            <el-icon><Moon /></el-icon>
+            <span>深色模式</span>
+            <el-icon v-if="themeStore.themeMode === 'dark'" class="chip-check"><Check /></el-icon>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- 布局模式 -->
-      <div class="config-section">
-        <div class="section-title">
-          <el-icon><Grid /></el-icon>
-          <span>布局模式</span>
-        </div>
-        <div class="section-content">
-          <div class="layout-preview-group">
-            <div
-              class="layout-preview-item"
-              :class="{ active: themeStore.layout === 'leftMode' }"
-              @click="themeStore.layout = 'leftMode'"
-            >
-              <div class="layout-preview left-layout">
-                <div class="preview-sidebar"></div>
-                <div class="preview-content">
-                  <div class="preview-header"></div>
-                  <div class="preview-main"></div>
-                </div>
-              </div>
-              <div class="layout-label">左侧布局</div>
-            </div>
-            <div
-              class="layout-preview-item"
-              :class="{ active: themeStore.layout === 'topMode' }"
-              @click="themeStore.layout = 'topMode'"
-            >
-              <div class="layout-preview top-layout">
+    <!-- 布局模式 -->
+    <div class="config-section">
+      <div class="section-title">
+        <el-icon><Grid /></el-icon>
+        <span>布局模式</span>
+      </div>
+      <div class="section-content">
+        <div class="layout-preview-group">
+          <div
+            class="layout-preview-item"
+            :class="{ active: themeStore.layout === 'leftMode' }"
+            @click="themeStore.layout = 'leftMode'"
+          >
+            <div class="layout-preview left-layout">
+              <div class="preview-sidebar"></div>
+              <div class="preview-content">
                 <div class="preview-header"></div>
                 <div class="preview-main"></div>
               </div>
-              <div class="layout-label">顶部布局</div>
             </div>
+            <div class="layout-label">左侧布局</div>
           </div>
-        </div>
-      </div>
-
-      <!-- 主题颜色 -->
-      <div class="config-section">
-        <div class="section-title">
-          <el-icon><Brush /></el-icon>
-          <span>主题颜色</span>
-        </div>
-        <div class="section-content theme-color-content">
-          <div class="color-chip-group">
-            <div
-              v-for="color in primaryColors"
-              :key="color.value"
-              class="color-chip"
-              :class="{ active: themeStore.primaryColor === color.value }"
-              @click="themeStore.primaryColor = color.value"
-            >
-              <span class="chip-dot" :style="{ backgroundColor: color.value }"></span>
-              <span class="chip-name">{{ color.name }}</span>
-              <el-icon v-if="themeStore.primaryColor === color.value" class="chip-check">
-                <Check />
-              </el-icon>
+          <div
+            class="layout-preview-item"
+            :class="{ active: themeStore.layout === 'topMode' }"
+            @click="themeStore.layout = 'topMode'"
+          >
+            <div class="layout-preview top-layout">
+              <div class="preview-header"></div>
+              <div class="preview-main"></div>
             </div>
-          </div>
-          <div class="custom-color">
-            <span>自定义</span>
-            <el-color-picker v-model="themeStore.primaryColor" class="color-picker" show-alpha />
+            <div class="layout-label">顶部布局</div>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- 区域配色 -->
-      <div class="config-section">
-        <div class="section-title">
-          <el-icon><Menu /></el-icon>
-          <span>区域配色</span>
+    <!-- 主题颜色 -->
+    <div class="config-section">
+      <div class="section-title">
+        <el-icon><Brush /></el-icon>
+        <span>主题颜色</span>
+      </div>
+      <div class="section-content theme-color-content">
+        <div class="color-chip-group">
+          <div
+            v-for="color in themeStore.primaryColorOptions"
+            :key="color.value"
+            class="color-chip"
+            :class="{ active: themeStore.primaryColor === color.value }"
+            @click="themeStore.togglePrimaryColor(color.value)"
+          >
+            <span class="chip-dot" :style="{ backgroundColor: color.value }"></span>
+            <span class="chip-name">{{ color.name }}</span>
+            <el-icon v-if="themeStore.primaryColor === color.value" class="chip-check">
+              <Check />
+            </el-icon>
+          </div>
         </div>
-        <div class="section-content dual-mode-row">
-          <div class="dual-item">
-            <div class="dual-label">侧边栏</div>
-            <el-radio-group
-              :model-value="getSidebarMode"
-              class="mode-radio-group"
-              @change="handleSidebarModeChange"
-            >
-              <el-radio-button label="light">
-                <span>浅色</span>
-              </el-radio-button>
-              <el-radio-button label="dark">
-                <span>深色</span>
-              </el-radio-button>
-            </el-radio-group>
-          </div>
-          <div class="dual-item">
-            <div class="dual-label">Header</div>
-            <el-radio-group
-              :model-value="getHeaderMode"
-              class="mode-radio-group"
-              @change="handleHeaderModeChange"
-            >
-              <el-radio-button label="light">
-                <span>浅色</span>
-              </el-radio-button>
-              <el-radio-button label="dark">
-                <span>深色</span>
-              </el-radio-button>
-            </el-radio-group>
-          </div>
+        <div class="custom-color">
+          <span>自定义</span>
+          <el-color-picker v-model="themeStore.primaryColor" show-alpha />
         </div>
       </div>
+    </div>
 
-      <!-- 界面元素 -->
-      <div class="config-section">
-        <div class="section-title">
-          <el-icon><View /></el-icon>
-          <span>界面元素</span>
+    <!-- 区域配色 -->
+    <div class="config-section">
+      <div class="section-title">
+        <el-icon><Menu /></el-icon>
+        <span>区域配色</span>
+      </div>
+      <div class="section-content dual-mode-row">
+        <div class="dual-item">
+          <div class="dual-label">侧边栏</div>
+          <el-radio-group v-model="themeStore.sidebarMode" class="mode-radio-group">
+            <el-radio-button value="light">浅色 </el-radio-button>
+            <el-radio-button value="dark">深色</el-radio-button>
+          </el-radio-group>
         </div>
-        <div class="section-content toggles-row">
-          <div class="toggle-item">
-            <span>显示 Logo</span>
-            <el-switch v-model="themeStore.showLogo" />
-          </div>
-          <div class="toggle-item">
-            <span>显示标签页</span>
-            <el-switch v-model="themeStore.showTabs" />
-          </div>
+        <div class="dual-item">
+          <div class="dual-label">Header</div>
+          <el-radio-group v-model="themeStore.headerMode" class="mode-radio-group">
+            <el-radio-button value="light">浅色 </el-radio-button>
+            <el-radio-button value="dark">深色</el-radio-button>
+          </el-radio-group>
+        </div>
+      </div>
+    </div>
+
+    <!-- 界面元素 -->
+    <div class="config-section">
+      <div class="section-title">
+        <el-icon><View /></el-icon>
+        <span>界面元素</span>
+      </div>
+      <div class="section-content toggles-row">
+        <div class="toggle-item">
+          <span>显示 Logo</span>
+          <el-switch v-model="themeStore.showLogo" />
+        </div>
+        <div class="toggle-item">
+          <span>显示标签页</span>
+          <el-switch v-model="themeStore.showTabs" />
         </div>
       </div>
     </div>
@@ -171,55 +146,9 @@ import { Sunny, Moon, Grid, Menu, Brush, Check, View } from '@element-plus/icons
 defineOptions({ name: 'ThemeConfig' })
 
 const themeStore = useThemeStore()
-
-// 主题颜色预设
-const primaryColors = [
-  { value: '#409EFF', name: '蓝色' },
-  { value: '#67C23A', name: '绿色' },
-  { value: '#E6A23C', name: '橙色' },
-  { value: '#F56C6C', name: '红色' },
-  { value: '#909399', name: '灰色' },
-  { value: '#9C27B0', name: '紫色' },
-  { value: '#FF9800', name: '深橙' },
-  { value: '#00BCD4', name: '青色' },
-]
-
-// 浅色和深色配色
-const lightTheme = { bg: '#ffffff', text: '#333333' }
-const darkTheme = { bg: '#1f2937', text: '#ffffff' }
-
-// 获取侧边栏当前模式
-const getSidebarMode = computed(() => {
-  return themeStore.sidebarBgColor === lightTheme.bg ? 'light' : 'dark'
-})
-
-// 获取Header当前模式
-const getHeaderMode = computed(() => {
-  return themeStore.headerBgColor === lightTheme.bg ? 'light' : 'dark'
-})
-
-// 处理侧边栏模式切换
-const handleSidebarModeChange = (mode: string | number | boolean | undefined) => {
-  const themeMode = mode === 'light' ? 'light' : 'dark'
-  const theme = themeMode === 'light' ? lightTheme : darkTheme
-  themeStore.sidebarBgColor = theme.bg
-  themeStore.sidebarTextColor = theme.text
-}
-
-// 处理Header模式切换
-const handleHeaderModeChange = (mode: string | number | boolean | undefined) => {
-  const themeMode = mode === 'light' ? 'light' : 'dark'
-  const theme = themeMode === 'light' ? lightTheme : darkTheme
-  themeStore.headerBgColor = theme.bg
-  themeStore.headerTextColor = theme.text
-}
 </script>
 
 <style scoped lang="scss">
-.theme-config-content {
-  padding: 0;
-}
-
 .config-section {
   margin-bottom: 20px;
 
@@ -234,12 +163,12 @@ const handleHeaderModeChange = (mode: string | number | boolean | undefined) => 
   gap: 6px;
   font-size: 13px;
   font-weight: 600;
-  color: #303133;
+  color: var(--el-text-color-primary);
   margin-bottom: 12px;
 
   .el-icon {
     font-size: 14px;
-    color: var(--primary-color);
+    color: var(--el-color-primary);
   }
 }
 
@@ -259,9 +188,9 @@ const handleHeaderModeChange = (mode: string | number | boolean | undefined) => 
   gap: 8px;
   padding: 10px 12px;
   border-radius: 8px;
-  border: 1px solid #e4e7ed;
+  border: 1px solid var(--el-border-color-lighter);
   font-size: 12px;
-  color: #606266;
+  color: var(--el-text-color-regular);
   cursor: pointer;
   transition: all 0.3s;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
@@ -273,60 +202,21 @@ const handleHeaderModeChange = (mode: string | number | boolean | undefined) => 
   .chip-check {
     margin-left: auto;
     font-size: 12px;
-    color: var(--primary-color);
+    color: var(--el-color-primary);
   }
 
   &:hover {
-    border-color: var(--primary-color);
-    color: var(--primary-color);
-    box-shadow: 0 3px 8px color-mix(in srgb, var(--primary-color) 20%, transparent);
+    border-color: var(--el-color-primary);
+    color: var(--el-color-primary);
+    box-shadow: 0 3px 8px color-mix(in srgb, var(--el-color-primary) 20%, transparent);
     transform: translateY(-1px);
   }
 
   &.active {
-    background: color-mix(in srgb, var(--primary-color) 10%, transparent);
-    border-color: var(--primary-color);
-    color: var(--primary-color);
-    box-shadow: 0 3px 12px color-mix(in srgb, var(--primary-color) 25%, transparent);
-  }
-}
-
-.mode-radio-group {
-  width: 100%;
-  display: flex;
-  gap: 6px;
-
-  :deep(.el-radio-button) {
-    flex: 1;
-
-    .el-radio-button__inner {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      padding: 8px 12px;
-      border-radius: 6px;
-      border: 1px solid #dcdfe6;
-      transition: all 0.3s;
-      font-size: 12px;
-
-      .el-icon {
-        font-size: 12px;
-      }
-
-      &:hover {
-        border-color: var(--primary-color);
-        color: var(--primary-color);
-      }
-    }
-
-    &.is-active .el-radio-button__inner {
-      background: var(--primary-color);
-      border-color: var(--primary-color);
-      color: #ffffff;
-      box-shadow: 0 2px 6px color-mix(in srgb, var(--primary-color) 25%, transparent);
-    }
+    background: color-mix(in srgb, var(--el-color-primary) 10%, transparent);
+    border-color: var(--el-color-primary);
+    color: var(--el-color-primary);
+    box-shadow: 0 3px 12px color-mix(in srgb, var(--el-color-primary) 25%, transparent);
   }
 }
 
@@ -336,13 +226,12 @@ const handleHeaderModeChange = (mode: string | number | boolean | undefined) => 
   grid-template-columns: repeat(2, 1fr);
   gap: 8px;
 }
-
 .layout-preview-item {
   cursor: pointer;
   transition: all 0.3s;
   padding: 8px;
   border-radius: 8px;
-  border: 1px solid #e4e7ed;
+  border: 1px solid var(--el-border-color-lighter);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 
   .layout-preview {
@@ -350,7 +239,7 @@ const handleHeaderModeChange = (mode: string | number | boolean | undefined) => 
     aspect-ratio: 4/3;
     border-radius: 6px;
     border: 1px solid transparent;
-    background: #f5f7fa;
+    background: var(--el-fill-color-light);
     padding: 6px;
     transition: all 0.3s;
     margin-bottom: 8px;
@@ -361,7 +250,7 @@ const handleHeaderModeChange = (mode: string | number | boolean | undefined) => 
 
       .preview-sidebar {
         width: 28%;
-        background: var(--primary-color);
+        background: var(--el-color-primary);
         border-radius: 4px;
       }
 
@@ -373,15 +262,16 @@ const handleHeaderModeChange = (mode: string | number | boolean | undefined) => 
 
         .preview-header {
           height: 18%;
-          background: #ffffff;
+          background: var(--el-bg-color-overlay);
           border-radius: 4px;
           border: 1px solid rgba(0, 0, 0, 0.06);
         }
 
         .preview-main {
           flex: 1;
-          background: #f1f5f9;
+          background: var(--el-bg-color-overlay);
           border-radius: 4px;
+          border: 1px solid rgba(0, 0, 0, 0.06);
         }
       }
     }
@@ -393,13 +283,14 @@ const handleHeaderModeChange = (mode: string | number | boolean | undefined) => 
 
       .preview-header {
         height: 22%;
-        background: var(--primary-color);
+        background: var(--el-color-primary);
         border-radius: 4px;
       }
 
       .preview-main {
         flex: 1;
-        background: #f1f5f9;
+        background: var(--el-bg-color-overlay);
+        border: 1px solid rgba(0, 0, 0, 0.06);
         border-radius: 4px;
       }
     }
@@ -408,80 +299,32 @@ const handleHeaderModeChange = (mode: string | number | boolean | undefined) => 
   .layout-label {
     text-align: center;
     font-size: 12px;
-    font-weight: 500;
-    color: #606266;
+    color: var(--el-text-color-regular);
     transition: color 0.3s;
   }
 
   &:hover {
-    border-color: var(--primary-color);
-    box-shadow: 0 3px 10px color-mix(in srgb, var(--primary-color) 20%, transparent);
+    border-color: var(--el-color-primary);
+    box-shadow: 0 3px 10px color-mix(in srgb, var(--el-color-primary) 20%, transparent);
     transform: translateY(-1px);
 
     .layout-label {
-      color: var(--primary-color);
+      color: var(--el-color-primary);
     }
   }
 
   &.active {
-    border-color: var(--primary-color);
-    background: color-mix(in srgb, var(--primary-color) 8%, transparent);
-    box-shadow: 0 4px 12px color-mix(in srgb, var(--primary-color) 25%, transparent);
+    border-color: var(--el-color-primary);
+    background: color-mix(in srgb, var(--el-color-primary) 8%, transparent);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--el-color-primary) 25%, transparent);
 
     .layout-label {
-      color: var(--primary-color);
-      font-weight: 600;
+      color: var(--el-color-primary);
     }
   }
 }
 
-.color-presets {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.color-item {
-  width: 100%;
-  aspect-ratio: 1;
-  border-radius: 6px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid transparent;
-  transition: all 0.3s;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-
-  &:hover {
-    transform: scale(1.08);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  }
-
-  &.active {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary-color) 20%, transparent);
-
-    .el-icon {
-      color: #ffffff;
-      font-size: 14px;
-      font-weight: bold;
-    }
-  }
-}
-
-.color-picker {
-  width: 100%;
-  height: 32px;
-
-  :deep(.el-color-picker__trigger) {
-    width: 100%;
-    height: 32px;
-    border-radius: 6px;
-  }
-}
-
+// 主题颜色
 .theme-color-content {
   display: flex;
   flex-direction: column;
@@ -498,13 +341,13 @@ const handleHeaderModeChange = (mode: string | number | boolean | undefined) => 
   min-width: 90px;
   padding: 6px 10px;
   border-radius: 999px;
-  border: 1px solid #e4e7ed;
-  background: #fff;
+  border: 1px solid var(--el-border-color-lighter);
+  background: var(--el-bg-color-overlay);
   display: flex;
   align-items: center;
   gap: 6px;
   font-size: 12px;
-  color: #606266;
+  color: var(--el-text-color-regular);
   cursor: pointer;
   transition: all 0.3s;
 
@@ -512,25 +355,25 @@ const handleHeaderModeChange = (mode: string | number | boolean | undefined) => 
     width: 14px;
     height: 14px;
     border-radius: 50%;
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--el-border-color-lighter);
   }
 
   .chip-check {
     font-size: 12px;
-    color: #fff;
+    color: var(--el-color-primary);
   }
 
   &:hover {
-    border-color: var(--primary-color);
-    color: var(--primary-color);
+    border-color: var(--el-color-primary);
+    color: var(--el-color-primary);
     transform: translateY(-1px);
   }
 
   &.active {
-    background: color-mix(in srgb, var(--primary-color) 10%, transparent);
-    border-color: var(--primary-color);
-    color: var(--primary-color);
-    box-shadow: 0 2px 6px color-mix(in srgb, var(--primary-color) 20%, transparent);
+    background: color-mix(in srgb, var(--el-color-primary) 10%, transparent);
+    border-color: var(--el-color-primary);
+    color: var(--el-color-primary);
+    box-shadow: 0 2px 6px color-mix(in srgb, var(--el-color-primary) 20%, transparent);
   }
 }
 
@@ -539,9 +382,10 @@ const handleHeaderModeChange = (mode: string | number | boolean | undefined) => 
   align-items: center;
   justify-content: space-between;
   font-size: 12px;
-  color: #606266;
+  color: var(--el-text-color-regular);
 }
 
+// 区域配色
 .dual-mode-row {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -555,50 +399,70 @@ const handleHeaderModeChange = (mode: string | number | boolean | undefined) => 
 
   .dual-label {
     font-size: 12px;
-    color: #909399;
+    color: var(--el-text-color-regular);
   }
 }
 
+.mode-radio-group {
+  width: 100%;
+  display: flex;
+  gap: 6px;
+  background: var(--el-bg-color-overlay);
+
+  :deep(.el-radio-button) {
+    flex: 1;
+
+    .el-radio-button__inner {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--el-border-color-lighter);
+      transition: all 0.3s;
+      font-size: 12px;
+      color: var(--el-text-color-regular);
+      font-weight: 400;
+
+      .el-icon {
+        font-size: 12px;
+      }
+
+      &:hover {
+        border-color: var(--el-color-primary);
+        color: var(--el-color-primary);
+        transform: translateY(-1px);
+        box-shadow: 0 3px 8px color-mix(in srgb, var(--el-color-primary) 20%, transparent);
+      }
+    }
+
+    &.is-active .el-radio-button__inner {
+      background: color-mix(in srgb, var(--el-color-primary) 10%, transparent);
+      border-color: var(--el-color-primary);
+      color: var(--el-color-primary);
+      box-shadow: 0 3px 12px color-mix(in srgb, var(--el-color-primary) 25%, transparent);
+    }
+  }
+}
+
+// 界面元素
 .toggles-row {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
 }
-
 .toggle-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
   font-size: 12px;
-  color: #606266;
+  color: var(--el-text-color-regular);
   padding: 8px 10px;
-  border: 1px solid #e4e7ed;
+  border: 1px solid var(--el-border-color-lighter);
   border-radius: 6px;
-  background: #fff;
-
-  :deep(.el-switch__core) {
-    width: 38px;
-    height: 18px;
-    border-color: var(--primary-color);
-  }
-
-  :deep(.el-switch.is-checked .el-switch__core) {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-    box-shadow: 0 2px 8px color-mix(in srgb, var(--primary-color) 30%, transparent);
-  }
-}
-
-// 深色模式适配
-:deep(.el-drawer) {
-  .el-drawer__header {
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-  }
-
-  .el-drawer__body {
-    padding: 16px;
-  }
+  background: var(--el-bg-color-overlay);
+  transition: all 0.3s;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button @click="themeStore.themeConfigDrawerOpen = true">切换布局</el-button>
+    <el-button type="primary" @click="themeStore.themeConfigDrawerOpen = true">切换布局</el-button>
   </div>
 </template>
 
