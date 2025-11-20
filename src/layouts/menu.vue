@@ -11,7 +11,7 @@
     <Transition :name="themeStore.layout === 'leftMode' ? 'el-zoom-in-top' : 'el-zoom-in-left'">
       <el-menu-item class="logo" v-if="themeStore.showLogo">
         <img src="@/assets/logo.svg" alt="logo" class="logo-img" />
-        <span class="logo-title">CAT Admin</span>
+        <span class="logo-title" :style="{ color: logoTitleColor }">CAT Admin</span>
       </el-menu-item>
     </Transition>
 
@@ -46,6 +46,11 @@ const menuTextColor = computed(() => {
 
 const menuActiveTextColor = computed(() => {
   return themeStore.primaryColor
+})
+
+const logoTitleColor = computed(() => {
+  if (themeStore.sidebarMode === 'dark') return '#ffffff'
+  return ''
 })
 </script>
 

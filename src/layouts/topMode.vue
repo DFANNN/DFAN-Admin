@@ -25,14 +25,10 @@ defineOptions({ name: 'TopMode' })
   .header {
     height: 50px;
     background: var(--el-bg-color);
-    // border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-    // box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   }
 
   .el-main {
-    background-color: #f5f7fa;
-    // border-top: 1px solid rgba(0, 0, 0, 0.04);
-    // box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
+    background: var(--el-bg-color-page);
   }
 }
 </style>
