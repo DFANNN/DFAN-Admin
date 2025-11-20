@@ -193,7 +193,6 @@ const handleLogin = async () => {
   width: 100%;
   height: 100vh;
   background: #ffffff;
-
   overflow: hidden;
   position: relative;
 }
