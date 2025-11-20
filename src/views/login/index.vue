@@ -87,7 +87,7 @@
           height="100%"
           class="logo-carousel"
         >
-          <el-carousel-item v-for="(logo, index) in brandLogos" :key="index">
+          <el-carousel-item v-for="(logo, index) in userStore.cats" :key="index">
             <div class="logo-slide">
               <div class="logo-frame">
                 <img :src="logo.src" :alt="logo.alt" class="logo-image" />
@@ -122,85 +122,11 @@ defineOptions({ name: 'LoginView' })
 const router = useRouter()
 const themeStore = useThemeStore()
 const menuStore = useMenuStore()
+const userStore = useUserStore()
 
 const loginFormRef = useTemplateRef<FormInstance>('loginFormRef')
 
 const loading = ref(false)
-
-// 品牌 SVG 轮播数据
-const brandLogos = [
-  {
-    src: new URL('@/assets/cats/白猫.svg', import.meta.url).href,
-    alt: '白猫',
-    title: '白猫',
-    description: '矢量 SVG 标识，支持任意尺寸下的高清展示。',
-    tags: ['SVG', '高分辨率', '品牌主色'],
-  },
-  {
-    src: new URL('@/assets/cats/布偶猫.svg', import.meta.url).href,
-    alt: '布偶猫',
-    title: '布偶猫',
-    description: '矢量 SVG 标识，支持任意尺寸下的高清展示。',
-    tags: ['SVG', '高分辨率', '品牌主色'],
-  },
-  {
-    src: new URL('@/assets/cats/三花猫.svg', import.meta.url).href,
-    alt: '三花猫',
-    title: '三花猫',
-    description: '矢量 SVG 标识，支持任意尺寸下的高清展示。',
-    tags: ['SVG', '高分辨率', '品牌主色'],
-  },
-  {
-    src: new URL('@/assets/cats/黄猫.svg', import.meta.url).href,
-    alt: '黄猫',
-    title: '黄猫',
-    description: '矢量 SVG 标识，支持任意尺寸下的高清展示。',
-    tags: ['SVG', '高分辨率', '品牌主色'],
-  },
-  {
-    src: new URL('@/assets/cats/波斯猫.svg', import.meta.url).href,
-    alt: '波斯猫',
-    title: '波斯猫',
-    description: '矢量 SVG 标识，支持任意尺寸下的高清展示。',
-    tags: ['SVG', '高分辨率', '品牌主色'],
-  },
-  {
-    src: new URL('@/assets/cats/暹罗猫.svg', import.meta.url).href,
-    alt: '暹罗猫',
-    title: '暹罗猫',
-    description: '矢量 SVG 标识，支持任意尺寸下的高清展示。',
-    tags: ['SVG', '高分辨率', '品牌主色'],
-  },
-  {
-    src: new URL('@/assets/cats/缅因猫.svg', import.meta.url).href,
-    alt: '缅因猫',
-    title: '缅因猫',
-    description: '矢量 SVG 标识，支持任意尺寸下的高清展示。',
-    tags: ['SVG', '高分辨率', '品牌主色'],
-  },
-
-  {
-    src: new URL('@/assets/cats/蓝猫.svg', import.meta.url).href,
-    alt: '蓝猫',
-    title: '蓝猫',
-    description: '矢量 SVG 标识，支持任意尺寸下的高清展示。',
-    tags: ['SVG', '高分辨率', '品牌主色'],
-  },
-  {
-    src: new URL('@/assets/cats/橘猫.svg', import.meta.url).href,
-    alt: '橘猫',
-    title: '橘猫',
-    description: '矢量 SVG 标识，支持任意尺寸下的高清展示。',
-    tags: ['SVG', '高分辨率', '品牌主色'],
-  },
-  {
-    src: new URL('@/assets/cats/黑猫.svg', import.meta.url).href,
-    alt: '黑猫',
-    title: '黑猫',
-    description: '矢量 SVG 标识，支持任意尺寸下的高清展示。',
-    tags: ['SVG', '高分辨率', '品牌主色'],
-  },
-]
 
 const loginForm = ref({
   username: '',
@@ -619,6 +545,17 @@ const loginRules = ref<FormRules>({
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 </style>
