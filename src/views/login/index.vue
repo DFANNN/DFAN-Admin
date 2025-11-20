@@ -5,6 +5,11 @@
       <div class="logo-section">
         <img src="@/assets/logo.svg" alt="logo" class="logo-img" />
         <h1 class="logo-title">CAT Admin</h1>
+        <el-tooltip content="主题配置" placement="bottom" effect="dark">
+          <div class="action-btn" @click="themeStore.themeConfigDrawerOpen = true">
+            <el-icon><Setting /></el-icon>
+          </div>
+        </el-tooltip>
       </div>
 
       <div class="login-form-wrapper">
@@ -102,6 +107,9 @@
         <div class="decoration-circle circle-3"></div>
       </div>
     </div>
+
+    <!-- Theme Config Component -->
+    <ThemeConfig />
   </div>
 </template>
 
@@ -116,7 +124,9 @@ import {
   DataAnalysis,
   Lock as SecurityIcon,
   Cloudy,
+  Setting,
 } from '@element-plus/icons-vue'
+import ThemeConfig from '@/layouts/themeConfig.vue'
 import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import { useRouter } from 'vue-router'
@@ -168,6 +178,8 @@ const features = [
 onMounted(() => {
   // 重新应用主题色，确保 CSS 变量被正确设置
   themeStore.togglePrimaryColor(themeStore.primaryColor)
+  // 确保主题模式被应用
+  themeStore.toggleThemeMode(themeStore.themeMode)
 })
 
 const handleLogin = async () => {
@@ -192,7 +204,7 @@ const handleLogin = async () => {
   display: flex;
   width: 100%;
   height: 100vh;
-  background: #ffffff;
+  background: var(--el-bg-color);
   overflow: hidden;
   position: relative;
 }
@@ -202,7 +214,7 @@ const handleLogin = async () => {
   flex: 0 0 45%;
   display: flex;
   flex-direction: column;
-  background: #ffffff;
+  background: var(--el-bg-color);
   padding: 40px 60px;
   position: relative;
   z-index: 2;
@@ -245,6 +257,7 @@ const handleLogin = async () => {
   .logo-section {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 12px;
     margin-bottom: 60px;
     animation: slideDown 0.6s ease-out;
@@ -262,6 +275,31 @@ const handleLogin = async () => {
       color: var(--el-text-color-primary);
       letter-spacing: 0.5px;
       margin: 0;
+      flex: 1;
+    }
+
+    .action-btn {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: var(--el-text-color-regular);
+      background: transparent;
+
+      &:hover {
+        background: var(--el-fill-color-light);
+        color: var(--el-color-primary);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      .el-icon {
+        font-size: 18px;
+      }
     }
   }
 
@@ -426,23 +464,13 @@ const handleLogin = async () => {
 .login-right {
   flex: 1;
   position: relative;
-  background:
-    linear-gradient(
-      120deg,
-      color-mix(in srgb, var(--el-color-primary) 35%, #ffffff) 0%,
-      color-mix(in srgb, var(--el-color-primary) 50%, #ffffff) 25%,
-      color-mix(in srgb, var(--el-color-primary) 70%, #6b46ff) 50%,
-      color-mix(in srgb, var(--el-color-primary) 75%, #6b46ff) 75%,
-      color-mix(in srgb, var(--el-color-primary) 80%, #2b27ff) 100%
-    ),
-    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.25), transparent 55%),
-    radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.2), transparent 45%);
+  background: var(--login-brand-bg);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 60px;
   overflow: hidden;
-  color: #fff;
+  color: var(--login-brand-text-color);
   // 异形左边缘 - 与左侧互补的圆润曲线
   clip-path: polygon(
     0% 0%,
@@ -484,10 +512,7 @@ const handleLogin = async () => {
     left: 0;
     right: 0;
     bottom: 0;
-    background-image:
-      radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 40%),
-      radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.08) 0%, transparent 40%),
-      radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 60%);
+    background-image: var(--login-brand-bg-pattern);
     animation: float 25s infinite ease-in-out alternate;
   }
 
@@ -524,20 +549,20 @@ const handleLogin = async () => {
       margin-bottom: 32px;
       display: inline-flex;
       padding: 24px;
-      background: rgba(255, 255, 255, 0.15);
+      background: var(--login-brand-icon-bg);
       backdrop-filter: blur(10px);
       border-radius: 24px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1px solid var(--login-brand-icon-border);
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
       &:hover {
         transform: scale(1.1) rotate(5deg);
-        background: rgba(255, 255, 255, 0.2);
+        background: color-mix(in srgb, var(--login-brand-icon-bg) 70%, #ffffff);
       }
     }
 
     .feature-icon {
-      color: #fff;
+      color: var(--login-brand-text-color);
     }
 
     .feature-title {
@@ -545,14 +570,14 @@ const handleLogin = async () => {
       font-weight: 700;
       margin-bottom: 16px;
       letter-spacing: 0.5px;
-      color: #fff;
+      color: var(--login-brand-text-color);
     }
 
     .feature-desc {
       font-size: 16px;
       line-height: 1.8;
       margin-bottom: 32px;
-      color: rgba(255, 255, 255, 0.9);
+      color: var(--login-brand-desc-color);
       opacity: 0.95;
     }
 
@@ -564,17 +589,17 @@ const handleLogin = async () => {
 
       .feature-tag {
         padding: 8px 20px;
-        background: rgba(255, 255, 255, 0.15);
+        background: var(--login-brand-tag-bg);
         backdrop-filter: blur(10px);
         border-radius: 20px;
         font-size: 13px;
         font-weight: 500;
-        border: 1px solid rgba(255, 255, 255, 0.25);
-        color: rgba(255, 255, 255, 0.95);
+        border: 1px solid var(--login-brand-tag-border);
+        color: var(--login-brand-text-color);
         transition: all 0.3s ease;
 
         &:hover {
-          background: rgba(255, 255, 255, 0.25);
+          background: color-mix(in srgb, var(--login-brand-tag-bg) 60%, #ffffff);
           transform: translateY(-2px);
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
@@ -594,7 +619,7 @@ const handleLogin = async () => {
     .decoration-circle {
       position: absolute;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.05);
+      background: var(--login-brand-decoration-bg);
       backdrop-filter: blur(20px);
       animation: floatCircle 20s infinite ease-in-out;
 

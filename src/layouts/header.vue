@@ -40,9 +40,9 @@
       <el-dropdown @command="handleCommand" trigger="click" placement="bottom-end">
         <div class="user-card">
           <div class="avatar-wrapper">
-            <el-avatar :size="36" class="user-avatar">
-              <el-icon><UserFilled /></el-icon>
-            </el-avatar>
+            <div class="user-avatar">
+              <img src="@/assets/avatar.svg" alt="avatar" />
+            </div>
             <span class="status-badge"></span>
           </div>
           <div class="user-info">
@@ -56,9 +56,9 @@
             <!-- 用户信息头部 -->
             <div class="user-header">
               <div class="avatar-wrapper">
-                <el-avatar :size="48" class="header-avatar">
-                  <el-icon><UserFilled /></el-icon>
-                </el-avatar>
+                <div class="header-avatar">
+                  <img src="@/assets/avatar.svg" alt="avatar" />
+                </div>
                 <span class="status-badge"></span>
               </div>
               <div class="user-info">
@@ -110,7 +110,6 @@
 import MenuView from '@/layouts/menu.vue'
 import {
   Setting,
-  UserFilled,
   User,
   ArrowDown,
   SwitchButton,
@@ -233,11 +232,6 @@ const handleCommand = (command: string) => {
     position: relative;
     flex-shrink: 0;
 
-    .user-avatar {
-      background: var(--el-color-primary);
-      color: #fff;
-    }
-
     .status-badge {
       position: absolute;
       bottom: 0;
@@ -308,11 +302,6 @@ const handleCommand = (command: string) => {
     position: relative;
     flex-shrink: 0;
 
-    .header-avatar {
-      background: var(--el-color-primary);
-      color: #fff;
-    }
-
     .status-badge {
       position: absolute;
       bottom: 0;
@@ -366,6 +355,36 @@ const handleCommand = (command: string) => {
       white-space: nowrap;
     }
   }
+}
+
+.avatar-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-wrapper .user-avatar,
+.avatar-wrapper .header-avatar {
+  border-radius: 50%;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+.avatar-wrapper .user-avatar {
+  width: 36px;
+  height: 36px;
+}
+
+.avatar-wrapper .header-avatar {
+  width: 48px;
+  height: 48px;
 }
 
 :deep(.user-menu) {

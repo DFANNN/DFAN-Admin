@@ -3,8 +3,13 @@
     <!-- 欢迎区域 -->
     <div class="welcome-section">
       <div class="welcome-content">
-        <h1 class="welcome-title">欢迎回来，<span class="username">管理员</span> 👋</h1>
-        <p class="welcome-desc">今天是 {{ currentDate }}，祝您工作愉快！</p>
+        <div class="welcome-avatar">
+          <img :src="welcomeAvatar" alt="用户头像" />
+        </div>
+        <div class="welcome-text">
+          <h1 class="welcome-title">欢迎回来，<span class="username">管理员</span> 👋</h1>
+          <p class="welcome-desc">今天是 {{ currentDate }}，祝您工作愉快！</p>
+        </div>
       </div>
       <div class="welcome-actions">
         <el-button type="primary" :icon="Plus">新建项目</el-button>
@@ -112,6 +117,7 @@
 
 <script setup lang="ts">
 import { ref, computed, type Component } from 'vue'
+import avatarImg from '@/assets/avatar.svg'
 import {
   Plus,
   Document,
@@ -133,6 +139,8 @@ import {
 } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'HomeView' })
+
+const welcomeAvatar = avatarImg
 
 // 当前日期
 const currentDate = computed(() => {
@@ -269,6 +277,26 @@ const handleAction = (action: QuickAction) => {
 
   .welcome-content {
     flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .welcome-avatar {
+      width: 64px;
+      height: 64px;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+    }
+
+    .welcome-text {
+      flex: 1;
+    }
 
     .welcome-title {
       font-size: 28px;
