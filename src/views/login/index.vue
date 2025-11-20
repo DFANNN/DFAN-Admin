@@ -69,17 +69,6 @@
       </div>
     </div>
 
-    <!-- Wave Separator -->
-    <div class="wave-separator">
-      <svg viewBox="0 0 200 1000" preserveAspectRatio="none" class="wave-svg">
-        <path
-          d="M0,0 Q50,500 0,1000 L0,1000 L200,1000 L200,0 Z"
-          fill="currentColor"
-          class="wave-path"
-        />
-      </svg>
-    </div>
-
     <!-- Right Side: Brand Experience (50-60%) -->
     <div class="login-right">
       <div class="brand-background"></div>
@@ -204,6 +193,7 @@ const handleLogin = async () => {
   width: 100%;
   height: 100vh;
   background: #ffffff;
+
   overflow: hidden;
   position: relative;
 }
@@ -217,10 +207,40 @@ const handleLogin = async () => {
   padding: 40px 60px;
   position: relative;
   z-index: 2;
+  // 异形右边缘 - 圆润的曲线
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% 3%,
+    99.5% 6%,
+    100% 10%,
+    99% 15%,
+    100% 20%,
+    99.5% 25%,
+    100% 30%,
+    99% 35%,
+    100% 40%,
+    99.5% 45%,
+    100% 50%,
+    99% 55%,
+    100% 60%,
+    99.5% 65%,
+    100% 70%,
+    99% 75%,
+    100% 80%,
+    99.5% 85%,
+    100% 90%,
+    99% 93%,
+    100% 96%,
+    99.7% 98%,
+    100% 100%,
+    0% 100%
+  );
 
   @media (max-width: 768px) {
     flex: 1;
     padding: 30px 24px;
+    clip-path: none; // 移动端取消异形效果
   }
 
   .logo-section {
@@ -403,50 +423,57 @@ const handleLogin = async () => {
   }
 }
 
-/* Wave Separator */
-.wave-separator {
-  position: absolute;
-  left: 45%;
-  top: 0;
-  bottom: 0;
-  width: 80px;
-  z-index: 3;
-  color: var(--el-color-primary);
-  transform: translateX(-50%);
-  pointer-events: none;
-
-  @media (max-width: 768px) {
-    display: none;
-  }
-
-  .wave-svg {
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
-
-  .wave-path {
-    opacity: 0.9;
-    filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.1));
-  }
-}
-
 /* Right Side: Brand Experience (50-60%) */
 .login-right {
   flex: 1;
   position: relative;
-  background: linear-gradient(
-    135deg,
-    var(--el-color-primary) 0%,
-    color-mix(in srgb, var(--el-color-primary) 80%, #000) 50%,
-    color-mix(in srgb, var(--el-color-primary) 60%, #000) 100%
-  );
+  background:
+    linear-gradient(
+      120deg,
+      color-mix(in srgb, var(--el-color-primary) 35%, #ffffff) 0%,
+      color-mix(in srgb, var(--el-color-primary) 50%, #ffffff) 25%,
+      color-mix(in srgb, var(--el-color-primary) 70%, #6b46ff) 50%,
+      color-mix(in srgb, var(--el-color-primary) 75%, #6b46ff) 75%,
+      color-mix(in srgb, var(--el-color-primary) 80%, #2b27ff) 100%
+    ),
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.25), transparent 55%),
+    radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.2), transparent 45%);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 60px;
   overflow: hidden;
   color: #fff;
+  // 异形左边缘 - 与左侧互补的圆润曲线
+  clip-path: polygon(
+    0% 0%,
+    0.3% 2%,
+    0% 4%,
+    0.5% 7%,
+    0% 10%,
+    1% 15%,
+    0% 20%,
+    0.5% 25%,
+    0% 30%,
+    1% 35%,
+    0% 40%,
+    0.5% 45%,
+    0% 50%,
+    1% 55%,
+    0% 60%,
+    0.5% 65%,
+    0% 70%,
+    1% 75%,
+    0% 80%,
+    0.5% 85%,
+    0% 90%,
+    1% 93%,
+    0% 96%,
+    0.3% 98%,
+    0% 100%,
+    100% 100%,
+    100% 0%
+  );
 
   @media (max-width: 768px) {
     display: none;
@@ -467,7 +494,7 @@ const handleLogin = async () => {
 
   .brand-content {
     position: relative;
-    z-index: 2;
+    z-index: 3;
     width: 100%;
     max-width: 500px;
     height: 100%;
@@ -563,7 +590,7 @@ const handleLogin = async () => {
     right: 0;
     bottom: 0;
     pointer-events: none;
-    z-index: 1;
+    z-index: 2;
 
     .decoration-circle {
       position: absolute;
