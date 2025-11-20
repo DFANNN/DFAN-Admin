@@ -1,16 +1,23 @@
 <template>
   <div class="header-container">
+    <!-- 菜单区域 -->
+    <div class="menu-container" v-if="themeStore.layout === 'topMode'">
+      <MenuView />
+    </div>
     <!-- 左侧区域 -->
-    <div class="header-left">
-      <div v-if="themeStore.showLogo" class="logo" @click="$router.push('/')">
-        <!-- <div class="logo-icon">
-          <span class="logo-text">D</span>
+    <div class="header-left" v-else>
+      <el-tooltip content="折叠菜单" placement="bottom" effect="dark">
+        <div class="action-btn" @click="menuStore.toggleCollapse">
+          <el-icon
+            ><component
+              :is="
+                menuStore.isCollapse
+                  ? menuStore.iconComponents['Expand']
+                  : menuStore.iconComponents['Fold']
+              "
+          /></el-icon>
         </div>
-        <div class="logo-content">
-          <span class="logo-title">DFAN</span>
-          <span class="logo-subtitle">Admin</span>
-        </div> -->
-      </div>
+      </el-tooltip>
     </div>
 
     <!-- 右侧操作区 -->
@@ -100,6 +107,7 @@
 </template>
 
 <script setup lang="ts">
+import MenuView from '@/layouts/menu.vue'
 import {
   Setting,
   UserFilled,
@@ -117,6 +125,7 @@ import { useFullscreen } from '@vueuse/core'
 
 defineOptions({ name: 'HeaderView' })
 
+const menuStore = useMenuStore()
 const themeStore = useThemeStore()
 
 // 全屏功能
@@ -159,69 +168,6 @@ const handleCommand = (command: string) => {
 .header-left {
   display: flex;
   align-items: center;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  cursor: pointer;
-  padding: 8px 12px;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: var(--el-fill-color-light);
-    transform: translateY(-1px);
-
-    .logo-icon {
-      transform: scale(1.05) rotate(5deg);
-    }
-  }
-
-  .logo-icon {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(
-      135deg,
-      var(--el-color-primary) 0%,
-      var(--el-color-primary-light-3) 100%
-    );
-    border-radius: 10px;
-    box-shadow: 0 4px 12px color-mix(in srgb, var(--el-color-primary) 25%, transparent);
-    transition: all 0.3s ease;
-
-    .logo-text {
-      font-size: 20px;
-      font-weight: 700;
-      color: #ffffff;
-      letter-spacing: 0.5px;
-    }
-  }
-
-  .logo-content {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-
-    .logo-title {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--el-text-color-primary);
-      letter-spacing: 0.5px;
-      line-height: 1.2;
-    }
-
-    .logo-subtitle {
-      font-size: 12px;
-      color: var(--el-text-color-regular);
-      font-weight: 400;
-      opacity: 0.8;
-    }
-  }
 }
 
 .header-right {
