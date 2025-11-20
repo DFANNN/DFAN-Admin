@@ -72,7 +72,11 @@ export const useThemeStore = defineStore('theme', () => {
   }
 
   // 布局元素
-  const showLogo = ref(true)
+  const showLogo = ref(JSON.parse(localStorage.getItem('showLogo') || 'true'))
+  const toggleShowLogo = (value: boolean) => {
+    showLogo.value = value
+    localStorage.setItem('showLogo', JSON.stringify(showLogo.value))
+  }
   const showTabs = ref(true)
 
   const themeConfigDrawerOpen = ref(false)
@@ -90,5 +94,6 @@ export const useThemeStore = defineStore('theme', () => {
     toggleLayout,
     togglePrimaryColor,
     toggleSidebarMode,
+    toggleShowLogo,
   }
 })

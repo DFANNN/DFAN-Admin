@@ -125,7 +125,7 @@
       <div class="section-content toggles-row">
         <div class="toggle-item">
           <span>显示 Logo</span>
-          <el-switch v-model="themeStore.showLogo" />
+          <el-switch v-model="themeStore.showLogo" @change="themeStore.toggleShowLogo as any" />
         </div>
         <div class="toggle-item">
           <span>显示标签页</span>
