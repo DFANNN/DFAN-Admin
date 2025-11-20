@@ -92,28 +92,29 @@
     </div>
 
     <!-- 区域配色 -->
-    <div class="config-section">
-      <div class="section-title">
-        <el-icon><Menu /></el-icon>
-        <span>区域配色</span>
-      </div>
-      <div class="section-content dual-mode-row">
-        <div class="dual-item">
-          <div class="dual-label">侧边栏</div>
-          <el-radio-group v-model="themeStore.sidebarMode" class="mode-radio-group">
-            <el-radio-button value="light">浅色 </el-radio-button>
-            <el-radio-button value="dark">深色</el-radio-button>
-          </el-radio-group>
+    <Transition name="el-zoom-in-left">
+      <div
+        class="config-section"
+        v-if="themeStore.themeMode !== 'dark' && themeStore.layout !== 'topMode'"
+      >
+        <div class="section-title">
+          <el-icon><Menu /></el-icon>
+          <span>侧边栏配色</span>
         </div>
-        <div class="dual-item">
-          <div class="dual-label">Header</div>
-          <el-radio-group v-model="themeStore.headerMode" class="mode-radio-group">
-            <el-radio-button value="light">浅色 </el-radio-button>
-            <el-radio-button value="dark">深色</el-radio-button>
-          </el-radio-group>
+        <div class="section-content">
+          <div class="dual-item">
+            <el-radio-group v-model="themeStore.sidebarMode" class="mode-radio-group">
+              <el-radio-button value="light" @click="themeStore.toggleSidebarMode('light')">
+                浅色
+              </el-radio-button>
+              <el-radio-button value="dark" @click="themeStore.toggleSidebarMode('dark')">
+                深色
+              </el-radio-button>
+            </el-radio-group>
+          </div>
         </div>
       </div>
-    </div>
+    </Transition>
 
     <!-- 界面元素 -->
     <div class="config-section">
@@ -373,21 +374,10 @@ const menuStore = useMenuStore()
 }
 
 // 区域配色
-.dual-mode-row {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-
 .dual-item {
   display: flex;
   flex-direction: column;
   gap: 8px;
-
-  .dual-label {
-    font-size: 12px;
-    color: var(--el-text-color-regular);
-  }
 }
 
 .mode-radio-group {

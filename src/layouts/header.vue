@@ -162,7 +162,6 @@ const handleCommand = (command: string) => {
   align-items: center;
   justify-content: space-between;
   height: 100%;
-  background: var(--el-bg-color);
 }
 
 .header-left {

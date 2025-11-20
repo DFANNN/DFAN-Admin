@@ -63,9 +63,13 @@ export const useThemeStore = defineStore('theme', () => {
   }
 
   // 侧边栏配色
-  const sidebarMode = ref<'light' | 'dark'>('light')
-  // Header配色
-  const headerMode = ref<'light' | 'dark'>('light')
+  const sidebarMode = ref<'light' | 'dark'>(
+    (localStorage.getItem('sidebarMode') as 'light' | 'dark') || 'light',
+  )
+  const toggleSidebarMode = (newVal: 'light' | 'dark') => {
+    sidebarMode.value = newVal
+    localStorage.setItem('sidebarMode', newVal)
+  }
 
   // 布局元素
   const showLogo = ref(true)
@@ -78,7 +82,6 @@ export const useThemeStore = defineStore('theme', () => {
     themeMode,
     primaryColor,
     sidebarMode,
-    headerMode,
     showLogo,
     showTabs,
     themeConfigDrawerOpen,
@@ -86,5 +89,6 @@ export const useThemeStore = defineStore('theme', () => {
     toggleThemeMode,
     toggleLayout,
     togglePrimaryColor,
+    toggleSidebarMode,
   }
 })
