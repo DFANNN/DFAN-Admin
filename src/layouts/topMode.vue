@@ -23,6 +23,7 @@ defineOptions({ name: 'TopMode' })
   height: 100%;
 
   .header {
+    height: 50px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.06);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     background-color: #ffffff;

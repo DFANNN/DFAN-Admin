@@ -170,6 +170,11 @@ const handleCommand = (command: string) => {
   align-items: center;
 }
 
+.menu-container {
+  flex: 1;
+  height: 100%;
+}
+
 .header-right {
   display: flex;
   align-items: center;

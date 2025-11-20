@@ -53,7 +53,7 @@
           <div
             class="layout-preview-item"
             :class="{ active: themeStore.layout === 'topMode' }"
-            @click="themeStore.toggleLayout('topMode')"
+            @click="(themeStore.toggleLayout('topMode'), (menuStore.isCollapse = false))"
           >
             <div class="layout-preview top-layout">
               <div class="preview-header"></div>
@@ -141,6 +141,7 @@ import { Sunny, Moon, Grid, Menu, Brush, View } from '@element-plus/icons-vue'
 defineOptions({ name: 'ThemeConfig' })
 
 const themeStore = useThemeStore()
+const menuStore = useMenuStore()
 </script>
 
 <style scoped lang="scss">
