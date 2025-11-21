@@ -138,15 +138,37 @@ const loginForm = ref({
 const handleLogin = async () => {
   if (!loginFormRef.value) return
 
-  await loginFormRef.value.validate((valid) => {
+  await loginFormRef.value.validate(async (valid) => {
     if (valid) {
       loading.value = true
-      // Simulate login request
-      setTimeout(() => {
+      try {
+        const response = await login({
+          username: loginForm.value.username,
+          password: loginForm.value.password,
+        })
+
+        const { data } = response.data
+
+        if (data && data.token) {
+          // 存储 token
+          localStorage.setItem('token', data.token)
+
+          // 如果选择了记住我，可以存储用户信息
+          if (loginForm.value.remember && data.user) {
+            localStorage.setItem('userInfo', JSON.stringify(data.user))
+          }
+
+          ElMessage.success('登录成功')
+          router.push('/')
+        } else {
+          ElMessage.error('登录失败，请重试')
+        }
+      } catch (error: unknown) {
+        console.error('登录错误:', error)
+        // 错误信息已经在 request.ts 的拦截器中处理并显示
+      } finally {
         loading.value = false
-        ElMessage.success('登录成功')
-        router.push('/')
-      }, 1500)
+      }
     }
   })
 }
@@ -156,9 +178,7 @@ const loginRules = ref<FormRules>({
   password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
 })
 
-onMounted(() => {
-  login()
-})
+// 移除 onMounted 中的 login() 调用，因为现在不需要了
 </script>
 
 <style scoped lang="scss">
