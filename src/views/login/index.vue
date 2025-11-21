@@ -114,6 +114,7 @@
 
 <script setup lang="ts">
 import ThemeConfig from '@/layouts/themeConfig.vue'
+import { login } from '@/api/login'
 import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 
@@ -153,6 +154,10 @@ const handleLogin = async () => {
 const loginRules = ref<FormRules>({
   username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
   password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+})
+
+onMounted(() => {
+  login()
 })
 </script>
 
