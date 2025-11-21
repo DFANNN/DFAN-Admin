@@ -46,7 +46,9 @@
           </el-form-item>
 
           <div class="form-options">
-            <el-checkbox v-model="loginForm.remember">记住我</el-checkbox>
+            <el-checkbox v-model="loginForm.remember" @change="handleRememberChange">
+              记住我
+            </el-checkbox>
             <el-link type="primary" :underline="false">忘记密码？</el-link>
           </div>
 
@@ -129,48 +131,56 @@ const loginFormRef = useTemplateRef<FormInstance>('loginFormRef')
 
 const loading = ref(false)
 
+// 记住我的 localStorage key
+const REMEMBER_USERNAME_KEY = 'remember_username'
+
 const loginForm = ref({
   username: '',
   password: '',
   remember: false,
 })
 
-const handleLogin = async () => {
-  if (!loginFormRef.value) return
+// 从 localStorage 读取记住的用户名
+const loadRememberedUsername = () => {
+  const rememberedUsername = localStorage.getItem(REMEMBER_USERNAME_KEY)
+  if (rememberedUsername) {
+    loginForm.value.username = rememberedUsername
+    loginForm.value.remember = true
+  }
+}
 
-  await loginFormRef.value.validate(async (valid) => {
-    if (valid) {
-      loading.value = true
-      try {
-        const response = await login({
-          username: loginForm.value.username,
-          password: loginForm.value.password,
-        })
-
-        const { data } = response.data
-
-        if (data && data.token) {
-          // 存储 token
-          localStorage.setItem('token', data.token)
-
-          // 如果选择了记住我，可以存储用户信息
-          if (loginForm.value.remember && data.user) {
-            localStorage.setItem('userInfo', JSON.stringify(data.user))
-          }
-
-          ElMessage.success('登录成功')
-          router.push('/')
-        } else {
-          ElMessage.error('登录失败，请重试')
-        }
-      } catch (error: unknown) {
-        console.error('登录错误:', error)
-        // 错误信息已经在 request.ts 的拦截器中处理并显示
-      } finally {
-        loading.value = false
-      }
+// 保存或清除记住的用户名
+const handleRememberChange = (value: boolean | string | number) => {
+  const remember = Boolean(value)
+  if (remember) {
+    // 保存用户名
+    if (loginForm.value.username) {
+      localStorage.setItem(REMEMBER_USERNAME_KEY, loginForm.value.username)
     }
-  })
+  } else {
+    // 清除保存的用户名
+    localStorage.removeItem(REMEMBER_USERNAME_KEY)
+  }
+}
+
+const handleLogin = async () => {
+  await loginFormRef.value?.validate()
+  loading.value = true
+  try {
+    const { data: res } = await login(loginForm.value)
+    if (res.code !== 200) return
+    if (!res.data || !res.data.token) return
+    localStorage.setItem('token', res.data.token)
+    if (loginForm.value.remember) {
+      localStorage.setItem(REMEMBER_USERNAME_KEY, loginForm.value.username)
+    } else {
+      localStorage.removeItem(REMEMBER_USERNAME_KEY)
+    }
+    ElMessage.success('登录成功')
+    router.push('/')
+  } finally {
+    loading.value = false
+  }
 }
 
 const loginRules = ref<FormRules>({
@@ -178,7 +188,10 @@ const loginRules = ref<FormRules>({
   password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
 })
 
-// 移除 onMounted 中的 login() 调用，因为现在不需要了
+// 页面加载时读取记住的用户名
+onMounted(() => {
+  loadRememberedUsername()
+})
 </script>
 
 <style scoped lang="scss">

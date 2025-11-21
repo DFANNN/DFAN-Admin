@@ -28,28 +28,14 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   (response: AxiosResponse) => {
-    const res = response.data
+    const { code, message } = response.data
 
-    // 如果响应数据直接是业务数据（非标准格式），直接返回完整响应
-    if (response.config.responseType === 'blob' || response.config.responseType === 'arraybuffer') {
-      return response
+    if (code === 500) {
+      ElMessage.error(message)
     }
 
-    // 根据业务状态码处理
-    if (res.code !== undefined) {
-      if (res.code === 200 || res.code === 0 || res.success === true) {
-        return response
-      }
-
-      const errorMessage = res.message || '请求失败'
-      ElMessage.error(errorMessage)
-
-      if (res.code === 401) {
-        localStorage.removeItem('token')
-        router.push('/login')
-      }
-
-      return Promise.reject(new Error(errorMessage))
+    if (code === 401) {
+      ElMessage.error('401')
     }
 
     return response

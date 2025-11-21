@@ -10,7 +10,7 @@ import {
   getAll,
   type Role,
   ensureDBInitialized,
-} from './db/index'
+} from './index'
 
 /**
  * 初始化默认用户数据
