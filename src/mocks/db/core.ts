@@ -33,6 +33,25 @@ export function openDB(): Promise<IDBDatabase> {
         const roleStore = db.createObjectStore(STORES.ROLES, { keyPath: 'id' })
         roleStore.createIndex('code', 'code', { unique: true })
       }
+
+      // 创建或升级 menus 表
+      if (!db.objectStoreNames.contains(STORES.MENUS)) {
+        const menuStore = db.createObjectStore(STORES.MENUS, { keyPath: 'id' })
+        menuStore.createIndex('path', 'path', { unique: false }) // 不唯一，因为directory和button可以为空
+        menuStore.createIndex('parentId', 'parentId', { unique: false })
+        menuStore.createIndex('type', 'type', { unique: false }) // 添加type索引
+      } else {
+        // 如果表已存在，尝试添加type索引（如果不存在）
+        const menuStore = db.transaction([STORES.MENUS], 'readwrite').objectStore(STORES.MENUS)
+        try {
+          if (!menuStore.indexNames.contains('type')) {
+            menuStore.createIndex('type', 'type', { unique: false })
+          }
+        } catch (error) {
+          // 索引可能已存在或创建失败，忽略错误
+          console.warn('[IndexedDB] 创建type索引失败，可能已存在:', error)
+        }
+      }
     }
   })
 }

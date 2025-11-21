@@ -12,3 +12,6 @@ export * from './users'
 
 // 角色操作
 export * from './roles'
+
+// 菜单操作
+export * from './menus'

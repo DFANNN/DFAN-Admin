@@ -9,6 +9,13 @@ import {
   updateRoleHandler,
   deleteRoleHandler,
 } from './roles'
+import {
+  getMenuListHandler,
+  getMenuByIdHandler,
+  createMenuHandler,
+  updateMenuHandler,
+  deleteMenuHandler,
+} from './menus'
 
 /**
  * 所有 MSW Handlers
@@ -23,4 +30,11 @@ export const handlers = [
   createRoleHandler,
   updateRoleHandler,
   deleteRoleHandler,
+
+  // 菜单相关
+  getMenuListHandler,
+  getMenuByIdHandler,
+  createMenuHandler,
+  updateMenuHandler,
+  deleteMenuHandler,
 ]
