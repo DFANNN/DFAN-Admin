@@ -216,91 +216,88 @@ export const createRoleHandler = http.post('/cat-admin-api/roles', async ({ requ
 /**
  * 更新角色
  */
-export const updateRoleHandler = http.put(
-  '/cat-admin-api/roles/:id',
-  async ({ params, request }) => {
-    // 验证token
-    const authError = verifyAuth(request)
-    if (authError) {
-      return authError
+export const updateRoleHandler = http.put('/cat-admin-api/roles', async ({ request }) => {
+  // 验证token
+  const authError = verifyAuth(request)
+  if (authError) {
+    return authError
+  }
+
+  try {
+    const body = (await request.json()) as {
+      id?: string
+      name?: string
+      code?: string
+      description?: string
+      status?: 'active' | 'inactive'
     }
 
-    try {
-      const { id } = params
-      if (!id || typeof id !== 'string') {
+    if (!body.id) {
+      return HttpResponse.json(
+        {
+          code: 400,
+          message: '角色ID不能为空',
+          success: false,
+        },
+        { status: 400 },
+      )
+    }
+
+    // 获取现有角色
+    const existingRole = await getById<Role>(STORES.ROLES, body.id)
+    if (!existingRole) {
+      return HttpResponse.json(
+        {
+          code: 404,
+          message: '角色不存在',
+          success: false,
+        },
+        { status: 404 },
+      )
+    }
+
+    // 如果更新了编码，检查是否重复
+    if (body.code && body.code !== existingRole.code) {
+      const codeExists = await roleCodeExists(body.code, body.id)
+      if (codeExists) {
         return HttpResponse.json(
           {
             code: 400,
-            message: '角色ID不能为空',
+            message: '角色编码已存在',
             success: false,
           },
           { status: 400 },
         )
       }
-
-      const body = (await request.json()) as {
-        name?: string
-        code?: string
-        description?: string
-        status?: 'active' | 'inactive'
-      }
-
-      // 获取现有角色
-      const existingRole = await getById<Role>(STORES.ROLES, id)
-      if (!existingRole) {
-        return HttpResponse.json(
-          {
-            code: 404,
-            message: '角色不存在',
-            success: false,
-          },
-          { status: 404 },
-        )
-      }
-
-      // 如果更新了编码，检查是否重复
-      if (body.code && body.code !== existingRole.code) {
-        const codeExists = await roleCodeExists(body.code, id)
-        if (codeExists) {
-          return HttpResponse.json(
-            {
-              code: 400,
-              message: '角色编码已存在',
-              success: false,
-            },
-            { status: 400 },
-          )
-        }
-      }
-
-      // 更新角色
-      const updatedRole: Role = {
-        ...existingRole,
-        ...body,
-        updateTime: new Date().toISOString(),
-      }
-
-      await update<Role>(STORES.ROLES, updatedRole)
-
-      return HttpResponse.json({
-        code: 200,
-        message: '更新成功',
-        success: true,
-        data: updatedRole,
-      })
-    } catch (error) {
-      console.error('[MSW] 更新角色错误:', error)
-      return HttpResponse.json(
-        {
-          code: 500,
-          message: '服务器内部错误',
-          success: false,
-        },
-        { status: 500 },
-      )
     }
-  },
-)
+
+    // 更新角色
+    const updatedRole: Role = {
+      ...existingRole,
+      ...body,
+      updateTime: new Date().toISOString(),
+    }
+
+    await update<Role>(STORES.ROLES, updatedRole)
+
+    return HttpResponse.json({
+      code: 200,
+      message: '更新成功',
+      success: true,
+      data: updatedRole,
+    })
+  } catch (error) {
+    console.error('[MSW] 更新角色错误:', error)
+    return HttpResponse.json(
+      {
+        code: 500,
+        message: '服务器内部错误',
+        success: false,
+      },
+      { status: 500 },
+    )
+  }
+})
 
 /**
  * 删除角色

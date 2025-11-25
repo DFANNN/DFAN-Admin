@@ -5,3 +5,25 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+/* 卡片margin-top样式 */
+.card-mt-16 {
+  margin-top: 1rem;
+}
+
+/* 卡片清除底部margin样式 */
+.card-clear-mb .el-card__body {
+  padding-bottom: 2px;
+}
+
+/* 分页容器样式 */
+.pagination-container {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* 操作容器样式 */
+.operation-container {
+  margin-bottom: 1rem;
+}

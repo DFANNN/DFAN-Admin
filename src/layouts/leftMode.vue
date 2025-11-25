@@ -31,5 +31,6 @@ defineOptions({ name: 'LeftMode' })
 
 .main {
   background: var(--el-bg-color-page);
+  padding: 1rem;
 }
 </style>
