@@ -120,16 +120,77 @@ export async function initDefaultRoles(): Promise<void> {
   }
 }
 
+const defaultMenuTreeData = [
+  {
+    path: '/layout/home',
+    title: '首页',
+    icon: 'HomeFilled',
+  },
+  {
+    path: '/layout/system',
+    title: '系统管理',
+    icon: 'Setting',
+    children: [
+      {
+        path: '/layout/system/user',
+        title: '用户管理',
+        icon: 'User',
+      },
+      {
+        path: '/layout/system/role',
+        title: '角色管理',
+        icon: 'Grid',
+      },
+      {
+        path: '/layout/system/menu',
+        title: '菜单管理',
+        icon: 'Menu',
+      },
+    ],
+  },
+  {
+    path: '/layout/settings',
+    title: '一级菜单',
+    icon: 'Setting',
+    children: [
+      {
+        path: '/layout/settings/user',
+        title: '二级菜单',
+        icon: 'Document',
+        children: [
+          {
+            path: '/layout/settings/user/user',
+            title: '三级菜单',
+            icon: 'User',
+          },
+        ],
+      },
+    ],
+  },
+]
+
+function collectMenuPaths(
+  menuItems: typeof defaultMenuTreeData,
+  acc: Set<string> = new Set(),
+): Set<string> {
+  menuItems.forEach((item) => {
+    if (item.path) {
+      acc.add(item.path)
+    }
+    if (item.children && item.children.length > 0) {
+      collectMenuPaths(item.children as typeof defaultMenuTreeData, acc)
+    }
+  })
+  return acc
+}
+
+const builtInMenuPaths = collectMenuPaths(defaultMenuTreeData)
+
 /**
  * 将树形菜单数据转换为扁平结构
  */
 function flattenMenuTree(
-  menuItems: Array<{
-    path: string
-    title: string
-    icon?: string
-    children?: Array<unknown>
-  }>,
+  menuItems: typeof defaultMenuTreeData,
   parentId: string | null = null,
   order: number = 0,
 ): Menu[] {
@@ -155,13 +216,14 @@ function flattenMenuTree(
       status: 'active',
       createTime: now,
       updateTime: now,
+      isBuiltIn: true,
     }
 
     menus.push(menu)
 
     // 处理子菜单
     if (hasChildren) {
-      const childMenus = flattenMenuTree(item.children as typeof menuItems, menuId, 0)
+      const childMenus = flattenMenuTree(item.children as typeof defaultMenuTreeData, menuId, 0)
       menus.push(...childMenus)
     }
   })
@@ -182,14 +244,23 @@ export async function initDefaultMenus(): Promise<void> {
       let needsUpdate = false
 
       for (const menu of existingMenus) {
+        const updates: Partial<Menu> = {}
+
         if (!menu.type) {
           // 根据是否有子菜单判断类型
           const hasChild = await hasChildren(menu.id)
           const defaultType: MenuType = hasChild ? 'directory' : 'menu'
+          updates.type = defaultType
+        }
 
+        if (menu.isBuiltIn === undefined) {
+          updates.isBuiltIn = menu.path ? builtInMenuPaths.has(menu.path) : false
+        }
+
+        if (Object.keys(updates).length > 0) {
           const updatedMenu: Menu = {
             ...menu,
-            type: defaultType,
+            ...updates,
             updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
           }
 
@@ -199,114 +270,13 @@ export async function initDefaultMenus(): Promise<void> {
       }
 
       if (needsUpdate) {
-        console.log('[MSW IndexedDB] 已更新现有菜单的类型字段')
+        console.log('[MSW IndexedDB] 已更新现有菜单的类型/内置字段')
       }
     }
 
     if (existingMenus.length === 0) {
-      // 从 menu.ts 中的菜单数据
-      const menuTreeData = [
-        {
-          path: '/layout/home',
-          title: '首页',
-          icon: 'HomeFilled',
-        },
-        {
-          path: '/layout/system',
-          title: '系统管理',
-          icon: 'Setting',
-          children: [
-            {
-              path: '/layout/system/user',
-              title: '用户管理',
-              icon: 'User',
-            },
-            {
-              path: '/layout/system/role',
-              title: '角色管理',
-              icon: 'Grid',
-            },
-            {
-              path: '/layout/system/menu',
-              title: '菜单管理',
-              icon: 'Menu',
-            },
-          ],
-        },
-        {
-          path: '/layout/content',
-          title: '内容管理',
-          icon: 'Files',
-          children: [
-            {
-              path: '/layout/content/article',
-              title: '文章管理',
-              icon: 'Document',
-            },
-            {
-              path: '/layout/content/category',
-              title: '分类管理',
-              icon: 'Grid',
-            },
-          ],
-        },
-        {
-          path: '/layout/data',
-          title: '数据分析',
-          icon: 'DataAnalysis',
-          children: [
-            {
-              path: '/layout/data/overview',
-              title: '数据概览',
-              icon: 'Location',
-            },
-            {
-              path: '/layout/data/report',
-              title: '数据报表',
-              icon: 'Document',
-            },
-          ],
-        },
-        {
-          path: '/layout/tools',
-          title: '工具',
-          icon: 'Tools',
-          children: [
-            {
-              path: '/layout/tools/icon',
-              title: '图标库',
-              icon: 'Grid',
-            },
-            {
-              path: '/layout/tools/component',
-              title: '组件库',
-              icon: 'Files',
-            },
-          ],
-        },
-        {
-          path: '/layout/settings',
-          title: '一级菜单',
-          icon: 'Setting',
-          children: [
-            {
-              path: '/layout/settings/user',
-              title: '二级菜单',
-              icon: 'Document',
-              children: [
-                {
-                  path: '/layout/settings/user/user',
-                  title: '三级菜单',
-                  icon: 'User',
-                },
-              ],
-            },
-          ],
-        },
-      ]
-
       // 转换为扁平结构
-      const flatMenus = flattenMenuTree(menuTreeData)
+      const flatMenus = flattenMenuTree(defaultMenuTreeData)
 
       // 批量添加默认菜单
       for (const menu of flatMenus) {

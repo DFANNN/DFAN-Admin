@@ -188,6 +188,7 @@ export const createMenuHandler = http.post('/cat-admin-api/menus', async ({ requ
       permission: permission || undefined,
       createTime: now,
       updateTime: now,
+      isBuiltIn: false,
     }
 
     await add<Menu>(STORES.MENUS, newMenu)
@@ -195,7 +196,7 @@ export const createMenuHandler = http.post('/cat-admin-api/menus', async ({ requ
     return HttpResponse.json({
       code: 200,
       message: '创建成功',
-      data: newMenu,
+      data: null,
     })
   } catch (error) {
     console.error('[MSW] 创建菜单错误:', error)
@@ -230,7 +231,11 @@ export const updateMenuHandler = http.put('/cat-admin-api/menus', async ({ reque
       permission?: string
     }
 
-    const id = body.id
+    const { id, ...payload } = body as typeof body & { isBuiltIn?: boolean }
+    if ('isBuiltIn' in payload) {
+      delete (payload as { isBuiltIn?: boolean }).isBuiltIn
+    }
+
     if (!id || typeof id !== 'string') {
       return HttpResponse.json({
         code: 500,
@@ -250,12 +255,12 @@ export const updateMenuHandler = http.put('/cat-admin-api/menus', async ({ reque
     }
 
     // 确定要使用的类型（如果更新了类型，使用新的，否则使用原有的）
-    const menuType = body.type || existingMenu.type
+    const menuType = payload.type || existingMenu.type
 
     // 根据类型验证path
     if (menuType === 'menu') {
       // menu类型必须要有path
-      const finalPath = body.path !== undefined ? body.path : existingMenu.path
+      const finalPath = payload.path !== undefined ? payload.path : existingMenu.path
       if (!finalPath) {
         return HttpResponse.json({
           code: 500,
@@ -264,8 +269,8 @@ export const updateMenuHandler = http.put('/cat-admin-api/menus', async ({ reque
         })
       }
       // 如果更新了路径，检查是否重复
-      if (body.path && body.path !== existingMenu.path) {
-        const pathExists = await menuPathExists(body.path, id)
+      if (payload.path && payload.path !== existingMenu.path) {
+        const pathExists = await menuPathExists(payload.path, id)
         if (pathExists) {
           return HttpResponse.json({
             code: 500,
@@ -277,8 +282,8 @@ export const updateMenuHandler = http.put('/cat-admin-api/menus', async ({ reque
     } else if (menuType === 'directory' || menuType === 'button') {
       // directory和button类型的path可以为空
       // 如果更新了路径，检查是否重复
-      if (body.path && body.path !== existingMenu.path) {
-        const pathExists = await menuPathExists(body.path, id)
+      if (payload.path && payload.path !== existingMenu.path) {
+        const pathExists = await menuPathExists(payload.path, id)
         if (pathExists) {
           return HttpResponse.json({
             code: 500,
@@ -290,7 +295,7 @@ export const updateMenuHandler = http.put('/cat-admin-api/menus', async ({ reque
     }
 
     // 检查是否将菜单设置为自己的子菜单（防止循环引用）
-    if (body.parentId === id) {
+    if (payload.parentId === id) {
       return HttpResponse.json({
         code: 500,
         message: '不能将菜单设置为自己的子菜单',
@@ -301,10 +306,11 @@ export const updateMenuHandler = http.put('/cat-admin-api/menus', async ({ reque
     // 更新菜单
     const updatedMenu: Menu = {
       ...existingMenu,
-      ...body,
+      ...payload,
       type: menuType,
-      path: body.path !== undefined ? body.path : existingMenu.path,
+      path: payload.path !== undefined ? payload.path : existingMenu.path,
       updateTime: new Date().toISOString(),
+      isBuiltIn: existingMenu.isBuiltIn ?? false,
     }
 
     await update<Menu>(STORES.MENUS, updatedMenu)
@@ -312,7 +318,7 @@ export const updateMenuHandler = http.put('/cat-admin-api/menus', async ({ reque
     return HttpResponse.json({
       code: 200,
       message: '更新成功',
-      data: updatedMenu,
+      data: null,
     })
   } catch (error) {
     console.error('[MSW] 更新菜单错误:', error)
@@ -357,6 +363,14 @@ export const deleteMenuHandler = http.delete(
         })
       }
 
+      if (menu.isBuiltIn) {
+        return HttpResponse.json({
+          code: 500,
+          message: '系统内置菜单不允许删除',
+          data: null,
+        })
+      }
+
       // 检查是否有子菜单
       const hasChildMenus = await hasChildren(id)
       if (hasChildMenus) {
@@ -373,6 +387,7 @@ export const deleteMenuHandler = http.delete(
       return HttpResponse.json({
         code: 200,
         message: '删除成功',
+        data: null,
       })
     } catch (error) {
       console.error('[MSW] 删除菜单错误:', error)

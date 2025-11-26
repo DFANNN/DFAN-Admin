@@ -51,6 +51,7 @@ export interface Menu {
   order?: number // 排序
   status?: 'active' | 'inactive' // 状态
   permission?: string // 权限标识（主要用于button类型）
+  isBuiltIn?: boolean // 是否为内置菜单
   createTime?: string // 创建时间
   updateTime?: string // 更新时间
   [key: string]: unknown

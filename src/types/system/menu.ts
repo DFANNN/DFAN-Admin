@@ -15,6 +15,7 @@ export interface IMenuItem {
   order: number
   status: 'active' | 'inactive'
   permission: string // 权限标识（主要用于button类型）
+  isBuiltIn?: boolean // 是否为内置菜单
   createTime?: string
   updateTime?: string
   children?: IMenuItem[]

@@ -110,9 +110,9 @@
               @confirm="deleteMenuHandle(row.id)"
             >
               <template #reference>
-                <el-button type="danger" link :icon="menuStore.iconComponents.Delete"
-                  >删除</el-button
-                >
+                <el-button type="danger" link :icon="menuStore.iconComponents.Delete">
+                  删除
+                </el-button>
               </template>
             </el-popconfirm>
           </template>
