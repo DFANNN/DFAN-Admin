@@ -15,6 +15,7 @@ import {
   ensureDBInitialized,
 } from './index'
 import { hasChildren } from './menus'
+import dayjs from 'dayjs'
 
 /**
  * 初始化默认用户数据
@@ -52,7 +53,7 @@ export async function initDefaultRoles(): Promise<void> {
     const existingRoles = await getAll<Role>(STORES.ROLES)
 
     if (existingRoles.length === 0) {
-      const now = new Date().toISOString()
+      const now = dayjs().format('YYYY-MM-DD HH:mm:ss')
       const defaultRoles: Role[] = [
         {
           id: 'role_1',
@@ -137,7 +138,7 @@ function flattenMenuTree(
 
   menuItems.forEach((item) => {
     const menuId = `menu_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
-    const now = new Date().toISOString()
+    const now = dayjs().format('YYYY-MM-DD HH:mm:ss')
 
     // 根据是否有子菜单判断类型
     const hasChildren = item.children && item.children.length > 0
@@ -189,7 +190,7 @@ export async function initDefaultMenus(): Promise<void> {
           const updatedMenu: Menu = {
             ...menu,
             type: defaultType,
-            updateTime: new Date().toISOString(),
+            updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
           }
 
           await update<Menu>(STORES.MENUS, updatedMenu)

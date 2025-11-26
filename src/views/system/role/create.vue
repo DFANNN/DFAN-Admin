@@ -54,9 +54,13 @@ defineOptions({ name: 'RoleCreate' })
 const emits = defineEmits(['refresh'])
 const submitFormRef = useTemplateRef<FormInstance>('submitFormRef')
 
+// 对话框开关
 const open = ref(false)
+
+// 提交按钮加载状态
 const submitLoading = ref(false)
 
+// 表单数据
 const submitForm = ref({
   id: undefined as string | undefined,
   name: '',
@@ -79,10 +83,11 @@ const confirm = async () => {
     : await createRole(submitForm.value)
   if (res.code !== 200) return
   ElMessage.success(submitForm.value.id ? '编辑成功' : '创建成功')
-  emits('refresh')
+  emits('refresh', submitForm.value.id ? 'update' : 'create')
   close()
 }
 
+// 获取角色信息
 const getRoleInfo = async () => {
   const { data: res } = await roleInfo(submitForm.value.id as string)
   if (res.code !== 200) return
@@ -104,6 +109,7 @@ const formRules: FormRules = {
   status: [{ required: true, message: '请选择状态', trigger: 'change' }],
 }
 
+// 显示对话框
 const showDialog = (id: string | undefined) => {
   submitForm.value.id = id
   if (id) getRoleInfo()

@@ -38,6 +38,6 @@ export const updateRole = (data: ICreateOrUpdateRoleParams) => {
 /**
  * 删除角色
  */
-export const deleteRole = (id: string) => {
-  return request.delete<CommonResponse>(`/roles/${id}`)
+export const deleteRole = (ids: string[]) => {
+  return request.delete<ICommonResponse<unknown>>('/roles', { data: ids })
 }

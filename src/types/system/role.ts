@@ -15,11 +15,12 @@ export interface IRoleItem {
 
 // 角色列表查询参数
 export interface IRoleListParams {
-  page?: number
-  pageSize?: number
-  name?: string
-  code?: string
+  page: number
+  pageSize: number
+  name: string
+  code: string
   status?: 'active' | 'inactive'
+  sortOrder: 'asc' | 'desc'
 }
 
 // 创建/更新角色参数
