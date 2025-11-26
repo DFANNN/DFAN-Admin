@@ -79,7 +79,6 @@
             <el-icon v-if="row.icon">
               <component :is="menuStore.iconComponents[row.icon]" />
             </el-icon>
-            <span v-else>-</span>
           </template>
         </el-table-column>
         <el-table-column prop="order" label="排序" min-width="100" :align="TABLE_CONFIG.align" />

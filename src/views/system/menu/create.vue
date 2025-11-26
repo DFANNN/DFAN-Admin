@@ -14,7 +14,7 @@
       label-position="right"
     >
       <el-form-item label="菜单类型" prop="type">
-        <el-radio-group v-model="submitForm.type">
+        <el-radio-group v-model="submitForm.type" @change="submitFormRef?.clearValidate()">
           <el-radio label="directory">目录</el-radio>
           <el-radio label="menu">菜单</el-radio>
           <el-radio label="button">按钮</el-radio>
@@ -177,14 +177,34 @@ const showDialog = (id: string | undefined) => {
   open.value = true
 }
 
-const rules = computed(() => {
-  return {
-    type: [{ required: true, message: '请选择菜单类型', trigger: 'blur' }],
-    title: [{ required: true, message: `请输入${titleLabel.value}`, trigger: 'blur' }],
-    path: [{ required: true, message: '请输入菜单路径', trigger: 'blur' }],
-    status: [{ required: true, message: '请选择状态', trigger: 'blur' }],
-  } as FormRules
-})
+// 标题验证器
+const titleValidator = (
+  _rule: unknown,
+  value: string,
+  callback: (error?: string | Error | undefined) => void,
+) => {
+  if (value === '') {
+    callback(new Error(`请输入${titleLabel.value}`))
+  } else {
+    callback()
+  }
+}
+
+const rules: FormRules = {
+  type: [{ required: true, message: '请选择菜单类型', trigger: 'blur' }],
+  title: [{ required: true, validator: titleValidator, trigger: 'blur' }],
+  path: [{ required: true, message: '请输入菜单路径', trigger: 'blur' }],
+  status: [{ required: true, message: '请选择状态', trigger: 'blur' }],
+}
+
+// const rules = computed(() => {
+//   return {
+//     type: [{ required: true, message: '请选择菜单类型', trigger: 'blur' }],
+//     title: [{ required: true, message: `请输入${titleLabel.value}`, trigger: 'blur' }],
+//     path: [{ required: true, message: '请输入菜单路径', trigger: 'blur' }],
+//     status: [{ required: true, message: '请选择状态', trigger: 'blur' }],
+//   } as FormRules
+// })
 
 defineExpose({
   showDialog,
