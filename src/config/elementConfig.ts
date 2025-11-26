@@ -2,7 +2,8 @@
 
 // 表格配置
 export const TABLE_CONFIG = {
-  border: true,
+  border: true, // 是否显示边框
+  align: 'left', // 对齐方式
 }
 
 // 页码配置

@@ -54,30 +54,53 @@
       <el-table
         :data="roleList"
         :border="TABLE_CONFIG.border"
+        align="center"
         show-overflow-tooltip
         @selection-change="tableSelectionChange"
         @sort-change="tableSortChange"
       >
-        <el-table-column type="selection" width="55" />
-        <el-table-column type="index" label="序号" width="55" fixed />
-        <el-table-column prop="name" label="角色名称" min-width="160" fixed />
-        <el-table-column prop="code" label="角色编码" min-width="160" />
-        <el-table-column prop="description" label="角色描述" min-width="200" />
-        <el-table-column prop="isBuiltIn" label="类型">
+        <el-table-column type="selection" width="55" :align="TABLE_CONFIG.align" />
+        <el-table-column type="index" label="序号" width="55" fixed :align="TABLE_CONFIG.align" />
+        <el-table-column
+          prop="name"
+          label="角色名称"
+          min-width="160"
+          fixed
+          :align="TABLE_CONFIG.align"
+        />
+        <el-table-column prop="code" label="角色编码" min-width="160" :align="TABLE_CONFIG.align" />
+        <el-table-column
+          prop="description"
+          label="角色描述"
+          min-width="200"
+          :align="TABLE_CONFIG.align"
+        />
+        <el-table-column prop="isBuiltIn" label="类型" :align="TABLE_CONFIG.align">
           <template #default="{ row }">
             <el-tag v-if="row.isBuiltIn" type="warning">内置</el-tag>
             <el-tag v-else type="success">自定义</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="status" label="状态">
+        <el-table-column prop="status" label="状态" :align="TABLE_CONFIG.align">
           <template #default="{ row }">
             <el-tag v-if="row.status === 'active'" type="success">启用</el-tag>
             <el-tag v-else type="danger">禁用</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="createTime" label="创建时间" sortable="custom" min-width="180" />
-        <el-table-column prop="updateTime" label="更新时间" min-width="180" />
-        <el-table-column label="操作" width="150" fixed="right">
+        <el-table-column
+          prop="createTime"
+          label="创建时间"
+          sortable="custom"
+          min-width="180"
+          :align="TABLE_CONFIG.align"
+        />
+        <el-table-column
+          prop="updateTime"
+          label="更新时间"
+          min-width="180"
+          :align="TABLE_CONFIG.align"
+        />
+        <el-table-column label="操作" width="150" fixed="right" :align="TABLE_CONFIG.align">
           <template #default="{ row }: { row: IRoleItem }">
             <el-button
               type="primary"
