@@ -54,7 +54,6 @@
       <el-table
         :data="roleList"
         :border="TABLE_CONFIG.border"
-        align="center"
         show-overflow-tooltip
         @selection-change="tableSelectionChange"
         @sort-change="tableSortChange"

@@ -82,7 +82,7 @@ const confirm = async () => {
     ? await updateRole(submitForm.value)
     : await createRole(submitForm.value)
   if (res.code !== 200) return
-  ElMessage.success(submitForm.value.id ? '编辑成功' : '创建成功')
+  ElMessage.success(submitForm.value.id ? '编辑成功' : '新增成功')
   emits('refresh', submitForm.value.id ? 'update' : 'create')
   close()
 }

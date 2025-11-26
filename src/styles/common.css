@@ -6,6 +6,10 @@
   box-sizing: border-box;
 }
 
+.mb-16 {
+  margin-bottom: 1rem;
+}
+
 /* 卡片margin-top样式 */
 .card-mt-16 {
   margin-top: 1rem;
