@@ -47,7 +47,13 @@
           @confirm="deleteRoleHandle(deleteRoleIds)"
         >
           <template #reference>
-            <el-button type="danger" :icon="menuStore.iconComponents.Delete"> 批量删除 </el-button>
+            <el-button
+              type="danger"
+              :icon="menuStore.iconComponents.Delete"
+              :disabled="!deleteRoleIds.length"
+            >
+              批量删除
+            </el-button>
           </template>
         </el-popconfirm>
       </div>

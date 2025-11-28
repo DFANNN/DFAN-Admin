@@ -9,6 +9,7 @@ export interface IRoleItem {
   description: string
   isBuiltIn: boolean
   status: 'active' | 'inactive'
+  menuIds?: string[] // 菜单权限ID列表
   createTime?: string
   updateTime?: string
 }
@@ -30,6 +31,7 @@ export interface ICreateOrUpdateRoleParams {
   code: string
   description: string
   status: 'active' | 'inactive'
+  menuIds?: string[] // 菜单权限ID列表
 }
 
 // 角色列表响应

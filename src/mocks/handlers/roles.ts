@@ -150,9 +150,10 @@ export const createRoleHandler = http.post('/cat-admin-api/roles', async ({ requ
       code?: string
       description?: string
       status?: 'active' | 'inactive'
+      menuIds?: string[]
     }
 
-    const { name, code, description, status } = body
+    const { name, code, description, status, menuIds } = body
 
     // 验证参数
     if (!name || !code) {
@@ -182,6 +183,7 @@ export const createRoleHandler = http.post('/cat-admin-api/roles', async ({ requ
       description,
       isBuiltIn: false,
       status: status || 'active',
+      menuIds: Array.isArray(menuIds) ? menuIds : [],
       createTime: now,
       updateTime: now,
     }
@@ -220,6 +222,7 @@ export const updateRoleHandler = http.put('/cat-admin-api/roles', async ({ reque
       code?: string
       description?: string
       status?: 'active' | 'inactive'
+      menuIds?: string[]
     }
 
     if (!body.id) {
@@ -252,10 +255,28 @@ export const updateRoleHandler = http.put('/cat-admin-api/roles', async ({ reque
       }
     }
 
+    // 如果是内置角色，不允许修改
+    if (existingRole.isBuiltIn) {
+      return HttpResponse.json({
+        code: 500,
+        message: '内置角色不允许修改',
+        data: null,
+      })
+    }
+
     // 更新角色
     const updatedRole: Role = {
       ...existingRole,
-      ...body,
+      name: body.name ?? existingRole.name,
+      code: body.code ?? existingRole.code,
+      description: body.description ?? existingRole.description,
+      status: body.status ?? existingRole.status,
+      menuIds:
+        body.menuIds !== undefined
+          ? Array.isArray(body.menuIds)
+            ? body.menuIds
+            : []
+          : existingRole.menuIds,
       updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
     }
 

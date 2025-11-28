@@ -32,6 +32,7 @@ export interface Role {
   description?: string // 角色描述
   isBuiltIn: boolean // 是否为内置角色
   status?: 'active' | 'inactive' // 状态
+  menuIds?: string[] // 菜单权限ID列表
   createTime?: string // 创建时间
   updateTime?: string // 更新时间
   [key: string]: unknown

@@ -37,6 +37,18 @@
           <el-radio label="inactive">禁用</el-radio>
         </el-radio-group>
       </el-form-item>
+      <el-form-item label="菜单权限" prop="menuIds">
+        <el-tree
+          ref="menuTreeRef"
+          :data="menuList"
+          :props="{ label: 'title', children: 'children' }"
+          show-checkbox
+          default-expand-all
+          node-key="id"
+          @check="handleMenuCheck as unknown"
+          style="width: 100%"
+        />
+      </el-form-item>
     </el-form>
 
     <template #footer>
@@ -48,17 +60,24 @@
 
 <script setup lang="ts">
 import { createRole, roleInfo, updateRole } from '@/api/role'
-import { type FormInstance, type FormRules } from 'element-plus'
+import { menuPage } from '@/api/menu'
+import { type FormInstance, type FormRules, type ElTree } from 'element-plus'
+import type { IMenuItem } from '@/types/system/menu'
+
 defineOptions({ name: 'RoleCreate' })
 
 const emits = defineEmits(['refresh'])
 const submitFormRef = useTemplateRef<FormInstance>('submitFormRef')
+const menuTreeRef = useTemplateRef<InstanceType<typeof ElTree> | null>('menuTreeRef')
 
 // 对话框开关
 const open = ref(false)
 
 // 提交按钮加载状态
 const submitLoading = ref(false)
+
+// 菜单列表
+const menuList = ref<IMenuItem[]>([])
 
 // 表单数据
 const submitForm = ref({
@@ -67,12 +86,15 @@ const submitForm = ref({
   code: '',
   description: '',
   status: 'active' as 'active' | 'inactive',
+  menuIds: [] as string[],
 })
 
 // 取消
 const close = () => {
   open.value = false
   submitFormRef.value?.resetFields()
+  menuList.value = []
+  submitForm.value.menuIds = []
 }
 
 // 确定
@@ -87,12 +109,35 @@ const confirm = async () => {
   close()
 }
 
+// 获取菜单列表
+const getMenuList = async () => {
+  const { data: res } = await menuPage()
+  if (res.code !== 200) return
+  menuList.value = res.data || []
+}
+
 // 获取角色信息
 const getRoleInfo = async () => {
   const { data: res } = await roleInfo(submitForm.value.id as string)
   if (res.code !== 200) return
-  const { id, name, code, description, status } = res.data
-  submitForm.value = { id, name, code, description, status }
+  const { id, name, code, description, status, menuIds } = res.data
+  submitForm.value = { id, name, code, description, status, menuIds: menuIds || [] }
+
+  // 等待菜单列表和 DOM 都更新后设置选中的菜单
+  await nextTick()
+  // 确保菜单树已经渲染
+  if (menuTreeRef.value && menuList.value.length > 0) {
+    const menuIdsToSet = menuIds && menuIds.length > 0 ? menuIds : []
+    menuTreeRef.value.setCheckedKeys(menuIdsToSet)
+  }
+}
+
+// 处理菜单选择
+const handleMenuCheck = (
+  data: IMenuItem,
+  checked: { checkedKeys: string[]; halfCheckedKeys: string[] },
+) => {
+  submitForm.value.menuIds = checked.checkedKeys
 }
 
 // 表单验证规则
@@ -110,10 +155,13 @@ const formRules: FormRules = {
 }
 
 // 显示对话框
-const showDialog = (id: string | undefined) => {
+const showDialog = async (id: string | undefined) => {
   submitForm.value.id = id
-  if (id) getRoleInfo()
+  submitForm.value.menuIds = []
   open.value = true
+  // 加载菜单列表
+  await getMenuList()
+  if (id) await getRoleInfo()
 }
 
 defineExpose({

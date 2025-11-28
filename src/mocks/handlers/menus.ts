@@ -254,6 +254,15 @@ export const updateMenuHandler = http.put('/cat-admin-api/menus', async ({ reque
       })
     }
 
+    // 检查是否为内置菜单，内置菜单不允许编辑
+    if (existingMenu.isBuiltIn) {
+      return HttpResponse.json({
+        code: 500,
+        message: '系统内置菜单不允许编辑',
+        data: null,
+      })
+    }
+
     // 确定要使用的类型（如果更新了类型，使用新的，否则使用原有的）
     const menuType = payload.type || existingMenu.type
 

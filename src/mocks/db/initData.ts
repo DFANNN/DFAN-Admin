@@ -54,6 +54,10 @@ export async function initDefaultRoles(): Promise<void> {
 
     if (existingRoles.length === 0) {
       const now = dayjs().format('YYYY-MM-DD HH:mm:ss')
+
+      // 获取所有菜单ID（用于超级管理员）
+      const allMenuIds = collectMenuIds(defaultMenuTreeData)
+
       const defaultRoles: Role[] = [
         {
           id: 'role_1',
@@ -62,6 +66,7 @@ export async function initDefaultRoles(): Promise<void> {
           description: '拥有系统所有权限，可管理所有功能',
           isBuiltIn: true,
           status: 'active',
+          menuIds: allMenuIds, // 所有菜单权限
           createTime: now,
           updateTime: now,
         },
@@ -72,6 +77,13 @@ export async function initDefaultRoles(): Promise<void> {
           description: '拥有大部分管理权限，可管理系统配置和用户',
           isBuiltIn: true,
           status: 'active',
+          menuIds: [
+            'menu_1', // 首页
+            'menu_2', // 系统管理
+            'menu_3', // 用户管理
+            'menu_4', // 角色管理
+            'menu_5', // 菜单管理
+          ],
           createTime: now,
           updateTime: now,
         },
@@ -82,6 +94,9 @@ export async function initDefaultRoles(): Promise<void> {
           description: '普通用户权限，可查看和操作基础功能',
           isBuiltIn: true,
           status: 'active',
+          menuIds: [
+            'menu_1', // 首页
+          ],
           createTime: now,
           updateTime: now,
         },
@@ -92,6 +107,12 @@ export async function initDefaultRoles(): Promise<void> {
           description: '内容编辑权限，可创建和编辑内容',
           isBuiltIn: true,
           status: 'active',
+          menuIds: [
+            'menu_1', // 首页
+            'menu_6', // 一级菜单
+            'menu_7', // 二级菜单
+            'menu_8', // 三级菜单
+          ],
           createTime: now,
           updateTime: now,
         },
@@ -102,6 +123,9 @@ export async function initDefaultRoles(): Promise<void> {
           description: '访客权限，仅可查看公开内容',
           isBuiltIn: true,
           status: 'active',
+          menuIds: [
+            'menu_1', // 首页
+          ],
           createTime: now,
           updateTime: now,
         },
@@ -122,26 +146,31 @@ export async function initDefaultRoles(): Promise<void> {
 
 const defaultMenuTreeData = [
   {
+    id: 'menu_1',
     path: '/layout/home',
     title: '首页',
     icon: 'HomeFilled',
   },
   {
+    id: 'menu_2',
     path: '/layout/system',
     title: '系统管理',
     icon: 'Setting',
     children: [
       {
+        id: 'menu_3',
         path: '/layout/system/user',
         title: '用户管理',
         icon: 'User',
       },
       {
+        id: 'menu_4',
         path: '/layout/system/role',
         title: '角色管理',
         icon: 'Grid',
       },
       {
+        id: 'menu_5',
         path: '/layout/system/menu',
         title: '菜单管理',
         icon: 'Menu',
@@ -149,16 +178,19 @@ const defaultMenuTreeData = [
     ],
   },
   {
+    id: 'menu_6',
     path: '/layout/settings',
     title: '一级菜单',
     icon: 'Setting',
     children: [
       {
+        id: 'menu_7',
         path: '/layout/settings/user',
         title: '二级菜单',
         icon: 'Document',
         children: [
           {
+            id: 'menu_8',
             path: '/layout/settings/user/user',
             title: '三级菜单',
             icon: 'User',
@@ -184,6 +216,21 @@ function collectMenuPaths(
   return acc
 }
 
+/**
+ * 从菜单树数据中收集所有菜单ID
+ */
+function collectMenuIds(menuItems: typeof defaultMenuTreeData, acc: string[] = []): string[] {
+  menuItems.forEach((item) => {
+    if (item.id) {
+      acc.push(item.id)
+    }
+    if (item.children && item.children.length > 0) {
+      collectMenuIds(item.children as typeof defaultMenuTreeData, acc)
+    }
+  })
+  return acc
+}
+
 const builtInMenuPaths = collectMenuPaths(defaultMenuTreeData)
 
 /**
@@ -198,7 +245,11 @@ function flattenMenuTree(
   let currentOrder = order
 
   menuItems.forEach((item) => {
-    const menuId = `menu_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
+    // 直接使用菜单数据中定义的固定ID
+    if (!item.id) {
+      throw new Error(`菜单项缺少ID: ${item.path || item.title}`)
+    }
+    const menuId = item.id
     const now = dayjs().format('YYYY-MM-DD HH:mm:ss')
 
     // 根据是否有子菜单判断类型
@@ -299,8 +350,9 @@ export async function initData(): Promise<void> {
     // 确保数据库结构已初始化（包括升级）
     await ensureDBInitialized()
     await initDefaultUsers()
-    await initDefaultRoles()
+    // 先初始化菜单，再初始化角色（角色需要引用菜单ID）
     await initDefaultMenus()
+    await initDefaultRoles()
     console.log('[MSW IndexedDB] 数据初始化完成')
   } catch (error) {
     console.error('[MSW IndexedDB] 数据初始化失败:', error)
