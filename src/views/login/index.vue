@@ -25,6 +25,7 @@
           :rules="loginRules"
           class="login-form"
           size="large"
+          @keyup.enter="handleLogin"
         >
           <el-form-item prop="username">
             <el-input
@@ -41,7 +42,6 @@
               placeholder="请输入密码"
               :prefix-icon="menuStore.iconComponents['Lock']"
               show-password
-              @keyup.enter="handleLogin"
             />
           </el-form-item>
 
@@ -169,7 +169,6 @@ const handleLogin = async () => {
   try {
     const { data: res } = await login(loginForm.value)
     if (res.code !== 200) return
-    if (!res.data || !res.data.token) return
     localStorage.setItem('token', res.data.token)
     if (loginForm.value.remember) {
       localStorage.setItem(REMEMBER_USERNAME_KEY, loginForm.value.username)

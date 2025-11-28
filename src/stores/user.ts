@@ -1,4 +1,7 @@
 import { defineStore } from 'pinia'
+import { userPermissions, userInfoRequest } from '@/api/login'
+import type { IUserItem } from '@/types/system/user'
+import type { IMenuItem } from '@/types/login'
 
 export const useUserStore = defineStore('user', () => {
   const cats = ref([
@@ -156,7 +159,30 @@ export const useUserStore = defineStore('user', () => {
     },
   ])
 
+  // 用户信息
+  const userInfo = ref<IUserItem | null>(null)
+
+  const getUserInfo = async () => {
+    const { data: res } = await userInfoRequest()
+    if (res.code !== 200) return
+    userInfo.value = res.data
+  }
+
+  // 用户菜单
+  const userMenus = ref<IMenuItem[]>([])
+  const buttonPermissions = ref<string[]>([])
+
+  const getUserPermissions = async () => {
+    const { data: res } = await userPermissions()
+    if (res.code !== 200) return
+    userMenus.value = res.data.menuList
+    buttonPermissions.value = res.data.buttonList
+  }
+
   return {
     cats,
+    userInfo,
+    getUserInfo,
+    getUserPermissions,
   }
 })

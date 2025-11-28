@@ -11,7 +11,6 @@ import { generateToken } from './utils'
 export const loginHandler = http.post('/cat-admin-api/login', async ({ request }) => {
   try {
     const body = (await request.json()) as { username?: string; password?: string }
-
     const { username, password } = body
 
     // 验证参数
@@ -43,8 +42,17 @@ export const loginHandler = http.post('/cat-admin-api/login', async ({ request }
       })
     }
 
-    // 登录成功，生成 token
-    const token = generateToken()
+    // 验证用户状态
+    if (user.status === 'inactive') {
+      return HttpResponse.json({
+        code: 500,
+        data: null,
+        message: '用户已被禁用，无法登录',
+      })
+    }
+
+    // 登录成功，生成 token（将用户ID编码到token中）
+    const token = generateToken(user.id)
 
     // 返回token
     return HttpResponse.json({

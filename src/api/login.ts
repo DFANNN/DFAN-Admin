@@ -1,26 +1,21 @@
 import request from '@/utils/request'
+import type { IUserDetailResponse } from '@/types/system/user'
+import type { ILoginParams, ILoginResponse, IUserPermissionsResponse } from '@/types/login'
 
-export interface LoginParams {
-  username: string
-  password: string
+export const login = (params: ILoginParams) => {
+  return request.post<ILoginResponse>('/login', params)
 }
 
-export interface LoginResponse {
-  code: number
-  message: string
-  success: boolean
-  data: {
-    token: string
-    user: {
-      id: string
-      username: string
-      name?: string
-      email?: string
-      [key: string]: unknown
-    }
-  }
+/**
+ * 获取用户权限（菜单权限和按钮权限）
+ */
+export const userPermissions = () => {
+  return request.get<IUserPermissionsResponse>('/users/permissions')
 }
 
-export const login = (params: LoginParams) => {
-  return request.post<LoginResponse>('/login', params)
+/**
+ * 获取用户信息
+ */
+export const userInfoRequest = () => {
+  return request.get<IUserDetailResponse>('/users/info')
 }

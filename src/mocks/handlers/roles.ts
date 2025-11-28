@@ -20,9 +20,9 @@ import { verifyAuth } from './utils'
  */
 export const getRoleListHandler = http.get('/cat-admin-api/roles', async ({ request }) => {
   // 验证token
-  const authError = verifyAuth(request)
-  if (authError) {
-    return authError
+  const { error } = verifyAuth(request)
+  if (error) {
+    return error
   }
 
   try {
@@ -139,9 +139,9 @@ export const getRoleByIdHandler = http.get(
  */
 export const createRoleHandler = http.post('/cat-admin-api/roles', async ({ request }) => {
   // 验证token
-  const authError = verifyAuth(request)
-  if (authError) {
-    return authError
+  const { error } = verifyAuth(request)
+  if (error) {
+    return error
   }
 
   try {
@@ -210,9 +210,9 @@ export const createRoleHandler = http.post('/cat-admin-api/roles', async ({ requ
  */
 export const updateRoleHandler = http.put('/cat-admin-api/roles', async ({ request }) => {
   // 验证token
-  const authError = verifyAuth(request)
-  if (authError) {
-    return authError
+  const { error } = verifyAuth(request)
+  if (error) {
+    return error
   }
 
   try {
@@ -302,9 +302,9 @@ export const updateRoleHandler = http.put('/cat-admin-api/roles', async ({ reque
  */
 export const deleteRoleHandler = http.delete('/cat-admin-api/roles', async ({ request }) => {
   // 验证token
-  const authError = verifyAuth(request)
-  if (authError) {
-    return authError
+  const { error } = verifyAuth(request)
+  if (error) {
+    return error
   }
 
   try {

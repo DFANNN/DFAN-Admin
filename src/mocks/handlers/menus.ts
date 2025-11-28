@@ -22,9 +22,9 @@ import dayjs from 'dayjs'
  */
 export const getMenuListHandler = http.get('/cat-admin-api/menus', async ({ request }) => {
   // 验证token
-  const authError = verifyAuth(request)
-  if (authError) {
-    return authError
+  const { error } = verifyAuth(request)
+  if (error) {
+    return error
   }
 
   try {
@@ -99,9 +99,9 @@ export const getMenuByIdHandler = http.get(
  */
 export const createMenuHandler = http.post('/cat-admin-api/menus', async ({ request }) => {
   // 验证token
-  const authError = verifyAuth(request)
-  if (authError) {
-    return authError
+  const { error } = verifyAuth(request)
+  if (error) {
+    return error
   }
 
   try {
@@ -213,9 +213,9 @@ export const createMenuHandler = http.post('/cat-admin-api/menus', async ({ requ
  */
 export const updateMenuHandler = http.put('/cat-admin-api/menus', async ({ request }) => {
   // 验证token
-  const authError = verifyAuth(request)
-  if (authError) {
-    return authError
+  const { error } = verifyAuth(request)
+  if (error) {
+    return error
   }
 
   try {

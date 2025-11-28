@@ -22,6 +22,8 @@ import {
   createUserHandler,
   updateUserHandler,
   deleteUserHandler,
+  getCurrentUserHandler,
+  getUserPermissionsHandler,
 } from './users'
 
 /**
@@ -47,6 +49,8 @@ export const handlers = [
 
   // 用户相关
   getUserListHandler,
+  getCurrentUserHandler, // 必须在 getUserByIdHandler 之前，因为更具体的路由要优先匹配
+  getUserPermissionsHandler, // 必须在 getUserByIdHandler 之前，因为更具体的路由要优先匹配
   getUserByIdHandler,
   createUserHandler,
   updateUserHandler,

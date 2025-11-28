@@ -5,9 +5,31 @@ import { HttpResponse } from 'msw'
 
 /**
  * 生成简单的 token（用于开发测试）
+ * @param userId 用户ID，将被编码到token中
+ * @returns token字符串，格式：token_${userId}_${timestamp}_${random}
  */
-export function generateToken(): string {
-  return `token_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`
+export function generateToken(userId: string): string {
+  return `token_${userId}_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`
+}
+
+/**
+ * 从token中解析用户ID
+ * @param token token字符串
+ * @returns 用户ID，如果token格式不正确则返回null
+ */
+export function getUserIdFromToken(token: string | null): string | null {
+  if (!token || !token.startsWith('token_')) {
+    return null
+  }
+
+  // token格式：token_${userId}_${timestamp}_${random}
+  const parts = token.split('_')
+  if (parts.length < 3) {
+    return null
+  }
+
+  // 返回userId（第二部分）
+  return `${parts[1]}_${parts[2]}` || null
 }
 
 /**
@@ -45,18 +67,30 @@ export function validateToken(token: string | null): boolean {
 /**
  * 验证请求是否包含有效的token
  * @param request 请求对象
- * @returns 如果token无效则返回错误响应，否则返回null
+ * @returns 如果token无效则返回错误响应，否则返回null和用户ID的对象
  */
-export function verifyAuth(request: Request) {
+export function verifyAuth(request: Request): {
+  error: ReturnType<typeof HttpResponse.json> | null
+  userId: string | null
+} {
   const token = extractToken(request)
 
   if (!token || !validateToken(token)) {
-    return HttpResponse.json({
-      code: 401,
-      message: '未授权，请先登录',
-      data: null,
-    })
+    return {
+      error: HttpResponse.json({
+        code: 401,
+        message: '未授权，请先登录',
+        data: null,
+      }) as ReturnType<typeof HttpResponse.json>,
+      userId: null,
+    }
   }
 
-  return null
+  // 从token中解析用户ID
+  const userId = getUserIdFromToken(token)
+
+  return {
+    error: null,
+    userId,
+  }
 }

@@ -5,14 +5,17 @@ import { http, HttpResponse } from 'msw'
 import dayjs from 'dayjs'
 import {
   getAll,
-  getById,
   add,
   update,
   remove,
+  getById,
   STORES,
   getUserById,
   usernameExists,
+  buildMenuTree,
   type User,
+  type Role,
+  type Menu,
 } from '../db/index'
 import { verifyAuth } from './utils'
 
@@ -21,9 +24,9 @@ import { verifyAuth } from './utils'
  */
 export const getUserListHandler = http.get('/cat-admin-api/users', async ({ request }) => {
   // 验证token
-  const authError = verifyAuth(request)
-  if (authError) {
-    return authError
+  const { error } = verifyAuth(request)
+  if (error) {
+    return error
   }
 
   try {
@@ -94,9 +97,9 @@ export const getUserByIdHandler = http.get(
   '/cat-admin-api/users/:id',
   async ({ params, request }) => {
     // 验证token
-    const authError = verifyAuth(request)
-    if (authError) {
-      return authError
+    const { error } = verifyAuth(request)
+    if (error) {
+      return error
     }
 
     try {
@@ -140,9 +143,9 @@ export const getUserByIdHandler = http.get(
  */
 export const createUserHandler = http.post('/cat-admin-api/users', async ({ request }) => {
   // 验证token
-  const authError = verifyAuth(request)
-  if (authError) {
-    return authError
+  const { error } = verifyAuth(request)
+  if (error) {
+    return error
   }
 
   try {
@@ -197,7 +200,7 @@ export const createUserHandler = http.post('/cat-admin-api/users', async ({ requ
     // 创建用户
     const now = dayjs().format('YYYY-MM-DD HH:mm:ss')
     const newUser: User = {
-      id: `user_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
+      id: `user_${Date.now()}`,
       username,
       password,
       name,
@@ -232,9 +235,9 @@ export const createUserHandler = http.post('/cat-admin-api/users', async ({ requ
  */
 export const updateUserHandler = http.put('/cat-admin-api/users', async ({ request }) => {
   // 验证token
-  const authError = verifyAuth(request)
-  if (authError) {
-    return authError
+  const { error } = verifyAuth(request)
+  if (error) {
+    return error
   }
 
   try {
@@ -332,9 +335,9 @@ export const updateUserHandler = http.put('/cat-admin-api/users', async ({ reque
  */
 export const deleteUserHandler = http.delete('/cat-admin-api/users', async ({ request }) => {
   // 验证token
-  const authError = verifyAuth(request)
-  if (authError) {
-    return authError
+  const { error } = verifyAuth(request)
+  if (error) {
+    return error
   }
 
   try {
@@ -421,3 +424,162 @@ export const deleteUserHandler = http.delete('/cat-admin-api/users', async ({ re
     })
   }
 })
+
+/**
+ * 获取当前用户信息
+ * 从token中获取用户ID，无需路径参数
+ */
+export const getCurrentUserHandler = http.get('/cat-admin-api/users/info', async ({ request }) => {
+  // 验证token并获取用户ID
+  const { error, userId } = verifyAuth(request)
+  if (error) {
+    return error
+  }
+
+  if (!userId) {
+    return HttpResponse.json({
+      code: 401,
+      message: '无法从token中获取用户ID',
+      data: null,
+    })
+  }
+
+  try {
+    // 获取用户信息
+    const user = await getUserById(userId)
+    if (!user) {
+      return HttpResponse.json({
+        code: 500,
+        message: '用户不存在',
+        data: null,
+      })
+    }
+
+    return HttpResponse.json({
+      code: 200,
+      message: '获取成功',
+      data: user,
+    })
+  } catch (error) {
+    console.error('[MSW] 获取用户信息错误:', error)
+    return HttpResponse.json({
+      code: 500,
+      message: '服务器内部错误',
+      data: null,
+    })
+  }
+})
+
+/**
+ * 获取用户权限（菜单权限和按钮权限）
+ * 从token中获取用户ID，无需路径参数
+ */
+export const getUserPermissionsHandler = http.get(
+  '/cat-admin-api/users/permissions',
+  async ({ request }) => {
+    // 验证token并获取用户ID
+    const { error, userId } = verifyAuth(request)
+    if (error) {
+      return error
+    }
+
+    if (!userId) {
+      return HttpResponse.json({
+        code: 401,
+        message: '无法从token中获取用户ID',
+        data: null,
+      })
+    }
+
+    try {
+      // 获取用户信息
+      const user = await getUserById(userId)
+      if (!user) {
+        return HttpResponse.json({
+          code: 500,
+          message: '用户不存在',
+          data: null,
+        })
+      }
+
+      // 如果用户未分配角色，返回空数组
+      if (!user.roleId) {
+        return HttpResponse.json({
+          code: 200,
+          message: '获取成功',
+          data: {
+            menus: [],
+            buttonPermissions: [],
+          },
+        })
+      }
+
+      // 获取角色信息
+      const role = await getById<Role>(STORES.ROLES, user.roleId)
+      if (!role) {
+        return HttpResponse.json({
+          code: 200,
+          message: '获取成功',
+          data: {
+            menus: [],
+            buttonPermissions: [],
+          },
+        })
+      }
+
+      // 如果角色未分配菜单权限，返回空数组
+      if (!role.menuIds || role.menuIds.length === 0) {
+        return HttpResponse.json({
+          code: 200,
+          message: '获取成功',
+          data: {
+            menus: [],
+            buttonPermissions: [],
+          },
+        })
+      }
+
+      // 获取所有菜单
+      const allMenus = await getAll<Menu>(STORES.MENUS)
+
+      // 根据menuIds过滤，只获取用户有权限的菜单，且status为active
+      const userMenus = allMenus.filter(
+        (menu) => role.menuIds!.includes(menu.id) && menu.status === 'active',
+      )
+
+      // 分离菜单和按钮权限
+      const menuItems = userMenus.filter(
+        (menu) => menu.type === 'directory' || menu.type === 'menu',
+      )
+      const buttonMenus = userMenus.filter((menu) => menu.type === 'button')
+
+      // 构建菜单树
+      const menuTree = buildMenuTree(menuItems)
+
+      // 提取按钮权限并去重
+      const buttonPermissions = Array.from(
+        new Set(
+          buttonMenus
+            .map((menu) => menu.permission)
+            .filter((permission): permission is string => !!permission),
+        ),
+      )
+
+      return HttpResponse.json({
+        code: 200,
+        message: '获取成功',
+        data: {
+          menus: menuTree,
+          buttonPermissions,
+        },
+      })
+    } catch (error) {
+      console.error('[MSW] 获取用户权限错误:', error)
+      return HttpResponse.json({
+        code: 500,
+        message: '服务器内部错误',
+        data: null,
+      })
+    }
+  },
+)
