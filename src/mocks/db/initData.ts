@@ -163,31 +163,31 @@ export async function initDefaultRoles(): Promise<void> {
 const defaultMenuTreeData = [
   {
     id: 'menu_1',
-    path: '/layout/home',
+    path: '/home',
     title: '首页',
     icon: 'HomeFilled',
   },
   {
     id: 'menu_2',
-    path: '/layout/system',
+    path: '',
     title: '系统管理',
     icon: 'Setting',
     children: [
       {
         id: 'menu_3',
-        path: '/layout/system/user',
+        path: '/system/user',
         title: '用户管理',
         icon: 'User',
       },
       {
         id: 'menu_4',
-        path: '/layout/system/role',
+        path: '/system/role',
         title: '角色管理',
         icon: 'Grid',
       },
       {
         id: 'menu_5',
-        path: '/layout/system/menu',
+        path: '/system/menu',
         title: '菜单管理',
         icon: 'Menu',
       },
@@ -195,20 +195,20 @@ const defaultMenuTreeData = [
   },
   {
     id: 'menu_6',
-    path: '/layout/settings',
+    path: '',
     title: '一级菜单',
     icon: 'Setting',
     children: [
       {
         id: 'menu_7',
-        path: '/layout/settings/user',
+        path: '',
         title: '二级菜单',
         icon: 'Document',
         children: [
           {
             id: 'menu_8',
-            path: '/layout/settings/user/user',
-            title: '三级菜单',
+            path: '/exception/403',
+            title: '403菜单',
             icon: 'User',
           },
         ],

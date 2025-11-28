@@ -25,7 +25,7 @@ export interface IMenuItem {
   path: string
   status: 'active' | 'inactive'
   title: string
-  type: 'menu' | 'button'
+  type: 'menu' | 'directory' | 'button'
   updateTime: string
 }
 
@@ -33,6 +33,6 @@ export interface IMenuItem {
  * 用户权限响应类型
  */
 export type IUserPermissionsResponse = ICommonResponse<{
-  menuList: IMenuItem[]
-  buttonList: string[]
+  menus: IMenuItem[]
+  buttonPermissions: string[]
 }>

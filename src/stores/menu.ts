@@ -22,8 +22,8 @@ export const useMenuStore = defineStore('menu', () => {
   const getUserPermissions = async () => {
     const { data: res } = await userPermissions()
     if (res.code !== 200) return
-    menuList.value = res.data.menuList
-    buttonPermissions.value = res.data.buttonList
+    menuList.value = res.data.menus
+    buttonPermissions.value = res.data.buttonPermissions
   }
 
   return {
