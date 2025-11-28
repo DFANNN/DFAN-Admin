@@ -32,6 +32,11 @@ const router = createRouter({
           name: 'menu',
           component: () => import('@/views/system/menu/index.vue'),
         },
+        {
+          path: 'system/user',
+          name: 'user',
+          component: () => import('@/views/system/user/index.vue'),
+        },
       ],
     },
   ],

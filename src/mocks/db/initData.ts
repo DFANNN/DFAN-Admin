@@ -26,17 +26,32 @@ export async function initDefaultUsers(): Promise<void> {
     const adminExists = await userExists('admin')
 
     if (!adminExists) {
-      // 创建默认管理员用户
+      // 获取超级管理员角色ID（role_1）
+      const allRoles = await getAll<Role>(STORES.ROLES)
+      const superAdminRole = allRoles.find((role) => role.code === 'super_admin')
+
+      if (!superAdminRole) {
+        console.warn('[MSW IndexedDB] 超级管理员角色不存在，无法为admin用户分配角色')
+      }
+
+      const now = dayjs().format('YYYY-MM-DD HH:mm:ss')
+
+      // 创建默认管理员用户，分配为超级管理员角色
       const defaultUser: User = {
         id: `user_${Date.now()}`,
         username: 'admin',
         password: 'admin', // 明文存储，仅用于开发测试
         name: '管理员',
         email: 'admin@example.com',
+        isBuiltIn: true, // 标记为内置用户
+        status: 'active', // 状态：启用
+        roleId: superAdminRole ? superAdminRole.id : undefined, // 分配为超级管理员角色（单角色）
+        createTime: now,
+        updateTime: now,
       }
 
       await addUser(defaultUser)
-      console.log('[MSW IndexedDB] 默认用户已创建: admin/admin')
+      console.log('[MSW IndexedDB] 默认用户已创建: admin/admin，已分配为超级管理员角色')
     }
   } catch (error) {
     console.error('[MSW IndexedDB] 初始化默认用户失败:', error)
@@ -55,8 +70,9 @@ export async function initDefaultRoles(): Promise<void> {
     if (existingRoles.length === 0) {
       const now = dayjs().format('YYYY-MM-DD HH:mm:ss')
 
-      // 获取所有菜单ID（用于超级管理员）
-      const allMenuIds = collectMenuIds(defaultMenuTreeData)
+      // 从数据库获取所有菜单ID（用于超级管理员，包括以后新增的菜单）
+      const allMenus = await getAll<Menu>(STORES.MENUS)
+      const allMenuIds = allMenus.map((menu) => menu.id)
 
       const defaultRoles: Role[] = [
         {
@@ -66,7 +82,7 @@ export async function initDefaultRoles(): Promise<void> {
           description: '拥有系统所有权限，可管理所有功能',
           isBuiltIn: true,
           status: 'active',
-          menuIds: allMenuIds, // 所有菜单权限
+          menuIds: allMenuIds, // 所有菜单权限（从数据库获取，包括以后新增的菜单）
           createTime: now,
           updateTime: now,
         },
@@ -216,21 +232,6 @@ function collectMenuPaths(
   return acc
 }
 
-/**
- * 从菜单树数据中收集所有菜单ID
- */
-function collectMenuIds(menuItems: typeof defaultMenuTreeData, acc: string[] = []): string[] {
-  menuItems.forEach((item) => {
-    if (item.id) {
-      acc.push(item.id)
-    }
-    if (item.children && item.children.length > 0) {
-      collectMenuIds(item.children as typeof defaultMenuTreeData, acc)
-    }
-  })
-  return acc
-}
-
 const builtInMenuPaths = collectMenuPaths(defaultMenuTreeData)
 
 /**
@@ -349,10 +350,10 @@ export async function initData(): Promise<void> {
   try {
     // 确保数据库结构已初始化（包括升级）
     await ensureDBInitialized()
-    await initDefaultUsers()
-    // 先初始化菜单，再初始化角色（角色需要引用菜单ID）
+    // 先初始化菜单，再初始化角色，最后初始化用户（用户需要分配角色）
     await initDefaultMenus()
-    await initDefaultRoles()
+    await initDefaultRoles() // 角色需要引用菜单ID，用户需要引用角色ID
+    await initDefaultUsers() // admin用户需要分配超级管理员角色，所以要在角色初始化之后
     console.log('[MSW IndexedDB] 数据初始化完成')
   } catch (error) {
     console.error('[MSW IndexedDB] 数据初始化失败:', error)

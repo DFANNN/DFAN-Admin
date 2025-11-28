@@ -16,6 +16,13 @@ import {
   updateMenuHandler,
   deleteMenuHandler,
 } from './menus'
+import {
+  getUserListHandler,
+  getUserByIdHandler,
+  createUserHandler,
+  updateUserHandler,
+  deleteUserHandler,
+} from './users'
 
 /**
  * 所有 MSW Handlers
@@ -37,4 +44,11 @@ export const handlers = [
   createMenuHandler,
   updateMenuHandler,
   deleteMenuHandler,
+
+  // 用户相关
+  getUserListHandler,
+  getUserByIdHandler,
+  createUserHandler,
+  updateUserHandler,
+  deleteUserHandler,
 ]

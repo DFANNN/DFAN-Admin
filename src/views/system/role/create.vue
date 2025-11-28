@@ -92,6 +92,7 @@ const submitForm = ref({
 // 取消
 const close = () => {
   open.value = false
+  menuTreeRef.value?.setCheckedKeys([])
   submitFormRef.value?.resetFields()
   menuList.value = []
   submitForm.value.menuIds = []

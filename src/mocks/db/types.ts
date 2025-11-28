@@ -21,6 +21,13 @@ export interface User {
   name?: string
   avatar?: string
   email?: string
+  phone?: string // 手机号
+  roleId?: string // 用户角色ID（单角色）
+  menuIds?: string[] // 菜单权限ID列表（用于admin用户拥有所有菜单权限）
+  status?: 'active' | 'inactive' // 状态
+  isBuiltIn?: boolean // 是否为内置用户
+  createTime?: string // 创建时间
+  updateTime?: string // 更新时间
   [key: string]: unknown
 }
 
