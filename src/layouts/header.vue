@@ -126,7 +126,7 @@ defineOptions({ name: 'HeaderView' })
 
 const menuStore = useMenuStore()
 const themeStore = useThemeStore()
-
+const router = useRouter()
 // 全屏功能
 const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
 
@@ -150,6 +150,8 @@ const handleCommand = (command: string) => {
       break
     case 'logout':
       console.log('退出登录')
+      localStorage.removeItem('token')
+      router.push('/login')
       break
   }
 }

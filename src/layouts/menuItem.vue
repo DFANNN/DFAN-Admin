@@ -1,5 +1,5 @@
 <template>
-  <el-sub-menu v-if="hasChildren" :index="item.path">
+  <el-sub-menu v-if="hasChildren" :index="item.id">
     <template #title>
       <el-icon v-if="item.icon">
         <component :is="menuStore.iconComponents[item.icon]" />

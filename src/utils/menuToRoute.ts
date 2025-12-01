@@ -1,5 +1,5 @@
 // 将菜单转换为路由
-import { type RouteRecordRaw } from 'vue-router'
+import { type RouteRecordRaw, type RouteComponent } from 'vue-router'
 import type { IMenuItem } from '@/types/login'
 
 // 匹配所有 views 下的 vue 文件
@@ -11,11 +11,13 @@ export const menuToRoute = (menuList: IMenuItem[]) => {
   menuList.forEach((menu) => {
     if (menu.type === 'menu') {
       const routeName = menu.path.split('/').filter(Boolean)
-      console.log(`output->`, routeName)
+      const name = routeName[routeName.length - 1]
+      // 删除path开头连续的/
+      const path = menu.path.replace(/^\/+/, '')
       dynamicRoute.push({
-        path: menu.path,
-        name: routeName[routeName.length - 1],
-        component: () => import(`@/views/${menu.path}.vue`),
+        path,
+        name,
+        component: modules[`/src/views/${path}/index.vue`] as RouteComponent,
         meta: {
           icon: menu.icon,
           title: menu.title,

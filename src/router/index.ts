@@ -20,9 +20,12 @@ router.beforeEach(async (to, from) => {
 
   if (token) {
     const menuStore = useMenuStore()
-    if (!menuStore.menuList?.length) await menuStore.getUserPermissions()
-    console.log(`output->menuStore.menuList`, menuStore.menuList)
-    console.log(`output->menuToRoute`, menuToRoute(menuStore.menuList))
+    if (!menuStore.menuList?.length) {
+      await menuStore.getUserPermissions()
+      console.log(`output->menuStore.menuList`, menuStore.menuList)
+      const dynamicRoutes = menuToRoute(menuStore.menuList)
+      dynamicRoutes.forEach((route) => router.addRoute('layout', route))
+    }
 
     if (to.path === '/login') return { path: from.path }
     return true

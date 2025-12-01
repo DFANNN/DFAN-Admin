@@ -6,6 +6,7 @@
     :text-color="menuTextColor"
     :active-text-color="menuActiveTextColor"
     :mode="themeStore.layout === 'topMode' ? 'horizontal' : 'vertical'"
+    @select="navigation"
     class="menu-container"
   >
     <Transition :name="themeStore.layout === 'leftMode' ? 'el-zoom-in-top' : 'el-zoom-in-left'">
@@ -27,7 +28,7 @@ defineOptions({ name: 'MenuView' })
 const menuStore = useMenuStore()
 const themeStore = useThemeStore()
 const route = useRoute()
-
+const router = useRouter()
 // 当前激活的菜单项
 const activeMenu = computed(() => route.path)
 
@@ -52,6 +53,10 @@ const logoTitleColor = computed(() => {
   if (themeStore.sidebarMode === 'dark') return '#ffffff'
   return ''
 })
+
+const navigation = (key: string) => {
+  router.push(key)
+}
 </script>
 
 <style scoped lang="scss">
