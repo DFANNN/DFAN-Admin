@@ -21,6 +21,7 @@ import dayjs from 'dayjs'
  * 获取菜单列表（树形结构）
  */
 export const getMenuListHandler = http.get('/cat-admin-api/menus', async ({ request }) => {
+  debugger
   // 验证token
   const { error } = verifyAuth(request)
   if (error) {

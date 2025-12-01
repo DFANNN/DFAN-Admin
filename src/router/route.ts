@@ -14,11 +14,11 @@ export const staticRoutes = [
         name: '404',
         component: () => import('@/views/exception/404/index.vue'),
       },
+      {
+        path: '/exception/403',
+        name: '403',
+        component: () => import('@/views/exception/403/index.vue'),
+      },
     ],
-  },
-  {
-    path: '/exception/403',
-    name: '403',
-    component: () => import('@/views/exception/403/index.vue'),
   },
 ]

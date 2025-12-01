@@ -26,11 +26,18 @@ export const useMenuStore = defineStore('menu', () => {
     buttonPermissions.value = res.data.buttonPermissions
   }
 
+  // 清除用户权限
+  const clearUserPermissions = () => {
+    menuList.value = []
+    buttonPermissions.value = []
+  }
+
   return {
     iconComponents,
     menuList,
     isCollapse,
     toggleCollapse,
     getUserPermissions,
+    clearUserPermissions,
   }
 })

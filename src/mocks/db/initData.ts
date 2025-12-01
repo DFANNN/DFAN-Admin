@@ -207,8 +207,8 @@ const defaultMenuTreeData = [
         children: [
           {
             id: 'menu_8',
-            path: '/exception/403',
-            title: '403菜单',
+            path: '/aaa/bbb/ccc',
+            title: '三级菜单',
             icon: 'User',
           },
         ],

@@ -167,9 +167,15 @@ export const useUserStore = defineStore('user', () => {
     userInfo.value = res.data
   }
 
+  // 清除用户信息
+  const clearUserInfo = () => {
+    userInfo.value = null
+  }
+
   return {
     cats,
     userInfo,
     getUserInfo,
+    clearUserInfo,
   }
 })
