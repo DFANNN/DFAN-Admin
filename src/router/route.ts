@@ -8,10 +8,16 @@ export const staticRoutes = [
     path: '/',
     name: 'layout',
     component: () => import('@/layouts/index.vue'),
-    children: [],
+    children: [
+      {
+        path: '/:pathMatch(.*)*',
+        name: '404',
+        component: () => import('@/views/exception/404/index.vue'),
+      },
+    ],
   },
   {
-    path: '/403',
+    path: '/exception/403',
     name: '403',
     component: () => import('@/views/exception/403/index.vue'),
   },
