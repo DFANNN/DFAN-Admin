@@ -30,15 +30,10 @@ router.beforeEach(async (to) => {
     return true
   }
 
-  // 访问 403 / 404 等异常页时，直接放行，避免再次重定向造成死循环
-  if (to.name === '403' || to.name === '404') {
-    return true
-  }
-
   const menuStore = useMenuStore()
 
   // 首次加载：初始化动态路由
-  if (!menuStore.menuList?.length) {
+  if (!menuStore.hasLoadedPermissions) {
     await menuStore.getUserPermissions()
     const dynamicRoutes = menuToRoute(menuStore.menuList)
 
@@ -54,17 +49,27 @@ router.beforeEach(async (to) => {
     // 访问根路径，重定向到第一个菜单项
     if (to.fullPath === '/') return { name: dynamicRoutes[0]?.name as string }
 
-    // 其他情况：让路由系统正常匹配（如果不存在会匹配到 404）
-    return to.fullPath
+    // 其他情况：使用 redirect 路由作为中间层，确保动态路由加载后再跳转
+    return {
+      path: `/redirect${to.fullPath}`,
+      query: to.query,
+      hash: to.hash,
+    }
   }
 
   // 已加载：正常处理
+  // 访问 403 / 404 等异常页时，直接放行（此时权限已加载，403 是真的没有权限）
+  if (to.name === '403' || to.name === '404') {
+    return true
+  }
+
+  // 访问登录页：重定向到第一个菜单项
   if (to.path === '/login') {
     const firstRoute = menuStore.menuList?.[0]
     // 如果第一个菜单项存在，则重定向到第一个菜单项
     if (firstRoute) return firstRoute.path
-    // 如果第一个菜单项不存在，则重定向到根路径
-    return { path: '/' }
+    // 如果第一个菜单项不存在，则重定向到 403 页面
+    return { name: '403' }
   }
 
   return true

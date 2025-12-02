@@ -17,6 +17,8 @@ export const useMenuStore = defineStore('menu', () => {
   const menuList = ref<IMenuItem[]>([])
   // 按钮权限
   const buttonPermissions = ref<string[]>([])
+  // 是否已经加载过权限（用于区分"未加载"和"已加载但为空"）
+  const hasLoadedPermissions = ref(false)
 
   // 获取用户权限
   const getUserPermissions = async () => {
@@ -24,18 +26,21 @@ export const useMenuStore = defineStore('menu', () => {
     if (res.code !== 200) return
     menuList.value = res.data.menus
     buttonPermissions.value = res.data.buttonPermissions
+    hasLoadedPermissions.value = true
   }
 
   // 清除用户权限
   const clearUserPermissions = () => {
     menuList.value = []
     buttonPermissions.value = []
+    hasLoadedPermissions.value = false
   }
 
   return {
     iconComponents,
     menuList,
     isCollapse,
+    hasLoadedPermissions,
     toggleCollapse,
     getUserPermissions,
     clearUserPermissions,

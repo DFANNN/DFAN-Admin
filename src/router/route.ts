@@ -10,6 +10,11 @@ export const staticRoutes = [
     component: () => import('@/layouts/index.vue'),
     children: [
       {
+        path: '/redirect/:path(.*)',
+        name: 'redirect',
+        component: () => import('@/views/redirect/index.vue'),
+      },
+      {
         path: '/:pathMatch(.*)*',
         name: '404',
         component: () => import('@/views/exception/404/index.vue'),
