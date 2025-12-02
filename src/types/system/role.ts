@@ -18,10 +18,10 @@ export interface IRoleItem {
 export interface IRoleListParams {
   page: number
   pageSize: number
-  name: string
-  code: string
+  name?: string
+  code?: string
   status?: 'active' | 'inactive'
-  sortOrder: 'asc' | 'desc'
+  sortOrder?: 'asc' | 'desc'
 }
 
 // 创建/更新角色参数

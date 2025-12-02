@@ -8,8 +8,8 @@
         <span class="status-badge"></span>
       </div>
       <div class="user-info">
-        <span class="username">管理员</span>
-        <span class="user-role-badge">系统管理员</span>
+        <span class="username">{{ userStore.userInfo?.name || userStore.userInfo?.username }}</span>
+        <span class="user-role-badge">{{ userRoleName }}</span>
       </div>
       <el-icon class="arrow-icon">
         <component :is="menuStore.iconComponents['ArrowDown']" />
@@ -27,10 +27,12 @@
           </div>
           <div class="user-info">
             <div class="name-row">
-              <span class="user-name">管理员</span>
-              <span class="pro-badge">系统管理员</span>
+              <span class="user-name">{{
+                userStore.userInfo?.name || userStore.userInfo?.username
+              }}</span>
+              <span class="pro-badge">{{ userRoleName }}</span>
             </div>
-            <div class="user-email">admin@dfan.com</div>
+            <div class="user-email">{{ userStore.userInfo?.email || '' }}</div>
           </div>
         </div>
 
@@ -75,6 +77,11 @@ const router = useRouter()
 const menuStore = useMenuStore()
 const userStore = useUserStore()
 
+// 用户角色名称
+const userRoleName = computed(() => {
+  return userStore.roleList.find((role) => role.id === userStore.userInfo?.roleId)?.name ?? '无权限'
+})
+
 // 退出登录
 const logout = () => {
   localStorage.removeItem('token')
@@ -107,6 +114,11 @@ const handleCommand = (command: string) => {
       break
   }
 }
+
+onMounted(() => {
+  userStore.getUserInfo()
+  userStore.getUserRoleName()
+})
 </script>
 
 <style scoped lang="scss">
@@ -289,6 +301,7 @@ const handleCommand = (command: string) => {
 :deep(.user-menu) {
   padding: 4px 0;
   min-width: 200px;
+  background: var(--el-bg-color);
 
   .el-dropdown-menu__item {
     display: flex;
@@ -297,6 +310,7 @@ const handleCommand = (command: string) => {
     gap: 12px;
     padding: 10px 16px;
     transition: background-color 0.2s;
+    background: transparent;
 
     &:hover {
       background: var(--el-fill-color-light);
