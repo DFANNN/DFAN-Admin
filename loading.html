@@ -5,6 +5,26 @@
   </div>
 </div>
 
+<script>
+  // 检测 dark 模式并应用到 loading
+  ;(function () {
+    // 从 localStorage 读取主题模式
+    const themeMode = localStorage.getItem('themeMode') || 'light'
+    const isDark = themeMode === 'dark'
+
+    // 如果 html 标签已经有 dark 类，也认为是 dark 模式
+    const htmlHasDark = document.documentElement.classList.contains('dark')
+
+    if (isDark || htmlHasDark) {
+      document.documentElement.classList.add('dark')
+      const loadingEl = document.getElementById('__app-loading__')
+      if (loadingEl) {
+        loadingEl.classList.add('dark-mode')
+      }
+    }
+  })()
+</script>
+
 <style>
   .app-loading {
     position: fixed;
@@ -17,6 +37,7 @@
     justify-content: center;
     background: #fff;
     z-index: 99999;
+    transition: background-color 0.3s ease;
   }
 
   .app-loading-content {
@@ -48,6 +69,25 @@
     color: #666;
     font-size: 14px;
     font-weight: 500;
+    transition: color 0.3s ease;
+  }
+
+  /* Dark 模式样式 */
+  .app-loading.dark-mode {
+    background: #1d1e1f;
+  }
+
+  .app-loading.dark-mode .loading-text {
+    color: #a8abb2;
+  }
+
+  /* 或者使用 html.dark 选择器（如果 useDark 已经添加了 dark 类） */
+  html.dark .app-loading {
+    background: #1d1e1f;
+  }
+
+  html.dark .app-loading .loading-text {
+    color: #a8abb2;
   }
 
   /* 应用加载完成后隐藏 */

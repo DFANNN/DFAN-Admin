@@ -5,7 +5,11 @@
         <HeaderView />
       </el-header>
       <el-main>
-        <RouterView />
+        <RouterView v-slot="{ Component, route }">
+          <Transition name="fade-slide" mode="out-in">
+            <component :is="Component" :key="route.path" />
+          </Transition>
+        </RouterView>
       </el-main>
     </el-container>
   </div>
@@ -29,6 +33,30 @@ defineOptions({ name: 'TopMode' })
 
   .el-main {
     background: var(--el-bg-color-page);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* 路由切换过渡动画 */
+  .fade-slide-enter-active,
+  .fade-slide-leave-active {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .fade-slide-enter-from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+
+  .fade-slide-leave-to {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+
+  .fade-slide-enter-to,
+  .fade-slide-leave-from {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 </style>
