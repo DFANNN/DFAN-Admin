@@ -37,20 +37,49 @@ export async function initDefaultUsers(): Promise<void> {
       const now = dayjs().format('YYYY-MM-DD HH:mm:ss')
 
       // 创建默认管理员用户，分配为超级管理员角色
-      const defaultUser: User = {
-        id: `user_${Date.now()}`,
-        username: 'admin',
-        password: 'admin', // 明文存储，仅用于开发测试
-        name: '管理员',
-        email: 'admin@example.com',
-        isBuiltIn: true, // 标记为内置用户
-        status: 'active', // 状态：启用
-        roleId: superAdminRole ? superAdminRole.id : undefined, // 分配为超级管理员角色（单角色）
-        createTime: now,
-        updateTime: now,
-      }
+      const defaultUser: User[] = [
+        {
+          id: `user1_${Date.now()}`,
+          username: 'admin',
+          password: 'admin', // 明文存储，仅用于开发测试
+          name: '管理员',
+          email: 'admin@example.com',
+          isBuiltIn: true, // 标记为内置用户
+          status: 'active', // 状态：启用
+          roleId: superAdminRole ? superAdminRole.id : undefined, // 分配为超级管理员角色（单角色）
+          createTime: now,
+          updateTime: now,
+        },
+        {
+          id: `user2_${Date.now()}`,
+          username: 'user2',
+          password: 'user2', // 明文存储，仅用于开发测试
+          name: '普通用户',
+          email: 'user@example.com',
+          isBuiltIn: true, // 标记为内置用户
+          status: 'active', // 状态：启用
+          roleId: 'role_3', // 分配为普通角色
+          createTime: now,
+          updateTime: now,
+        },
+        // 无权限用户
+        {
+          id: `user3_${Date.now()}`,
+          username: 'user3',
+          password: 'user3', // 明文存储，仅用于开发测试
+          name: '无权限用户',
+          email: 'user3@example.com',
+          isBuiltIn: true, // 标记为内置用户
+          status: 'active', // 状态：启用
+          roleId: undefined, // 无权限用户，不分配角色
+          createTime: now,
+          updateTime: now,
+        },
+      ]
 
-      await addUser(defaultUser)
+      for (const user of defaultUser) {
+        await addUser(user)
+      }
       console.log('[MSW IndexedDB] 默认用户已创建: admin/admin，已分配为超级管理员角色')
     }
   } catch (error) {
@@ -111,7 +140,10 @@ export async function initDefaultRoles(): Promise<void> {
           isBuiltIn: true,
           status: 'active',
           menuIds: [
-            'menu_1', // 首页
+            'menu_2', // 系统管理
+            'menu_3', // 用户管理
+            'menu_4', // 角色管理
+            'menu_5', // 菜单管理
           ],
           createTime: now,
           updateTime: now,

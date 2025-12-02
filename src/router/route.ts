@@ -5,15 +5,16 @@ export const staticRoutes = [
     component: () => import('@/views/login/index.vue'),
   },
   {
+    path: '/redirect/:path(.*)',
+    name: 'redirect',
+    component: () => import('@/views/redirect/index.vue'),
+    meta: { hidden: true },
+  },
+  {
     path: '/',
     name: 'layout',
     component: () => import('@/layouts/index.vue'),
     children: [
-      {
-        path: '/redirect/:path(.*)',
-        name: 'redirect',
-        component: () => import('@/views/redirect/index.vue'),
-      },
       {
         path: '/:pathMatch(.*)*',
         name: '404',
