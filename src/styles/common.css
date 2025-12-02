@@ -1,5 +1,6 @@
 @import '@/styles/theme.css';
 @import '@/styles/commonAnimation.css';
+@import '@/styles/nprogress.css';
 
 * {
   margin: 0;

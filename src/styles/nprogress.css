@@ -1,0 +1,17 @@
+/* 覆盖 NProgress 默认颜色，使用主题色变量 */
+#nprogress .bar {
+  background: var(--el-color-primary) !important;
+  height: 2px !important;
+}
+
+#nprogress .peg {
+  box-shadow:
+    0 0 10px var(--el-color-primary),
+    0 0 5px var(--el-color-primary) !important;
+}
+
+/* 如果显示 spinner，也可以设置颜色 */
+#nprogress .spinner-icon {
+  border-top-color: var(--el-color-primary) !important;
+  border-left-color: var(--el-color-primary) !important;
+}
