@@ -2,6 +2,7 @@ import '@/styles/common.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 import 'element-plus/dist/index.css'
 import 'nprogress/nprogress.css'
+import { loadingFadeOut } from 'virtual:app-loading'
 import { worker } from '@/mocks/browser'
 import { initData } from '@/mocks/db/initData'
 import { createApp } from 'vue'
@@ -31,6 +32,15 @@ async function startApp() {
   app.use(router)
 
   app.mount('#app')
+
+  // 等待路由完全准备好（包括动态路由加载）
+  await router.isReady()
+
+  // 再等待一个 tick，确保首次路由导航完成
+  await nextTick()
+
+  // 此时路由已完全加载，可以安全地隐藏 loading
+  loadingFadeOut()
 }
 
 // 启动应用

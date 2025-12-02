@@ -4,12 +4,13 @@ export const staticRoutes = [
     name: 'login',
     component: () => import('@/views/login/index.vue'),
   },
-  {
-    path: '/redirect/:path(.*)',
-    name: 'redirect',
-    component: () => import('@/views/redirect/index.vue'),
-    meta: { hidden: true },
-  },
+  // 重定向路由(暂时注释掉，因为redirect路由会导致加载缓慢)
+  // {
+  //   path: '/redirect/:path(.*)',
+  //   name: 'redirect',
+  //   component: () => import('@/views/redirect/index.vue'),
+  //   meta: { hidden: true },
+  // },
   {
     path: '/',
     name: 'layout',

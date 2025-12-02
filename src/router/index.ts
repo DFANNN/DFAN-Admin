@@ -49,12 +49,15 @@ router.beforeEach(async (to) => {
     // 访问根路径，重定向到第一个菜单项
     if (to.fullPath === '/') return { name: dynamicRoutes[0]?.name as string }
 
-    // 其他情况：使用 redirect 路由作为中间层，确保动态路由加载后再跳转
-    return {
-      path: `/redirect${to.fullPath}`,
-      query: to.query,
-      hash: to.hash,
-    }
+    // 其他情况：使用 redirect 路由作为中间层，确保动态路由加载后再跳转（暂时注释掉，因为redirect路由会导致加载缓慢）
+    // return {
+    //   path: `/redirect${to.fullPath}`,
+    //   query: to.query,
+    //   hash: to.hash,
+    // }
+
+    // 直接跳转到目标路径，确保动态路由加载后再跳转
+    return to.fullPath
   }
 
   // 已加载：正常处理

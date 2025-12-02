@@ -90,6 +90,9 @@ importers:
       vite:
         specifier: ^7.1.11
         version: 7.2.2(@types/node@22.19.1)(jiti@2.6.1)(sass@1.94.1)
+      vite-plugin-app-loading:
+        specifier: ^0.4.0
+        version: 0.4.0
       vite-plugin-vue-devtools:
         specifier: ^8.0.3
         version: 8.0.5(vite@7.2.2(@types/node@22.19.1)(jiti@2.6.1)(sass@1.94.1))(vue@3.5.24(typescript@5.9.3))
@@ -2035,6 +2038,9 @@ packages:
     resolution: {integrity: sha512-7SpgZmU7R+dDnSmvXE1mfDtnHLHQSisdySVR7lO8ceAXvM0otZeuQQ6C8LrS5d/aYyP/QZ0hI0L+dIPrm4YlFQ==}
     peerDependencies:
       vite: ^2.6.0 || ^3.0.0 || ^4.0.0 || ^5.0.0-0 || ^6.0.0-0 || ^7.0.0-0
+
+  vite-plugin-app-loading@0.4.0:
+    resolution: {integrity: sha512-ifcqZk2x4fFrUvBJ8Llcw0gZpK8y7zwAZqSOQLER7VIJXd+w8nn+X9vzAFOxzYKqNVjFCyEZVkMs5NDyN9iNdg==}
 
   vite-plugin-inspect@11.3.3:
     resolution: {integrity: sha512-u2eV5La99oHoYPHE6UvbwgEqKKOQGz86wMg40CCosP6q8BkB6e5xPneZfYagK4ojPJSj5anHCrnvC20DpwVdRA==}
@@ -4086,6 +4092,8 @@ snapshots:
   vite-hot-client@2.1.0(vite@7.2.2(@types/node@22.19.1)(jiti@2.6.1)(sass@1.94.1)):
     dependencies:
       vite: 7.2.2(@types/node@22.19.1)(jiti@2.6.1)(sass@1.94.1)
+
+  vite-plugin-app-loading@0.4.0: {}
 
   vite-plugin-inspect@11.3.3(vite@7.2.2(@types/node@22.19.1)(jiti@2.6.1)(sass@1.94.1)):
     dependencies:

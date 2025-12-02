@@ -1,8 +1,9 @@
+<!-- 重定向路由(暂时注释掉，因为redirect路由会导致加载缓慢) -->
 <template>
   <div class="redirect-container">
     <div class="redirect-loading">
       <img src="@/assets/logo.svg" alt="logo" class="loading-logo" />
-      <div class="loading-text">正在跳转...</div>
+      <div class="loading-text">正在跳转redirect...</div>
     </div>
   </div>
 </template>

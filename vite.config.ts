@@ -5,12 +5,14 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import AppLoading from 'vite-plugin-app-loading'
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
     vueDevTools(),
+    AppLoading(),
     AutoImport({
       imports: ['vue', 'vue-router', 'pinia'],
       dirs: ['src/stores'],
