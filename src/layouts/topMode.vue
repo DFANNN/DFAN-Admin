@@ -1,18 +1,16 @@
 <template>
-  <div>
-    <el-container class="top-mode-container">
-      <el-header class="header">
-        <HeaderView />
-      </el-header>
-      <el-main>
-        <RouterView v-slot="{ Component, route }">
-          <Transition name="fade-slide" mode="out-in">
-            <component :is="Component" :key="route.path" />
-          </Transition>
-        </RouterView>
-      </el-main>
-    </el-container>
-  </div>
+  <el-container class="top-mode-container">
+    <el-header class="header">
+      <HeaderView />
+    </el-header>
+    <el-main class="main">
+      <RouterView v-slot="{ Component, route }">
+        <Transition name="fade-slide" mode="out-in">
+          <component :is="Component" :key="route.path" />
+        </Transition>
+      </RouterView>
+    </el-main>
+  </el-container>
 </template>
 
 <script setup lang="ts">
@@ -31,8 +29,9 @@ defineOptions({ name: 'TopMode' })
     background: var(--el-bg-color);
   }
 
-  .el-main {
+  .main {
     background: var(--el-bg-color-page);
+    padding: 1rem;
     position: relative;
     overflow: hidden;
   }

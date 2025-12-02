@@ -51,6 +51,7 @@ const menuActiveTextColor = computed(() => {
 })
 
 const logoTitleColor = computed(() => {
+  if (themeStore.layout === 'topMode') return ''
   if (themeStore.sidebarMode === 'dark') return '#ffffff'
   return ''
 })
