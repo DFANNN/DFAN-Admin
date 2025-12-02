@@ -93,9 +93,9 @@ export const getRoleByIdHandler = http.get(
   '/cat-admin-api/roles/:id',
   async ({ params, request }) => {
     // 验证token
-    const authError = verifyAuth(request)
-    if (authError) {
-      return authError
+    const { error } = verifyAuth(request)
+    if (error) {
+      return error
     }
 
     try {

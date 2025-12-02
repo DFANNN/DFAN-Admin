@@ -21,7 +21,6 @@ import dayjs from 'dayjs'
  * 获取菜单列表（树形结构）
  */
 export const getMenuListHandler = http.get('/cat-admin-api/menus', async ({ request }) => {
-  debugger
   // 验证token
   const { error } = verifyAuth(request)
   if (error) {
@@ -54,9 +53,9 @@ export const getMenuByIdHandler = http.get(
   '/cat-admin-api/menus/:id',
   async ({ params, request }) => {
     // 验证token
-    const authError = verifyAuth(request)
-    if (authError) {
-      return authError
+    const { error } = verifyAuth(request)
+    if (error) {
+      return error
     }
 
     try {
@@ -347,9 +346,9 @@ export const deleteMenuHandler = http.delete(
   '/cat-admin-api/menus/:id',
   async ({ params, request }) => {
     // 验证token
-    const authError = verifyAuth(request)
-    if (authError) {
-      return authError
+    const { error } = verifyAuth(request)
+    if (error) {
+      return error
     }
 
     try {
