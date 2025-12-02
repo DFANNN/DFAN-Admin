@@ -37,6 +37,7 @@ defineOptions({ name: 'LeftMode' })
   background: var(--el-bg-color-page);
   padding: 1rem;
   position: relative;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 </style>
