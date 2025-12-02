@@ -11,8 +11,8 @@
   >
     <Transition :name="themeStore.layout === 'leftMode' ? 'el-zoom-in-top' : 'el-zoom-in-left'">
       <el-menu-item class="logo" v-if="themeStore.showLogo">
-        <img src="@/assets/logo.svg" alt="logo" class="logo-img" />
-        <span class="logo-title" :style="{ color: logoTitleColor }">CAT Admin</span>
+        <img :src="APP_CONFIG.logoSrc" alt="logo" class="logo-img" />
+        <span class="logo-title" :style="{ color: logoTitleColor }">{{ APP_CONFIG.name }}</span>
       </el-menu-item>
     </Transition>
 
@@ -21,6 +21,7 @@
 </template>
 
 <script setup lang="ts">
+import { APP_CONFIG } from '@/config/app.config'
 import MenuItem from '@/layouts/menuItem.vue'
 
 defineOptions({ name: 'MenuView' })

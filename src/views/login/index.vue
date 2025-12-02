@@ -3,9 +3,14 @@
     <div class="login-left">
       <!-- logo -->
       <div class="logo-section">
-        <img src="@/assets/logo.svg" alt="logo" class="logo-img" />
-        <h1 class="logo-title">CAT Admin</h1>
-        <el-tooltip content="主题配置" placement="bottom" effect="dark">
+        <img :src="APP_CONFIG.logoSrc" alt="logo" class="logo-img" />
+        <h1 class="logo-title">{{ APP_CONFIG.name }}</h1>
+        <el-tooltip
+          content="主题配置"
+          placement="bottom"
+          effect="dark"
+          v-if="APP_CONFIG.showThemeConfig"
+        >
           <div class="action-btn" @click="themeStore.themeConfigDrawerOpen = true">
             <el-icon><component :is="menuStore.iconComponents['Setting']" /></el-icon>
           </div>
@@ -84,12 +89,12 @@
       <div class="brand-background"></div>
       <div class="brand-content">
         <el-carousel
-          :interval="5000"
+          :interval="APP_CONFIG.carousel.interval"
           indicator-position="outside"
           height="100%"
           class="logo-carousel"
         >
-          <el-carousel-item v-for="(logo, index) in userStore.cats" :key="index">
+          <el-carousel-item v-for="(logo, index) in APP_CONFIG.carousel.items" :key="index">
             <div class="logo-slide">
               <div class="logo-frame">
                 <img :src="logo.src" :alt="logo.alt" class="logo-image" />
@@ -115,6 +120,7 @@
 </template>
 
 <script setup lang="ts">
+import { APP_CONFIG } from '@/config/app.config'
 import ThemeConfig from '@/layouts/themeConfig.vue'
 import { login } from '@/api/login'
 import { ElMessage } from 'element-plus'
@@ -125,7 +131,6 @@ defineOptions({ name: 'LoginView' })
 const router = useRouter()
 const themeStore = useThemeStore()
 const menuStore = useMenuStore()
-const userStore = useUserStore()
 
 const loginFormRef = useTemplateRef<FormInstance>('loginFormRef')
 

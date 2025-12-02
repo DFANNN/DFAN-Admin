@@ -23,7 +23,12 @@
     <!-- 右侧操作区 -->
     <div class="header-right">
       <div class="action-buttons">
-        <el-tooltip content="主题配置" placement="bottom" effect="dark">
+        <el-tooltip
+          content="主题配置"
+          placement="bottom"
+          effect="dark"
+          v-if="APP_CONFIG.showThemeConfig"
+        >
           <div class="action-btn" @click="themeStore.themeConfigDrawerOpen = true">
             <el-icon><component :is="menuStore.iconComponents['Setting']" /></el-icon>
           </div>
@@ -50,6 +55,7 @@
 </template>
 
 <script setup lang="ts">
+import { APP_CONFIG } from '@/config/app.config'
 import MenuView from '@/layouts/menu.vue'
 import UserDropdown from '@/layouts/userDropdown.vue'
 import { useFullscreen } from '@vueuse/core'

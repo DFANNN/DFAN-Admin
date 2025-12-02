@@ -2,6 +2,7 @@ import '@/styles/common.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 import 'element-plus/dist/index.css'
 import 'nprogress/nprogress.css'
+import { APP_CONFIG } from '@/config/app.config'
 import { loadingFadeOut } from 'virtual:app-loading'
 import { worker } from '@/mocks/browser'
 import { initData } from '@/mocks/db/initData'
@@ -9,6 +10,19 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
+
+//  设置 favicon和title
+const initAppConfig = () => {
+  document.title = APP_CONFIG.name
+
+  let faviconLink = document.querySelector("link[rel~='icon']") as HTMLLinkElement
+  if (!faviconLink) {
+    faviconLink = document.createElement('link')
+    faviconLink.rel = 'icon'
+    document.head.appendChild(faviconLink)
+  }
+  faviconLink.href = APP_CONFIG.faviconSrc
+}
 
 // 启动 MSW worker 并初始化 IndexedDB 数据
 async function startApp() {
@@ -32,6 +46,7 @@ async function startApp() {
   app.use(router)
 
   app.mount('#app')
+  initAppConfig()
 
   // 等待路由完全准备好（包括动态路由加载）
   await router.isReady()
