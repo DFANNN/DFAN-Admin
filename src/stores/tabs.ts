@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
+import type { IMenuItem } from '@/types/system/menu'
 
 export interface TabItem {
   path: string
@@ -16,6 +17,22 @@ export const useTabsStore = defineStore('tabs', () => {
   // 当前激活的标签页路径
   const activePath = ref<string>('')
 
+  // 从菜单列表中根据 path 递归查找节点
+  const findMenuByPath = (menus: IMenuItem[], path: string): IMenuItem | null => {
+    for (const item of menus) {
+      // 只匹配 type 为 'menu' 的项（实际页面路由）
+      if (item.type === 'menu' && item.path === path) {
+        return item
+      }
+      // 递归查找子菜单
+      if (item.children?.length) {
+        const child = findMenuByPath(item.children, path)
+        if (child) return child
+      }
+    }
+    return null
+  }
+
   /**
    * 添加标签页
    * @param route 路由对象
@@ -23,6 +40,22 @@ export const useTabsStore = defineStore('tabs', () => {
   const addTab = (route: RouteLocationNormalizedLoaded) => {
     // 如果路由 meta 中标记为 hidden，则不添加到标签页
     if (route.meta?.hidden) return
+
+    // 如果当前菜单列表中有首页，则添加首页标签页
+    if (!tabs.value.some((tab) => tab.path === '/home')) {
+      const menuStore = useMenuStore()
+      const homeMenu = findMenuByPath(menuStore.menuList, '/home')
+      if (homeMenu) {
+        tabs.value.unshift({
+          path: homeMenu.path,
+          fullPath: homeMenu.path,
+          title: homeMenu.title,
+          icon: homeMenu.icon,
+          closable: false,
+          name: 'home',
+        })
+      }
+    }
 
     // 检查标签页是否已存在
     const existTab = tabs.value.find((tab) => tab.path === route.path)
@@ -44,6 +77,9 @@ export const useTabsStore = defineStore('tabs', () => {
 
     // 设置当前激活的标签页
     activePath.value = route.path
+    if (tabs.value.length === 1) {
+      tabs.value[0]!.closable = false
+    }
   }
 
   /**
@@ -65,14 +101,9 @@ export const useTabsStore = defineStore('tabs', () => {
         activePath.value = nextTab.path
       }
     }
-  }
-
-  /**
-   * 设置激活的标签页
-   * @param path 标签页路径
-   */
-  const setActive = (path: string) => {
-    activePath.value = path
+    if (tabs.value.length === 1) {
+      tabs.value[0]!.closable = false
+    }
   }
 
   /**
@@ -133,7 +164,6 @@ export const useTabsStore = defineStore('tabs', () => {
     activePath,
     addTab,
     removeTab,
-    setActive,
     closeOtherTabs,
     closeAllTabs,
     closeLeftTabs,

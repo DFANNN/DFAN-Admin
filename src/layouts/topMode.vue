@@ -3,8 +3,8 @@
     <el-header class="header">
       <HeaderView />
     </el-header>
+    <TabsView />
     <el-main class="main">
-      <TabsView />
       <RouterView v-slot="{ Component, route }">
         <Transition name="fade-slide" mode="out-in">
           <component :is="Component" :key="route.path" />
@@ -29,6 +29,7 @@ defineOptions({ name: 'TopMode' })
   .header {
     height: 50px;
     background: var(--el-bg-color);
+    border-bottom: 1px solid var(--el-border-color-lighter);
   }
 
   .main {

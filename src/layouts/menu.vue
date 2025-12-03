@@ -94,7 +94,7 @@ const navigation = (key: string) => {
   width: 200px;
   &.el-menu--horizontal {
     width: 100%;
-    height: 50px;
+    height: 49px;
     border: none !important;
     border-bottom: none !important;
     border-top: none !important;

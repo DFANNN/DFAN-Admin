@@ -140,7 +140,7 @@ export async function initDefaultRoles(): Promise<void> {
           isBuiltIn: true,
           status: 'active',
           menuIds: [
-            'menu_1', // 首页
+            // 'menu_1', // 首页
             'menu_2', // 系统管理
             'menu_3', // 用户管理
             'menu_4', // 角色管理
