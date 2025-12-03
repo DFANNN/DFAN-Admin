@@ -38,6 +38,7 @@ const tabsStore = useTabsStore()
   height: 50px;
   background: var(--el-bg-color);
   border-bottom: 1px solid var(--el-border-color-lighter);
+  padding-right: 0.25rem;
 }
 
 .main {

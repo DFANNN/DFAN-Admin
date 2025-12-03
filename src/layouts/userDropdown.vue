@@ -135,8 +135,6 @@ onMounted(() => {
   transition: background-color 0.2s;
 
   &:hover {
-    background: var(--el-fill-color-light);
-
     .arrow-icon {
       color: var(--el-color-primary);
     }

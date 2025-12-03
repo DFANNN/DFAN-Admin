@@ -21,27 +21,33 @@
       <el-dropdown trigger="click" class="tabs-dropdown-wrapper">
         <div class="tabs-dropdown-icon">
           <el-icon>
-            <component :is="menuStore.iconComponents['ArrowDown']" />
+            <component :is="menuStore.iconComponents['MoreFilled']" />
           </el-icon>
         </div>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item :icon="Plus" @click="tabsStore.closeOtherTabs(tabsStore.activePath)">
+            <el-dropdown-item
+              :icon="menuStore.iconComponents['CircleClose']"
+              @click="tabsStore.closeOtherTabs(tabsStore.activePath)"
+            >
               关闭其他标签页
             </el-dropdown-item>
             <el-dropdown-item
-              :icon="CirclePlusFilled"
+              :icon="menuStore.iconComponents['Delete']"
               @click="(tabsStore.closeAllTabs(), router.push(tabsStore.activePath))"
             >
               关闭所有标签页
             </el-dropdown-item>
             <el-dropdown-item
-              :icon="CirclePlus"
+              :icon="menuStore.iconComponents['ArrowRight']"
               @click="tabsStore.closeRightTabs(tabsStore.activePath)"
             >
               关闭右侧标签页
             </el-dropdown-item>
-            <el-dropdown-item :icon="Check" @click="tabsStore.closeLeftTabs(tabsStore.activePath)">
+            <el-dropdown-item
+              :icon="menuStore.iconComponents['ArrowLeft']"
+              @click="tabsStore.closeLeftTabs(tabsStore.activePath)"
+            >
               关闭左侧标签页
             </el-dropdown-item>
           </el-dropdown-menu>
@@ -52,7 +58,6 @@
 </template>
 
 <script setup lang="ts">
-import { Plus, CirclePlusFilled, CirclePlus, Check } from '@element-plus/icons-vue'
 import type { TabItem } from '@/stores/tabs'
 
 defineOptions({ name: 'TabsView' })
@@ -147,19 +152,76 @@ const handleClose = (item: TabItem) => {
   }
   .tabs-dropdown {
     position: absolute;
-    right: 0;
-    top: 0;
-    height: 100%;
+    inset-block: 0;
+    right: 0.5rem;
+    display: flex;
+    align-items: center;
+    padding-left: 0.75rem;
+    background: linear-gradient(
+      to right,
+      color-mix(in srgb, var(--el-bg-color) 60%, transparent),
+      var(--el-bg-color)
+    );
+
+    /* 与标签区域做一个轻微分隔 */
+    &::before {
+      content: '';
+      width: 1px;
+      height: 1.25rem;
+      background-color: var(--el-border-color-lighter);
+      margin-right: 0.5rem;
+    }
+
     .tabs-dropdown-wrapper {
       height: 100%;
-      .tabs-dropdown-icon {
-        width: 1.25rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
+      display: flex;
+      align-items: center;
+      background: var(--el-bg-color);
+    }
+
+    .tabs-dropdown-icon {
+      width: 1.75rem;
+      height: 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      color: var(--el-text-color-regular);
+      transition: all 0.2s ease;
+
+      &:hover {
+        background-color: var(--el-fill-color-light);
+        color: var(--el-color-primary);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      }
+
+      .el-icon {
+        font-size: 16px;
       }
     }
+
+    /* 下拉菜单项与整体风格保持一致 */
+    :deep(.el-dropdown-menu__item) {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+  }
+}
+
+:deep(.el-dropdown-menu__item) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  transition: background-color 0.2s;
+  background: transparent;
+
+  &:hover {
+    background: var(--el-fill-color-light) !important;
+    color: var(--el-color-primary);
   }
 }
 </style>
