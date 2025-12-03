@@ -1,5 +1,6 @@
 import type { ICommonResponse } from '@/types/common'
 import type { IUserItem } from '@/types/system/user'
+import type { IMenuItem } from '@/types/system/menu'
 
 // 登录参数类型
 export interface ILoginParams {
@@ -12,22 +13,6 @@ export type ILoginResponse = ICommonResponse<{
   token: string
   user: IUserItem
 }>
-
-// 菜单列表项
-export interface IMenuItem {
-  children: IMenuItem[]
-  createTime: string
-  icon: string
-  id: string
-  isBuiltIn: boolean
-  order: number
-  parentId: string | null
-  path: string
-  status: 'active' | 'inactive'
-  title: string
-  type: 'menu' | 'directory' | 'button'
-  updateTime: string
-}
 
 /**
  * 用户权限响应类型

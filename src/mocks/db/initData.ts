@@ -53,10 +53,10 @@ export async function initDefaultUsers(): Promise<void> {
         {
           id: `user2_${Date.now()}`,
           username: 'user2',
-          password: 'user2', // 明文存储，仅用于开发测试
+          password: 'user2',
           name: '普通用户',
           email: 'user@example.com',
-          isBuiltIn: true, // 标记为内置用户
+          isBuiltIn: true,
           status: 'active', // 状态：启用
           roleId: 'role_3', // 分配为普通角色
           createTime: now,
@@ -66,11 +66,11 @@ export async function initDefaultUsers(): Promise<void> {
         {
           id: `user3_${Date.now()}`,
           username: 'user3',
-          password: 'user3', // 明文存储，仅用于开发测试
+          password: 'user3',
           name: '无权限用户',
           email: 'user3@example.com',
-          isBuiltIn: true, // 标记为内置用户
-          status: 'active', // 状态：启用
+          isBuiltIn: true,
+          status: 'active',
           roleId: undefined, // 无权限用户，不分配角色
           createTime: now,
           updateTime: now,
@@ -140,6 +140,7 @@ export async function initDefaultRoles(): Promise<void> {
           isBuiltIn: true,
           status: 'active',
           menuIds: [
+            'menu_1', // 首页
             'menu_2', // 系统管理
             'menu_3', // 用户管理
             'menu_4', // 角色管理

@@ -1,6 +1,6 @@
 // 将菜单转换为路由
 import { type RouteRecordRaw, type RouteComponent } from 'vue-router'
-import type { IMenuItem } from '@/types/login'
+import type { IMenuItem } from '@/types/system/menu'
 
 // 匹配所有 views 下的 vue 文件
 const modules = import.meta.glob('@/views/**/*.vue')

@@ -18,6 +18,7 @@
           /></el-icon>
         </div>
       </el-tooltip>
+      <BreadcrumbView :showIcon="true" />
     </div>
 
     <!-- 右侧操作区 -->
@@ -58,6 +59,7 @@
 import { APP_CONFIG } from '@/config/app.config'
 import MenuView from '@/layouts/menu.vue'
 import UserDropdown from '@/layouts/userDropdown.vue'
+import BreadcrumbView from '@/layouts/breadcrumb.vue'
 import { useFullscreen } from '@vueuse/core'
 
 defineOptions({ name: 'HeaderView' })
@@ -79,6 +81,7 @@ const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
 .header-left {
   display: flex;
   align-items: center;
+  gap: 0.5rem;
 }
 
 .menu-container {

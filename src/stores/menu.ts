@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import * as Icons from '@element-plus/icons-vue'
 import { userPermissions } from '@/api/login'
-import type { IMenuItem } from '@/types/login'
+import type { IMenuItem } from '@/types/system/menu'
 
 export const useMenuStore = defineStore('menu', () => {
   // 图标映射(导入所有图标)
