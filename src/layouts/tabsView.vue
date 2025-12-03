@@ -12,16 +12,47 @@
           <el-icon><component :is="menuStore.iconComponents[item.icon as string]" /></el-icon>
           <div>{{ item.title }}</div>
           <el-icon class="close-icon" @click.stop="handleClose(item)" v-if="item.closable">
-            <Close />
+            <component :is="menuStore.iconComponents['Close']" />
           </el-icon>
         </div>
       </div>
     </el-scrollbar>
+    <div class="tabs-dropdown">
+      <el-dropdown trigger="click" class="tabs-dropdown-wrapper">
+        <div class="tabs-dropdown-icon">
+          <el-icon>
+            <component :is="menuStore.iconComponents['ArrowDown']" />
+          </el-icon>
+        </div>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item :icon="Plus" @click="tabsStore.closeOtherTabs(tabsStore.activePath)">
+              关闭其他标签页
+            </el-dropdown-item>
+            <el-dropdown-item
+              :icon="CirclePlusFilled"
+              @click="(tabsStore.closeAllTabs(), router.push(tabsStore.activePath))"
+            >
+              关闭所有标签页
+            </el-dropdown-item>
+            <el-dropdown-item
+              :icon="CirclePlus"
+              @click="tabsStore.closeRightTabs(tabsStore.activePath)"
+            >
+              关闭右侧标签页
+            </el-dropdown-item>
+            <el-dropdown-item :icon="Check" @click="tabsStore.closeLeftTabs(tabsStore.activePath)">
+              关闭左侧标签页
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Close } from '@element-plus/icons-vue'
+import { Plus, CirclePlusFilled, CirclePlus, Check } from '@element-plus/icons-vue'
 import type { TabItem } from '@/stores/tabs'
 
 defineOptions({ name: 'TabsView' })
@@ -48,6 +79,7 @@ const handleClose = (item: TabItem) => {
   padding: 0 1.25rem;
   border-bottom: 1px solid var(--el-border-color-lighter);
   background: var(--el-bg-color);
+  position: relative;
 
   .tabs-wrapper {
     height: 100%;
@@ -110,6 +142,22 @@ const handleClose = (item: TabItem) => {
         &:active {
           transform: scale(0.95);
         }
+      }
+    }
+  }
+  .tabs-dropdown {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    .tabs-dropdown-wrapper {
+      height: 100%;
+      .tabs-dropdown-icon {
+        width: 1.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
       }
     }
   }
