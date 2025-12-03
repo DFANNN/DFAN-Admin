@@ -6,6 +6,7 @@
         <HeaderView />
       </el-header>
       <el-main class="main">
+        <TabsView />
         <RouterView v-slot="{ Component, route }">
           <Transition name="fade-slide" mode="out-in">
             <component :is="Component" :key="route.path" />
@@ -19,6 +20,7 @@
 <script setup lang="ts">
 import HeaderView from '@/layouts/header.vue'
 import MenuView from '@/layouts/menu.vue'
+import TabsView from '@/layouts/tabsView.vue'
 defineOptions({ name: 'LeftMode' })
 </script>
 

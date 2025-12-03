@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { staticRoutes } from '@/router/route'
 import { menuToRoute } from '@/utils/menuToRoute'
+import { useTabsStore } from '@/stores/tabs'
 import NProgress from 'nprogress'
 
 // 配置 NProgress
@@ -78,8 +79,12 @@ router.beforeEach(async (to) => {
   return true
 })
 
-router.afterEach(() => {
+router.afterEach((to) => {
   NProgress.done()
+
+  // 添加标签页
+  const tabsStore = useTabsStore()
+  tabsStore.addTab(to)
 })
 
 // 重置路由(清除动态路由)

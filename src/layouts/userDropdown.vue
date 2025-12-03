@@ -72,10 +72,12 @@
 
 <script setup lang="ts">
 import { resetRouter } from '@/router'
+import { useTabsStore } from '@/stores/tabs'
 
 const router = useRouter()
 const menuStore = useMenuStore()
 const userStore = useUserStore()
+const tabsStore = useTabsStore()
 
 // 用户角色名称
 const userRoleName = computed(() => {
@@ -87,6 +89,7 @@ const logout = () => {
   localStorage.removeItem('token')
   menuStore.clearUserPermissions()
   userStore.clearUserInfo()
+  tabsStore.clearTabs()
   resetRouter()
   router.replace('/login')
 }
