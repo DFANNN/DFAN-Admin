@@ -141,3 +141,88 @@ themeStore.togglePrimaryColor('#10B981') // 切换到绿色主题
 
 - `color-mix()` 函数需要现代浏览器支持（Chrome 111+, Safari 16.4+）
 - 如果浏览器不支持，可以考虑使用 JavaScript 颜色库（如 `tinycolor2`）来计算颜色变体
+
+## 全局loading
+
+### 实现原理
+
+使用 `vite-plugin-app-loading` 插件在应用启动前显示全局 loading 动画，避免页面刷新时出现白屏。该插件会在 HTML 中自动注入 loading 元素，覆盖应用启动阶段（MSW worker、IndexedDB 初始化、Vue 挂载、路由初始化）。
+
+### 安装插件
+
+```shell
+pnpm add -D vite-plugin-app-loading
+```
+
+### 配置 Vite
+
+在 `vite.config.ts` 中添加插件：
+
+```typescript
+import { defineConfig } from 'vite'
+import AppLoading from 'vite-plugin-app-loading'
+
+export default defineConfig({
+  plugins: [
+    // ... 其他插件
+    AppLoading(),
+  ],
+})
+```
+
+### 创建 loading.html
+
+在项目根目录（与 `index.html` 同级）创建 `loading.html` 文件，插件会自动读取并注入该文件的内容。
+
+**重要**: `loading.html` 中必须包含 `id="__app-loading__"` 的元素。
+
+示例 `loading.html`：
+
+```html
+<div id="__app-loading__" class="app-loading">
+  <div class="app-loading-content">
+    <img src="/logo.svg" alt="logo" class="loading-logo" />
+    <div class="loading-text">正在加载...</div>
+  </div>
+</div>
+```
+
+### 在 main.ts 中使用
+
+在应用完全加载后，调用 `loadingFadeOut()` 隐藏 loading：
+
+```typescript
+import { loadingFadeOut } from 'virtual:app-loading'
+import { createApp } from 'vue'
+
+const app = createApp(App)
+app.mount('#app')
+
+// 等待路由完全准备好（包括动态路由加载）
+await router.isReady()
+// 再等待一个 tick，确保首次路由导航完成
+await nextTick()
+// 此时路由已完全加载，可以安全地隐藏 loading
+loadingFadeOut()
+```
+
+告诉 TypeScript 虚拟导入的类型，在你的 tsconfig.app.json 中，将以下内容添加到你的 compilerOptions.types 数组中
+
+```typescript
+{
+  // ...
+  "compilerOptions": {
+    // ...
+    "types": [
+      "vite-plugin-app-loading/client"
+    ]
+  }
+}
+```
+
+### 工作原理
+
+1. **插件注入**: `vite-plugin-app-loading` 会在 HTML 中自动注入 `loading.html` 的内容
+2. **应用启动阶段**: Loading 覆盖从页面刷新到 Vue 应用挂载完成的整个过程
+3. **路由初始化**: 等待 `router.isReady()` 确保动态路由加载完成
+4. **隐藏时机**: 在路由完全准备好后调用 `loadingFadeOut()` 隐藏 loading
