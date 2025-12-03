@@ -131,7 +131,7 @@ import MenuCreate from '@/views/system/menu/create.vue'
 import type { FormInstance } from 'element-plus'
 import type { IMenuItem } from '@/types/system/menu'
 
-defineOptions({ name: 'MenuPage' })
+defineOptions({ name: 'MenuView' })
 
 const menuStore = useMenuStore()
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')

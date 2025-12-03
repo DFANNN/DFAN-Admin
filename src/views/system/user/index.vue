@@ -158,7 +158,7 @@ import type { IUserItem } from '@/types/system/user'
 import type { IRoleItem } from '@/types/system/role'
 import type { FormInstance } from 'element-plus'
 
-defineOptions({ name: 'UserPage' })
+defineOptions({ name: 'UserView' })
 
 const menuStore = useMenuStore()
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')

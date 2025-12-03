@@ -5,6 +5,11 @@ import type { IMenuItem } from '@/types/system/menu'
 // 匹配所有 views 下的 vue 文件
 const modules = import.meta.glob('@/views/**/*.vue')
 
+// 组件名称
+const componentName = (name: string) => {
+  return name.charAt(0).toUpperCase() + name.substring(1) + 'View'
+}
+
 export const menuToRoute = (menuList: IMenuItem[]) => {
   const dynamicRoute: RouteRecordRaw[] = []
 
@@ -16,13 +21,14 @@ export const menuToRoute = (menuList: IMenuItem[]) => {
       const path = menu.path.replace(/^\/+/, '')
       dynamicRoute.push({
         path,
-        name,
+        name: componentName(name as string),
         component: modules[`/src/views/${path}/index.vue`] as RouteComponent,
         meta: {
           icon: menu.icon,
           title: menu.title,
           id: menu.id,
           parentId: menu.parentId,
+          keepAlive: true,
         },
       })
     }

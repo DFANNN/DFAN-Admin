@@ -1,12 +1,12 @@
 /**
- * meta.hidden: 是否在标签页中显示
+ * meta.keepAlive: 是否需要缓存
  */
 export const staticRoutes = [
   {
     path: '/login',
     name: 'login',
     component: () => import('@/views/login/index.vue'),
-    meta: { hidden: true },
+    meta: { keepAlive: false },
   },
   // 重定向路由(暂时注释掉，因为redirect路由会导致加载缓慢)
   // {
@@ -24,13 +24,13 @@ export const staticRoutes = [
         path: '/:pathMatch(.*)*',
         name: '404',
         component: () => import('@/views/exception/404/index.vue'),
-        meta: { hidden: true },
+        meta: { keepAlive: false },
       },
       {
         path: '/exception/403',
         name: '403',
         component: () => import('@/views/exception/403/index.vue'),
-        meta: { hidden: true },
+        meta: { keepAlive: false },
       },
     ],
   },

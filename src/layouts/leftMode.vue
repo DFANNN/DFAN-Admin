@@ -9,7 +9,9 @@
       <el-main class="main">
         <RouterView v-slot="{ Component, route }">
           <Transition name="fade-slide" mode="out-in">
-            <component :is="Component" :key="route.path" />
+            <KeepAlive :include="tabsStore.tabs.map((tab) => tab.name as string)">
+              <component :is="Component" :key="route.path" />
+            </KeepAlive>
           </Transition>
         </RouterView>
       </el-main>
@@ -22,6 +24,8 @@ import HeaderView from '@/layouts/header.vue'
 import MenuView from '@/layouts/menu.vue'
 import TabsView from '@/layouts/tabsView.vue'
 defineOptions({ name: 'LeftMode' })
+
+const tabsStore = useTabsStore()
 </script>
 
 <style scoped lang="scss">

@@ -154,7 +154,7 @@ import RoleCreate from '@/views/system/role/create.vue'
 import type { IRoleItem } from '@/types/system/role'
 import type { FormInstance } from 'element-plus'
 
-defineOptions({ name: 'RolePage' })
+defineOptions({ name: 'RoleView' })
 
 const menuStore = useMenuStore()
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')

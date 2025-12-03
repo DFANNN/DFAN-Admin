@@ -118,7 +118,7 @@ const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
   &:hover {
     background: var(--el-fill-color-light);
     color: var(--el-color-primary);
-    transform: translateY(-2px);
+    // transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   }
 

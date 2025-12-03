@@ -38,8 +38,8 @@ export const useTabsStore = defineStore('tabs', () => {
    * @param route 路由对象
    */
   const addTab = (route: RouteLocationNormalizedLoaded) => {
-    // 如果路由 meta 中标记为 hidden，则不添加到标签页
-    if (route.meta?.hidden) return
+    // 如果路由 meta 中标记为 keepAlive为false，则不添加到标签页
+    if (!route.meta?.keepAlive) return
 
     // 如果当前菜单列表中有首页，则添加首页标签页
     if (!tabs.value.some((tab) => tab.path === '/home')) {
@@ -52,7 +52,7 @@ export const useTabsStore = defineStore('tabs', () => {
           title: homeMenu.title,
           icon: homeMenu.icon,
           closable: false,
-          name: 'home',
+          name: 'HomeView',
         })
       }
     }
