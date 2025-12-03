@@ -5,7 +5,10 @@
       <el-header class="header">
         <HeaderView />
       </el-header>
-      <TabsView />
+      <Transition name="fade-slide" mode="out-in">
+        <TabsView v-if="themeStore.showTabs" />
+      </Transition>
+
       <el-main class="main">
         <RouterView v-slot="{ Component, route }">
           <Transition name="fade-slide" mode="out-in">
@@ -26,6 +29,7 @@ import TabsView from '@/layouts/tabsView.vue'
 defineOptions({ name: 'LeftMode' })
 
 const tabsStore = useTabsStore()
+const themeStore = useThemeStore()
 </script>
 
 <style scoped lang="scss">
