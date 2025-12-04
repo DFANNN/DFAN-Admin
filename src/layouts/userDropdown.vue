@@ -128,7 +128,7 @@ onMounted(() => {
 .user-card {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 0.25rem;
   padding: 4px 8px 4px 4px;
   border-radius: 6px;
   cursor: pointer;
@@ -188,7 +188,7 @@ onMounted(() => {
   }
 
   .arrow-icon {
-    font-size: 12px;
+    font-size: 16px;
     color: var(--el-text-color-regular);
     transition: color 0.2s;
     margin-left: 4px;

@@ -1,11 +1,11 @@
 <template>
   <div class="tabs-container">
-    <div class="tabs-left-icon">
+    <div class="tabs-left-icon" @click="slideLeft">
       <el-icon>
         <component :is="menuStore.iconComponents['ArrowLeft']" />
       </el-icon>
     </div>
-    <div class="tabs-pages">
+    <div class="tabs-pages" ref="tabsPagesRef">
       <div
         class="tabs-page-item"
         :class="{ active: tab.path === tabsStore.activePath }"
@@ -22,7 +22,7 @@
         </el-icon>
       </div>
     </div>
-    <div class="tabs-right-icon">
+    <div class="tabs-right-icon" @click="slideRight">
       <el-icon>
         <component :is="menuStore.iconComponents['ArrowRight']" />
       </el-icon>
@@ -73,6 +73,7 @@ defineOptions({ name: 'TabsView' })
 const router = useRouter()
 const menuStore = useMenuStore()
 const tabsStore = useTabsStore()
+const tabsPagesRef = useTemplateRef<HTMLDivElement>('tabsPagesRef')
 
 // 导航到指定路径
 const navigation = (path: string) => {
@@ -84,6 +85,69 @@ const navigation = (path: string) => {
 const handleClose = (item: TabItem) => {
   tabsStore.removeTab(item.path)
   router.push(tabsStore.activePath)
+}
+
+// 滚动步进值（容器宽度的80%）
+const SCROLL_STEP_RATIO = 0.8
+
+// 获取滚动容器信息
+const getScrollInfo = () => {
+  const container = tabsPagesRef.value
+  if (!container) return null
+
+  return {
+    container,
+    containerWidth: container.offsetWidth,
+    contentWidth: container.scrollWidth,
+    scrollLeft: container.scrollLeft,
+    maxScrollLeft: container.scrollWidth - container.offsetWidth,
+  }
+}
+
+// 向左滑动
+const slideLeft = () => {
+  const info = getScrollInfo()
+  if (!info) return
+
+  // 检查是否需要滚动（内容超出容器）
+  if (info.containerWidth >= info.contentWidth) return
+
+  // 计算滚动距离（容器宽度的80%）
+  const scrollDistance = info.containerWidth * SCROLL_STEP_RATIO
+
+  // 计算目标滚动位置
+  const targetScrollLeft = Math.max(0, info.scrollLeft - scrollDistance)
+
+  // 如果已经在最左边，不执行滚动
+  if (info.scrollLeft <= 0) return
+
+  info.container.scrollTo({
+    left: targetScrollLeft,
+    behavior: 'smooth',
+  })
+}
+
+// 向右滑动
+const slideRight = () => {
+  const info = getScrollInfo()
+  if (!info) return
+
+  // 检查是否需要滚动（内容超出容器）
+  if (info.containerWidth >= info.contentWidth) return
+
+  // 计算滚动距离（容器宽度的80%）
+  const scrollDistance = info.containerWidth * SCROLL_STEP_RATIO
+
+  // 计算目标滚动位置
+  const targetScrollLeft = Math.min(info.maxScrollLeft, info.scrollLeft + scrollDistance)
+
+  // 如果已经在最右边，不执行滚动
+  if (info.scrollLeft >= info.maxScrollLeft) return
+
+  info.container.scrollTo({
+    left: targetScrollLeft,
+    behavior: 'smooth',
+  })
 }
 </script>
 
@@ -101,6 +165,10 @@ const handleClose = (item: TabItem) => {
     display: flex;
     align-items: center;
     cursor: pointer;
+    color: var(--el-text-color-regular);
+    &:hover {
+      color: var(--el-color-primary);
+    }
   }
   .tabs-right-icon {
     padding: 0 0.5rem;
@@ -108,10 +176,13 @@ const handleClose = (item: TabItem) => {
     display: flex;
     align-items: center;
     cursor: pointer;
+    color: var(--el-text-color-regular);
+    &:hover {
+      color: var(--el-color-primary);
+    }
   }
   .tabs-pages {
     padding: 0 1.25rem;
-
     height: 2.5rem;
     flex: 1;
     display: flex;
@@ -201,6 +272,10 @@ const handleClose = (item: TabItem) => {
         padding: 0 0.5rem;
         display: flex;
         align-items: center;
+        color: var(--el-text-color-regular);
+        &:hover {
+          color: var(--el-color-primary);
+        }
       }
     }
   }
