@@ -287,10 +287,17 @@ const slideRight = () => {
   justify-content: space-between;
   gap: 12px;
   padding: 10px 16px;
-  transition: background-color 0.2s;
-  background: transparent;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
 
   &:hover {
+    background: var(--el-fill-color-light) !important;
+    color: var(--el-color-primary);
+  }
+
+  &:focus,
+  &:focus-visible {
     background: var(--el-fill-color-light) !important;
     color: var(--el-color-primary);
   }
