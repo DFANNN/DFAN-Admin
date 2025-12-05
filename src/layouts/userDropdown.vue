@@ -39,7 +39,7 @@
         <!-- 菜单项 -->
         <el-dropdown-menu class="user-menu">
           <el-dropdown-item command="profile">
-            <el-icon><component :is="menuStore.iconComponents['User']" /></el-icon>
+            <el-icon><component :is="menuStore.iconComponents['Avatar']" /></el-icon>
             <span>个人中心</span>
           </el-dropdown-item>
           <el-dropdown-item command="docs">
@@ -71,28 +71,14 @@
 </template>
 
 <script setup lang="ts">
-import { resetRouter } from '@/router'
-import { useTabsStore } from '@/stores/tabs'
-
 const router = useRouter()
 const menuStore = useMenuStore()
 const userStore = useUserStore()
-const tabsStore = useTabsStore()
 
 // 用户角色名称
 const userRoleName = computed(() => {
   return userStore.roleList.find((role) => role.id === userStore.userInfo?.roleId)?.name ?? '无权限'
 })
-
-// 退出登录
-const logout = () => {
-  localStorage.removeItem('token')
-  menuStore.clearUserPermissions()
-  userStore.clearUserInfo()
-  tabsStore.clearTabs()
-  resetRouter()
-  router.replace('/login')
-}
 
 // 用户菜单命令处理
 const handleCommand = (command: string) => {
@@ -114,7 +100,7 @@ const handleCommand = (command: string) => {
       console.log('锁定屏幕')
       break
     case 'logout':
-      logout()
+      userStore.logout()
       break
   }
 }

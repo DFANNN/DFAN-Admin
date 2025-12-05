@@ -10,7 +10,9 @@ import type {
 } from '@/types/system/user'
 import type { IRoleItem } from '@/types/system/role'
 import { ElMessage } from 'element-plus'
-import router from '@/router'
+import router, { resetRouter } from '@/router'
+import { useMenuStore } from './menu'
+import { useTabsStore } from './tabs'
 
 export const useUserStore = defineStore('user', () => {
   // 用户信息
@@ -167,10 +169,20 @@ export const useUserStore = defineStore('user', () => {
     const { data: res } = await updatePasswordRequest(data)
     if (res.code !== 200) return
     ElMessage.success('修改密码成功,请重新登录')
+    setTimeout(() => logout(), 1000)
+  }
+
+  // 退出登录
+  const logout = () => {
     localStorage.removeItem('token')
-    setTimeout(() => {
-      router.push('/login')
-    }, 1000)
+    const menuStore = useMenuStore()
+    const tabsStore = useTabsStore()
+    menuStore.clearUserPermissions()
+    clearUserInfo()
+    tabsStore.clearTabs()
+    resetRouter()
+    router.replace('/login')
+    console.log(`output->`, router.getRoutes())
   }
 
   return {
@@ -188,5 +200,6 @@ export const useUserStore = defineStore('user', () => {
     deleteAllMessages,
     updateUserProfile,
     updatePassword,
+    logout,
   }
 })

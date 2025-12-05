@@ -58,7 +58,7 @@ const menuList: Array<{ key: string; label: string; icon: string }> = [
   {
     key: 'messages',
     label: '我的消息',
-    icon: 'BellFilled',
+    icon: 'Bell',
   },
 ]
 

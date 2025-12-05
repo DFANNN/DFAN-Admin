@@ -4,7 +4,7 @@
       <div class="card-header">
         <div class="header-left">
           <el-icon class="header-icon">
-            <component :is="menuStore.iconComponents['BellFilled']" />
+            <component :is="menuStore.iconComponents['Bell']" />
           </el-icon>
           <span class="header-title">我的消息</span>
         </div>

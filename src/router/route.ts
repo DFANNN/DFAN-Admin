@@ -24,7 +24,7 @@ export const staticRoutes = [
         path: '/profile',
         name: 'profile',
         component: () => import('@/views/profile/index.vue'),
-        meta: { title: '个人中心', keepAlive: true },
+        meta: { title: '个人中心', icon: 'Avatar', keepAlive: true },
       },
       {
         path: '/:pathMatch(.*)*',

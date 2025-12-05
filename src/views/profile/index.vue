@@ -31,7 +31,7 @@ defineOptions({ name: 'ProfileView' })
 <style scoped lang="scss">
 .profile-container {
   display: flex;
-  gap: 2rem;
+  gap: 1rem;
   height: 100%;
   .profile-right {
     flex: 1;

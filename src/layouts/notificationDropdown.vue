@@ -7,7 +7,7 @@
       :offset="[-5, 5]"
     >
       <div class="action-btn">
-        <el-icon><component :is="menuStore.iconComponents['BellFilled']" /></el-icon>
+        <el-icon><component :is="menuStore.iconComponents['Bell']" /></el-icon>
       </div>
     </el-badge>
 
@@ -176,6 +176,42 @@ const goToProfile = () => {
 
       &:hover {
         background: var(--el-fill-color-light);
+      }
+
+      .message-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        min-width: 0;
+
+        .message-title {
+          font-size: 14px;
+          font-weight: 600;
+          color: var(--el-text-color-primary);
+          line-height: 1.4;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .message-text {
+          font-size: 13px;
+          color: var(--el-text-color-regular);
+          line-height: 1.5;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          line-clamp: 2;
+          -webkit-box-orient: vertical;
+        }
+
+        .message-time {
+          font-size: 12px;
+          color: var(--el-text-color-secondary);
+          line-height: 1.4;
+        }
       }
     }
   }
