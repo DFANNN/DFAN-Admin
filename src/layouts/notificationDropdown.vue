@@ -173,6 +173,10 @@ const goToProfile = () => {
           font-size: 1rem;
         }
       }
+
+      &:hover {
+        background: var(--el-fill-color-light);
+      }
     }
   }
   .notification-footer {

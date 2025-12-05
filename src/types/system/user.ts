@@ -61,3 +61,17 @@ export interface IUserMessageItem {
   read: boolean
   time: string
 }
+
+// 修改用户个人信息参数
+export interface IUpdateUserProfileParams {
+  name: string
+  phone: string
+  email: string
+}
+
+// 修改密码参数
+export interface IUpdatePasswordParams {
+  oldPassword: string
+  newPassword: string
+  confirmPassword: string
+}

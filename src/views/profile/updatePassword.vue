@@ -15,7 +15,7 @@
     >
       <el-form-item label="旧密码" prop="oldPassword">
         <el-input
-          v-model="passwordForm.oldPassword"
+          v-model.trim="passwordForm.oldPassword"
           type="password"
           placeholder="请输入旧密码"
           size="large"
@@ -25,7 +25,7 @@
       </el-form-item>
       <el-form-item label="新密码" prop="newPassword">
         <el-input
-          v-model="passwordForm.newPassword"
+          v-model.trim="passwordForm.newPassword"
           type="password"
           placeholder="请输入新密码（至少6位）"
           size="large"
@@ -35,7 +35,7 @@
       </el-form-item>
       <el-form-item label="确认密码" prop="confirmPassword">
         <el-input
-          v-model="passwordForm.confirmPassword"
+          v-model.trim="passwordForm.confirmPassword"
           type="password"
           placeholder="请再次输入新密码"
           size="large"
@@ -54,7 +54,11 @@
 </template>
 
 <script setup lang="ts">
+import type { FormInstance } from 'element-plus'
+
+const userStore = useUserStore()
 const menuStore = useMenuStore()
+const passwordFormRef = useTemplateRef<FormInstance>('passwordFormRef')
 
 const passwordForm = ref({
   oldPassword: '',
@@ -64,12 +68,33 @@ const passwordForm = ref({
 
 const passwordLoading = ref(false)
 
-const updatePassword = async () => {}
+const updatePassword = async () => {
+  await passwordFormRef.value?.validate()
+  passwordLoading.value = true
+  try {
+    await userStore.updatePassword(passwordForm.value)
+  } finally {
+    passwordLoading.value = false
+  }
+}
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const validateNewPassword = (rule: any, value: string, callback: any) => {
+  if (value.trim() === '') return callback(new Error('请输入新密码'))
+  if (value.length < 6) return callback(new Error('新密码长度至少6位'))
+  callback()
+}
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const validateConfirmPassword = (rule: any, value: string, callback: any) => {
+  if (value.trim() === '') return callback(new Error('请输入确认密码'))
+  if (value !== passwordForm.value.newPassword) return callback(new Error('确认密码与新密码不一致'))
+  callback()
+}
 const passwordRules = ref({
   oldPassword: [{ required: true, message: '请输入旧密码', trigger: 'blur' }],
-  newPassword: [{ required: true, message: '请输入新密码', trigger: 'blur' }],
-  confirmPassword: [{ required: true, message: '请输入确认密码', trigger: 'blur' }],
+  newPassword: [{ required: true, validator: validateNewPassword, trigger: 'blur' }],
+  confirmPassword: [{ required: true, validator: validateConfirmPassword, trigger: 'blur' }],
 })
 </script>
 

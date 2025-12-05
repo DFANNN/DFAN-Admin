@@ -4,6 +4,8 @@ import type {
   IUserListResponse,
   ICreateOrUpdateUserParams,
   IUserDetailResponse,
+  IUpdateUserProfileParams,
+  IUpdatePasswordParams,
 } from '@/types/system/user'
 import type { ICommonResponse } from '@/types/common'
 
@@ -40,4 +42,18 @@ export const updateUser = (data: ICreateOrUpdateUserParams) => {
  */
 export const deleteUser = (ids: string[]) => {
   return request.delete<ICommonResponse<unknown>>('/users', { data: ids })
+}
+
+/**
+ * 修改用户个人信息
+ */
+export const updateProfile = (data: IUpdateUserProfileParams) => {
+  return request.put<ICommonResponse<unknown>>('/users/profile', data)
+}
+
+/**
+ * 修改密码
+ */
+export const updatePasswordRequest = (data: IUpdatePasswordParams) => {
+  return request.put<ICommonResponse<unknown>>('/users/password', data)
 }

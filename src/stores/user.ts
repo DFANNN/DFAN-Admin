@@ -1,8 +1,16 @@
 import { defineStore } from 'pinia'
 import { userInfoRequest } from '@/api/login'
 import { rolePage } from '@/api/role'
-import type { IUserItem, IUserMessageItem } from '@/types/system/user'
+import { updateProfile, updatePasswordRequest } from '@/api/user'
+import type {
+  IUserItem,
+  IUserMessageItem,
+  IUpdateUserProfileParams,
+  IUpdatePasswordParams,
+} from '@/types/system/user'
 import type { IRoleItem } from '@/types/system/role'
+import { ElMessage } from 'element-plus'
+import router from '@/router'
 
 export const useUserStore = defineStore('user', () => {
   // 用户信息
@@ -146,6 +154,25 @@ export const useUserStore = defineStore('user', () => {
     userMessages.value = []
   }
 
+  // 修改用户个人信息
+  const updateUserProfile = async (data: IUpdateUserProfileParams) => {
+    const { data: res } = await updateProfile(data)
+    if (res.code !== 200) return
+    getUserInfo()
+    ElMessage.success('修改个人信息成功')
+  }
+
+  // 修改密码
+  const updatePassword = async (data: IUpdatePasswordParams) => {
+    const { data: res } = await updatePasswordRequest(data)
+    if (res.code !== 200) return
+    ElMessage.success('修改密码成功,请重新登录')
+    localStorage.removeItem('token')
+    setTimeout(() => {
+      router.push('/login')
+    }, 1000)
+  }
+
   return {
     userInfo,
     roleList,
@@ -159,5 +186,7 @@ export const useUserStore = defineStore('user', () => {
     deleteMessage,
     markAllAsRead,
     deleteAllMessages,
+    updateUserProfile,
+    updatePassword,
   }
 })

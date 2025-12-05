@@ -583,3 +583,191 @@ export const getUserPermissionsHandler = http.get(
     }
   },
 )
+
+/**
+ * 修改用户基本信息（姓名、手机号、邮箱）
+ * 从token中获取用户ID，无需路径参数
+ */
+export const updateUserProfileHandler = http.put(
+  '/cat-admin-api/users/profile',
+  async ({ request }) => {
+    // 验证token并获取用户ID
+    const { error, userId } = verifyAuth(request)
+    if (error) {
+      return error
+    }
+
+    if (!userId) {
+      return HttpResponse.json({
+        code: 401,
+        message: '无法从token中获取用户ID',
+        data: null,
+      })
+    }
+
+    try {
+      const body = (await request.json()) as {
+        name?: string
+        phone?: string
+        email?: string
+      }
+
+      // 获取现有用户
+      const existingUser = await getUserById(userId)
+      if (!existingUser) {
+        return HttpResponse.json({
+          code: 500,
+          message: '用户不存在',
+          data: null,
+        })
+      }
+
+      // 如果是内置用户，不允许修改
+      if (existingUser.isBuiltIn) {
+        return HttpResponse.json({
+          code: 500,
+          message: '内置用户不允许修改',
+          data: null,
+        })
+      }
+
+      // 更新用户基本信息
+      const updatedUser: User = {
+        ...existingUser,
+        name: body.name !== undefined ? body.name : existingUser.name,
+        phone: body.phone !== undefined ? body.phone : existingUser.phone,
+        email: body.email !== undefined ? body.email : existingUser.email,
+        updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      }
+
+      await update<User>(STORES.USERS, updatedUser)
+
+      return HttpResponse.json({
+        code: 200,
+        message: '更新成功',
+        data: updatedUser,
+      })
+    } catch (error) {
+      console.error('[MSW] 修改用户基本信息错误:', error)
+      return HttpResponse.json({
+        code: 500,
+        message: '服务器内部错误',
+        data: null,
+      })
+    }
+  },
+)
+
+/**
+ * 修改用户密码
+ * 从token中获取用户ID，无需路径参数
+ */
+export const updateUserPasswordHandler = http.put(
+  '/cat-admin-api/users/password',
+  async ({ request }) => {
+    // 验证token并获取用户ID
+    const { error, userId } = verifyAuth(request)
+    if (error) {
+      return error
+    }
+
+    if (!userId) {
+      return HttpResponse.json({
+        code: 401,
+        message: '无法从token中获取用户ID',
+        data: null,
+      })
+    }
+
+    try {
+      const body = (await request.json()) as {
+        oldPassword?: string
+        newPassword?: string
+        confirmPassword?: string
+      }
+
+      const { oldPassword, newPassword, confirmPassword } = body
+
+      // 验证参数
+      if (!oldPassword || !newPassword || !confirmPassword) {
+        return HttpResponse.json({
+          code: 500,
+          message: '旧密码、新密码和确认密码不能为空',
+          data: null,
+        })
+      }
+
+      // 验证新密码长度至少6位
+      if (newPassword.length < 6) {
+        return HttpResponse.json({
+          code: 500,
+          message: '新密码长度至少6位',
+          data: null,
+        })
+      }
+
+      // 验证新密码和确认密码是否一致
+      if (newPassword !== confirmPassword) {
+        return HttpResponse.json({
+          code: 500,
+          message: '新密码和确认密码不一致',
+          data: null,
+        })
+      }
+
+      // 获取现有用户
+      const existingUser = await getUserById(userId)
+      if (!existingUser) {
+        return HttpResponse.json({
+          code: 500,
+          message: '用户不存在',
+          data: null,
+        })
+      }
+
+      // 如果是内置用户，不允许修改
+      if (existingUser.isBuiltIn) {
+        return HttpResponse.json({
+          code: 500,
+          message: '内置用户不允许修改',
+          data: null,
+        })
+      }
+
+      // 验证旧密码是否正确
+      if (existingUser.password !== oldPassword) {
+        return HttpResponse.json({
+          code: 500,
+          message: '旧密码错误',
+          data: null,
+        })
+      }
+
+      // 更新用户密码
+      const updatedUser: User = {
+        ...existingUser,
+        password: newPassword,
+        updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      }
+
+      await update<User>(STORES.USERS, updatedUser)
+
+      // 返回更新后的用户信息（不包含密码字段）
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...userWithoutPassword } = updatedUser
+
+      return HttpResponse.json({
+        code: 200,
+        message: '密码修改成功',
+        data: userWithoutPassword,
+      })
+    } catch (error) {
+      console.error('[MSW] 修改用户密码错误:', error)
+      return HttpResponse.json({
+        code: 500,
+        message: '服务器内部错误',
+        data: null,
+      })
+    }
+  },
+)

@@ -47,7 +47,14 @@ watchEffect(() => {
   profileForm.value.email = userStore.userInfo?.email || ''
 })
 
-const updateProfile = async () => {}
+const updateProfile = async () => {
+  profileLoading.value = true
+  try {
+    await userStore.updateUserProfile(profileForm.value)
+  } finally {
+    profileLoading.value = false
+  }
+}
 </script>
 
 <style scoped lang="scss">
