@@ -98,7 +98,8 @@ const logout = () => {
 const handleCommand = (command: string) => {
   switch (command) {
     case 'profile':
-      console.log('个人中心')
+      userStore.currentMenu = 'info'
+      router.push('/profile')
       break
     case 'docs':
       console.log('文档')

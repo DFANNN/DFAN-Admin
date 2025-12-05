@@ -48,3 +48,16 @@ export type IUserListResponse = ICommonResponse<{
 
 // 用户详情响应
 export type IUserDetailResponse = ICommonResponse<IUserItem>
+
+// 消息类型
+export type MessageType = 'system' | 'user' | 'todo'
+
+// 用户消息列表项
+export interface IUserMessageItem {
+  id: string
+  title: string
+  content: string
+  type: MessageType
+  read: boolean
+  time: string
+}

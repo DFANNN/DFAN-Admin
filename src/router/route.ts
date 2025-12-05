@@ -21,6 +21,12 @@ export const staticRoutes = [
     component: () => import('@/layouts/index.vue'),
     children: [
       {
+        path: '/profile',
+        name: 'profile',
+        component: () => import('@/views/profile/index.vue'),
+        meta: { title: '个人中心', keepAlive: true },
+      },
+      {
         path: '/:pathMatch(.*)*',
         name: '404',
         component: () => import('@/views/exception/404/index.vue'),

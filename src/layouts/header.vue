@@ -47,6 +47,7 @@
             /></el-icon>
           </div>
         </el-tooltip>
+        <NotificationDropdown />
       </div>
 
       <!-- 用户下拉菜单 -->
@@ -60,6 +61,7 @@ import { APP_CONFIG } from '@/config/app.config'
 import MenuView from '@/layouts/menu.vue'
 import UserDropdown from '@/layouts/userDropdown.vue'
 import BreadcrumbView from '@/layouts/breadcrumb.vue'
+import NotificationDropdown from '@/layouts/notificationDropdown.vue'
 import { useFullscreen } from '@vueuse/core'
 
 defineOptions({ name: 'HeaderView' })
