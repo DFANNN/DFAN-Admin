@@ -57,64 +57,72 @@
             </div>
           </template>
           <div class="message-list">
-            <div
-              v-for="message in item.messages"
-              :key="message.id"
-              class="message-item"
-              :class="{ unread: !message.read }"
-            >
-              <div class="message-icon-wrapper">
-                <div class="message-icon">
-                  <el-icon>
-                    <component
-                      :is="
-                        message.type === 'system'
-                          ? menuStore.iconComponents['InfoFilled']
-                          : message.type === 'user'
-                            ? menuStore.iconComponents['User']
-                            : menuStore.iconComponents['Document']
-                      "
-                    />
-                  </el-icon>
+            <el-scrollbar>
+              <div
+                v-for="message in item.messages"
+                :key="message.id"
+                class="message-item"
+                :class="{ unread: !message.read }"
+              >
+                <div class="message-icon-wrapper">
+                  <div class="message-icon">
+                    <el-icon>
+                      <component
+                        :is="
+                          message.type === 'system'
+                            ? menuStore.iconComponents['InfoFilled']
+                            : message.type === 'user'
+                              ? menuStore.iconComponents['User']
+                              : menuStore.iconComponents['Document']
+                        "
+                      />
+                    </el-icon>
+                  </div>
+                  <div v-if="!message.read" class="unread-dot"></div>
                 </div>
-                <div v-if="!message.read" class="unread-dot"></div>
-              </div>
-              <div class="message-content">
-                <div class="message-header">
-                  <div class="message-title">{{ message.title }}</div>
-                  <div class="message-time">{{ message.time }}</div>
+                <div class="message-content">
+                  <div class="message-header">
+                    <div class="message-title">{{ message.title }}</div>
+                    <div class="message-time">{{ message.time }}</div>
+                  </div>
+                  <div class="message-content">{{ message.content }}</div>
                 </div>
-                <div class="message-content">{{ message.content }}</div>
+                <div class="message-actions">
+                  <el-button
+                    type="primary"
+                    link
+                    size="small"
+                    v-if="!message.read"
+                    @click="userStore.markAsRead(message.id)"
+                  >
+                    <el-icon class="button-icon"
+                      ><component :is="menuStore.iconComponents['Check']"
+                    /></el-icon>
+                    标记已读
+                  </el-button>
+                  <el-popconfirm
+                    title="确定要删除这条消息吗？"
+                    @confirm="
+                      (userStore.deleteMessage(message.id), ElMessage.success('消息已删除'))
+                    "
+                  >
+                    <template #reference>
+                      <el-button type="danger" link size="small">
+                        <el-icon class="button-icon"
+                          ><component :is="menuStore.iconComponents['Delete']"
+                        /></el-icon>
+                        删除
+                      </el-button>
+                    </template>
+                  </el-popconfirm>
+                </div>
               </div>
-              <div class="message-actions">
-                <el-button
-                  type="primary"
-                  link
-                  size="small"
-                  v-if="!message.read"
-                  @click="userStore.markAsRead(message.id)"
-                >
-                  <el-icon class="button-icon"
-                    ><component :is="menuStore.iconComponents['Check']"
-                  /></el-icon>
-                  标记已读
-                </el-button>
-                <el-popconfirm
-                  title="确定要删除这条消息吗？"
-                  @confirm="(userStore.deleteMessage(message.id), ElMessage.success('消息已删除'))"
-                >
-                  <template #reference>
-                    <el-button type="danger" link size="small">
-                      <el-icon class="button-icon"
-                        ><component :is="menuStore.iconComponents['Delete']"
-                      /></el-icon>
-                      删除
-                    </el-button>
-                  </template>
-                </el-popconfirm>
-              </div>
-            </div>
-            <el-empty v-if="item.messages.length === 0" description="暂无消息" :image-size="120" />
+              <el-empty
+                v-if="item.messages.length === 0"
+                description="暂无消息"
+                :image-size="120"
+              />
+            </el-scrollbar>
           </div>
         </el-tab-pane>
       </el-tabs>

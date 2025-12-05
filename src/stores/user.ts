@@ -75,6 +75,86 @@ export const useUserStore = defineStore('user', () => {
       read: true,
       time: '2024-01-13 09:15:00',
     },
+    {
+      id: '10',
+      title: '数据库性能优化通知',
+      content: '系统将在今晚 23:00 进行数据库性能优化，期间部分服务可能会出现短暂波动，请您谅解。',
+      type: 'system',
+      read: false,
+      time: '2024-01-15 09:10:00',
+    },
+    {
+      id: '11',
+      title: '服务网络升级',
+      content: '为提升访问速度，我们将于本周内进行网络带宽扩容，升级期间不影响正常使用。',
+      type: 'system',
+      read: false,
+      time: '2024-01-14 18:40:00',
+    },
+    {
+      id: '12',
+      title: '隐私政策更新',
+      content: '我们的隐私政策已于今日更新，请前往设置中心查看最新内容。',
+      type: 'system',
+      read: false,
+      time: '2024-01-14 09:30:00',
+    },
+    {
+      id: '13',
+      title: '系统版本升级公告',
+      content: '系统已升级至 V2.1.0，带来更稳定的体验及多项功能优化。',
+      type: 'system',
+      read: false,
+      time: '2024-01-13 18:00:00',
+    },
+    {
+      id: '14',
+      title: 'API 调用限制调整',
+      content: '由于系统策略调整，部分 API 的调用限制已变更，请查看文档以了解最新规则。',
+      type: 'system',
+      read: true,
+      time: '2024-01-13 12:50:00',
+    },
+    {
+      id: '15',
+      title: '缓存系统更新',
+      content: '我们已完成缓存系统的升级，数据读取速度和稳定性将得到显著提升。',
+      type: 'system',
+      read: true,
+      time: '2024-01-12 11:20:00',
+    },
+    {
+      id: '16',
+      title: '账号安全通知',
+      content: '近期检测到异常登录行为增多，建议所有用户开启登录提醒并启用双重认证。',
+      type: 'system',
+      read: false,
+      time: '2024-01-12 08:45:00',
+    },
+    {
+      id: '17',
+      title: '功能调整说明',
+      content: '由于使用率较低，系统将于本月底下线旧版数据导出功能，请尽快迁移至新版导出工具。',
+      type: 'system',
+      read: false,
+      time: '2024-01-11 19:00:00',
+    },
+    {
+      id: '18',
+      title: '消息通知优化',
+      content: '我们优化了消息推送机制，现在可以更快地接收到系统和业务通知。',
+      type: 'system',
+      read: true,
+      time: '2024-01-11 09:40:00',
+    },
+    {
+      id: '19',
+      title: '异常故障恢复通知',
+      content: '今日上午发生的短暂访问异常已全部修复，当前系统运行正常，感谢您的理解。',
+      type: 'system',
+      read: false,
+      time: '2024-01-10 18:10:00',
+    },
     // 用户信息
     {
       id: '4',
@@ -182,7 +262,6 @@ export const useUserStore = defineStore('user', () => {
     tabsStore.clearTabs()
     resetRouter()
     router.replace('/login')
-    console.log(`output->`, router.getRoutes())
   }
 
   return {

@@ -121,7 +121,37 @@ const breadcrumbList = computed<BreadcrumbItem[]>(() => {
 
   // 查找当前路由对应的菜单项
   const currentMenu = findMenuByPath(menuStore.menuList, route.path)
-  if (!currentMenu) return []
+
+  // 如果找不到菜单项，尝试从路由 meta 中获取信息（处理不在菜单中的页面，如403、404、个人中心等）
+  if (!currentMenu) {
+    const path: BreadcrumbItem[] = []
+
+    // 查找首页菜单项
+    const homeMenu = findHomeMenu(menuStore.menuList)
+
+    // 如果找到首页，先添加首页
+    if (homeMenu && route.path !== homeMenu.path) {
+      path.push({
+        id: homeMenu.id,
+        title: homeMenu.title,
+        path: homeMenu.path || '/',
+        icon: homeMenu.icon,
+      })
+    }
+
+    // 从路由 meta 中获取当前页面的标题
+    const routeTitle = route.meta?.title as string | undefined
+    if (routeTitle) {
+      path.push({
+        id: (route.name as string) || route.path,
+        title: routeTitle,
+        path: route.path,
+        icon: route.meta?.icon as string | undefined,
+      })
+    }
+
+    return path
+  }
 
   // 构建菜单映射
   const menuMap = buildMenuMap(menuStore.menuList)
