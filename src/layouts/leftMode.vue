@@ -1,6 +1,6 @@
 <template>
   <el-container class="left-mode-container">
-    <MenuView />
+    <MenuView v-if="!menuStore.isMobile" />
     <el-container>
       <el-header class="header">
         <HeaderView />
@@ -20,16 +20,29 @@
       </el-main>
     </el-container>
   </el-container>
+
+  <!-- 移动端菜单抽屉 -->
+  <el-drawer
+    v-model="menuStore.isMobileMenuOpen"
+    :direction="'ltr'"
+    :with-header="false"
+    :size="230"
+    class="mobile-menu-drawer"
+  >
+    <MenuView />
+  </el-drawer>
 </template>
 
 <script setup lang="ts">
 import HeaderView from '@/layouts/header.vue'
 import MenuView from '@/layouts/menu.vue'
 import TabsView from '@/layouts/tabsView.vue'
+
 defineOptions({ name: 'LeftMode' })
 
 const tabsStore = useTabsStore()
 const themeStore = useThemeStore()
+const menuStore = useMenuStore()
 </script>
 
 <style scoped lang="scss">
@@ -51,5 +64,11 @@ const themeStore = useThemeStore()
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+:deep(.mobile-menu-drawer) {
+  .el-drawer__body {
+    padding: 0;
+  }
 }
 </style>

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import * as Icons from '@element-plus/icons-vue'
+import { useWindowSize } from '@vueuse/core'
 import { userPermissions } from '@/api/login'
 import type { IMenuItem } from '@/types/system/menu'
 
@@ -11,6 +12,22 @@ export const useMenuStore = defineStore('menu', () => {
   const isCollapse = ref(false)
   const toggleCollapse = () => {
     isCollapse.value = !isCollapse.value
+  }
+
+  // 响应式监听窗口宽度
+  const { width } = useWindowSize()
+  // 是否为手机模式
+  const isMobile = computed(() => width.value < 992)
+
+  // 如果是手机模式,菜单不折叠
+  watchEffect(() => {
+    if (isMobile.value) isCollapse.value = false
+  })
+
+  // 移动端菜单抽屉显示状态
+  const isMobileMenuOpen = ref(false)
+  const toggleMobileMenu = () => {
+    isMobileMenuOpen.value = !isMobileMenuOpen.value
   }
 
   // 菜单数据配置
@@ -40,8 +57,11 @@ export const useMenuStore = defineStore('menu', () => {
     iconComponents,
     menuList,
     isCollapse,
+    isMobileMenuOpen,
     hasLoadedPermissions,
+    isMobile,
     toggleCollapse,
+    toggleMobileMenu,
     getUserPermissions,
     clearUserPermissions,
   }

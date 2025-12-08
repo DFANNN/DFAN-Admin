@@ -6,19 +6,25 @@
     </div>
     <!-- 左侧区域 -->
     <div class="header-left" v-else>
-      <el-tooltip content="折叠菜单" placement="bottom" effect="dark">
-        <div class="action-btn" @click="menuStore.toggleCollapse">
+      <el-tooltip
+        :content="menuStore.isMobile ? '展开菜单' : '折叠菜单'"
+        placement="bottom"
+        effect="dark"
+      >
+        <div class="action-btn" @click="handleMenuToggle">
           <el-icon
             ><component
               :is="
-                menuStore.isCollapse
-                  ? menuStore.iconComponents['Expand']
-                  : menuStore.iconComponents['Fold']
+                menuStore.isMobile
+                  ? menuStore.iconComponents['Menu']
+                  : menuStore.isCollapse
+                    ? menuStore.iconComponents['Expand']
+                    : menuStore.iconComponents['Fold']
               "
           /></el-icon>
         </div>
       </el-tooltip>
-      <BreadcrumbView :showIcon="true" />
+      <BreadcrumbView :showIcon="true" v-if="!menuStore.isMobile" />
     </div>
 
     <!-- 右侧操作区 -->
@@ -35,16 +41,22 @@
           </div>
         </el-tooltip>
 
-        <el-tooltip :content="isFullscreen ? '退出全屏' : '全屏'" placement="bottom" effect="dark">
+        <el-tooltip
+          :content="isFullscreen ? '退出全屏' : '全屏'"
+          placement="bottom"
+          effect="dark"
+          v-if="!menuStore.isMobile"
+        >
           <div class="action-btn" @click="toggleFullscreen">
-            <el-icon
-              ><component
+            <el-icon>
+              <component
                 :is="
                   isFullscreen
                     ? menuStore.iconComponents['FullScreen']
                     : menuStore.iconComponents['Aim']
                 "
-            /></el-icon>
+              />
+            </el-icon>
           </div>
         </el-tooltip>
         <NotificationDropdown />
@@ -70,6 +82,15 @@ const menuStore = useMenuStore()
 const themeStore = useThemeStore()
 // 全屏功能
 const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
+
+// 处理菜单切换
+const handleMenuToggle = () => {
+  if (menuStore.isMobile) {
+    menuStore.toggleMobileMenu()
+  } else {
+    menuStore.toggleCollapse()
+  }
+}
 </script>
 
 <style scoped lang="scss">

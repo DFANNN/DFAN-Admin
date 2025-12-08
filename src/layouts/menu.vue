@@ -8,6 +8,7 @@
     :mode="themeStore.layout === 'topMode' ? 'horizontal' : 'vertical'"
     @select="navigation"
     class="menu-container"
+    :class="{ '--menu-border': menuStore.isMobile }"
   >
     <Transition :name="themeStore.layout === 'leftMode' ? 'el-zoom-in-top' : 'el-zoom-in-left'">
       <el-menu-item class="logo" v-if="themeStore.showLogo">
@@ -58,10 +59,18 @@ const logoTitleColor = computed(() => {
 
 const navigation = (key: string) => {
   router.push(key)
+  // 移动端点击菜单项后自动关闭抽屉
+  if (menuStore.isMobile && menuStore.isMobileMenuOpen) {
+    menuStore.isMobileMenuOpen = false
+  }
 }
 </script>
 
 <style scoped lang="scss">
+.--menu-border {
+  border-right: none;
+}
+
 .menu-container {
   height: 100%;
   .logo {
