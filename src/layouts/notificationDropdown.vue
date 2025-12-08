@@ -126,6 +126,8 @@ const goToProfile = () => {
     background: var(--el-fill-color-light);
     color: var(--el-color-primary);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    animation: jello;
+    animation-duration: 1s;
   }
 
   .el-icon {

@@ -14,7 +14,7 @@
         :ref="(el) => setTabRef(el, tab.path)"
         @click="navigation(tab.path)"
       >
-        <el-icon>
+        <el-icon class="tabs-page-icon">
           <component :is="menuStore.iconComponents[tab.icon as string]" />
         </el-icon>
         <div>{{ tab.title }}</div>
@@ -232,6 +232,8 @@ const slideRight = () => {
     color: var(--el-text-color-regular);
     &:hover {
       color: var(--el-color-primary);
+      animation: jello;
+      animation-duration: 1s;
     }
   }
   .tabs-right-icon {
@@ -243,6 +245,8 @@ const slideRight = () => {
     color: var(--el-text-color-regular);
     &:hover {
       color: var(--el-color-primary);
+      animation: jello;
+      animation-duration: 1s;
     }
   }
   .tabs-pages {
@@ -287,6 +291,10 @@ const slideRight = () => {
       &:hover {
         background-color: var(--el-fill-color-light);
         border-radius: 0.625rem 0.625rem 0.875rem 0.875rem;
+        .tabs-page-icon {
+          animation: jello;
+          animation-duration: 1s;
+        }
       }
 
       &.active {
@@ -332,6 +340,7 @@ const slideRight = () => {
     .tabs-dropdown-wrapper {
       height: 100%;
       cursor: pointer;
+      margin-right: 0.5rem;
       .tabs-dropdown-icon {
         padding: 0 0.5rem;
         display: flex;
@@ -339,6 +348,8 @@ const slideRight = () => {
         color: var(--el-text-color-regular);
         &:hover {
           color: var(--el-color-primary);
+          animation: jello;
+          animation-duration: 1s;
         }
       }
     }

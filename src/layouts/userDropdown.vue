@@ -124,6 +124,8 @@ onMounted(() => {
   &:hover {
     .arrow-icon {
       color: var(--el-color-primary);
+      animation: jello;
+      animation-duration: 1s;
     }
   }
 
