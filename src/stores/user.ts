@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { userInfoRequest } from '@/api/login'
 import { rolePage } from '@/api/role'
-import { updateProfile, updatePasswordRequest } from '@/api/user'
+import { updateProfile, updatePasswordRequest, updateAvatarRequest } from '@/api/user'
 import type {
   IUserItem,
   IUserMessageItem,
@@ -13,8 +13,11 @@ import { ElMessage } from 'element-plus'
 import router, { resetRouter } from '@/router'
 import { useMenuStore } from './menu'
 import { useTabsStore } from './tabs'
+import defaultAvatarSvg from '@/assets/cats/三花猫.svg'
 
 export const useUserStore = defineStore('user', () => {
+  // 默认头像占位
+  const defaultAvatarImg = ref(defaultAvatarSvg)
   // 用户信息
   const userInfo = ref<IUserItem | null>(null)
 
@@ -26,6 +29,9 @@ export const useUserStore = defineStore('user', () => {
     const { data: res } = await userInfoRequest()
     if (res.code !== 200) return
     userInfo.value = res.data
+    if (!userInfo.value?.avatar) {
+      userInfo.value.avatar = defaultAvatarImg.value
+    }
   }
 
   // 获取用户角色名称
@@ -36,6 +42,14 @@ export const useUserStore = defineStore('user', () => {
     })
     if (res.code !== 200) return
     roleList.value = res.data?.list ?? []
+  }
+
+  // 修改头像
+  const updateAvatar = async (avatar: string) => {
+    const { data: res } = await updateAvatarRequest({ avatar })
+    if (res.code !== 200) return
+    getUserInfo()
+    ElMessage.success('修改头像成功')
   }
 
   // 清除用户信息
@@ -280,5 +294,6 @@ export const useUserStore = defineStore('user', () => {
     updateUserProfile,
     updatePassword,
     logout,
+    updateAvatar,
   }
 })

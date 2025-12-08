@@ -2,8 +2,8 @@
   <el-card shadow="never" class="profile-menu-card">
     <div class="avatar-section">
       <div class="avatar-wrapper">
-        <img src="@/assets/cats/白猫.svg" alt="头像" />
-        <div class="avatar-overlay">
+        <img :src="userStore.userInfo?.avatar" alt="头像" />
+        <div class="avatar-overlay" @click="selectAvatarDialogRef?.showDialog()">
           <el-icon><component :is="menuStore.iconComponents['Camera']" /></el-icon>
           <span>更换头像</span>
         </div>

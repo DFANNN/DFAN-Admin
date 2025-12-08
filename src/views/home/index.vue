@@ -4,7 +4,7 @@
     <div class="welcome-section">
       <div class="welcome-content">
         <div class="welcome-avatar">
-          <img :src="welcomeAvatar" alt="用户头像" />
+          <img :src="userStore.userInfo?.avatar" alt="用户头像" />
         </div>
         <div class="welcome-text">
           <h1 class="welcome-title">欢迎回来，<span class="username">管理员</span> 👋</h1>
@@ -117,7 +117,6 @@
 
 <script setup lang="ts">
 import { ref, computed, type Component } from 'vue'
-import avatarImg from '@/assets/avatar.svg'
 import {
   Plus,
   Document,
@@ -140,7 +139,7 @@ import {
 
 defineOptions({ name: 'HomeView' })
 
-const welcomeAvatar = avatarImg
+const userStore = useUserStore()
 
 // 当前日期
 const currentDate = computed(() => {
@@ -285,6 +284,7 @@ const handleAction = (action: QuickAction) => {
       width: 64px;
       height: 64px;
       overflow: hidden;
+      border-radius: 50%;
 
       img {
         width: 100%;

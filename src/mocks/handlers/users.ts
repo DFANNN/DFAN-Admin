@@ -771,3 +771,82 @@ export const updateUserPasswordHandler = http.put(
     }
   },
 )
+
+/**
+ * 修改用户头像
+ * 从token中获取用户ID，无需路径参数
+ */
+export const updateUserAvatarHandler = http.put(
+  '/cat-admin-api/users/avatar',
+  async ({ request }) => {
+    // 验证token并获取用户ID
+    const { error, userId } = verifyAuth(request)
+    if (error) {
+      return error
+    }
+
+    if (!userId) {
+      return HttpResponse.json({
+        code: 401,
+        message: '无法从token中获取用户ID',
+        data: null,
+      })
+    }
+
+    try {
+      const body = (await request.json()) as {
+        avatar?: string
+      }
+
+      // 验证参数
+      if (body.avatar === undefined || body.avatar === null) {
+        return HttpResponse.json({
+          code: 500,
+          message: '头像不能为空',
+          data: null,
+        })
+      }
+
+      // 获取现有用户
+      const existingUser = await getUserById(userId)
+      if (!existingUser) {
+        return HttpResponse.json({
+          code: 500,
+          message: '用户不存在',
+          data: null,
+        })
+      }
+
+      // 如果是内置用户，不允许修改
+      if (existingUser.isBuiltIn) {
+        return HttpResponse.json({
+          code: 500,
+          message: '内置用户不允许修改',
+          data: null,
+        })
+      }
+
+      // 更新用户头像
+      const updatedUser: User = {
+        ...existingUser,
+        avatar: body.avatar,
+        updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      }
+
+      await update<User>(STORES.USERS, updatedUser)
+
+      return HttpResponse.json({
+        code: 200,
+        message: '头像修改成功',
+        data: updatedUser,
+      })
+    } catch (error) {
+      console.error('[MSW] 修改用户头像错误:', error)
+      return HttpResponse.json({
+        code: 500,
+        message: '服务器内部错误',
+        data: null,
+      })
+    }
+  },
+)

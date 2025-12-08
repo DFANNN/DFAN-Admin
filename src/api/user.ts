@@ -6,6 +6,7 @@ import type {
   IUserDetailResponse,
   IUpdateUserProfileParams,
   IUpdatePasswordParams,
+  IUpdateUserAvatarParams,
 } from '@/types/system/user'
 import type { ICommonResponse } from '@/types/common'
 
@@ -56,4 +57,11 @@ export const updateProfile = (data: IUpdateUserProfileParams) => {
  */
 export const updatePasswordRequest = (data: IUpdatePasswordParams) => {
   return request.put<ICommonResponse<unknown>>('/users/password', data)
+}
+
+/**
+ * 修改头像
+ */
+export const updateAvatarRequest = (data: IUpdateUserAvatarParams) => {
+  return request.put<ICommonResponse<unknown>>('/users/avatar', data)
 }

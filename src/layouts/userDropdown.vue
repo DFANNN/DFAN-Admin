@@ -3,7 +3,7 @@
     <div class="user-card">
       <div class="avatar-wrapper">
         <div class="user-avatar">
-          <img src="@/assets/avatar.svg" alt="avatar" />
+          <img :src="userStore.userInfo?.avatar" alt="avatar" />
         </div>
         <span class="status-badge"></span>
       </div>
@@ -23,7 +23,7 @@
         <div class="user-header">
           <div class="avatar-wrapper">
             <div class="header-avatar">
-              <img src="@/assets/avatar.svg" alt="avatar" />
+              <img :src="userStore.userInfo?.avatar" alt="avatar" />
             </div>
             <span class="status-badge"></span>
           </div>

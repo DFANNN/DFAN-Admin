@@ -49,6 +49,7 @@ export async function initDefaultUsers(): Promise<void> {
           roleId: superAdminRole ? superAdminRole.id : undefined, // 分配为超级管理员角色（单角色）
           createTime: now,
           updateTime: now,
+          avatar: 'https://picsum.photos/200/300',
         },
         {
           id: `user2_${Date.now()}`,

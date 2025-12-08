@@ -7,6 +7,7 @@ export interface IUserItem {
   username: string
   password: string
   name?: string
+  avatar?: string // 头像（base64 或 URL）
   phone?: string
   email?: string
   roleId?: string // 用户角色ID（单角色）
@@ -74,4 +75,9 @@ export interface IUpdatePasswordParams {
   oldPassword: string
   newPassword: string
   confirmPassword: string
+}
+
+// 修改头像参数
+export interface IUpdateUserAvatarParams {
+  avatar: string // 头像（base64 或 URL）
 }

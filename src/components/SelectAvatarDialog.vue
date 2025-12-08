@@ -17,7 +17,6 @@
           v-for="avatar in filteredAvatars"
           :key="avatar.id"
           class="avatar-item"
-          :class="{ active: currentSelectAvatar === avatar.src }"
           @click="selectAvatar(avatar)"
         >
           <div class="avatar-image">
@@ -35,12 +34,11 @@ import { APP_CONFIG } from '@/config/app.config'
 
 defineOptions({ name: 'SelectAvatarDialog' })
 
-const emits = defineEmits(['getSelectAvatar'])
+const userStore = useUserStore()
 const menuStore = useMenuStore()
 
 const open = ref(false)
 const avatarSearchText = ref('')
-const currentSelectAvatar = ref('')
 
 // 获取所有头像
 const allAvatars = computed(() => {
@@ -57,24 +55,22 @@ const filteredAvatars = computed(() => {
     (avatar) =>
       avatar.title.toLowerCase().includes(search) ||
       avatar.alt.toLowerCase().includes(search) ||
-      avatar.description.toLowerCase().includes(search)
+      avatar.description.toLowerCase().includes(search),
   )
 })
 
 // 选择头像
 const selectAvatar = (avatar: { src: string }) => {
-  emits('getSelectAvatar', avatar.src)
+  userStore.updateAvatar(avatar.src)
   close()
 }
 
 const close = () => {
   open.value = false
-  currentSelectAvatar.value = ''
   avatarSearchText.value = ''
 }
 
-const showDialog = (avatarSrc: string) => {
-  currentSelectAvatar.value = avatarSrc
+const showDialog = () => {
   open.value = true
 }
 
@@ -154,4 +150,3 @@ defineExpose({
   }
 }
 </style>
-
