@@ -65,28 +65,30 @@
                   class="message-item"
                   :class="{ unread: !message.read }"
                 >
-                  <div class="message-icon-wrapper">
-                    <div class="message-icon">
-                      <el-icon>
-                        <component
-                          :is="
-                            message.type === 'system'
-                              ? menuStore.iconComponents['InfoFilled']
-                              : message.type === 'user'
-                                ? menuStore.iconComponents['User']
-                                : menuStore.iconComponents['Document']
-                          "
-                        />
-                      </el-icon>
+                  <div class="message-top-section">
+                    <div class="message-icon-wrapper">
+                      <div class="message-icon">
+                        <el-icon>
+                          <component
+                            :is="
+                              message.type === 'system'
+                                ? menuStore.iconComponents['InfoFilled']
+                                : message.type === 'user'
+                                  ? menuStore.iconComponents['User']
+                                  : menuStore.iconComponents['Document']
+                            "
+                          />
+                        </el-icon>
+                      </div>
+                      <div v-if="!message.read" class="unread-dot"></div>
                     </div>
-                    <div v-if="!message.read" class="unread-dot"></div>
-                  </div>
-                  <div class="message-content">
                     <div class="message-header">
                       <div class="message-title">{{ message.title }}</div>
                       <div class="message-time">{{ message.time }}</div>
                     </div>
-                    <div class="message-content">{{ message.content }}</div>
+                  </div>
+                  <div class="message-content">
+                    <div class="message-content-text">{{ message.content }}</div>
                   </div>
                   <div class="message-actions">
                     <el-button
@@ -214,6 +216,10 @@ const messagesList = computed(() => {
     display: flex;
     flex-direction: column;
 
+    @media (max-width: 992px) {
+      padding: 1rem;
+    }
+
     :deep(.el-tabs) {
       display: flex;
       flex-direction: column;
@@ -251,6 +257,10 @@ const messagesList = computed(() => {
       display: flex;
       flex-direction: column;
 
+      @media (max-width: 992px) {
+        padding: 0.5rem 0;
+      }
+
       :deep(.el-scrollbar) {
         height: 100%;
         flex: 1;
@@ -270,8 +280,9 @@ const messagesList = computed(() => {
         padding: 1rem;
         border-radius: 0.75rem;
         display: flex;
-        align-items: center;
-        gap: 1rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
         border: 1px solid var(--el-border-color-lighter);
         transition: all 0.3s ease;
         cursor: pointer;
@@ -281,12 +292,22 @@ const messagesList = computed(() => {
           transform: translateY(-4px);
           border-color: var(--el-color-primary);
         }
+
         &.unread {
           border-left: 0.25rem solid var(--el-color-primary);
         }
+
+        .message-top-section {
+          width: 100%;
+          display: flex;
+          align-items: flex-start;
+          gap: 1rem;
+        }
+
         .message-icon-wrapper {
           position: relative;
           flex-shrink: 0;
+
           .message-icon {
             width: 3rem;
             height: 3rem;
@@ -303,6 +324,7 @@ const messagesList = computed(() => {
             );
             color: #fff;
           }
+
           .unread-dot {
             position: absolute;
             top: -0.25rem;
@@ -314,37 +336,78 @@ const messagesList = computed(() => {
             border: 2px solid var(--el-bg-color);
           }
         }
-        .message-content {
+
+        .message-header {
           flex: 1;
-          .message-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 0.8rem;
-            .message-title {
-              font-size: 1rem;
-              font-weight: 600;
-              color: var(--el-text-color-primary);
-            }
-            .message-time {
-              font-size: 0.8rem;
-              color: var(--el-text-color-placeholder);
-              white-space: nowrap;
-            }
+          min-width: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.25rem;
+
+          .message-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--el-text-color-primary);
+            width: 100%;
           }
-          .message-content {
+
+          .message-time {
+            font-size: 0.8rem;
+            color: var(--el-text-color-placeholder);
+            white-space: normal;
+          }
+        }
+
+        .message-content {
+          width: 100%;
+
+          .message-content-text {
             font-size: 0.875rem;
             color: var(--el-text-color-regular);
             line-height: 1.5;
           }
         }
+
         .message-actions {
-          flex-shrink: 0;
+          width: 100%;
           display: flex;
           align-items: center;
+          justify-content: flex-end;
           gap: 0.5rem;
+          padding-top: 0.5rem;
+          border-top: 1px solid var(--el-border-color-lighter);
+
           .button-icon {
             margin-right: 0.25rem;
+          }
+        }
+
+        // 移动端响应式布局（只调整尺寸）
+        @media (max-width: 992px) {
+          .message-icon-wrapper {
+            .message-icon {
+              width: 2.5rem;
+              height: 2.5rem;
+              font-size: 1.25rem;
+            }
+          }
+
+          .message-header {
+            .message-title {
+              font-size: 0.95rem;
+            }
+
+            .message-time {
+              font-size: 0.75rem;
+            }
+          }
+
+          .message-content {
+            .message-content-text {
+              font-size: 0.8rem;
+              line-height: 1.4;
+            }
           }
         }
       }
