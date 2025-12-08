@@ -58,63 +58,65 @@
           </template>
           <div class="message-list">
             <el-scrollbar>
-              <div
-                v-for="message in item.messages"
-                :key="message.id"
-                class="message-item"
-                :class="{ unread: !message.read }"
-              >
-                <div class="message-icon-wrapper">
-                  <div class="message-icon">
-                    <el-icon>
-                      <component
-                        :is="
-                          message.type === 'system'
-                            ? menuStore.iconComponents['InfoFilled']
-                            : message.type === 'user'
-                              ? menuStore.iconComponents['User']
-                              : menuStore.iconComponents['Document']
-                        "
-                      />
-                    </el-icon>
+              <div class="message-items-wrapper">
+                <div
+                  v-for="message in item.messages"
+                  :key="message.id"
+                  class="message-item"
+                  :class="{ unread: !message.read }"
+                >
+                  <div class="message-icon-wrapper">
+                    <div class="message-icon">
+                      <el-icon>
+                        <component
+                          :is="
+                            message.type === 'system'
+                              ? menuStore.iconComponents['InfoFilled']
+                              : message.type === 'user'
+                                ? menuStore.iconComponents['User']
+                                : menuStore.iconComponents['Document']
+                          "
+                        />
+                      </el-icon>
+                    </div>
+                    <div v-if="!message.read" class="unread-dot"></div>
                   </div>
-                  <div v-if="!message.read" class="unread-dot"></div>
-                </div>
-                <div class="message-content">
-                  <div class="message-header">
-                    <div class="message-title">{{ message.title }}</div>
-                    <div class="message-time">{{ message.time }}</div>
+                  <div class="message-content">
+                    <div class="message-header">
+                      <div class="message-title">{{ message.title }}</div>
+                      <div class="message-time">{{ message.time }}</div>
+                    </div>
+                    <div class="message-content">{{ message.content }}</div>
                   </div>
-                  <div class="message-content">{{ message.content }}</div>
-                </div>
-                <div class="message-actions">
-                  <el-button
-                    type="primary"
-                    link
-                    size="small"
-                    v-if="!message.read"
-                    @click="userStore.markAsRead(message.id)"
-                  >
-                    <el-icon class="button-icon"
-                      ><component :is="menuStore.iconComponents['Check']"
-                    /></el-icon>
-                    标记已读
-                  </el-button>
-                  <el-popconfirm
-                    title="确定要删除这条消息吗？"
-                    @confirm="
-                      (userStore.deleteMessage(message.id), ElMessage.success('消息已删除'))
-                    "
-                  >
-                    <template #reference>
-                      <el-button type="danger" link size="small">
-                        <el-icon class="button-icon"
-                          ><component :is="menuStore.iconComponents['Delete']"
-                        /></el-icon>
-                        删除
-                      </el-button>
-                    </template>
-                  </el-popconfirm>
+                  <div class="message-actions">
+                    <el-button
+                      type="primary"
+                      link
+                      size="small"
+                      v-if="!message.read"
+                      @click="userStore.markAsRead(message.id)"
+                    >
+                      <el-icon class="button-icon"
+                        ><component :is="menuStore.iconComponents['Check']"
+                      /></el-icon>
+                      标记已读
+                    </el-button>
+                    <el-popconfirm
+                      title="确定要删除这条消息吗？"
+                      @confirm="
+                        (userStore.deleteMessage(message.id), ElMessage.success('消息已删除'))
+                      "
+                    >
+                      <template #reference>
+                        <el-button type="danger" link size="small">
+                          <el-icon class="button-icon"
+                            ><component :is="menuStore.iconComponents['Delete']"
+                          /></el-icon>
+                          删除
+                        </el-button>
+                      </template>
+                    </el-popconfirm>
+                  </div>
                 </div>
               </div>
               <el-empty
@@ -167,6 +169,9 @@ const messagesList = computed(() => {
 <style scoped lang="scss">
 :deep(.el-card__body) {
   padding: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 .el-card {
   border-radius: 1rem;
@@ -204,6 +209,33 @@ const messagesList = computed(() => {
   }
   .message-container {
     padding: 2rem;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+
+    :deep(.el-tabs) {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0; // 重要：允许 flex 子元素收缩
+
+      .el-tabs__header {
+        flex-shrink: 0;
+      }
+
+      .el-tabs__content {
+        flex: 1;
+        min-height: 0; // 重要：允许 flex 子元素收缩
+
+        .el-tab-pane {
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+        }
+      }
+    }
+
     .tab-label {
       display: flex;
       align-items: center;
@@ -214,9 +246,26 @@ const messagesList = computed(() => {
     }
     .message-list {
       padding: 1rem 0;
+      flex: 1;
+      min-height: 0; // 重要：允许 flex 子元素收缩
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+
+      :deep(.el-scrollbar) {
+        height: 100%;
+        flex: 1;
+
+        .el-scrollbar__wrap {
+          height: 100%;
+        }
+      }
+
+      .message-items-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
       .message-item {
         padding: 1rem;
         border-radius: 0.75rem;

@@ -182,4 +182,10 @@ const handleSelectAvatar = (avatar: string) => {
     }
   }
 }
+
+@media (max-width: 992px) {
+  .profile-menu-card {
+    width: 100%;
+  }
+}
 </style>

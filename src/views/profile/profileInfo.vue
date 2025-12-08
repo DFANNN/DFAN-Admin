@@ -7,7 +7,7 @@
       </div>
     </template>
 
-    <el-form ref="profileFormRef" :model="profileForm" label-width="100px" class="profile-form">
+    <el-form ref="profileFormRef" :model="profileForm" label-width="60px" class="profile-form">
       <el-form-item label="姓名" prop="name">
         <el-input v-model="profileForm.name" placeholder="请输入姓名" size="large" clearable />
       </el-form-item>
@@ -93,6 +93,14 @@ const updateProfile = async () => {
       .icon-check {
         margin-right: 0.5rem;
       }
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .profile-info-card {
+    .profile-form {
+      padding: 1rem;
     }
   }
 }

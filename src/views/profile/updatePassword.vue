@@ -10,7 +10,7 @@
       ref="passwordFormRef"
       :model="passwordForm"
       :rules="passwordRules"
-      label-width="100px"
+      label-width="80px"
       class="password-form"
     >
       <el-form-item label="旧密码" prop="oldPassword">
@@ -133,6 +133,14 @@ const passwordRules = ref({
       .icon-lock {
         margin-right: 0.5rem;
       }
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .update-password-card {
+    .password-form {
+      padding: 1rem;
     }
   }
 }

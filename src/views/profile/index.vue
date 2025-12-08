@@ -37,4 +37,9 @@ defineOptions({ name: 'ProfileView' })
     flex: 1;
   }
 }
+@media (max-width: 992px) {
+  .profile-container {
+    flex-direction: column;
+  }
+}
 </style>
