@@ -1,6 +1,6 @@
 <template>
   <el-container class="left-mode-container">
-    <MenuView v-if="!menuStore.isMobile" />
+    <MenuView v-if="!menuStore.isMobile" class="menu-view" />
     <el-container>
       <el-header class="header">
         <HeaderView />
@@ -39,6 +39,9 @@ const menuStore = useMenuStore()
   width: 100%;
   height: 100%;
 }
+.menu-view {
+  flex-shrink: 0;
+}
 
 .header {
   height: 50px;
@@ -53,11 +56,5 @@ const menuStore = useMenuStore()
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
-}
-
-:deep(.mobile-menu-drawer) {
-  .el-drawer__body {
-    padding: 0;
-  }
 }
 </style>

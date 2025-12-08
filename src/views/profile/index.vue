@@ -1,6 +1,6 @@
 <template>
   <div class="profile-container">
-    <div>
+    <div class="profile-left">
       <ProfileMenu />
     </div>
     <div class="profile-right">
@@ -33,6 +33,10 @@ defineOptions({ name: 'ProfileView' })
   display: flex;
   gap: 1rem;
   height: 100%;
+  .profile-left {
+    width: 18.75rem;
+    transition: all 0.3s ease;
+  }
   .profile-right {
     flex: 1;
   }
@@ -40,6 +44,9 @@ defineOptions({ name: 'ProfileView' })
 @media (max-width: 992px) {
   .profile-container {
     flex-direction: column;
+    .profile-left {
+      width: 100%;
+    }
   }
 }
 </style>

@@ -11,6 +11,7 @@
         :class="{ active: tab.path === tabsStore.activePath }"
         v-for="tab in tabsStore.tabs"
         :key="tab.path"
+        :ref="(el) => setTabRef(el, tab.path)"
         @click="navigation(tab.path)"
       >
         <el-icon>
@@ -75,16 +76,79 @@ const menuStore = useMenuStore()
 const tabsStore = useTabsStore()
 const tabsPagesRef = useTemplateRef<HTMLDivElement>('tabsPagesRef')
 
+// 存储每个标签页的 DOM 引用
+const tabRefs = new Map<string, HTMLDivElement>()
+
+// 设置标签页引用
+const setTabRef = (el: Element | ComponentPublicInstance | null, path: string) => {
+  if (el && el instanceof HTMLElement) {
+    tabRefs.set(path, el as HTMLDivElement)
+  } else {
+    tabRefs.delete(path)
+  }
+}
+
+// 滚动到选中的标签页
+const scrollToActiveTab = () => {
+  nextTick(() => {
+    const activeTab = tabRefs.get(tabsStore.activePath)
+    const container = tabsPagesRef.value
+    if (!activeTab || !container) return
+
+    const containerRect = container.getBoundingClientRect()
+    const tabRect = activeTab.getBoundingClientRect()
+
+    // 检查标签页是否在可视区域内
+    const isVisible = tabRect.left >= containerRect.left && tabRect.right <= containerRect.right
+
+    if (!isVisible) {
+      // 如果标签页在左侧不可见
+      if (tabRect.left < containerRect.left) {
+        container.scrollTo({
+          left: container.scrollLeft + (tabRect.left - containerRect.left) - 10,
+          behavior: 'smooth',
+        })
+      }
+      // 如果标签页在右侧不可见
+      else if (tabRect.right > containerRect.right) {
+        container.scrollTo({
+          left: container.scrollLeft + (tabRect.right - containerRect.right) + 10,
+          behavior: 'smooth',
+        })
+      }
+    }
+  })
+}
+
+// 监听 activePath 变化，自动滚动到选中的标签页
+watch(
+  () => tabsStore.activePath,
+  () => {
+    scrollToActiveTab()
+  },
+  { immediate: true },
+)
+
+// 监听 tabs 数组变化，确保在标签页添加或删除后也能正确滚动
+watch(
+  () => tabsStore.tabs.length,
+  () => {
+    scrollToActiveTab()
+  },
+)
+
 // 导航到指定路径
 const navigation = (path: string) => {
   router.push(path)
   tabsStore.activePath = path
+  scrollToActiveTab()
 }
 
 // 关闭标签页
 const handleClose = (item: TabItem) => {
   tabsStore.removeTab(item.path)
   router.push(tabsStore.activePath)
+  scrollToActiveTab()
 }
 
 // 滚动步进值（容器宽度的80%）

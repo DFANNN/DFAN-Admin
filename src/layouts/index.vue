@@ -9,7 +9,7 @@
       v-model="menuStore.isMobileMenuOpen"
       :direction="'ltr'"
       :with-header="false"
-      :size="230"
+      :size="200"
       class="mobile-menu-drawer"
     >
       <MenuView />
@@ -30,6 +30,11 @@ const themeStore = useThemeStore()
 </script>
 
 <style scoped lang="scss">
+:deep(.mobile-menu-drawer) {
+  .el-drawer__body {
+    padding: 0;
+  }
+}
 .layout-container {
   width: 100%;
   height: 100vh;

@@ -76,7 +76,6 @@ const handleSelectAvatar = (avatar: string) => {
 }
 
 .profile-menu-card {
-  width: 18.75rem;
   height: 100%;
   .avatar-section {
     background: linear-gradient(
@@ -180,12 +179,6 @@ const handleSelectAvatar = (avatar: string) => {
         color: var(--el-color-primary);
       }
     }
-  }
-}
-
-@media (max-width: 992px) {
-  .profile-menu-card {
-    width: 100%;
   }
 }
 </style>
