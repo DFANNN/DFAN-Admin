@@ -1,7 +1,7 @@
 <template>
   <div class="header-container">
     <!-- 菜单区域 -->
-    <div class="menu-container" v-if="themeStore.layout === 'topMode'">
+    <div class="menu-container" v-if="showTopMenu">
       <MenuView />
     </div>
     <!-- 左侧区域 -->
@@ -82,6 +82,11 @@ const menuStore = useMenuStore()
 const themeStore = useThemeStore()
 // 全屏功能
 const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
+
+// 显示顶部菜单
+const showTopMenu = computed(() => {
+  return themeStore.layout === 'topMode' && !menuStore.isMobile
+})
 
 // 处理菜单切换
 const handleMenuToggle = () => {

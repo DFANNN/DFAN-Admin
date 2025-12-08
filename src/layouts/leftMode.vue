@@ -20,17 +20,6 @@
       </el-main>
     </el-container>
   </el-container>
-
-  <!-- 移动端菜单抽屉 -->
-  <el-drawer
-    v-model="menuStore.isMobileMenuOpen"
-    :direction="'ltr'"
-    :with-header="false"
-    :size="230"
-    class="mobile-menu-drawer"
-  >
-    <MenuView />
-  </el-drawer>
 </template>
 
 <script setup lang="ts">

@@ -5,7 +5,7 @@
     :background-color="menuBackgroundColor"
     :text-color="menuTextColor"
     :active-text-color="menuActiveTextColor"
-    :mode="themeStore.layout === 'topMode' ? 'horizontal' : 'vertical'"
+    :mode="menuMode"
     @select="navigation"
     class="menu-container"
     :class="{ '--menu-border': menuStore.isMobile }"
@@ -33,6 +33,12 @@ const route = useRoute()
 const router = useRouter()
 // 当前激活的菜单项
 const activeMenu = computed(() => route.path)
+
+// 菜单模式
+const menuMode = computed(() => {
+  if (menuStore.isMobile) return 'vertical'
+  return themeStore.layout === 'topMode' ? 'horizontal' : 'vertical'
+})
 
 // 菜单颜色配置
 const menuBackgroundColor = computed(() => {
