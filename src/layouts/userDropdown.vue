@@ -8,7 +8,9 @@
         <span class="status-badge"></span>
       </div>
       <div class="user-info">
-        <span class="username">{{ userStore.userInfo?.name || userStore.userInfo?.username }}</span>
+        <span class="username ellipsis-text">{{
+          userStore.userInfo?.name || userStore.userInfo?.username
+        }}</span>
         <span class="user-role-badge">{{ userRoleName }}</span>
       </div>
       <el-icon class="arrow-icon">
@@ -27,7 +29,7 @@
           </div>
           <div class="user-info">
             <div class="name-row">
-              <span class="user-name">{{
+              <span class="user-name ellipsis-text">{{
                 userStore.userInfo?.name || userStore.userInfo?.username
               }}</span>
               <span class="pro-badge">{{ userRoleName }}</span>
@@ -68,12 +70,29 @@
       </div>
     </template>
   </el-dropdown>
+
+  <el-dialog v-model="logoutDialogVisible" width="400px" title="系统提示">
+    <div class="logout-dialog-content">
+      <el-icon class="warning-icon">
+        <component :is="menuStore.iconComponents['WarningFilled']" />
+      </el-icon>
+      <span class="dialog-text">确定要退出登录吗？</span>
+    </div>
+    <template #footer>
+      <el-button @click="logoutDialogVisible = false">取消</el-button>
+      <el-button type="primary" @click="(userStore.logout(), (logoutDialogVisible = false))"
+        >确定</el-button
+      >
+    </template>
+  </el-dialog>
 </template>
 
 <script setup lang="ts">
 const router = useRouter()
 const menuStore = useMenuStore()
 const userStore = useUserStore()
+
+const logoutDialogVisible = ref(false)
 
 // 用户角色名称
 const userRoleName = computed(() => {
@@ -100,7 +119,7 @@ const handleCommand = (command: string) => {
       console.log('锁定屏幕')
       break
     case 'logout':
-      userStore.logout()
+      logoutDialogVisible.value = true
       break
   }
 }
@@ -159,6 +178,7 @@ onMounted(() => {
       font-weight: 600;
       color: var(--el-text-color-primary);
       line-height: 1.2;
+      max-width: 100px;
     }
 
     .user-role-badge {
@@ -230,6 +250,7 @@ onMounted(() => {
         font-weight: 600;
         color: var(--el-text-color-primary);
         line-height: 1.2;
+        max-width: 100px;
       }
 
       .pro-badge {
@@ -323,6 +344,25 @@ onMounted(() => {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       opacity: 0.6;
     }
+  }
+}
+
+.logout-dialog-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+
+  .warning-icon {
+    font-size: 24px;
+    color: var(--el-color-warning);
+    flex-shrink: 0;
+  }
+
+  .dialog-text {
+    font-size: 14px;
+    color: var(--el-text-color-primary);
+    line-height: 1.5;
   }
 }
 </style>

@@ -33,3 +33,10 @@
 .operation-container {
   margin-bottom: 1rem;
 }
+
+/* 省略文本样式 */
+.ellipsis-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap !important;
+}
