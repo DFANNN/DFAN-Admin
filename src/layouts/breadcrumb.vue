@@ -187,7 +187,7 @@ const breadcrumbList = computed<BreadcrumbItem[]>(() => {
     align-items: center;
     gap: 0.25rem;
     .breadcrumb-icon {
-      font-size: 1rem;
+      font-size: 1.125rem;
     }
   }
 }

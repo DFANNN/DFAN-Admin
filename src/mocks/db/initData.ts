@@ -199,7 +199,7 @@ const defaultMenuTreeData = [
     id: 'menu_1',
     path: '/home',
     title: '首页',
-    icon: 'HomeFilled',
+    icon: 'hero-outline:Cog8ToothIcon',
   },
   {
     id: 'menu_2',

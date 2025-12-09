@@ -4,7 +4,7 @@
       <div class="card-header">
         <div class="header-left">
           <el-icon class="header-icon">
-            <component :is="menuStore.iconComponents['Bell']" />
+            <component :is="menuStore.iconComponents['HSolid:BellAlertIcon']" />
           </el-icon>
           <span class="header-title">我的消息</span>
         </div>
@@ -191,7 +191,7 @@ const messagesList = computed(() => {
       align-items: center;
       gap: 0.75rem;
       .header-icon {
-        font-size: 1.25rem;
+        font-size: 1.6rem;
         color: var(--el-color-primary);
       }
       .header-title {

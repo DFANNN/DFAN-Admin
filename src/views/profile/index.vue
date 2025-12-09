@@ -30,6 +30,7 @@ const componentMap: Record<string, Component> = {
 
 <style scoped lang="scss">
 .profile-container {
+  flex: 1;
   display: flex;
   gap: 1rem;
   height: 100%;

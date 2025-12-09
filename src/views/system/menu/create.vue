@@ -2,7 +2,7 @@
   <el-dialog
     v-model="open"
     :title="submitForm.id ? '编辑菜单' : '新增菜单'"
-    width="600px"
+    :width="menuStore.isMobile ? '90%' : '600px'"
     :close-on-click-modal="false"
     @close="close"
   >
@@ -51,7 +51,7 @@
           <el-button
             :icon="menuStore.iconComponents.Search"
             @click="selectIconDialogRef?.showDialog(submitForm.icon)"
-            >选择图标</el-button
+            >{{ menuStore.isMobile ? null : '选择图标' }}</el-button
           >
         </div>
       </el-form-item>

@@ -1,12 +1,35 @@
 import { defineStore } from 'pinia'
-import * as Icons from '@element-plus/icons-vue'
+import * as ElIcons from '@element-plus/icons-vue'
+import * as HeroOutlineIcons from '@heroicons/vue/24/outline'
+import * as HeroSolidIcons from '@heroicons/vue/24/solid'
 import { useWindowSize } from '@vueuse/core'
 import { userPermissions } from '@/api/login'
 import type { IMenuItem } from '@/types/system/menu'
 
 export const useMenuStore = defineStore('menu', () => {
+  // el-icon 图标映射
+  const elIcons: Record<string, Component> = ElIcons
+  // heroicons outline 图标映射
+  const heroOutlineIcons: Record<string, Component> = {}
+  Object.keys(HeroOutlineIcons).forEach((key) => {
+    heroOutlineIcons[`HOutline:${key}`] = HeroOutlineIcons[
+      key as keyof typeof HeroOutlineIcons
+    ] as Component
+  })
+  // heroicons solid 图标映射
+  const heroSolidIcons: Record<string, Component> = {}
+  Object.keys(HeroSolidIcons).forEach((key) => {
+    heroSolidIcons[`HSolid:${key}`] = HeroSolidIcons[
+      key as keyof typeof HeroSolidIcons
+    ] as Component
+  })
+
   // 图标映射(导入所有图标)
-  const iconComponents: Record<string, Component> = Icons
+  const iconComponents: Record<string, Component> = markRaw({
+    ...elIcons,
+    ...heroOutlineIcons,
+    ...heroSolidIcons,
+  })
 
   // 菜单折叠状态
   const isCollapse = ref(false)

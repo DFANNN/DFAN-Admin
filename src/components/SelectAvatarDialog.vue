@@ -13,7 +13,9 @@
           :class="{ active: activeMenu === 'upload' }"
           @click="switchMenu('upload')"
         >
-          <el-icon><component :is="menuStore.iconComponents['Camera']" /></el-icon>
+          <el-icon size="20"
+            ><component :is="menuStore.iconComponents['HSolid:CameraIcon']"
+          /></el-icon>
           <span>上传头像</span>
         </div>
         <div
@@ -21,7 +23,9 @@
           :class="{ active: activeMenu === 'cat' }"
           @click="switchMenu('cat')"
         >
-          <el-icon><component :is="menuStore.iconComponents['Camera']" /></el-icon>
+          <el-icon size="20"
+            ><component :is="menuStore.iconComponents['HSolid:SparklesIcon']"
+          /></el-icon>
           <span>猫猫头像</span>
         </div>
       </div>
@@ -39,7 +43,7 @@
               >
                 <div v-if="!selectedAvatar" class="upload-content">
                   <el-icon class="upload-icon">
-                    <component :is="menuStore.iconComponents['PictureFilled']" />
+                    <component :is="menuStore.iconComponents['HSolid:PhotoIcon']" />
                   </el-icon>
                   <div class="upload-text">
                     <div class="upload-text-main">拖拽图片到此处或点击上传</div>

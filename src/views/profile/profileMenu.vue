@@ -19,7 +19,7 @@
         :class="{ active: userStore.currentMenu === menu.key }"
         @click="userStore.currentMenu = menu.key"
       >
-        <el-icon><component :is="menuStore.iconComponents[menu.icon]" /></el-icon>
+        <el-icon :size="20"><component :is="menuStore.iconComponents[menu.icon]" /></el-icon>
         <span>{{ menu.label }}</span>
         <el-badge
           v-if="menu.key === 'messages'"
@@ -48,17 +48,17 @@ const menuList: Array<{ key: string; label: string; icon: string }> = [
   {
     key: 'info',
     label: '基本信息',
-    icon: 'User',
+    icon: 'HSolid:UserCircleIcon',
   },
   {
     key: 'password',
     label: '修改密码',
-    icon: 'Lock',
+    icon: 'HSolid:LockClosedIcon',
   },
   {
     key: 'messages',
     label: '我的消息',
-    icon: 'Bell',
+    icon: 'HSolid:BellAlertIcon',
   },
 ]
 

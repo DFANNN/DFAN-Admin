@@ -2,7 +2,9 @@
   <el-card class="profile-info-card" shadow="never">
     <template #header>
       <div class="card-header">
-        <el-icon class="header-icon"><component :is="menuStore.iconComponents['User']" /></el-icon>
+        <el-icon class="header-icon"
+          ><component :is="menuStore.iconComponents['HSolid:UserCircleIcon']"
+        /></el-icon>
         <span class="header-title">基本信息</span>
       </div>
     </template>
@@ -73,7 +75,7 @@ const updateProfile = async () => {
     align-items: center;
     gap: 0.75rem;
     .header-icon {
-      font-size: 1.25rem;
+      font-size: 2rem;
       color: var(--el-color-primary);
     }
     .header-title {
