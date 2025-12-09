@@ -14,7 +14,7 @@
         <span class="user-role-badge ellipsis-text">{{ userRoleName }}</span>
       </div>
       <el-icon class="arrow-icon">
-        <component :is="menuStore.iconComponents['ArrowDown']" />
+        <component :is="menuStore.iconComponents['HOutline:ChevronDownIcon']" />
       </el-icon>
     </div>
     <template #dropdown>
@@ -41,28 +41,38 @@
         <!-- 菜单项 -->
         <el-dropdown-menu class="user-menu">
           <el-dropdown-item command="profile">
-            <el-icon><component :is="menuStore.iconComponents['Avatar']" /></el-icon>
+            <el-icon>
+              <component :is="menuStore.iconComponents['HOutline:UserCircleIcon']" />
+            </el-icon>
             <span>个人中心</span>
           </el-dropdown-item>
           <el-dropdown-item command="docs">
-            <el-icon><component :is="menuStore.iconComponents['Document']" /></el-icon>
+            <el-icon>
+              <component :is="menuStore.iconComponents['HOutline:DocumentTextIcon']" />
+            </el-icon>
             <span>文档</span>
           </el-dropdown-item>
           <el-dropdown-item command="github">
-            <el-icon><component :is="menuStore.iconComponents['Link']" /></el-icon>
+            <el-icon><component :is="menuStore.iconComponents['HOutline:LinkIcon']" /></el-icon>
             <span>GitHub</span>
           </el-dropdown-item>
           <el-dropdown-item command="help">
-            <el-icon><component :is="menuStore.iconComponents['QuestionFilled']" /></el-icon>
+            <el-icon>
+              <component :is="menuStore.iconComponents['HOutline:QuestionMarkCircleIcon']" />
+            </el-icon>
             <span>问题 & 帮助</span>
           </el-dropdown-item>
           <el-dropdown-item divided command="lock">
-            <el-icon><component :is="menuStore.iconComponents['Lock']" /></el-icon>
+            <el-icon>
+              <component :is="menuStore.iconComponents['HOutline:LockClosedIcon']" />
+            </el-icon>
             <span>锁定屏幕</span>
             <span class="shortcut">⇧ L</span>
           </el-dropdown-item>
           <el-dropdown-item command="logout">
-            <el-icon><component :is="menuStore.iconComponents['SwitchButton']" /></el-icon>
+            <el-icon>
+              <component :is="menuStore.iconComponents['HOutline:ArrowRightOnRectangleIcon']" />
+            </el-icon>
             <span>退出登录</span>
             <span class="shortcut">⇧ Q</span>
           </el-dropdown-item>
@@ -198,7 +208,7 @@ onMounted(() => {
   }
 
   .arrow-icon {
-    font-size: 16px;
+    font-size: 1rem;
     color: var(--el-text-color-regular);
     transition: color 0.2s;
     margin-left: 4px;
@@ -331,7 +341,7 @@ onMounted(() => {
     }
 
     .el-icon {
-      font-size: 18px;
+      font-size: 1.25rem;
       flex-shrink: 0;
     }
 

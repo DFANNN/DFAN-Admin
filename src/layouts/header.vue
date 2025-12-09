@@ -16,10 +16,10 @@
             ><component
               :is="
                 menuStore.isMobile
-                  ? menuStore.iconComponents['Menu']
+                  ? menuStore.iconComponents['HOutline:Bars3CenterLeftIcon']
                   : menuStore.isCollapse
-                    ? menuStore.iconComponents['Expand']
-                    : menuStore.iconComponents['Fold']
+                    ? menuStore.iconComponents['HOutline:Bars3BottomRightIcon']
+                    : menuStore.iconComponents['HOutline:Bars3BottomLeftIcon']
               "
           /></el-icon>
         </div>
@@ -37,7 +37,9 @@
           v-if="APP_CONFIG.showThemeConfig"
         >
           <div class="action-btn" @click="themeStore.themeConfigDrawerOpen = true">
-            <el-icon><component :is="menuStore.iconComponents['Setting']" /></el-icon>
+            <el-icon
+              ><component :is="menuStore.iconComponents['HOutline:Cog6ToothIcon']"
+            /></el-icon>
           </div>
         </el-tooltip>
 
@@ -52,8 +54,8 @@
               <component
                 :is="
                   isFullscreen
-                    ? menuStore.iconComponents['FullScreen']
-                    : menuStore.iconComponents['Aim']
+                    ? menuStore.iconComponents['HOutline:ArrowsPointingInIcon']
+                    : menuStore.iconComponents['HOutline:ArrowsPointingOutIcon']
                 "
               />
             </el-icon>
@@ -154,7 +156,7 @@ const handleMenuToggle = () => {
   }
 
   .el-icon {
-    font-size: 18px;
+    font-size: 1.25rem;
   }
 }
 </style>

@@ -197,33 +197,67 @@ export async function initDefaultRoles(): Promise<void> {
 const defaultMenuTreeData = [
   {
     id: 'menu_1',
-    path: '/home',
-    title: '首页',
-    icon: 'hero-outline:Cog8ToothIcon',
+    path: '',
+    title: 'Dashboard',
+    icon: 'HOutline:Squares2X2Icon',
+    children: [
+      {
+        id: 'menu_12',
+        path: '/dashboard/home',
+        title: '工作台',
+        icon: 'HOutline:HomeIcon',
+      },
+      {
+        id: 'menu_13',
+        path: '/dashboard/analysis',
+        title: '分析页',
+        icon: 'HOutline:ChartBarSquareIcon',
+      },
+      {
+        id: 'menu_14',
+        path: '/dashboard/monitor',
+        title: '监控页',
+        icon: 'HOutline:EyeIcon',
+      },
+    ],
   },
   {
     id: 'menu_2',
     path: '',
     title: '系统管理',
-    icon: 'Setting',
+    icon: 'HOutline:Cog6ToothIcon',
     children: [
       {
         id: 'menu_3',
         path: '/system/user',
         title: '用户管理',
-        icon: 'User',
+        icon: 'HOutline:UserGroupIcon',
       },
       {
         id: 'menu_4',
         path: '/system/role',
         title: '角色管理',
-        icon: 'Grid',
+        icon: 'HOutline:IdentificationIcon',
       },
       {
         id: 'menu_5',
         path: '/system/menu',
         title: '菜单管理',
-        icon: 'Menu',
+        icon: 'HOutline:ListBulletIcon',
+      },
+    ],
+  },
+  {
+    id: 'menu_15',
+    path: '',
+    title: '功能演示',
+    icon: 'HOutline:BeakerIcon',
+    children: [
+      {
+        id: 'menu_16',
+        path: '/demo/table',
+        title: 'VXE Table',
+        icon: 'HOutline:TableCellsIcon',
       },
     ],
   },
@@ -231,19 +265,19 @@ const defaultMenuTreeData = [
     id: 'menu_9',
     path: '',
     title: '异常页面',
-    icon: 'CircleCloseFilled',
+    icon: 'HOutline:ExclamationTriangleIcon',
     children: [
       {
         id: 'menu_10',
         path: '/exception/403',
         title: '403页面',
-        icon: 'CircleCloseFilled',
+        icon: 'HOutline:NoSymbolIcon',
       },
       {
         id: 'menu_11',
         path: '/exception/404',
         title: '404页面',
-        icon: 'CircleCloseFilled',
+        icon: 'HOutline:QuestionMarkCircleIcon',
       },
     ],
   },
@@ -251,19 +285,19 @@ const defaultMenuTreeData = [
     id: 'menu_6',
     path: '',
     title: '一级菜单',
-    icon: 'Setting',
+    icon: 'HOutline:FolderIcon',
     children: [
       {
         id: 'menu_7',
         path: '',
         title: '二级菜单',
-        icon: 'Document',
+        icon: 'HOutline:FolderOpenIcon',
         children: [
           {
             id: 'menu_8',
             path: '/aaa/bbb/ccc',
             title: '三级菜单',
-            icon: 'User',
+            icon: 'HOutline:DocumentTextIcon',
           },
         ],
       },

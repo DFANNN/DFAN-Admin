@@ -2,7 +2,7 @@
   <div class="tabs-container">
     <div class="tabs-left-icon" @click="slideLeft">
       <el-icon>
-        <component :is="menuStore.iconComponents['ArrowLeft']" />
+        <component :is="menuStore.iconComponents['HOutline:ChevronLeftIcon']" />
       </el-icon>
     </div>
     <div class="tabs-pages" ref="tabsPagesRef">
@@ -14,18 +14,18 @@
         :ref="(el) => setTabRef(el, tab.path)"
         @click="navigation(tab.path)"
       >
-        <el-icon class="tabs-page-icon">
+        <el-icon class="tabs-page-icon" size="18">
           <component :is="menuStore.iconComponents[tab.icon as string]" />
         </el-icon>
         <div>{{ tab.title }}</div>
         <el-icon v-if="tab.closable" class="close-icon" @click.stop="handleClose(tab)">
-          <component :is="menuStore.iconComponents['Close']" />
+          <component :is="menuStore.iconComponents['HSolid:XMarkIcon']" />
         </el-icon>
       </div>
     </div>
     <div class="tabs-right-icon" @click="slideRight">
       <el-icon>
-        <component :is="menuStore.iconComponents['ArrowRight']" />
+        <component :is="menuStore.iconComponents['HOutline:ChevronRightIcon']" />
       </el-icon>
     </div>
     <div class="tabs-dropdown">
@@ -38,25 +38,25 @@
         <template #dropdown>
           <el-dropdown-menu>
             <el-dropdown-item
-              :icon="menuStore.iconComponents['CircleClose']"
+              :icon="menuStore.iconComponents['HOutline:MinusCircleIcon']"
               @click="tabsStore.closeOtherTabs(tabsStore.activePath)"
             >
               关闭其他标签页
             </el-dropdown-item>
             <el-dropdown-item
-              :icon="menuStore.iconComponents['Delete']"
+              :icon="menuStore.iconComponents['HOutline:TrashIcon']"
               @click="(tabsStore.closeAllTabs(), router.push(tabsStore.activePath))"
             >
               关闭所有标签页
             </el-dropdown-item>
             <el-dropdown-item
-              :icon="menuStore.iconComponents['ArrowRight']"
+              :icon="menuStore.iconComponents['HOutline:ChevronDoubleRightIcon']"
               @click="tabsStore.closeRightTabs(tabsStore.activePath)"
             >
               关闭右侧标签页
             </el-dropdown-item>
             <el-dropdown-item
-              :icon="menuStore.iconComponents['ArrowLeft']"
+              :icon="menuStore.iconComponents['HOutline:ChevronDoubleLeftIcon']"
               @click="tabsStore.closeLeftTabs(tabsStore.activePath)"
             >
               关闭左侧标签页
@@ -216,6 +216,10 @@ const slideRight = () => {
 </script>
 
 <style scoped lang="scss">
+:deep(.el-dropdown-menu__item .el-icon) {
+  font-size: 1.125rem;
+}
+
 .tabs-container {
   padding-top: 0.1rem;
   height: 2.5rem;
@@ -267,6 +271,7 @@ const slideRight = () => {
       flex-shrink: 0;
       gap: 0.5rem;
       cursor: pointer;
+      color: var(--el-text-color-regular);
 
       .close-icon {
         margin-left: 0.25rem;
@@ -291,6 +296,7 @@ const slideRight = () => {
       &:hover {
         background-color: var(--el-fill-color-light);
         border-radius: 0.625rem 0.625rem 0.875rem 0.875rem;
+        font-weight: bold;
         .tabs-page-icon {
           animation: jello;
           animation-duration: 1s;

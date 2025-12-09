@@ -62,7 +62,7 @@ const findMenuByPath = (menus: IMenuItem[], path: string): IMenuItem | null => {
 const findHomeMenu = (menus: IMenuItem[]): IMenuItem | null => {
   for (const item of menus) {
     // 检查是否为首页（path 为 '/' 或 '/home'）
-    if (item.type === 'menu' && (item.path === '/' || item.path === '/home')) {
+    if (item.type === 'menu' && (item.path === '/' || item.path === '/dashboard/home')) {
       return item
     }
     // 递归查找子菜单

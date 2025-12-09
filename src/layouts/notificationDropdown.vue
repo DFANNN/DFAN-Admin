@@ -7,7 +7,7 @@
       :offset="[-5, 5]"
     >
       <div class="action-btn">
-        <el-icon><component :is="menuStore.iconComponents['Bell']" /></el-icon>
+        <el-icon><component :is="menuStore.iconComponents['HOutline:BellAlertIcon']" /></el-icon>
       </div>
     </el-badge>
 
@@ -131,7 +131,7 @@ const goToProfile = () => {
   }
 
   .el-icon {
-    font-size: 18px;
+    font-size: 1.25rem;
   }
 }
 .notification-dropdown {
