@@ -199,13 +199,13 @@ const defaultMenuTreeData = [
     id: 'menu_1',
     path: '',
     title: 'Dashboard',
-    icon: 'HOutline:Squares2X2Icon',
+    icon: 'HOutline:HomeIcon',
     children: [
       {
         id: 'menu_12',
         path: '/dashboard/home',
         title: '工作台',
-        icon: 'HOutline:HomeIcon',
+        icon: 'HOutline:ComputerDesktopIcon',
       },
       {
         id: 'menu_13',
