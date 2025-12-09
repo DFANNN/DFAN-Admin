@@ -9,15 +9,17 @@
         <TabsView v-if="themeStore.showTabs" />
       </Transition>
 
-      <el-main class="main">
-        <RouterView v-slot="{ Component, route }">
-          <Transition name="fade-slide" mode="out-in">
-            <KeepAlive :include="tabsStore.tabs.map((tab) => tab.name as string)">
-              <component :is="Component" :key="route.path" />
-            </KeepAlive>
-          </Transition>
-        </RouterView>
-      </el-main>
+      <el-scrollbar>
+        <el-main class="main">
+          <RouterView v-slot="{ Component, route }">
+            <Transition name="fade-slide" mode="out-in">
+              <KeepAlive :include="tabsStore.tabs.map((tab) => tab.name as string)">
+                <component :is="Component" :key="route.path" />
+              </KeepAlive>
+            </Transition>
+          </RouterView>
+        </el-main>
+      </el-scrollbar>
     </el-container>
   </el-container>
 </template>
@@ -56,5 +58,8 @@ const menuStore = useMenuStore()
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
+  min-height: calc(100vh - 50px - 2.5rem);
+  display: flex;
+  flex-direction: column;
 }
 </style>

@@ -228,6 +228,26 @@ const defaultMenuTreeData = [
     ],
   },
   {
+    id: 'menu_9',
+    path: '',
+    title: '异常页面',
+    icon: 'CircleCloseFilled',
+    children: [
+      {
+        id: 'menu_10',
+        path: '/exception/403',
+        title: '403页面',
+        icon: 'CircleCloseFilled',
+      },
+      {
+        id: 'menu_11',
+        path: '/exception/404',
+        title: '404页面',
+        icon: 'CircleCloseFilled',
+      },
+    ],
+  },
+  {
     id: 'menu_6',
     path: '',
     title: '一级菜单',

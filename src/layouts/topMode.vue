@@ -6,13 +6,15 @@
     <Transition name="fade-slide" mode="out-in">
       <TabsView v-if="themeStore.showTabs" />
     </Transition>
-    <el-main class="main">
-      <RouterView v-slot="{ Component, route }">
-        <Transition name="fade-slide" mode="out-in">
-          <component :is="Component" :key="route.path" />
-        </Transition>
-      </RouterView>
-    </el-main>
+    <el-scrollbar>
+      <el-main class="main">
+        <RouterView v-slot="{ Component, route }">
+          <Transition name="fade-slide" mode="out-in">
+            <component :is="Component" :key="route.path" />
+          </Transition>
+        </RouterView>
+      </el-main>
+    </el-scrollbar>
   </el-container>
 </template>
 
@@ -43,6 +45,9 @@ const themeStore = useThemeStore()
     position: relative;
     overflow-y: auto;
     overflow-x: hidden;
+    min-height: calc(100vh - 50px - 2.5rem);
+    display: flex;
+    flex-direction: column;
   }
 }
 </style>

@@ -38,7 +38,7 @@ export const staticRoutes = [
         path: '/exception/403',
         name: '403',
         component: () => import('@/views/exception/403/index.vue'),
-        meta: { title: '403', keepAlive: true },
+        meta: { title: '403', icon: 'CircleCloseFilled', keepAlive: true },
       },
     ],
   },
