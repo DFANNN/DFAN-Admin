@@ -274,6 +274,7 @@ const messagesList = computed(() => {
         display: flex;
         flex-direction: column;
         gap: 1rem;
+        padding-top: 0.5rem;
       }
 
       .message-item {
@@ -286,6 +287,10 @@ const messagesList = computed(() => {
         border: 1px solid var(--el-border-color-lighter);
         transition: all 0.3s ease;
         cursor: pointer;
+
+        &:last-child {
+          margin-bottom: 4rem;
+        }
 
         &:hover {
           box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);

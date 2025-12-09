@@ -6,7 +6,7 @@
     :close-on-click-modal="false"
     @close="close"
   >
-    <div class="avatar-container">
+    <div class="avatar-container" :class="{ 'is-mobile': menuStore.isMobile }">
       <div class="avatar-menu">
         <div
           class="avatar-menu-item"
@@ -70,7 +70,7 @@
                 </template>
               </el-input>
 
-              <el-scrollbar height="410">
+              <el-scrollbar :height="menuStore.isMobile ? '300' : '410'">
                 <div class="cat-avatar-list">
                   <div
                     class="cat-avatar-item"
@@ -207,6 +207,37 @@ defineExpose({
   display: flex;
   gap: 1rem;
   min-height: 30rem;
+
+  // 移动端布局
+  &.is-mobile {
+    flex-direction: column;
+    gap: 0.5rem;
+    min-height: auto;
+    max-height: calc(100vh - 200px);
+    overflow: hidden;
+
+    .avatar-menu {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid var(--el-border-color-lighter);
+      padding: 0.5rem;
+      flex-direction: row;
+      justify-content: space-around;
+      gap: 0.25rem;
+
+      .avatar-menu-item {
+        flex: 1;
+        justify-content: center;
+        padding: 0.75rem 0.5rem;
+        font-size: 0.875rem;
+      }
+    }
+
+    .avatar-content {
+      padding: 0.25rem;
+    }
+  }
+
   .avatar-menu {
     width: 10rem;
     border-right: 1px solid var(--el-border-color-lighter);
@@ -252,6 +283,12 @@ defineExpose({
       min-height: 410px;
       gap: 1.5rem;
 
+      // 移动端优化
+      @media (max-width: 992px) {
+        min-height: auto;
+        gap: 1rem;
+      }
+
       .upload-drag {
         width: 100%;
         :deep(.el-upload-dragger) {
@@ -269,6 +306,13 @@ defineExpose({
           padding: 2rem;
           position: relative;
 
+          // 移动端优化
+          @media (max-width: 992px) {
+            height: 250px;
+            padding: 1rem;
+            gap: 0.75rem;
+          }
+
           &:hover {
             border-color: var(--el-color-primary);
           }
@@ -280,9 +324,17 @@ defineExpose({
             justify-content: center;
             gap: 1rem;
 
+            @media (max-width: 992px) {
+              gap: 0.75rem;
+            }
+
             .upload-icon {
               font-size: 4rem;
               color: var(--el-color-primary);
+
+              @media (max-width: 992px) {
+                font-size: 3rem;
+              }
             }
 
             .upload-text {
@@ -292,10 +344,19 @@ defineExpose({
                 color: var(--el-text-color-primary);
                 font-weight: 500;
                 margin-bottom: 0.5rem;
+
+                @media (max-width: 992px) {
+                  font-size: 0.875rem;
+                  margin-bottom: 0.25rem;
+                }
               }
               .upload-text-tip {
                 font-size: 0.875rem;
                 color: var(--el-text-color-secondary);
+
+                @media (max-width: 992px) {
+                  font-size: 0.75rem;
+                }
               }
             }
           }
@@ -309,6 +370,10 @@ defineExpose({
             width: 100%;
             height: 100%;
 
+            @media (max-width: 992px) {
+              gap: 0.75rem;
+            }
+
             .preview-image-container {
               position: relative;
               width: 180px;
@@ -319,11 +384,34 @@ defineExpose({
               box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
               transition: all 0.3s ease;
 
+              @media (max-width: 992px) {
+                width: 150px;
+                height: 150px;
+                border-width: 3px;
+              }
+
               &:hover {
                 border-color: var(--el-color-primary);
                 box-shadow: 0 6px 30px rgba(0, 0, 0, 0.15);
 
                 .preview-overlay {
+                  opacity: 1;
+                }
+              }
+
+              // 移动端优化：点击显示删除按钮
+              @media (max-width: 992px) {
+                .preview-overlay {
+                  // 移动端点击时显示
+                  opacity: 0;
+
+                  &:active {
+                    opacity: 1;
+                  }
+                }
+
+                // 点击容器时显示删除按钮
+                &:active .preview-overlay {
                   opacity: 1;
                 }
               }
@@ -359,6 +447,11 @@ defineExpose({
               font-size: 0.875rem;
               color: var(--el-text-color-secondary);
               text-align: center;
+
+              @media (max-width: 992px) {
+                font-size: 0.75rem;
+                padding: 0 0.5rem;
+              }
             }
           }
         }
@@ -369,11 +462,23 @@ defineExpose({
       display: flex;
       flex-direction: column;
       gap: 1rem;
+
+      @media (max-width: 992px) {
+        gap: 0.75rem;
+      }
+
       .cat-avatar-list {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
         gap: 1rem;
         padding: 0.5rem 0;
+
+        @media (max-width: 992px) {
+          grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+          gap: 0.75rem;
+          padding: 0.25rem 0;
+        }
+
         .cat-avatar-item {
           display: flex;
           flex-direction: column;
@@ -383,11 +488,26 @@ defineExpose({
           border-radius: 0.5rem;
           cursor: pointer;
           transition: all 0.3s ease;
+          padding: 0.5rem;
+
+          @media (max-width: 992px) {
+            padding: 0.375rem;
+            border-width: 1.5px;
+          }
+
           &:hover {
             border-color: var(--el-color-primary);
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
           }
+
+          // 移动端点击效果
+          @media (max-width: 992px) {
+            &:active {
+              transform: scale(0.95);
+            }
+          }
+
           &.active {
             border-color: var(--el-color-primary);
             background: var(--el-color-primary-light-9);
@@ -398,6 +518,17 @@ defineExpose({
               width: 100%;
               height: 100%;
               object-fit: cover;
+            }
+          }
+
+          .cat-avatar-name {
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            text-align: center;
+
+            @media (max-width: 992px) {
+              font-size: 0.625rem;
+              margin-top: 0.125rem;
             }
           }
         }

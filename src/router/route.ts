@@ -1,5 +1,7 @@
 /**
+ * name: 路由名称, 也用于keepAlive缓存，需要与组件名称一致
  * meta.keepAlive: 是否需要缓存
+ *
  */
 export const staticRoutes = [
   {
@@ -22,7 +24,7 @@ export const staticRoutes = [
     children: [
       {
         path: '/profile',
-        name: 'profile',
+        name: 'ProfileView',
         component: () => import('@/views/profile/index.vue'),
         meta: { title: '个人中心', icon: 'Avatar', keepAlive: true },
       },

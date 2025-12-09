@@ -11,7 +11,7 @@
         <span class="username ellipsis-text">{{
           userStore.userInfo?.name || userStore.userInfo?.username
         }}</span>
-        <span class="user-role-badge">{{ userRoleName }}</span>
+        <span class="user-role-badge ellipsis-text">{{ userRoleName }}</span>
       </div>
       <el-icon class="arrow-icon">
         <component :is="menuStore.iconComponents['ArrowDown']" />
@@ -32,7 +32,7 @@
               <span class="user-name ellipsis-text">{{
                 userStore.userInfo?.name || userStore.userInfo?.username
               }}</span>
-              <span class="pro-badge">{{ userRoleName }}</span>
+              <span class="pro-badge ellipsis-text">{{ userRoleName }}</span>
             </div>
             <div class="user-email">{{ userStore.userInfo?.email || '' }}</div>
           </div>
@@ -182,7 +182,7 @@ onMounted(() => {
     }
 
     .user-role-badge {
-      display: inline-flex;
+      display: inline-block;
       align-items: center;
       padding: 2px 8px;
       background: color-mix(in srgb, var(--el-color-primary) 10%, transparent);
@@ -193,6 +193,7 @@ onMounted(() => {
       border: 1px solid color-mix(in srgb, var(--el-color-primary) 20%, transparent);
       white-space: nowrap;
       line-height: 1.2;
+      max-width: 100px;
     }
   }
 
@@ -254,7 +255,7 @@ onMounted(() => {
       }
 
       .pro-badge {
-        display: inline-flex;
+        display: inline-block;
         align-items: center;
         padding: 3px 10px;
         background: color-mix(in srgb, var(--el-color-primary) 10%, transparent);
@@ -264,6 +265,7 @@ onMounted(() => {
         border-radius: 12px;
         line-height: 1.2;
         border: 1px solid color-mix(in srgb, var(--el-color-primary) 20%, transparent);
+        max-width: 100px;
       }
     }
 

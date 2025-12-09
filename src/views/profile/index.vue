@@ -17,6 +17,8 @@ import ProfileMenu from '@/views/profile/profileMenu.vue'
 import ProfileInfo from '@/views/profile/profileInfo.vue'
 import UpdatePassword from '@/views/profile/updatePassword.vue'
 
+defineOptions({ name: 'ProfileView' })
+
 const userStore = useUserStore()
 
 const componentMap: Record<string, Component> = {
@@ -24,8 +26,6 @@ const componentMap: Record<string, Component> = {
   password: UpdatePassword,
   messages: MyMessage,
 }
-
-defineOptions({ name: 'ProfileView' })
 </script>
 
 <style scoped lang="scss">
