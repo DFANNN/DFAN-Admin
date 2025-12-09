@@ -24,7 +24,7 @@
           /></el-icon>
         </div>
       </el-tooltip>
-      <BreadcrumbView :showIcon="true" v-if="!menuStore.isMobile" />
+      <BreadcrumbView :showIcon="false" v-if="!menuStore.isMobile" />
     </div>
 
     <!-- 右侧操作区 -->

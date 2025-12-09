@@ -1,6 +1,6 @@
 <template>
   <div class="breadcrumb-container" v-if="breadcrumbList.length > 0">
-    <el-breadcrumb separator="/">
+    <el-breadcrumb separator=">" :separator-icon="ArrowRight">
       <!-- 动态面包屑项 -->
       <el-breadcrumb-item
         v-for="(item, index) in breadcrumbList"
@@ -19,6 +19,7 @@
 </template>
 
 <script setup lang="ts">
+import { ArrowRight } from '@element-plus/icons-vue'
 import type { IMenuItem } from '@/types/system/menu'
 
 defineOptions({ name: 'BreadcrumbView' })
@@ -186,6 +187,7 @@ const breadcrumbList = computed<BreadcrumbItem[]>(() => {
     display: flex;
     align-items: center;
     gap: 0.25rem;
+    font-weight: 400;
     .breadcrumb-icon {
       font-size: 1.125rem;
     }
