@@ -61,6 +61,11 @@
             </el-icon>
           </div>
         </el-tooltip>
+
+        <!-- 国际化 -->
+        <I18nDropdown />
+
+        <!-- 消息通知 -->
         <NotificationDropdown />
       </div>
 
@@ -76,6 +81,7 @@ import MenuView from '@/layouts/menu.vue'
 import UserDropdown from '@/layouts/userDropdown.vue'
 import BreadcrumbView from '@/layouts/breadcrumb.vue'
 import NotificationDropdown from '@/layouts/notificationDropdown.vue'
+import I18nDropdown from '@/layouts/i18nDropdown.vue'
 import { useFullscreen } from '@vueuse/core'
 
 defineOptions({ name: 'HeaderView' })
