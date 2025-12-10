@@ -1,6 +1,7 @@
 <template>
   <el-card shadow="never" class="profile-menu-card">
     <div class="avatar-section">
+      <div class="avatar-glow"></div>
       <div class="avatar-wrapper">
         <img :src="userStore.userInfo?.avatar" alt="头像" />
         <div class="avatar-overlay" @click="selectAvatarDialogRef?.showDialog()">
@@ -78,24 +79,58 @@ const handleSelectAvatar = (avatar: string) => {
 .profile-menu-card {
   height: 100%;
   .avatar-section {
-    background: linear-gradient(
-      135deg,
-      var(--el-color-primary-light-7) 0%,
-      var(--el-color-primary-dark-2) 100%
-    );
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(
+        circle at 20% 20%,
+        color-mix(in srgb, var(--el-color-primary) 12%, transparent) 0,
+        transparent 45%
+      ),
+      radial-gradient(
+        circle at 80% 0%,
+        color-mix(in srgb, #10b981 10%, transparent) 0,
+        transparent 40%
+      ),
+      linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--el-color-primary) 16%, var(--el-bg-color) 84%),
+        var(--el-bg-color)
+      );
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 3rem 1rem;
+
+    .avatar-glow {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(
+          circle at 30% 50%,
+          color-mix(in srgb, var(--el-color-primary) 8%, transparent) 0,
+          transparent 45%
+        ),
+        radial-gradient(
+          circle at 80% 50%,
+          color-mix(in srgb, #10b981 10%, transparent) 0,
+          transparent 40%
+        );
+      filter: blur(24px);
+      opacity: 0.7;
+      pointer-events: none;
+      z-index: 0;
+    }
     .avatar-wrapper {
+      position: relative;
+      z-index: 1;
       width: 7.5rem;
       height: 7.5rem;
       border-radius: 50%;
       border: 4px solid #fff;
       margin-bottom: 1.25rem;
       overflow: hidden;
-      position: relative;
       cursor: pointer;
       transition: all 0.3s ease;
       img {
@@ -137,16 +172,20 @@ const handleSelectAvatar = (avatar: string) => {
       }
     }
     .user-name {
+      position: relative;
+      z-index: 1;
       font-size: 1.25rem;
       font-weight: 700;
-      color: #fff;
+      color: var(--el-text-color-primary);
       margin-bottom: 0.5rem;
       text-align: center;
     }
 
     .user-email {
+      position: relative;
+      z-index: 1;
       font-size: 0.875rem;
-      color: rgba(255, 255, 255, 0.9);
+      color: var(--el-text-color-regular);
     }
   }
   .menu-list {
