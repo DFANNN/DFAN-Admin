@@ -80,11 +80,11 @@ const navigation = (key: string) => {
 }
 
 .menu-container {
-  height: 100%;
+  height: 100vh;
   .logo {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
     transition: all 0.3s ease;
 
     .logo-img {
