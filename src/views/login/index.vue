@@ -12,7 +12,9 @@
           v-if="APP_CONFIG.showThemeConfig"
         >
           <div class="action-btn" @click="themeStore.themeConfigDrawerOpen = true">
-            <el-icon><component :is="menuStore.iconComponents['Setting']" /></el-icon>
+            <el-icon
+              ><component :is="menuStore.iconComponents['HOutline:Cog6ToothIcon']"
+            /></el-icon>
           </div>
         </el-tooltip>
       </div>
@@ -121,7 +123,7 @@
 
 <script setup lang="ts">
 import { APP_CONFIG } from '@/config/app.config'
-import ThemeConfig from '@/layouts/themeConfig.vue'
+import ThemeConfig from '@/components/ThemeConfig.vue'
 import { login } from '@/api/login'
 import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
@@ -289,7 +291,7 @@ onMounted(() => {
         }
 
         .el-icon {
-          font-size: 18px;
+          font-size: 1.25rem;
         }
       }
     }

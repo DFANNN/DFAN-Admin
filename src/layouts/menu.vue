@@ -1,24 +1,26 @@
 <template>
-  <el-menu
-    :default-active="activeMenu"
-    :collapse="menuStore.isCollapse"
-    :background-color="menuBackgroundColor"
-    :text-color="menuTextColor"
-    :active-text-color="menuActiveTextColor"
-    :mode="menuMode"
-    @select="navigation"
-    class="menu-container"
-    :class="{ '--menu-border': menuStore.isMobile }"
-  >
-    <Transition :name="themeStore.layout === 'leftMode' ? 'el-zoom-in-top' : 'el-zoom-in-left'">
-      <el-menu-item class="logo" v-if="themeStore.showLogo">
-        <img :src="APP_CONFIG.logoSrc" alt="logo" class="logo-img" />
-        <span class="logo-title" :style="{ color: logoTitleColor }">{{ APP_CONFIG.name }}</span>
-      </el-menu-item>
-    </Transition>
+  <el-scrollbar>
+    <el-menu
+      :default-active="activeMenu"
+      :collapse="menuStore.isCollapse"
+      :background-color="menuBackgroundColor"
+      :text-color="menuTextColor"
+      :active-text-color="menuActiveTextColor"
+      :mode="menuMode"
+      @select="navigation"
+      class="menu-container"
+      :class="{ '--menu-border': menuStore.isMobile }"
+    >
+      <Transition :name="themeStore.layout === 'leftMode' ? 'el-zoom-in-top' : 'el-zoom-in-left'">
+        <el-menu-item class="logo" v-if="themeStore.showLogo">
+          <img :src="APP_CONFIG.logoSrc" alt="logo" class="logo-img" />
+          <span class="logo-title" :style="{ color: logoTitleColor }">{{ APP_CONFIG.name }}</span>
+        </el-menu-item>
+      </Transition>
 
-    <MenuItem v-for="item in menuStore.menuList" :key="item.path" :item="item" />
-  </el-menu>
+      <MenuItem v-for="item in menuStore.menuList" :key="item.path" :item="item" />
+    </el-menu>
+  </el-scrollbar>
 </template>
 
 <script setup lang="ts">
@@ -106,7 +108,7 @@ const navigation = (key: string) => {
 }
 
 .menu-container:not(.el-menu--collapse) {
-  width: 200px;
+  width: 13.75rem;
   &.el-menu--horizontal {
     width: 100%;
     height: 49px;

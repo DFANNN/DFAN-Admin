@@ -9,7 +9,7 @@
       v-model="menuStore.isMobileMenuOpen"
       :direction="'ltr'"
       :with-header="false"
-      :size="200"
+      :size="220"
       class="mobile-menu-drawer"
     >
       <MenuView />
@@ -20,7 +20,7 @@
 <script setup lang="ts">
 import LeftMode from '@/layouts/leftMode.vue'
 import TopMode from '@/layouts/topMode.vue'
-import ThemeConfig from '@/layouts/themeConfig.vue'
+import ThemeConfig from '@/components/ThemeConfig.vue'
 import MenuView from '@/layouts/menu.vue'
 defineOptions({ name: 'LayoutView' })
 
