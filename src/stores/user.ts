@@ -13,7 +13,7 @@ import { ElMessage } from 'element-plus'
 import router, { resetRouter } from '@/router'
 import { useMenuStore } from './menu'
 import { useTabsStore } from './tabs'
-import defaultAvatarSvg from '@/assets/cats/三花猫.svg'
+import defaultAvatarSvg from '@/assets/animals/小狗.svg'
 
 export const useUserStore = defineStore('user', () => {
   // 默认头像占位

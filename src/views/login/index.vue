@@ -34,6 +34,22 @@
           size="large"
           @keyup.enter="handleLogin"
         >
+          <el-form-item>
+            <el-select
+              v-model="rolePreset"
+              placeholder="请选择登录身份"
+              class="preset-select"
+              @change="applyPreset"
+            >
+              <el-option
+                v-for="item in roleOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
+
           <el-form-item prop="username">
             <el-input
               v-model="loginForm.username"
@@ -147,6 +163,27 @@ const loginForm = ref({
   remember: false,
 })
 
+type RolePreset = 'super_admin' | 'normal' | 'noperm'
+
+const rolePreset = ref<RolePreset>('super_admin')
+
+const roleOptions: Array<{
+  label: string
+  value: RolePreset
+  preset: { username: string; password: string }
+}> = [
+  { label: '超级管理员', value: 'super_admin', preset: { username: 'admin', password: 'admin' } },
+  { label: '普通用户', value: 'normal', preset: { username: 'user2', password: 'user2' } },
+  { label: '无权限用户', value: 'noperm', preset: { username: 'user3', password: 'user3' } },
+]
+
+const applyPreset = (value: RolePreset) => {
+  const target = roleOptions.find((item) => item.value === value)
+  if (!target) return
+  loginForm.value.username = target.preset.username
+  loginForm.value.password = target.preset.password
+}
+
 // 从 localStorage 读取记住的用户名
 const loadRememberedUsername = () => {
   const rememberedUsername = localStorage.getItem(REMEMBER_USERNAME_KEY)
@@ -197,6 +234,7 @@ const loginRules = ref<FormRules>({
 // 页面加载时读取记住的用户名
 onMounted(() => {
   loadRememberedUsername()
+  applyPreset(rolePreset.value)
 })
 </script>
 
@@ -329,6 +367,11 @@ onMounted(() => {
           margin-bottom: 28px;
         }
 
+        .preset-select {
+          width: 100%;
+          margin-bottom: 8px;
+        }
+
         .login-btn {
           width: 100%;
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -435,7 +478,7 @@ onMounted(() => {
 
       .logo-carousel {
         width: 100%;
-        height: 500px;
+        height: 100vh;
 
         :deep(.el-carousel__container) {
           height: 100%;

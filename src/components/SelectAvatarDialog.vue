@@ -26,7 +26,7 @@
           <el-icon size="20"
             ><component :is="menuStore.iconComponents['HSolid:SparklesIcon']"
           /></el-icon>
-          <span>猫猫头像</span>
+          <span>系统头像</span>
         </div>
       </div>
       <div class="avatar-content">

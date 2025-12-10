@@ -559,9 +559,9 @@ onMounted(async () => {
       width: 72px;
       height: 72px;
       overflow: hidden;
-      border-radius: 18px;
+      border-radius: 50%;
       border: 1px solid color-mix(in srgb, var(--el-color-primary) 25%, transparent);
-      background: var(--el-bg-color-overlay);
+      background: #fff;
       box-shadow: 0 10px 26px color-mix(in srgb, var(--el-color-primary) 20%, transparent);
 
       img {

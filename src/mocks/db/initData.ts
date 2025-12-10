@@ -42,24 +42,24 @@ export async function initDefaultUsers(): Promise<void> {
           id: `user1_${Date.now()}`,
           username: 'admin',
           password: 'admin', // 明文存储，仅用于开发测试
-          name: '管理员',
+          name: '宇宙 Root 管理者 Rootiverse',
           email: 'admin@example.com',
           isBuiltIn: true, // 标记为内置用户
           status: 'active', // 状态：启用
           roleId: superAdminRole ? superAdminRole.id : undefined, // 分配为超级管理员角色（单角色）
           createTime: now,
           updateTime: now,
-          avatar: 'https://picsum.photos/200/300',
+          avatar: new URL('@/assets/animals/狐狸.svg', import.meta.url).href,
         },
         {
           id: `user2_${Date.now()}`,
           username: 'user2',
           password: 'user2',
-          name: '普通用户',
+          name: '普通但不平凡的路人乙',
           email: 'user@example.com',
           isBuiltIn: true,
           status: 'active', // 状态：启用
-          roleId: 'role_3', // 分配为普通角色
+          roleId: 'role_2', // 分配为普通角色
           createTime: now,
           updateTime: now,
         },
@@ -68,11 +68,11 @@ export async function initDefaultUsers(): Promise<void> {
           id: `user3_${Date.now()}`,
           username: 'user3',
           password: 'user3',
-          name: '无权限用户',
+          name: '权限被吃掉的少年',
           email: 'user3@example.com',
           isBuiltIn: true,
           status: 'active',
-          roleId: undefined, // 无权限用户，不分配角色
+          roleId: 'role_3', // 无权限用户，分配为无权限角色
           createTime: now,
           updateTime: now,
         },
@@ -107,7 +107,7 @@ export async function initDefaultRoles(): Promise<void> {
       const defaultRoles: Role[] = [
         {
           id: 'role_1',
-          name: '超级管理员',
+          name: '管理员',
           code: 'super_admin',
           description: '拥有系统所有权限，可管理所有功能',
           isBuiltIn: true,
@@ -118,64 +118,26 @@ export async function initDefaultRoles(): Promise<void> {
         },
         {
           id: 'role_2',
-          name: '管理员',
-          code: 'admin',
-          description: '拥有大部分管理权限，可管理系统配置和用户',
-          isBuiltIn: true,
-          status: 'active',
-          menuIds: [
-            'menu_1', // 首页
-            'menu_2', // 系统管理
-            'menu_3', // 用户管理
-            'menu_4', // 角色管理
-            'menu_5', // 菜单管理
-          ],
-          createTime: now,
-          updateTime: now,
-        },
-        {
-          id: 'role_3',
           name: '普通用户',
           code: 'user',
           description: '普通用户权限，可查看和操作基础功能',
           isBuiltIn: true,
           status: 'active',
-          menuIds: [
-            // 'menu_1', // 首页
-            'menu_2', // 系统管理
-            'menu_3', // 用户管理
-            'menu_4', // 角色管理
-            'menu_5', // 菜单管理
-          ],
+          // 所有菜单里面去除menu_2 menu_3 menu_4 menu_5
+          menuIds: allMenuIds.filter(
+            (menuId) => !['menu_2', 'menu_3', 'menu_4', 'menu_5'].includes(menuId),
+          ),
           createTime: now,
           updateTime: now,
         },
         {
-          id: 'role_4',
-          name: '编辑',
-          code: 'editor',
-          description: '内容编辑权限，可创建和编辑内容',
+          id: 'role_3',
+          name: '无权限用户',
+          code: 'no_permission',
+          description: '无权限用户，无法访问任何功能',
           isBuiltIn: true,
           status: 'active',
-          menuIds: [
-            'menu_1', // 首页
-            'menu_6', // 一级菜单
-            'menu_7', // 二级菜单
-            'menu_8', // 三级菜单
-          ],
-          createTime: now,
-          updateTime: now,
-        },
-        {
-          id: 'role_5',
-          name: '访客',
-          code: 'guest',
-          description: '访客权限，仅可查看公开内容',
-          isBuiltIn: true,
-          status: 'active',
-          menuIds: [
-            'menu_1', // 首页
-          ],
+          menuIds: [],
           createTime: now,
           updateTime: now,
         },
