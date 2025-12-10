@@ -1,7 +1,7 @@
 <div id="__app-loading__" class="app-loading">
   <div class="app-loading-content">
     <img src="/src/assets/logo.svg" alt="logo" class="loading-logo" />
-    <div class="loading-text">正在加载...</div>
+    <div class="loading-text">CAT Admin</div>
   </div>
 </div>
 
@@ -48,28 +48,54 @@
   }
 
   .loading-logo {
-    width: 60px;
-    height: 60px;
-    animation: pulse 1.5s ease-in-out infinite;
+    width: 120px;
+    height: 120px;
+    animation: logoSpin 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 10px rgba(64, 158, 255, 0.5));
   }
 
-  @keyframes pulse {
-    0%,
-    100% {
-      opacity: 1;
-      transform: scale(1);
+  @media (max-width: 992px) {
+    .loading-logo {
+      width: 80px;
+      height: 80px;
+    }
+  }
+
+  @keyframes logoSpin {
+    0% {
+      transform: rotate(0deg) scale(1);
+      filter: drop-shadow(0 0 10px rgba(64, 158, 255, 0.5));
+    }
+    25% {
+      transform: rotate(90deg) scale(1.1);
+      filter: drop-shadow(0 0 15px rgba(64, 158, 255, 0.8));
     }
     50% {
-      opacity: 0.7;
-      transform: scale(1.05);
+      transform: rotate(180deg) scale(1);
+      filter: drop-shadow(0 0 20px rgba(64, 158, 255, 1));
+    }
+    75% {
+      transform: rotate(270deg) scale(1.1);
+      filter: drop-shadow(0 0 15px rgba(64, 158, 255, 0.8));
+    }
+    100% {
+      transform: rotate(360deg) scale(1);
+      filter: drop-shadow(0 0 10px rgba(64, 158, 255, 0.5));
     }
   }
 
   .loading-text {
     color: #666;
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 32px;
+    font-weight: 600;
     transition: color 0.3s ease;
+    letter-spacing: 1px;
+  }
+
+  @media (max-width: 992px) {
+    .loading-text {
+      font-size: 24px;
+    }
   }
 
   /* Dark 模式样式 */

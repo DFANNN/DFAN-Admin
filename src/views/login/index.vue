@@ -246,7 +246,7 @@ onMounted(() => {
       0% 100%
     );
 
-    @media (max-width: 768px) {
+    @media (max-width: 992px) {
       flex: 1;
       padding: 30px 24px;
       clip-path: none; // 移动端取消异形效果
@@ -410,7 +410,7 @@ onMounted(() => {
       100% 0%
     );
 
-    @media (max-width: 768px) {
+    @media (max-width: 992px) {
       display: none;
     }
 
