@@ -8,7 +8,7 @@ export const APP_CONFIG = {
   name: 'CAT Admin',
 
   // Favicon src
-  faviconSrc: '/logo.svg',
+  faviconSrc: '/favicon.ico',
 
   // Logo src
   logoSrc: new URL('@/assets/logo.svg', import.meta.url).href,

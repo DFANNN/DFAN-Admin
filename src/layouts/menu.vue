@@ -84,7 +84,7 @@ const navigation = (key: string) => {
   .logo {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 0.5rem;
     transition: all 0.3s ease;
 
     .logo-img {
@@ -96,7 +96,7 @@ const navigation = (key: string) => {
     }
 
     .logo-title {
-      font-size: 18px;
+      font-size: 1.25rem;
       font-weight: 700;
       color: var(--el-text-color-primary);
       letter-spacing: 0.5px;
