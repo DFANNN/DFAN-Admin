@@ -51,6 +51,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # 生成自动导入类型文件（auto-imports.d.ts 和 components.d.ts）
+      # 这些文件由 unplugin-auto-import 和 unplugin-vue-components 自动生成
+      # 需要通过运行 vite 来触发插件生成这些类型定义文件
+      - name: Generate type definitions
+        run: pnpm exec vite build --mode development
+
       # 类型检查
       - name: Type check
         run: pnpm type-check
