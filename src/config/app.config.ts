@@ -7,8 +7,11 @@ export const APP_CONFIG = {
   // 项目名称
   name: 'DFAN Admin',
 
-  // Favicon src
-  faviconSrc: '/favicon.ico',
+  // Favicon src - 根据环境动态设置 base path
+  faviconSrc:
+    import.meta.env.MODE === 'production'
+      ? `${import.meta.env.VITE_APP_STATIC_URL || '/'}favicon.ico`
+      : '/favicon.ico',
 
   // Logo src
   logoSrc: new URL('@/assets/logo.svg', import.meta.url).href,
