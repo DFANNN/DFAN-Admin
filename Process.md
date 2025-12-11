@@ -226,3 +226,133 @@ loadingFadeOut()
 2. **应用启动阶段**: Loading 覆盖从页面刷新到 Vue 应用挂载完成的整个过程
 3. **路由初始化**: 等待 `router.isReady()` 确保动态路由加载完成
 4. **隐藏时机**: 在路由完全准备好后调用 `loadingFadeOut()` 隐藏 loading
+
+## Heroicons
+
+### 安装
+
+```shell
+npm install @heroicons/vue
+# 或
+pnpm install @heroicons/vue
+# 或
+yarn add @heroicons/vue
+```
+
+### 图标样式和尺寸
+
+Heroicons 提供了多种样式和尺寸：
+
+- **24x24 Outline 图标**: `@heroicons/vue/24/outline`
+- **24x24 Solid 图标**: `@heroicons/vue/24/solid`
+- **20x20 Solid 图标**: `@heroicons/vue/20/solid`
+- **16x16 Solid 图标**: `@heroicons/vue/16/solid`
+
+### 基本使用
+
+在 Vue 组件中导入并使用图标：
+
+```vue
+<template>
+  <div>
+    <!-- 使用 24x24 Solid 样式 -->
+    <BeakerIcon class="h-6 w-6 text-blue-500" />
+
+    <!-- 使用 24x24 Outline 样式 -->
+    <HomeIcon class="h-6 w-6 text-gray-600" />
+  </div>
+</template>
+
+<script setup>
+import { BeakerIcon } from '@heroicons/vue/24/solid'
+import { HomeIcon } from '@heroicons/vue/24/outline'
+</script>
+```
+
+### 图标尺寸设置
+
+**重要提示：** Heroicons 是 **SVG 图标**，不是字体图标，因此：
+
+- ❌ **不能使用 `font-size`** 设置图标大小（这是字体图标才有的特性）
+- ✅ **只能使用 `width` 和 `height`** 来设置图标大小
+
+#### 正确的方式
+
+```vue
+<template>
+  <!-- 使用 width 和 height -->
+  <HomeIcon style="width: 24px; height: 24px;" />
+
+  <!-- 使用 Tailwind CSS 类 -->
+  <HomeIcon class="w-6 h-6" />
+
+  <!-- 使用 CSS 类 -->
+  <HomeIcon class="icon-size" />
+</template>
+
+<style scoped>
+.icon-size {
+  width: 24px;
+  height: 24px;
+}
+</style>
+```
+
+#### 如果需要使用 font-size
+
+如果需要像字体图标一样使用 `font-size` 来控制大小，有两种解决方案：
+
+**方案 1: 使用 el-icon 包裹**
+
+```vue
+<template>
+  <el-icon :size="20">
+    <Cog6ToothIcon />
+  </el-icon>
+</template>
+
+<script setup>
+import { Cog6ToothIcon } from '@heroicons/vue/24/outline'
+</script>
+```
+
+`el-icon` 会自动将 `size` 属性转换为 `width` 和 `height`。
+
+**方案 2: 自己封装组件**
+
+```vue
+<!-- IconWrapper.vue -->
+<template>
+  <component :is="icon" :style="{ width: size, height: size }" />
+</template>
+
+<script setup>
+defineProps({
+  icon: {
+    type: Object,
+    required: true,
+  },
+  size: {
+    type: [String, Number],
+    default: '1em',
+  },
+})
+</script>
+```
+
+使用封装组件：
+
+```vue
+<template>
+  <IconWrapper :icon="Cog6ToothIcon" size="20px" />
+  <!-- 或者使用 em 单位，这样可以通过父元素的 font-size 控制 -->
+  <div style="font-size: 20px;">
+    <IconWrapper :icon="Cog6ToothIcon" size="1em" />
+  </div>
+</template>
+
+<script setup>
+import { Cog6ToothIcon } from '@heroicons/vue/24/outline'
+import IconWrapper from './IconWrapper.vue'
+</script>
+```
