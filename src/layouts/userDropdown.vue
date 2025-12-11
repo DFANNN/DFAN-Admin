@@ -53,7 +53,7 @@
             <span>文档</span>
           </el-dropdown-item>
           <el-dropdown-item command="github">
-            <el-icon><component :is="menuStore.iconComponents['HOutline:LinkIcon']" /></el-icon>
+            <el-icon><IconGithub /></el-icon>
             <span>GitHub</span>
           </el-dropdown-item>
           <el-dropdown-item command="help">
@@ -67,14 +67,14 @@
               <component :is="menuStore.iconComponents['HOutline:LockClosedIcon']" />
             </el-icon>
             <span>锁定屏幕</span>
-            <span class="shortcut">⇧ L</span>
+            <span class="shortcut">⌥ L</span>
           </el-dropdown-item>
           <el-dropdown-item command="logout">
             <el-icon>
               <component :is="menuStore.iconComponents['HOutline:ArrowRightOnRectangleIcon']" />
             </el-icon>
             <span>退出登录</span>
-            <span class="shortcut">⇧ Q</span>
+            <span class="shortcut">⌥ Q</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </div>
@@ -98,6 +98,8 @@
 </template>
 
 <script setup lang="ts">
+import IconGithub from '@/components/icons/IconGithub.vue'
+
 const router = useRouter()
 const menuStore = useMenuStore()
 const userStore = useUserStore()
@@ -117,13 +119,13 @@ const handleCommand = (command: string) => {
       router.push('/profile')
       break
     case 'docs':
-      console.log('文档')
+      window.open('https://github.com/DFANNN/DFAN-Admin', '_blank')
       break
     case 'github':
-      window.open('https://github.com', '_blank')
+      window.open('https://github.com/DFANNN/DFAN-Admin', '_blank')
       break
     case 'help':
-      console.log('问题 & 帮助')
+      window.open('https://github.com/DFANNN/DFAN-Admin', '_blank')
       break
     case 'lock':
       console.log('锁定屏幕')
@@ -134,9 +136,30 @@ const handleCommand = (command: string) => {
   }
 }
 
+// 监听快捷键：Alt/Option + Q 触发退出登录弹窗
+const handleKeydown = (event: KeyboardEvent) => {
+  const target = event.target as HTMLElement | null
+  const isTyping =
+    (target && ['INPUT', 'TEXTAREA'].includes(target.tagName)) ||
+    target?.getAttribute('contenteditable') === 'true'
+
+  if (isTyping) return
+
+  // Mac 上 Option+Q 常返回 Dead key，改用 code 判断物理键位
+  if (event.altKey && event.code === 'KeyQ') {
+    event.preventDefault()
+    logoutDialogVisible.value = true
+  }
+}
+
 onMounted(() => {
   userStore.getUserInfo()
   userStore.getUserRoleName()
+  window.addEventListener('keydown', handleKeydown)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', handleKeydown)
 })
 </script>
 

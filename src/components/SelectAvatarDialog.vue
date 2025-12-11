@@ -134,7 +134,7 @@ const avatarSearchText = ref('')
 
 // 获取所有头像
 const allAvatars = computed(() => {
-  return APP_CONFIG.carousel.items
+  return APP_CONFIG.systemAvatar
 })
 
 // 过滤后的头像列表
@@ -514,7 +514,6 @@ defineExpose({
 
           &.active {
             border-color: var(--el-color-primary);
-            background: var(--el-color-primary-light-9);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
           }
           .cat-avatar-image {

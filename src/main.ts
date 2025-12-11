@@ -9,8 +9,8 @@ import { worker } from '@/mocks/browser'
 import { initData } from '@/mocks/db/initData'
 import { createApp, nextTick } from 'vue'
 import { createPinia } from 'pinia'
-import App from './App.vue'
-import router from './router'
+import App from '@/App.vue'
+import router from '@/router/index'
 
 //  动态设置favicon和项目名称
 const initAppConfig = () => {

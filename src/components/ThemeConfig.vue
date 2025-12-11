@@ -86,7 +86,11 @@
         </div>
         <div class="custom-color">
           <span>自定义</span>
-          <el-color-picker v-model="themeStore.primaryColor" show-alpha />
+          <el-color-picker
+            v-model="themeStore.primaryColor"
+            show-alpha
+            @change="(value: string | null) => themeStore.togglePrimaryColor(value as string)"
+          />
         </div>
       </div>
     </div>

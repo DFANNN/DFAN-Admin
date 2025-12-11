@@ -76,4 +76,18 @@ export const APP_CONFIG = {
 
   // 是否展示主题配置
   showThemeConfig: true,
+
+  // 系统内置头像
+  systemAvatar: Object.entries(import.meta.glob('@/assets/animals/*.svg', { eager: true })).map(
+    ([path, module], index) => {
+      const src = (module as { default: string }).default
+      const fileName = path.split('/').pop()?.replace('.svg', '') ?? `avatar-${index + 1}`
+      return {
+        id: index + 1,
+        title: fileName,
+        alt: fileName,
+        src,
+      }
+    },
+  ),
 }

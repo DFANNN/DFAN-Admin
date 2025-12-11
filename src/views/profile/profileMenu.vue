@@ -32,7 +32,7 @@
       </div>
     </div>
   </el-card>
-  <SelectAvatarDialog ref="selectAvatarDialogRef" @getSelectAvatar="handleSelectAvatar" />
+  <SelectAvatarDialog ref="selectAvatarDialogRef" />
 </template>
 
 <script setup lang="ts">
@@ -62,10 +62,6 @@ const menuList: Array<{ key: string; label: string; icon: string }> = [
     icon: 'HSolid:BellAlertIcon',
   },
 ]
-
-const handleSelectAvatar = (avatar: string) => {
-  console.log(`output->`, avatar)
-}
 </script>
 
 <style scoped lang="scss">
