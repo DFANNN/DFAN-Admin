@@ -119,7 +119,7 @@ const navigation = (key: string) => {
     border-right: none !important;
 
     .el-menu-item:nth-child(1) {
-      height: 50px;
+      height: 49px;
       padding: 0;
       border-bottom: none !important;
 
@@ -129,8 +129,8 @@ const navigation = (key: string) => {
     }
 
     :deep(.el-menu-item) {
-      height: 50px;
-      line-height: 50px;
+      height: 49px;
+      line-height: 49px;
       border: none !important;
       border-bottom: none !important;
       border-top: none !important;
@@ -146,8 +146,8 @@ const navigation = (key: string) => {
       border-right: none !important;
 
       .el-sub-menu__title {
-        height: 50px;
-        line-height: 50px;
+        height: 49px;
+        line-height: 49px;
         border: none !important;
         border-bottom: none !important;
         border-top: none !important;
