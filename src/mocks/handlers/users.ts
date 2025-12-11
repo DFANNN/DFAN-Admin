@@ -333,7 +333,7 @@ export const updateUserHandler = http.put(`${MSW_BASE}/users`, async ({ request 
 /**
  * 删除用户（支持批量删除）
  */
-export const deleteUserHandler = http.delete('/cat-admin-api/users', async ({ request }) => {
+export const deleteUserHandler = http.delete(`${MSW_BASE}/users`, async ({ request }) => {
   // 验证token
   const { error } = verifyAuth(request)
   if (error) {

@@ -3,7 +3,7 @@
  */
 
 // 数据库配置
-export const DB_NAME = 'cat-admin-db'
+export const DB_NAME = 'DFAN-admin-db'
 export const DB_VERSION = 4
 
 // 数据库表名

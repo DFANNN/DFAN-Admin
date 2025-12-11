@@ -76,7 +76,7 @@ pnpm install
 pnpm dev
 ```
 
-启动后访问 `http://localhost:3007`，MSW 会自动在浏览器中注册并拦截 `/cat-admin-api` 开头的请求。
+启动后访问 `http://localhost:3007`，MSW 会自动在浏览器中注册并拦截 `/DFAN-admin-api(可以自定义拦截地址)` 开头的请求。
 
 ### 3\. 构建生产版本
 
@@ -89,12 +89,15 @@ pnpm build
 项目秉持“约定优于配置”的原则，主要配置集中管理：
 
 - **全局应用配置** (`src/config/app.config.ts`)
+  - 是否开启MSW
   - 修改项目名称 (`name`)
   - 替换 Logo 和 Favicon
   - 配置首页轮播图
+  - ...
 - **UI 组件配置** (`src/config/elementConfig.ts`)
   - 统一设置表格边框、对齐方式
   - 全局定义分页器布局和页码大小
+  - ...
 
 ## 📁 项目目录
 
@@ -125,7 +128,7 @@ DFAN-Admin/
 
 ### 对接真实后端
 
-若需对接真实后端，只需在 `.env` 或配置中关闭 MSW 启用开关，或修改 `src/main.ts` 中移除 worker 启动代码，并配置 `axios` 的 `baseURL` 指向您的服务器地址即可。
+若需对接真实后端，只需在 `src/config/app.config.ts` 中关闭 MSW 启用开关，或修改 `src/main.ts` 中移除 worker 启动代码，并配置 `.env.development/.env.production` 的 `VITE_API_BASE_URL` 指向您的服务器地址即可。
 
 ## 👥 适合人群
 

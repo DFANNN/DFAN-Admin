@@ -208,7 +208,7 @@ export const createRoleHandler = http.post(`${MSW_BASE}/roles`, async ({ request
 /**
  * 更新角色
  */
-export const updateRoleHandler = http.put('/cat-admin-api/roles', async ({ request }) => {
+export const updateRoleHandler = http.put(`${MSW_BASE}/roles`, async ({ request }) => {
   // 验证token
   const { error } = verifyAuth(request)
   if (error) {
@@ -300,7 +300,7 @@ export const updateRoleHandler = http.put('/cat-admin-api/roles', async ({ reque
 /**
  * 删除角色（支持批量删除）
  */
-export const deleteRoleHandler = http.delete('/cat-admin-api/roles', async ({ request }) => {
+export const deleteRoleHandler = http.delete(`${MSW_BASE}/roles`, async ({ request }) => {
   // 验证token
   const { error } = verifyAuth(request)
   if (error) {
