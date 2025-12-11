@@ -2,7 +2,7 @@
   <el-dialog
     v-model="open"
     :title="submitForm.id ? '编辑用户' : '新增用户'"
-    width="600px"
+    :width="menuStore.isMobile ? '90%' : '600px'"
     :close-on-click-modal="false"
     @close="close"
   >
@@ -66,6 +66,8 @@ import type { IRoleItem } from '@/types/system/role'
 defineOptions({ name: 'UserCreate' })
 
 const emits = defineEmits(['refresh'])
+const menuStore = useMenuStore()
+
 const submitFormRef = useTemplateRef<FormInstance>('submitFormRef')
 
 // 对话框开关

@@ -22,6 +22,8 @@ DFAN Admin 是一款基于 Vue 3、Element Plus 和 Vite 构建的现代化后�
 **🔗 [https://dfannn.github.io/DFAN-Admin/](https://dfannn.github.io/DFAN-Admin/)**
 
 > **💡 提示**：演示环境的所有数据均存储在您浏览器的 **IndexedDB** 本地数据库中。刷新页面数据不丢失；如需重置数据，请清除浏览器缓存或删除 IndexedDB 数据。
+>
+> 如果遇到无法访问、页面一直加载或数据错乱，请清除 LocalStorage 和 IndexedDB 后再访问；如有重要数据请谨慎操作。
 
 ---
 
