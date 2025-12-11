@@ -2,6 +2,7 @@
  * 用户相关的 MSW Handlers
  */
 import { http, HttpResponse } from 'msw'
+import { APP_CONFIG } from '@/config/app.config'
 import dayjs from 'dayjs'
 import {
   getAll,
@@ -19,10 +20,12 @@ import {
 } from '../db/index'
 import { verifyAuth } from './utils'
 
+const MSW_BASE = APP_CONFIG.listenMSWPath
+
 /**
  * 获取用户列表
  */
-export const getUserListHandler = http.get('/cat-admin-api/users', async ({ request }) => {
+export const getUserListHandler = http.get(`${MSW_BASE}/users`, async ({ request }) => {
   // 验证token
   const { error } = verifyAuth(request)
   if (error) {
@@ -93,55 +96,52 @@ export const getUserListHandler = http.get('/cat-admin-api/users', async ({ requ
 /**
  * 获取用户详情
  */
-export const getUserByIdHandler = http.get(
-  '/cat-admin-api/users/:id',
-  async ({ params, request }) => {
-    // 验证token
-    const { error } = verifyAuth(request)
-    if (error) {
-      return error
-    }
+export const getUserByIdHandler = http.get(`${MSW_BASE}/users/:id`, async ({ params, request }) => {
+  // 验证token
+  const { error } = verifyAuth(request)
+  if (error) {
+    return error
+  }
 
-    try {
-      const { id } = params
-      if (!id || typeof id !== 'string') {
-        return HttpResponse.json({
-          code: 500,
-          message: '用户ID不能为空',
-          data: null,
-        })
-      }
-
-      const user = await getUserById(id)
-
-      if (!user) {
-        return HttpResponse.json({
-          code: 500,
-          message: '用户不存在',
-          data: null,
-        })
-      }
-
-      return HttpResponse.json({
-        code: 200,
-        message: '获取成功',
-        data: user,
-      })
-    } catch (error) {
-      console.error('[MSW] 获取用户详情错误:', error)
+  try {
+    const { id } = params
+    if (!id || typeof id !== 'string') {
       return HttpResponse.json({
         code: 500,
-        message: '服务器内部错误',
+        message: '用户ID不能为空',
         data: null,
       })
     }
-  },
-)
+
+    const user = await getUserById(id)
+
+    if (!user) {
+      return HttpResponse.json({
+        code: 500,
+        message: '用户不存在',
+        data: null,
+      })
+    }
+
+    return HttpResponse.json({
+      code: 200,
+      message: '获取成功',
+      data: user,
+    })
+  } catch (error) {
+    console.error('[MSW] 获取用户详情错误:', error)
+    return HttpResponse.json({
+      code: 500,
+      message: '服务器内部错误',
+      data: null,
+    })
+  }
+})
 
 /**
  * 创建用户
  */
-export const createUserHandler = http.post('/cat-admin-api/users', async ({ request }) => {
+export const createUserHandler = http.post(`${MSW_BASE}/users`, async ({ request }) => {
   // 验证token
   const { error } = verifyAuth(request)
   if (error) {
@@ -233,7 +233,7 @@ export const createUserHandler = http.post('/cat-admin-api/users', async ({ requ
 /**
  * 更新用户
  */
-export const updateUserHandler = http.put('/cat-admin-api/users', async ({ request }) => {
+export const updateUserHandler = http.put(`${MSW_BASE}/users`, async ({ request }) => {
   // 验证token
   const { error } = verifyAuth(request)
   if (error) {
@@ -429,7 +429,7 @@ export const deleteUserHandler = http.delete('/cat-admin-api/users', async ({ re
  * 获取当前用户信息
  * 从token中获取用户ID，无需路径参数
  */
-export const getCurrentUserHandler = http.get('/cat-admin-api/users/info', async ({ request }) => {
+export const getCurrentUserHandler = http.get(`${MSW_BASE}/users/info`, async ({ request }) => {
   // 验证token并获取用户ID
   const { error, userId } = verifyAuth(request)
   if (error) {
@@ -475,7 +475,7 @@ export const getCurrentUserHandler = http.get('/cat-admin-api/users/info', async
  * 从token中获取用户ID，无需路径参数
  */
 export const getUserPermissionsHandler = http.get(
-  '/cat-admin-api/users/permissions',
+  `${MSW_BASE}/users/permissions`,
   async ({ request }) => {
     // 验证token并获取用户ID
     const { error, userId } = verifyAuth(request)
@@ -589,7 +589,7 @@ export const getUserPermissionsHandler = http.get(
  * 从token中获取用户ID，无需路径参数
  */
 export const updateUserProfileHandler = http.put(
-  '/cat-admin-api/users/profile',
+  `${MSW_BASE}/users/profile`,
   async ({ request }) => {
     // 验证token并获取用户ID
     const { error, userId } = verifyAuth(request)
@@ -663,7 +663,7 @@ export const updateUserProfileHandler = http.put(
  * 从token中获取用户ID，无需路径参数
  */
 export const updateUserPasswordHandler = http.put(
-  '/cat-admin-api/users/password',
+  `${MSW_BASE}/users/password`,
   async ({ request }) => {
     // 验证token并获取用户ID
     const { error, userId } = verifyAuth(request)
@@ -776,77 +776,74 @@ export const updateUserPasswordHandler = http.put(
  * 修改用户头像
  * 从token中获取用户ID，无需路径参数
  */
-export const updateUserAvatarHandler = http.put(
-  '/cat-admin-api/users/avatar',
-  async ({ request }) => {
-    // 验证token并获取用户ID
-    const { error, userId } = verifyAuth(request)
-    if (error) {
-      return error
+export const updateUserAvatarHandler = http.put(`${MSW_BASE}/users/avatar`, async ({ request }) => {
+  // 验证token并获取用户ID
+  const { error, userId } = verifyAuth(request)
+  if (error) {
+    return error
+  }
+
+  if (!userId) {
+    return HttpResponse.json({
+      code: 401,
+      message: '无法从token中获取用户ID',
+      data: null,
+    })
+  }
+
+  try {
+    const body = (await request.json()) as {
+      avatar?: string
     }
 
-    if (!userId) {
-      return HttpResponse.json({
-        code: 401,
-        message: '无法从token中获取用户ID',
-        data: null,
-      })
-    }
-
-    try {
-      const body = (await request.json()) as {
-        avatar?: string
-      }
-
-      // 验证参数
-      if (body.avatar === undefined || body.avatar === null) {
-        return HttpResponse.json({
-          code: 500,
-          message: '头像不能为空',
-          data: null,
-        })
-      }
-
-      // 获取现有用户
-      const existingUser = await getUserById(userId)
-      if (!existingUser) {
-        return HttpResponse.json({
-          code: 500,
-          message: '用户不存在',
-          data: null,
-        })
-      }
-
-      // 如果是内置用户，不允许修改
-      if (existingUser.isBuiltIn) {
-        return HttpResponse.json({
-          code: 500,
-          message: '内置用户不允许修改',
-          data: null,
-        })
-      }
-
-      // 更新用户头像
-      const updatedUser: User = {
-        ...existingUser,
-        avatar: body.avatar,
-        updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-      }
-
-      await update<User>(STORES.USERS, updatedUser)
-
-      return HttpResponse.json({
-        code: 200,
-        message: '头像修改成功',
-        data: updatedUser,
-      })
-    } catch (error) {
-      console.error('[MSW] 修改用户头像错误:', error)
+    // 验证参数
+    if (body.avatar === undefined || body.avatar === null) {
       return HttpResponse.json({
         code: 500,
-        message: '服务器内部错误',
+        message: '头像不能为空',
         data: null,
       })
     }
-  },
-)
+
+    // 获取现有用户
+    const existingUser = await getUserById(userId)
+    if (!existingUser) {
+      return HttpResponse.json({
+        code: 500,
+        message: '用户不存在',
+        data: null,
+      })
+    }
+
+    // 如果是内置用户，不允许修改
+    if (existingUser.isBuiltIn) {
+      return HttpResponse.json({
+        code: 500,
+        message: '内置用户不允许修改',
+        data: null,
+      })
+    }
+
+    // 更新用户头像
+    const updatedUser: User = {
+      ...existingUser,
+      avatar: body.avatar,
+      updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+    }
+
+    await update<User>(STORES.USERS, updatedUser)
+
+    return HttpResponse.json({
+      code: 200,
+      message: '头像修改成功',
+      data: updatedUser,
+    })
+  } catch (error) {
+    console.error('[MSW] 修改用户头像错误:', error)
+    return HttpResponse.json({
+      code: 500,
+      message: '服务器内部错误',
+      data: null,
+    })
+  }
+})

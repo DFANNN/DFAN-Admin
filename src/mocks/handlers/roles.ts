@@ -2,6 +2,7 @@
  * 角色相关的 MSW Handlers
  */
 import { http, HttpResponse } from 'msw'
+import { APP_CONFIG } from '@/config/app.config'
 import dayjs from 'dayjs'
 import {
   getAll,
@@ -15,10 +16,12 @@ import {
 } from '../db/index'
 import { verifyAuth } from './utils'
 
+const MSW_BASE = APP_CONFIG.listenMSWPath
+
 /**
  * 获取角色列表
  */
-export const getRoleListHandler = http.get('/cat-admin-api/roles', async ({ request }) => {
+export const getRoleListHandler = http.get(`${MSW_BASE}/roles`, async ({ request }) => {
   // 验证token
   const { error } = verifyAuth(request)
   if (error) {
@@ -89,55 +92,52 @@ export const getRoleListHandler = http.get('/cat-admin-api/roles', async ({ requ
 /**
  * 获取角色详情
  */
-export const getRoleByIdHandler = http.get(
-  '/cat-admin-api/roles/:id',
-  async ({ params, request }) => {
-    // 验证token
-    const { error } = verifyAuth(request)
-    if (error) {
-      return error
-    }
+export const getRoleByIdHandler = http.get(`${MSW_BASE}/roles/:id`, async ({ params, request }) => {
+  // 验证token
+  const { error } = verifyAuth(request)
+  if (error) {
+    return error
+  }
 
-    try {
-      const { id } = params
-      if (!id || typeof id !== 'string') {
-        return HttpResponse.json({
-          code: 500,
-          message: '角色ID不能为空',
-          data: null,
-        })
-      }
-
-      const role = await getById<Role>(STORES.ROLES, id)
-
-      if (!role) {
-        return HttpResponse.json({
-          code: 500,
-          message: '角色不存在',
-          data: null,
-        })
-      }
-
-      return HttpResponse.json({
-        code: 200,
-        message: '获取成功',
-        data: role,
-      })
-    } catch (error) {
-      console.error('[MSW] 获取角色详情错误:', error)
+  try {
+    const { id } = params
+    if (!id || typeof id !== 'string') {
       return HttpResponse.json({
         code: 500,
-        message: '服务器内部错误',
+        message: '角色ID不能为空',
         data: null,
       })
     }
-  },
-)
+
+    const role = await getById<Role>(STORES.ROLES, id)
+
+    if (!role) {
+      return HttpResponse.json({
+        code: 500,
+        message: '角色不存在',
+        data: null,
+      })
+    }
+
+    return HttpResponse.json({
+      code: 200,
+      message: '获取成功',
+      data: role,
+    })
+  } catch (error) {
+    console.error('[MSW] 获取角色详情错误:', error)
+    return HttpResponse.json({
+      code: 500,
+      message: '服务器内部错误',
+      data: null,
+    })
+  }
+})
 
 /**
  * 创建角色
  */
-export const createRoleHandler = http.post('/cat-admin-api/roles', async ({ request }) => {
+export const createRoleHandler = http.post(`${MSW_BASE}/roles`, async ({ request }) => {
   // 验证token
   const { error } = verifyAuth(request)
   if (error) {

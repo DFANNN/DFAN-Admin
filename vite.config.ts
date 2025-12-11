@@ -11,7 +11,7 @@ import AppLoading from 'vite-plugin-app-loading'
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   return {
-    base: mode === 'production' ? env.VITE_APP_STATIC_URL : '/',
+    base: env.VITE_STATIC_URL || '/',
     plugins: [
       vue(),
       vueDevTools(),

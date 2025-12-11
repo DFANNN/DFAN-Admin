@@ -17,9 +17,7 @@ NProgress.configure({
 const dynamicRouteNames = ref<string[]>([])
 
 const router = createRouter({
-  history: createWebHistory(
-    import.meta.env.MODE === 'production' ? import.meta.env.VITE_APP_STATIC_URL : '/',
-  ),
+  history: createWebHistory(import.meta.env.VITE_STATIC_URL || '/'),
   routes: staticRoutes,
 })
 

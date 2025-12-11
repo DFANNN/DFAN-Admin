@@ -2,13 +2,14 @@
  * 认证相关的 MSW Handlers
  */
 import { http, HttpResponse } from 'msw'
+import { APP_CONFIG } from '@/config/app.config'
 import { getUser } from '../db/index'
 import { generateToken } from './utils'
 
 /**
  * 登录接口
  */
-export const loginHandler = http.post('/cat-admin-api/login', async ({ request }) => {
+export const loginHandler = http.post(`${APP_CONFIG.listenMSWPath}/login`, async ({ request }) => {
   try {
     const body = (await request.json()) as { username?: string; password?: string }
     const { username, password } = body
