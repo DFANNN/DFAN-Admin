@@ -5,7 +5,7 @@
 
 export const APP_CONFIG = {
   // 项目名称
-  name: 'CAT Admin',
+  name: 'DFAN Admin',
 
   // Favicon src
   faviconSrc: '/favicon.ico',
