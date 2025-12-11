@@ -1,48 +1,143 @@
-# vue-project
+<div align="center">
+  <img src="./public/logo.svg" alt="DFAN Admin Logo" width="120" />
 
-This template should help get you started developing with Vue 3 in Vite.
+# DFAN Admin
 
-## Recommended IDE Setup
+</div>
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+DFAN Admin 是一款基于 Vue 3、Element Plus 和 Vite 构建的现代化后台管理解决方案。采用了 MSW (Mock Service Worker) + IndexedDB 架构，在纯前端环境下实现了真实的数据拦截与持久化存储，为您提供无需后端支持即可进行完整 CRUD 操作的极致开发体验，适用于快速原型开发、演示系统搭建及 Vue 生态学习
 
-## Recommended Browser Setup
+**核心特色：** 使用 **MSW (Mock Service Worker) + IndexedDB** 架构，实现完全前端的数据拦截与持久化；既可作为无后端的演示模式运行，也能快速切换到真实 API。
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+> 🚧 **开发状态 (WIP)**
+>
+> - 核心架构（MSW + IndexedDB）已完成
+> - 部分业务模块持续迭代中
+> - 发现问题或缺少功能，欢迎提 Issue / Star 关注更新
 
-## Type Support for `.vue` Imports in TS
+## 🌐 在线演示
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+立即体验完整功能：
 
-## Customize configuration
+**🔗 [https://dfannn.github.io/DFAN-Admin/](https://dfannn.github.io/DFAN-Admin/)**
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+> **💡 提示**：演示环境的所有数据均存储在您浏览器的 **IndexedDB** 本地数据库中。刷新页面数据不丢失；如需重置数据，请清除浏览器缓存或删除 IndexedDB 数据。
 
-## Project Setup
+---
 
-```sh
+## ✨ 核心特性
+
+### 🚀 灵活的架构设计
+
+- **双模运行**：默认开启 MSW 拦截，模拟真实后端环境，实现完整的 CRUD；同时也支持关闭 Mock，直接对接真实 API 服务器。
+- **纯前端闭环**：利用 Service Worker 拦截请求 + IndexedDB 本地存储，无需 Node.js 或数据库服务即可部署并运行完整的管理系统。
+
+### 🎨 清爽规范的开发体验
+
+- **零过度封装**：尽可能保持 Element Plus 原生写法，代码逻辑清晰，降低学习和二开成本。
+- **统一配置**：通过 `src/config` 目录下的配置文件，即可快速调整系统标题、Logo、主题色及组件默认行为。
+- **TypeScript**：全量使用 TypeScript，提供完整的类型推断。
+
+### 🧩 完整的功能模块
+
+- **用户/角色/菜单管理**：内置完善的 RBAC 权限管理模型。
+- **个人中心**：支持资料修改、头像上传、密码变更。
+- **UI 交互**：支持明暗主题切换、响应式布局、多标签页导航。
+- **移动端适配**：界面全面适配手机端，支持小屏设备流畅访问与操作。
+
+## 🛠️ 技术栈
+
+| 类别          | 技术                  | 说明                                         |
+| :------------ | :-------------------- | :------------------------------------------- |
+| **核心框架**  | Vue 3                 | 组合式 API (Composition API)                 |
+| **构建工具**  | Vite                  | 极速的开发服务器与打包工具                   |
+| **语言**      | TypeScript            | 强类型 JavaScript 超集                       |
+| **UI 组件**   | Element Plus          | 经典的 Vue 3 组件库                          |
+| **状态/路由** | Pinia + Vue Router    | 官方推荐的状态与路由管理                     |
+| **数据模拟**  | **MSW + IndexedDB**   | **本项目核心亮点，实现浏览器端的数据持久化** |
+| **工具库**    | Axios, Day.js, VueUse | HTTP 请求与常用工具函数                      |
+
+## 🚀 快速开始
+
+### 环境要求
+
+- **Node.js**: `^20.19.0` 或 `>=22.12.0`
+- **pnpm**: `>=10.4.1` (推荐)
+
+### 1\. 安装依赖
+
+```bash
 pnpm install
 ```
 
-### Compile and Hot-Reload for Development
+### 2\. 启动开发服务器
 
-```sh
+```bash
 pnpm dev
 ```
 
-### Type-Check, Compile and Minify for Production
+启动后访问 `http://localhost:3007`，MSW 会自动在浏览器中注册并拦截 `/cat-admin-api` 开头的请求。
 
-```sh
+### 3\. 构建生产版本
+
+```bash
 pnpm build
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+## ⚙️ 核心配置
 
-```sh
-pnpm lint
+项目秉持“约定优于配置”的原则，主要配置集中管理：
+
+- **全局应用配置** (`src/config/app.config.ts`)
+  - 修改项目名称 (`name`)
+  - 替换 Logo 和 Favicon
+  - 配置首页轮播图
+- **UI 组件配置** (`src/config/elementConfig.ts`)
+  - 统一设置表格边框、对齐方式
+  - 全局定义分页器布局和页码大小
+
+## 📁 项目目录
+
+```text
+DFAN-Admin/
+├── public/                 # 静态资源 (含 mockServiceWorker.js)
+├── src/
+│   ├── api/                # API 接口定义
+│   ├── components/         # 公共组件
+│   ├── config/             # 全局配置文件 (App & Element)
+│   ├── mocks/              # MSW 数据模拟核心
+│   │   ├── db/             # IndexedDB 数据库操作层
+│   │   └── handlers/       # API 请求拦截处理器
+│   ├── router/             # 路由配置
+│   ├── stores/             # Pinia 状态仓库
+│   ├── views/              # 页面视图
+│   └── main.ts             # 入口文件
+└── vite.config.ts          # Vite 配置
 ```
+
+## 💡 开发指南
+
+### 数据模拟机制 (Mock Mode)
+
+1.  **拦截**：`src/mocks/handlers` 中的 Handler 拦截 API 请求。
+2.  **处理**：调用 `src/mocks/db` 操作 IndexedDB 中的 `users`, `roles`, `menus` 表。
+3.  **响应**：返回模拟的 JSON 数据，延迟和状态码均模拟真实网络环境。
+
+### 对接真实后端
+
+若需对接真实后端，只需在 `.env` 或配置中关闭 MSW 启用开关，或修改 `src/main.ts` 中移除 worker 启动代码，并配置 `axios` 的 `baseURL` 指向您的服务器地址即可。
+
+## 👥 适合人群
+
+- 需要快速搭建**中后台原型**的前端开发者。
+- 学习 **Vue 3 + TypeScript + Pinia** 全家桶的初学者。
+- 希望研究 **MSW** 和 **IndexedDB** 前端数据模拟方案的进阶开发者。
+- 寻找**纯前端**可部署演示系统的讲师或学生。
+
+## 📄 许可证
+
+[MIT License](https://www.google.com/search?q=./LICENSE)
+
+---
+
+**⭐ 如果这个项目对你有帮助，欢迎点个 Star！**
