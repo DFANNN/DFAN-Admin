@@ -27,8 +27,16 @@ const initAppConfig = () => {
 
 // 启动 MSW worker 并初始化 IndexedDB 数据
 async function startApp() {
+  // 获取 base path，用于解决 GitHub Pages 的 Service Worker 路径问题
+  const basePath =
+    import.meta.env.MODE === 'production' ? import.meta.env.VITE_APP_STATIC_URL || '/' : '/'
+
   // 启动 MSW worker
   await worker.start({
+    // 指定 Service Worker 的 URL，考虑 base path
+    serviceWorker: {
+      url: `${basePath}mockServiceWorker.js`,
+    },
     // 只匹配 /cat-admin-api 开头的请求，其他请求直接放行
     onUnhandledRequest(req, print) {
       if (req.url.includes('/cat-admin-api')) {
