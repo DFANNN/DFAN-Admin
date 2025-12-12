@@ -9,6 +9,7 @@ import { worker } from '@/mocks/browser'
 import { initData } from '@/mocks/db/initData'
 import { createApp, nextTick } from 'vue'
 import { createPinia } from 'pinia'
+import { permissionDirective } from '@/directives/permission'
 import App from '@/App.vue'
 import router from '@/router/index'
 
@@ -56,6 +57,9 @@ const startApp = async () => {
 
   app.use(createPinia())
   app.use(router)
+
+  // 注册自定义指令
+  app.directive('permission', permissionDirective)
 
   app.mount('#app')
   // 动态设置favicon和项目名称

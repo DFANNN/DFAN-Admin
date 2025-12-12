@@ -79,6 +79,7 @@ export const useMenuStore = defineStore('menu', () => {
   return {
     iconComponents,
     menuList,
+    buttonPermissions,
     isCollapse,
     isMobileMenuOpen,
     hasLoadedPermissions,
