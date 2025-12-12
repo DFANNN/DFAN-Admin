@@ -8,10 +8,11 @@ import {
   add,
   update,
   remove,
+  getAll,
   STORES,
   menuPathExists,
   hasChildren,
-  getMenuTree,
+  buildMenuTree,
   type Menu,
   type MenuType,
 } from '../db/index'
@@ -31,8 +32,11 @@ export const getMenuListHandler = http.get(
     }
 
     try {
-      // 获取树形菜单
-      const menuTree = await getMenuTree()
+      // 获取所有菜单（包括按钮）
+      const allMenus = await getAll<Menu>(STORES.MENUS)
+
+      // 构建完整的菜单树（包含 directory、menu 和 button 类型）
+      const menuTree = buildMenuTree(allMenus)
 
       return HttpResponse.json({
         code: 200,

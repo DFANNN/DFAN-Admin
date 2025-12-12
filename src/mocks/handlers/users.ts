@@ -14,6 +14,7 @@ import {
   getUserById,
   usernameExists,
   buildMenuTree,
+  getMenuAncestors,
   type User,
   type Role,
   type Menu,
@@ -543,15 +544,31 @@ export const getUserPermissionsHandler = http.get(
       const allMenus = await getAll<Menu>(STORES.MENUS)
 
       // 根据menuIds过滤，只获取用户有权限的菜单，且status为active
-      const userMenus = allMenus.filter(
+      const userMenuIds = new Set(role.menuIds!)
+
+      // 对于每个有权限的菜单（包括按钮、menu、directory），自动包含其所有父菜单
+      const userAuthorizedMenus = allMenus.filter(
         (menu) => role.menuIds!.includes(menu.id) && menu.status === 'active',
+      )
+
+      // 为每个有权限的菜单查找并添加所有祖先菜单
+      userAuthorizedMenus.forEach((menu) => {
+        const ancestors = getMenuAncestors(menu.id, allMenus)
+        ancestors.forEach((ancestorId) => {
+          userMenuIds.add(ancestorId)
+        })
+      })
+
+      // 根据扩展后的menuIds过滤，只获取用户有权限的菜单，且status为active
+      const userMenus = allMenus.filter(
+        (menu) => userMenuIds.has(menu.id) && menu.status === 'active',
       )
 
       // 分离菜单和按钮权限
       const menuItems = userMenus.filter(
         (menu) => menu.type === 'directory' || menu.type === 'menu',
       )
-      const buttonMenus = userMenus.filter((menu) => menu.type === 'button')
+      const userButtonMenus = userMenus.filter((menu) => menu.type === 'button')
 
       // 构建菜单树
       const menuTree = buildMenuTree(menuItems)
@@ -559,7 +576,7 @@ export const getUserPermissionsHandler = http.get(
       // 提取按钮权限并去重
       const buttonPermissions = Array.from(
         new Set(
-          buttonMenus
+          userButtonMenus
             .map((menu) => menu.permission)
             .filter((permission): permission is string => !!permission),
         ),

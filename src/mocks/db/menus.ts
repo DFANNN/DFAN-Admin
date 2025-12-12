@@ -118,3 +118,37 @@ export async function getMenuTree(): Promise<Menu[]> {
   const menus = await getAll<Menu>(STORES.MENUS)
   return buildMenuTree(menus)
 }
+
+/**
+ * 获取菜单的所有祖先菜单ID（向上递归到根）
+ * @param menuId 菜单ID
+ * @param allMenus 所有菜单列表
+ * @returns 祖先菜单ID数组（包括自己）
+ */
+export function getMenuAncestors(menuId: string, allMenus: Menu[]): string[] {
+  const ancestors: string[] = []
+  const menuMap = new Map<string, Menu>()
+
+  // 创建菜单映射
+  allMenus.forEach((menu) => {
+    menuMap.set(menu.id, menu)
+  })
+
+  // 向上递归查找所有父菜单
+  let currentMenuId: string | null | undefined = menuId
+  const visited = new Set<string>() // 防止循环引用
+
+  while (currentMenuId && !visited.has(currentMenuId)) {
+    visited.add(currentMenuId)
+    ancestors.push(currentMenuId)
+
+    const menu = menuMap.get(currentMenuId)
+    if (menu && menu.parentId) {
+      currentMenuId = menu.parentId
+    } else {
+      break
+    }
+  }
+
+  return ancestors
+}

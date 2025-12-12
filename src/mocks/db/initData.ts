@@ -90,6 +90,33 @@ export async function initDefaultUsers(): Promise<void> {
 }
 
 /**
+ * 获取菜单的所有后代菜单ID（包括子菜单和按钮，向下递归）
+ */
+function getMenuDescendants(menuId: string, allMenus: Menu[]): string[] {
+  const descendants: string[] = []
+  const menuMap = new Map<string, Menu>()
+
+  // 创建菜单映射
+  allMenus.forEach((menu) => {
+    menuMap.set(menu.id, menu)
+  })
+
+  // 递归查找所有子菜单
+  const findChildren = (parentId: string) => {
+    allMenus.forEach((menu) => {
+      if (menu.parentId === parentId) {
+        descendants.push(menu.id)
+        // 递归查找子菜单的子菜单
+        findChildren(menu.id)
+      }
+    })
+  }
+
+  findChildren(menuId)
+  return descendants
+}
+
+/**
  * 初始化默认角色数据
  */
 export async function initDefaultRoles(): Promise<void> {
@@ -103,6 +130,11 @@ export async function initDefaultRoles(): Promise<void> {
       // 从数据库获取所有菜单ID（用于超级管理员，包括以后新增的菜单）
       const allMenus = await getAll<Menu>(STORES.MENUS)
       const allMenuIds = allMenus.map((menu) => menu.id)
+
+      // 获取系统管理（menu_2）及其所有后代菜单ID
+      const systemMenuIds = new Set(['menu_2'])
+      const systemDescendants = getMenuDescendants('menu_2', allMenus)
+      systemDescendants.forEach((id) => systemMenuIds.add(id))
 
       const defaultRoles: Role[] = [
         {
@@ -123,10 +155,8 @@ export async function initDefaultRoles(): Promise<void> {
           description: '普通用户权限，可查看和操作基础功能',
           isBuiltIn: true,
           status: 'active',
-          // 所有菜单里面去除menu_2 menu_3 menu_4 menu_5
-          menuIds: allMenuIds.filter(
-            (menuId) => !['menu_2', 'menu_3', 'menu_4', 'menu_5'].includes(menuId),
-          ),
+          // 所有菜单里面去除系统管理（menu_2）及其所有子菜单和按钮
+          menuIds: allMenuIds.filter((menuId) => !systemMenuIds.has(menuId)),
           createTime: now,
           updateTime: now,
         },
@@ -159,107 +189,400 @@ export async function initDefaultRoles(): Promise<void> {
 const defaultMenuTreeData = [
   {
     id: 'menu_1',
+    type: 'directory',
     path: '',
     title: 'Dashboard',
     icon: 'HOutline:HomeIcon',
+    parentId: null,
+    order: 0,
+    status: 'active',
+    createTime: '2025-12-12 14:00:12',
+    updateTime: '2025-12-12 14:00:12',
+    isBuiltIn: true,
     children: [
       {
         id: 'menu_12',
+        type: 'menu',
         path: '/dashboard/home',
         title: '工作台',
         icon: 'HOutline:ComputerDesktopIcon',
+        parentId: 'menu_1',
+        order: 0,
+        status: 'active',
+        createTime: '2025-12-12 14:00:12',
+        updateTime: '2025-12-12 14:00:12',
+        isBuiltIn: true,
+        children: [],
       },
       {
         id: 'menu_13',
+        type: 'menu',
         path: '/dashboard/analysis',
         title: '分析页',
         icon: 'HOutline:ChartBarSquareIcon',
+        parentId: 'menu_1',
+        order: 1,
+        status: 'active',
+        createTime: '2025-12-12 14:00:12',
+        updateTime: '2025-12-12 14:00:12',
+        isBuiltIn: true,
+        children: [],
       },
       {
         id: 'menu_14',
+        type: 'menu',
         path: '/dashboard/monitor',
         title: '监控页',
         icon: 'HOutline:EyeIcon',
+        parentId: 'menu_1',
+        order: 2,
+        status: 'active',
+        createTime: '2025-12-12 14:00:12',
+        updateTime: '2025-12-12 14:00:12',
+        isBuiltIn: true,
+        children: [],
       },
     ],
   },
   {
     id: 'menu_2',
+    type: 'directory',
     path: '',
     title: '系统管理',
     icon: 'HOutline:Cog6ToothIcon',
+    parentId: null,
+    order: 1,
+    status: 'active',
+    createTime: '2025-12-12 14:00:12',
+    updateTime: '2025-12-12 14:00:12',
+    isBuiltIn: true,
     children: [
       {
         id: 'menu_3',
+        type: 'menu',
         path: '/system/user',
         title: '用户管理',
         icon: 'HOutline:UserGroupIcon',
+        parentId: 'menu_2',
+        order: 0,
+        status: 'active',
+        createTime: '2025-12-12 14:00:12',
+        updateTime: '2025-12-12 14:00:12',
+        isBuiltIn: true,
+        children: [
+          {
+            id: 'menu_3_button_0',
+            type: 'button',
+            path: '',
+            title: '添加用户',
+            permission: 'user:add',
+            parentId: 'menu_3',
+            order: 0,
+            status: 'active',
+            createTime: '2025-12-12 14:00:12',
+            updateTime: '2025-12-12 14:00:12',
+            isBuiltIn: true,
+            children: [],
+          },
+          {
+            id: 'menu_3_button_1',
+            type: 'button',
+            path: '',
+            title: '编辑用户',
+            permission: 'user:edit',
+            parentId: 'menu_3',
+            order: 1,
+            status: 'active',
+            createTime: '2025-12-12 14:00:12',
+            updateTime: '2025-12-12 14:00:12',
+            isBuiltIn: true,
+            children: [],
+          },
+          {
+            id: 'menu_3_button_2',
+            type: 'button',
+            path: '',
+            title: '删除用户',
+            permission: 'user:delete',
+            parentId: 'menu_3',
+            order: 2,
+            status: 'active',
+            createTime: '2025-12-12 14:00:12',
+            updateTime: '2025-12-12 14:00:12',
+            isBuiltIn: true,
+            children: [],
+          },
+          {
+            id: 'menu_3_button_3',
+            type: 'button',
+            path: '',
+            title: '查看用户',
+            permission: 'user:view',
+            parentId: 'menu_3',
+            order: 3,
+            status: 'active',
+            createTime: '2025-12-12 14:00:12',
+            updateTime: '2025-12-12 14:00:12',
+            isBuiltIn: true,
+            children: [],
+          },
+        ],
       },
       {
         id: 'menu_4',
+        type: 'menu',
         path: '/system/role',
         title: '角色管理',
         icon: 'HOutline:IdentificationIcon',
+        parentId: 'menu_2',
+        order: 1,
+        status: 'active',
+        createTime: '2025-12-12 14:00:12',
+        updateTime: '2025-12-12 14:00:12',
+        isBuiltIn: true,
+        children: [
+          {
+            id: 'menu_4_button_0',
+            type: 'button',
+            path: '',
+            title: '添加角色',
+            permission: 'role:add',
+            parentId: 'menu_4',
+            order: 0,
+            status: 'active',
+            createTime: '2025-12-12 14:00:12',
+            updateTime: '2025-12-12 14:00:12',
+            isBuiltIn: true,
+            children: [],
+          },
+          {
+            id: 'menu_4_button_1',
+            type: 'button',
+            path: '',
+            title: '编辑角色',
+            permission: 'role:edit',
+            parentId: 'menu_4',
+            order: 1,
+            status: 'active',
+            createTime: '2025-12-12 14:00:12',
+            updateTime: '2025-12-12 14:00:12',
+            isBuiltIn: true,
+            children: [],
+          },
+          {
+            id: 'menu_4_button_2',
+            type: 'button',
+            path: '',
+            title: '删除角色',
+            permission: 'role:delete',
+            parentId: 'menu_4',
+            order: 2,
+            status: 'active',
+            createTime: '2025-12-12 14:00:12',
+            updateTime: '2025-12-12 14:00:12',
+            isBuiltIn: true,
+            children: [],
+          },
+          {
+            id: 'menu_4_button_3',
+            type: 'button',
+            path: '',
+            title: '查看角色',
+            permission: 'role:view',
+            parentId: 'menu_4',
+            order: 3,
+            status: 'active',
+            createTime: '2025-12-12 14:00:12',
+            updateTime: '2025-12-12 14:00:12',
+            isBuiltIn: true,
+            children: [],
+          },
+        ],
       },
       {
         id: 'menu_5',
+        type: 'menu',
         path: '/system/menu',
         title: '菜单管理',
         icon: 'HOutline:ListBulletIcon',
+        parentId: 'menu_2',
+        order: 2,
+        status: 'active',
+        createTime: '2025-12-12 14:00:12',
+        updateTime: '2025-12-12 14:00:12',
+        isBuiltIn: true,
+        children: [
+          {
+            id: 'menu_5_button_0',
+            type: 'button',
+            path: '',
+            title: '添加菜单',
+            permission: 'menu:add',
+            parentId: 'menu_5',
+            order: 0,
+            status: 'active',
+            createTime: '2025-12-12 14:00:12',
+            updateTime: '2025-12-12 14:00:12',
+            isBuiltIn: true,
+            children: [],
+          },
+          {
+            id: 'menu_5_button_1',
+            type: 'button',
+            path: '',
+            title: '编辑菜单',
+            permission: 'menu:edit',
+            parentId: 'menu_5',
+            order: 1,
+            status: 'active',
+            createTime: '2025-12-12 14:00:12',
+            updateTime: '2025-12-12 14:00:12',
+            isBuiltIn: true,
+            children: [],
+          },
+          {
+            id: 'menu_5_button_2',
+            type: 'button',
+            path: '',
+            title: '删除菜单',
+            permission: 'menu:delete',
+            parentId: 'menu_5',
+            order: 2,
+            status: 'active',
+            createTime: '2025-12-12 14:00:12',
+            updateTime: '2025-12-12 14:00:12',
+            isBuiltIn: true,
+            children: [],
+          },
+          {
+            id: 'menu_5_button_3',
+            type: 'button',
+            path: '',
+            title: '查看菜单',
+            permission: 'menu:view',
+            parentId: 'menu_5',
+            order: 3,
+            status: 'active',
+            createTime: '2025-12-12 14:00:12',
+            updateTime: '2025-12-12 14:00:12',
+            isBuiltIn: true,
+            children: [],
+          },
+        ],
       },
     ],
   },
   {
     id: 'menu_15',
+    type: 'directory',
     path: '',
     title: '功能演示',
     icon: 'HOutline:BeakerIcon',
+    parentId: null,
+    order: 2,
+    status: 'active',
+    createTime: '2025-12-12 14:00:12',
+    updateTime: '2025-12-12 14:00:12',
+    isBuiltIn: true,
     children: [
       {
         id: 'menu_16',
+        type: 'menu',
         path: '/demo/table',
         title: 'VXE Table',
         icon: 'HOutline:TableCellsIcon',
+        parentId: 'menu_15',
+        order: 0,
+        status: 'active',
+        createTime: '2025-12-12 14:00:12',
+        updateTime: '2025-12-12 14:00:12',
+        isBuiltIn: true,
+        children: [],
       },
     ],
   },
   {
     id: 'menu_9',
+    type: 'directory',
     path: '',
     title: '异常页面',
     icon: 'HOutline:ExclamationTriangleIcon',
+    parentId: null,
+    order: 3,
+    status: 'active',
+    createTime: '2025-12-12 14:00:12',
+    updateTime: '2025-12-12 14:00:12',
+    isBuiltIn: true,
     children: [
       {
         id: 'menu_10',
+        type: 'menu',
         path: '/exception/403',
         title: '403页面',
         icon: 'HOutline:NoSymbolIcon',
+        parentId: 'menu_9',
+        order: 0,
+        status: 'active',
+        createTime: '2025-12-12 14:00:12',
+        updateTime: '2025-12-12 14:00:12',
+        isBuiltIn: true,
+        children: [],
       },
       {
         id: 'menu_11',
+        type: 'menu',
         path: '/exception/404',
         title: '404页面',
         icon: 'HOutline:QuestionMarkCircleIcon',
+        parentId: 'menu_9',
+        order: 1,
+        status: 'active',
+        createTime: '2025-12-12 14:00:12',
+        updateTime: '2025-12-12 14:00:12',
+        isBuiltIn: true,
+        children: [],
       },
     ],
   },
   {
     id: 'menu_6',
+    type: 'directory',
     path: '',
     title: '一级菜单',
     icon: 'HOutline:FolderIcon',
+    parentId: null,
+    order: 4,
+    status: 'active',
+    createTime: '2025-12-12 14:00:12',
+    updateTime: '2025-12-12 14:00:12',
+    isBuiltIn: true,
     children: [
       {
         id: 'menu_7',
+        type: 'directory',
         path: '',
         title: '二级菜单',
         icon: 'HOutline:FolderOpenIcon',
+        parentId: 'menu_6',
+        order: 0,
+        status: 'active',
+        createTime: '2025-12-12 14:00:12',
+        updateTime: '2025-12-12 14:00:12',
+        isBuiltIn: true,
         children: [
           {
             id: 'menu_8',
+            type: 'menu',
             path: '/aaa/bbb/ccc',
             title: '三级菜单',
             icon: 'HOutline:DocumentTextIcon',
+            parentId: 'menu_7',
+            order: 0,
+            status: 'active',
+            createTime: '2025-12-12 14:00:12',
+            updateTime: '2025-12-12 14:00:12',
+            isBuiltIn: true,
+            children: [],
           },
         ],
       },
@@ -276,7 +599,8 @@ function collectMenuPaths(
       acc.add(item.path)
     }
     if (item.children && item.children.length > 0) {
-      collectMenuPaths(item.children as typeof defaultMenuTreeData, acc)
+      // @ts-expect-error - 类型转换是安全的，因为 children 的结构与 defaultMenuTreeData 相同
+      collectMenuPaths(item.children, acc)
     }
   })
   return acc
@@ -301,31 +625,43 @@ function flattenMenuTree(
       throw new Error(`菜单项缺少ID: ${item.path || item.title}`)
     }
     const menuId = item.id
-    const now = dayjs().format('YYYY-MM-DD HH:mm:ss')
 
-    // 根据是否有子菜单判断类型
-    const hasChildren = item.children && item.children.length > 0
-    const menuType: 'directory' | 'menu' = hasChildren ? 'directory' : 'menu'
+    // 优先使用数据中定义的 type，如果没有则根据是否有子菜单判断类型
+    let menuType: MenuType
+    if (
+      item.type &&
+      (item.type === 'directory' || item.type === 'menu' || item.type === 'button')
+    ) {
+      menuType = item.type as MenuType
+    } else {
+      const hasChildren = item.children && item.children.length > 0
+      menuType = hasChildren ? 'directory' : 'menu'
+    }
 
+    // 使用数据中定义的字段，如果没有则使用默认值
     const menu: Menu = {
       id: menuId,
       type: menuType,
-      path: item.path,
+      path: item.path || '',
       title: item.title,
       icon: item.icon,
-      parentId,
-      order: currentOrder++,
-      status: 'active',
-      createTime: now,
-      updateTime: now,
-      isBuiltIn: true,
+      parentId: item.parentId !== undefined && item.parentId !== null ? item.parentId : parentId,
+      order: item.order !== undefined ? item.order : currentOrder++,
+      status: (item.status === 'active' || item.status === 'inactive' ? item.status : 'active') as
+        | 'active'
+        | 'inactive',
+      permission: (item as { permission?: string }).permission,
+      createTime: item.createTime || dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      updateTime: item.updateTime || dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      isBuiltIn: item.isBuiltIn !== undefined ? item.isBuiltIn : true,
     }
 
     menus.push(menu)
 
     // 处理子菜单
-    if (hasChildren) {
-      const childMenus = flattenMenuTree(item.children as typeof defaultMenuTreeData, menuId, 0)
+    if (item.children && item.children.length > 0) {
+      // @ts-expect-error - 类型转换是安全的，因为 children 的结构与 defaultMenuTreeData 相同
+      const childMenus = flattenMenuTree(item.children, menuId, 0)
       menus.push(...childMenus)
     }
   })
