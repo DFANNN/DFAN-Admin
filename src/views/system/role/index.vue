@@ -38,6 +38,7 @@
           type="primary"
           :icon="menuStore.iconComponents.Plus"
           @click="roleCreateRef?.showDialog(undefined)"
+          v-permission="['role:add']"
           >新增角色</el-button
         >
         <el-popconfirm
@@ -50,7 +51,9 @@
             <el-button
               type="danger"
               :icon="menuStore.iconComponents.Delete"
-              :disabled="!deleteRoleIds.length"
+              :disabled="
+                !useButtonPermission(['role:delete'], [() => !!deleteRoleIds.length]).value
+              "
             >
               批量删除
             </el-button>
@@ -112,6 +115,7 @@
               :icon="menuStore.iconComponents.Edit"
               link
               @click="roleCreateRef?.showDialog(row.id)"
+              v-permission="['role:edit']"
             >
               编辑
             </el-button>
@@ -122,7 +126,12 @@
               @confirm="deleteRoleHandle([row.id])"
             >
               <template #reference>
-                <el-button type="danger" :icon="menuStore.iconComponents.Delete" link>
+                <el-button
+                  type="danger"
+                  :icon="menuStore.iconComponents.Delete"
+                  link
+                  v-permission="['role:delete']"
+                >
                   删除
                 </el-button>
               </template>
@@ -149,6 +158,7 @@
 
 <script setup lang="ts">
 import { rolePage, deleteRole } from '@/api/role'
+import { useButtonPermission } from '@/composables/useButtonPermission'
 import { PAGINATION_CONFIG, POPCONFIRM_CONFIG, TABLE_CONFIG } from '@/config/elementConfig'
 import RoleCreate from '@/views/system/role/create.vue'
 import type { IRoleItem } from '@/types/system/role'

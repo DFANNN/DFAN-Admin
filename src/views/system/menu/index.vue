@@ -48,6 +48,7 @@
           type="primary"
           :icon="menuStore.iconComponents.Plus"
           @click="menuCreateRef?.showDialog(undefined)"
+          v-permission="['menu:add']"
           >新增菜单</el-button
         >
       </div>
@@ -101,6 +102,7 @@
               link
               :icon="menuStore.iconComponents.Edit"
               @click="menuCreateRef?.showDialog(row.id)"
+              v-permission="['menu:edit']"
               >编辑</el-button
             >
             <el-popconfirm
@@ -110,7 +112,12 @@
               @confirm="deleteMenuHandle(row.id)"
             >
               <template #reference>
-                <el-button type="danger" link :icon="menuStore.iconComponents.Delete">
+                <el-button
+                  type="danger"
+                  link
+                  :icon="menuStore.iconComponents.Delete"
+                  v-permission="['menu:delete']"
+                >
                   删除
                 </el-button>
               </template>

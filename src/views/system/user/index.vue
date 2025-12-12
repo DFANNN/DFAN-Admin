@@ -38,6 +38,7 @@
           type="primary"
           :icon="menuStore.iconComponents.Plus"
           @click="userCreateRef?.showDialog(undefined)"
+          v-permission="['user:add']"
           >新增用户</el-button
         >
         <el-popconfirm
@@ -50,7 +51,9 @@
             <el-button
               type="danger"
               :icon="menuStore.iconComponents.Delete"
-              :disabled="!deleteUserIds.length"
+              :disabled="
+                !useButtonPermission(['user:delete'], [() => !!deleteUserIds.length]).value
+              "
             >
               批量删除
             </el-button>
@@ -114,6 +117,7 @@
               :icon="menuStore.iconComponents.Edit"
               link
               @click="userCreateRef?.showDialog(row.id)"
+              v-permission="['user:edit']"
             >
               编辑
             </el-button>
@@ -124,7 +128,12 @@
               @confirm="deleteUserHandle([row.id])"
             >
               <template #reference>
-                <el-button type="danger" :icon="menuStore.iconComponents.Delete" link>
+                <el-button
+                  type="danger"
+                  :icon="menuStore.iconComponents.Delete"
+                  link
+                  v-permission="['user:delete']"
+                >
                   删除
                 </el-button>
               </template>
@@ -152,6 +161,7 @@
 <script setup lang="ts">
 import { userPage, deleteUser } from '@/api/user'
 import { rolePage } from '@/api/role'
+import { useButtonPermission } from '@/composables/useButtonPermission'
 import { PAGINATION_CONFIG, POPCONFIRM_CONFIG, TABLE_CONFIG } from '@/config/elementConfig'
 import UserCreate from '@/views/system/user/create.vue'
 import type { IUserItem } from '@/types/system/user'
