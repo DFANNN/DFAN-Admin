@@ -488,7 +488,7 @@ const defaultMenuTreeData = [
       {
         id: 'menu_16',
         type: 'menu',
-        path: '/demo/table',
+        path: '/demo/vxeTable',
         title: 'VXE Table',
         icon: 'HOutline:TableCellsIcon',
         parentId: 'menu_15',

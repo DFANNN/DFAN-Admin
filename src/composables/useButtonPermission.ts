@@ -18,10 +18,7 @@ export const useButtonPermission = (
 
     if (!hasPermission) return false
 
-    // debugger
-
     // 2. 检查业务条件
-
     // 2.1 如果没有业务条件，则直接返回权限
     if (!conditions || conditions.length === 0) return hasPermission
 

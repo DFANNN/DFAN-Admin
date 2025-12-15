@@ -1,4 +1,5 @@
 :root {
+  /* 登录页面品牌背景 */
   --login-brand-bg:
     linear-gradient(
       120deg,
@@ -24,6 +25,7 @@
 }
 
 .dark {
+  /* 登录页面品牌背景 */
   --login-brand-bg:
     linear-gradient(
       120deg,

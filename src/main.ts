@@ -1,15 +1,15 @@
-import '@/styles/common.css'
-import 'element-plus/theme-chalk/dark/css-vars.css'
-import 'element-plus/dist/index.css'
-import 'nprogress/nprogress.css'
-import 'animate.css'
-import { APP_CONFIG } from '@/config/app.config'
-import { loadingFadeOut } from 'virtual:app-loading'
-import { worker } from '@/mocks/browser'
-import { initData } from '@/mocks/db/initData'
+import '@/styles/common.css' // 公共样式
+import 'element-plus/theme-chalk/dark/css-vars.css' // Element Plus 深色模式样式
+import 'element-plus/dist/index.css' // Element Plus 样式
+import 'nprogress/nprogress.css' // NProgress 样式
+import 'animate.css' // Animate.css 样式
+import { APP_CONFIG } from '@/config/app.config' // 全局应用配置
+import { loadingFadeOut } from 'virtual:app-loading' // 全局loading
+import { worker } from '@/mocks/browser' // 模拟数据
+import { initData } from '@/mocks/db/initData' // indexedDB数据库初始化数据
+import { permissionDirective } from '@/directives/permission' // 自定义权限指令
 import { createApp, nextTick } from 'vue'
 import { createPinia } from 'pinia'
-import { permissionDirective } from '@/directives/permission'
 import App from '@/App.vue'
 import router from '@/router/index'
 
