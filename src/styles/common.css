@@ -24,7 +24,7 @@
 
 /* 分页容器样式 */
 .pagination-container {
-  margin-top: 1rem;
+  padding-top: 1rem;
   display: flex;
   justify-content: flex-end;
 }

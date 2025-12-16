@@ -3,6 +3,11 @@
   --vxe-ui-font-color: var(--el-text-color-regular); /* 字体颜色 */
   --vxe-ui-font-family: var(--el-font-family); /* 字体 */
 
+  /* 按钮样式变量 */
+  --vxe-ui-font-primary-color: var(--el-color-primary); /* 按钮主色 */
+  --vxe-ui-font-primary-lighten-color: var(--el-color-primary); /* 按钮主色浅色 */
+  --vxe-ui-font-primary-darken-color: var(--el-color-primary); /* 按钮主色深色 */
+
   /* 表格样式变量 */
   --vxe-ui-table-header-font-color: var(--el-text-color-secondary); /* 表头字体颜色 */
   --vxe-ui-table-border-color: var(--el-border-color-lighter); /* 表格边框颜色 */
