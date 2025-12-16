@@ -13,8 +13,13 @@ VxeUITable.setConfig({
     headerCellConfig: {
       height: 40, // 设置表头高度
     },
+    // 单元格配置
     cellConfig: {
       height: 40, // 设置表格行高度
+    },
+    // 列配置
+    columnConfig: {
+      resizable: true, // 支持列宽拖拽
     },
   },
 })
