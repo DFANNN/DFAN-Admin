@@ -8,6 +8,7 @@ import { loadingFadeOut } from 'virtual:app-loading' // 全局loading
 import { worker } from '@/mocks/browser' // 模拟数据
 import { initData } from '@/mocks/db/initData' // indexedDB数据库初始化数据
 import { permissionDirective } from '@/directives/permission' // 自定义权限指令
+import VXETablePlugin from '@/plugins/vxeTable'
 import { createApp, nextTick } from 'vue'
 import { createPinia } from 'pinia'
 import App from '@/App.vue'
@@ -54,6 +55,9 @@ const startApp = async () => {
 
   // 创建并挂载 Vue 应用
   const app = createApp(App)
+
+  // 注册 VXE Table 插件
+  VXETablePlugin(app)
 
   app.use(createPinia())
   app.use(router)

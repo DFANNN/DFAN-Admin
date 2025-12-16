@@ -1,0 +1,12 @@
+:root {
+  /* 文字 */
+  --vxe-ui-font-color: var(--el-text-color-regular); /* 字体颜色 */
+  --vxe-ui-font-family: var(--el-font-family); /* 字体 */
+
+  /* 表格样式变量 */
+  --vxe-ui-table-header-font-color: var(--el-text-color-secondary); /* 表头字体颜色 */
+  --vxe-ui-table-border-color: var(--el-border-color-lighter); /* 表格边框颜色 */
+  --vxe-ui-table-header-background-color: var(--el-bg-color); /* 表头背景颜色 */
+  --vxe-ui-table-footer-background-color: var(--el-bg-color); /* 表尾背景颜色 */
+  --vxe-ui-layout-background-color: var(--el-bg-color); /* 自定义表体背景 */
+}
