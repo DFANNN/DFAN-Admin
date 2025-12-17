@@ -1,16 +1,11 @@
-@import '@/styles/theme.css';
-@import '@/styles/commonAnimation.css';
-@import '@/styles/nprogress.css';
+/* ==================== 工具类样式 ==================== */
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
+/* 间距工具类 */
 .mb-16 {
   margin-bottom: 1rem;
 }
+
+/* ==================== 卡片样式 ==================== */
 
 /* 卡片margin-top样式 */
 .card-mt-16 {
@@ -22,6 +17,8 @@
   padding-bottom: 2px;
 }
 
+/* ==================== 容器样式 ==================== */
+
 /* 分页容器样式 */
 .pagination-container {
   padding-top: 1rem;
@@ -31,8 +28,10 @@
 
 /* 操作容器样式 */
 .operation-container {
-  margin-bottom: 1rem;
+  padding-bottom: 1rem;
 }
+
+/* ==================== 文本样式 ==================== */
 
 /* 省略文本样式 */
 .ellipsis-text {
@@ -40,3 +39,5 @@
   text-overflow: ellipsis;
   white-space: nowrap !important;
 }
+
+/* ==================== 组件样式 ==================== */

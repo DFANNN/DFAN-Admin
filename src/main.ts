@@ -1,4 +1,4 @@
-import '@/styles/common.css' // 公共样式
+import '@/styles/index.css' // 公共样式
 import 'element-plus/theme-chalk/dark/css-vars.css' // Element Plus 深色模式样式
 import 'element-plus/dist/index.css' // Element Plus 样式
 import 'nprogress/nprogress.css' // NProgress 样式

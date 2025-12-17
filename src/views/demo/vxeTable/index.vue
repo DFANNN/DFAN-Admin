@@ -40,8 +40,8 @@
     </el-card>
 
     <el-card shadow="never" class="card-mt-16" ref="vxeTableCardRef">
-      <vxe-grid v-bind="gridConfig" ref="gridRef">
-        <template #operation-left>
+      <div class="operation-container">
+        <div class="operation-container-left">
           <el-button type="primary" :icon="menuStore.iconComponents.Plus">新增数据 </el-button>
           <el-popconfirm
             title="确定要删除选中的数据吗？"
@@ -52,9 +52,63 @@
               <el-button type="danger" :icon="menuStore.iconComponents.Delete">批量删除 </el-button>
             </template>
           </el-popconfirm>
-        </template>
+        </div>
+        <div class="operation-container-right">
+          <IconButton
+            icon="HOutline:ArrowsPointingOutIcon"
+            tooltip="全屏"
+            placement="top"
+            @click="toggleFullscreen"
+          />
+          <IconButton
+            icon="HOutline:ArrowUpTrayIcon"
+            tooltip="导入"
+            placement="top"
+            @click="gridRef?.openImport()"
+          />
+          <IconButton
+            icon="HOutline:ArrowDownTrayIcon"
+            tooltip="导出"
+            placement="top"
+            @click="gridRef?.openExport()"
+          />
+          <IconButton
+            icon="HOutline:PrinterIcon"
+            tooltip="打印"
+            placement="top"
+            @click="gridRef?.openPrint()"
+          />
+          <IconButton
+            icon="HOutline:ArrowPathIcon"
+            tooltip="刷新"
+            placement="top"
+            @click="gridRef?.openCustom()"
+          />
+          <IconButton
+            icon="HOutline:Cog6ToothIcon"
+            tooltip="列设置"
+            placement="top"
+            @click="gridRef?.openCustom()"
+          />
+        </div>
+      </div>
+
+      <vxe-grid v-bind="gridConfig" ref="gridRef">
+        <!-- 操作按钮自定义slot -->
+        <!-- <template #operation-left>
+          <el-button type="primary" :icon="menuStore.iconComponents.Plus">新增数据 </el-button>
+          <el-popconfirm
+            title="确定要删除选中的数据吗？"
+            :placement="POPCONFIRM_CONFIG.placement"
+            :width="POPCONFIRM_CONFIG.width"
+          >
+            <template #reference>
+              <el-button type="danger" :icon="menuStore.iconComponents.Delete">批量删除 </el-button>
+            </template>
+          </el-popconfirm>
+        </template> -->
         <!-- 工具栏按钮自定义slot -->
-        <template #operation-right>
+        <!-- <template #operation-right>
           <vxe-button
             circle
             :icon="isFullscreen ? 'vxe-icon-minimize' : 'vxe-icon-fullscreen'"
@@ -62,37 +116,7 @@
             @click="toggleFullscreen"
             v-if="!menuStore.isMobile"
           />
-          <!-- <el-button
-            :icon="menuStore.iconComponents['HOutline:ArrowUpTrayIcon']"
-            circle
-            @click="gridRef?.openImport()"
-          />
-          <el-button
-            :icon="menuStore.iconComponents['HOutline:ArrowDownTrayIcon']"
-            circle
-            @click="gridRef?.openExport()"
-          />
-          <el-button
-            :icon="menuStore.iconComponents['HOutline:PrinterIcon']"
-            circle
-            @click="gridRef?.openPrint()"
-          />
-          <el-button
-            :icon="menuStore.iconComponents['HOutline:ArrowPathIcon']"
-            circle
-            @click="getList"
-          />
-          <el-button
-            :icon="menuStore.iconComponents['HOutline:ArrowsPointingOutIcon']"
-            circle
-            @click="(gridRef?.zoom(), console.log(gridRef?.isMaximized()))"
-          />
-          <el-button
-            :icon="menuStore.iconComponents['HOutline:Cog6ToothIcon']"
-            circle
-            @click="gridRef?.openCustom()"
-          /> -->
-        </template>
+        </template> -->
       </vxe-grid>
       <div class="pagination-container" ref="paginationRef">
         <el-pagination
@@ -110,11 +134,12 @@
 </template>
 
 <script setup lang="ts">
-import { POPCONFIRM_CONFIG, PAGINATION_CONFIG } from '@/config/elementConfig'
-import type { VxeGridProps, VxeGridInstance } from 'vxe-table'
-import { useTableHeight } from '@/composables/useTableHeight'
-import type { FormInstance } from 'element-plus'
 import { useFullscreen } from '@vueuse/core'
+import { useTableHeight } from '@/composables/useTableHeight'
+import { POPCONFIRM_CONFIG, PAGINATION_CONFIG } from '@/config/elementConfig'
+import IconButton from '@/components/button/IconButton.vue'
+import type { VxeGridProps, VxeGridInstance } from 'vxe-table'
+import type { FormInstance } from 'element-plus'
 
 defineOptions({ name: 'VxeTableView' })
 
@@ -132,6 +157,7 @@ const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(vxeTableCardRef
 // 动态计算表格高度
 const tableHeight = useTableHeight(queryFormCardRef, paginationRef, {
   tableCardPadding: 22,
+  isFullscreenRef: isFullscreen,
 })
 
 // 性别选项
@@ -166,19 +192,19 @@ const gridConfig = ref<VxeGridProps>({
   printConfig: {}, // 打印配置
   importConfig: {}, // 导入数据配置
   exportConfig: {}, // 导出数据配置
-  // 工具栏配置
-  toolbarConfig: {
-    custom: true, //
-    zoom: false, // 最大化显示
-    print: true, // 打印
-    import: true, // 导入数据
-    export: true, // 导出数据
-    refresh: true, // 刷新数据
-    slots: {
-      buttons: 'operation-left',
-      tools: 'operation-right', // 工具栏按钮自定义slot
-    },
-  },
+  // // 工具栏配置
+  // toolbarConfig: {
+  //   custom: true, // 自定义工具栏
+  //   zoom: false, // 最大化显示
+  //   print: true, // 打印
+  //   import: true, // 导入数据
+  //   export: true, // 导出数据
+  //   refresh: true, // 刷新数据
+  //   slots: {
+  //     buttons: 'operation-left', // 操作按钮自定义slot
+  //     tools: 'operation-right', // 工具栏按钮自定义slot
+  //   },
+  // },
   // 复选框配置
   checkboxConfig: {
     labelField: 'id', // 复选框的值
@@ -231,6 +257,11 @@ const gridConfig = ref<VxeGridProps>({
   data: [],
 })
 
+// 监听表格高度变化，更新 gridConfig
+watch(tableHeight, (newHeight) => {
+  gridConfig.value.height = newHeight
+})
+
 // 随机工具函数
 const randomInt = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min
 
@@ -281,11 +312,6 @@ const reset = () => {
   getList()
 }
 
-// 监听表格高度变化，更新 gridConfig
-watch(tableHeight, (newHeight) => {
-  gridConfig.value.height = isFullscreen.value ? window.innerHeight - 100 : newHeight
-})
-
 onMounted(() => {
   getList()
 })
@@ -300,5 +326,15 @@ onMounted(() => {
 }
 .operation-right-button {
   margin-right: 0.5rem !important;
+}
+
+.operation-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .operation-container-right {
+    display: flex;
+    align-items: center;
+  }
 }
 </style>
