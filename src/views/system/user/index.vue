@@ -146,9 +146,16 @@
         <el-pagination
           v-model:current-page="pagination.page"
           v-model:page-size="pagination.pageSize"
-          :layout="PAGINATION_CONFIG.layout"
+          :layout="
+            menuStore.isMobile ? PAGINATION_CONFIG.mobileLayout : PAGINATION_CONFIG.desktopLayout
+          "
           :page-sizes="PAGINATION_CONFIG.pageSizes"
           :total="pagination.total"
+          :pager-count="
+            menuStore.isMobile
+              ? PAGINATION_CONFIG.mobilePagerCount
+              : PAGINATION_CONFIG.desktopPagerCount
+          "
           @change="getUserList"
         />
       </div>

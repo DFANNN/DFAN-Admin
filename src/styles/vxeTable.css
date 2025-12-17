@@ -1,3 +1,8 @@
+/*
+ * 用element-plus的样式变量 覆盖 VXE Table 样式变量
+ * 在此查阅所有可自定义的变量：http://github.com/x-extends/vxe-table/blob/master/styles/variable.scss
+ */
+
 :root {
   /* 文字 */
   --vxe-ui-font-color: var(--el-text-color-regular); /* 字体颜色 */
@@ -7,6 +12,7 @@
   --vxe-ui-font-primary-color: var(--el-color-primary); /* 按钮主色 */
   --vxe-ui-font-primary-lighten-color: var(--el-color-primary); /* 按钮主色浅色 */
   --vxe-ui-font-primary-darken-color: var(--el-color-primary); /* 按钮主色深色 */
+  --vxe-ui-font-primary-disabled-color: var(--el-color-primary-light-5); /* 按钮主色禁用颜色 */
 
   /* 表格样式变量 */
   --vxe-ui-table-header-font-color: var(--el-text-color-secondary); /* 表头字体颜色 */
@@ -14,4 +20,19 @@
   --vxe-ui-table-header-background-color: var(--el-bg-color); /* 表头背景颜色 */
   --vxe-ui-table-footer-background-color: var(--el-bg-color); /* 表尾背景颜色 */
   --vxe-ui-layout-background-color: var(--el-bg-color); /* 自定义表体背景 */
+  --vxe-ui-table-row-hover-background-color: var(--el-bg-color-page); /* 表格行悬停背景颜色 */
+  --vxe-ui-table-row-checkbox-checked-background-color: var(
+    --el-bg-color-page
+  ); /* 表格行复选框选中背景颜色 */
+  --vxe-ui-table-row-hover-checkbox-checked-background-color: var(
+    --el-bg-color-page
+  ); /* 表格行悬停复选框选中背景颜色 */
+
+  /*loading*/
+  --vxe-ui-loading-background-color: var(--el-mask-color-extra-light); /* 加载背景颜色  */
+
+  /* modal */
+  --vxe-ui-modal-header-background-color: var(--el-dialog-bg-color); /* 对话框header背景颜色 */
+  --vxe-ui-input-border-color: var(--el-border-color); /* 输入框边框颜色 */
+  --vxe-ui-base-popup-border-color: var(--el-card-border-color); /* 弹窗边框颜色 */
 }

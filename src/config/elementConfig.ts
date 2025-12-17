@@ -8,7 +8,14 @@ export const TABLE_CONFIG = {
 
 // 页码配置
 export const PAGINATION_CONFIG = {
-  layout: 'total, sizes, prev, pager, next, jumper',
+  // 页码布局pc端
+  desktopLayout: 'total, sizes, prev, pager, next, jumper',
+  // 页码布局移动端
+  mobileLayout: 'total, prev, pager, next',
+  // 页码按钮数量pc端
+  desktopPagerCount: 7,
+  // 页码按钮数量移动端
+  mobilePagerCount: 5,
   pageSizes: [10, 20, 30, 40, 50],
   // 计算删除后当前页码
   calculatePageAfterDelete: (

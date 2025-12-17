@@ -41,15 +41,28 @@
 
     <el-card shadow="never" class="card-mt-16" ref="vxeTableCardRef">
       <div class="operation-container">
-        <div class="operation-container-left">
-          <el-button type="primary" :icon="menuStore.iconComponents.Plus">新增数据 </el-button>
+        <div class="operation-container-left" ref="operationContainerRef">
+          <el-button
+            type="primary"
+            :icon="menuStore.iconComponents.Plus"
+            @click="vxeTableCreateRef?.showDialog(undefined)"
+          >
+            <template #default v-if="!menuStore.isMobile">新增数据</template>
+          </el-button>
           <el-popconfirm
             title="确定要删除选中的数据吗？"
             :placement="POPCONFIRM_CONFIG.placement"
             :width="POPCONFIRM_CONFIG.width"
+            @confirm="deleteDataHandle(selectedIds)"
           >
             <template #reference>
-              <el-button type="danger" :icon="menuStore.iconComponents.Delete">批量删除 </el-button>
+              <el-button
+                type="danger"
+                :icon="menuStore.iconComponents.Delete"
+                :disabled="!selectedIds.length"
+              >
+                <template #default v-if="!menuStore.isMobile">批量删除</template>
+              </el-button>
             </template>
           </el-popconfirm>
         </div>
@@ -59,6 +72,7 @@
             tooltip="全屏"
             placement="top"
             @click="toggleFullscreen"
+            v-if="!menuStore.isMobile"
           />
           <IconButton
             icon="HOutline:ArrowUpTrayIcon"
@@ -82,7 +96,7 @@
             icon="HOutline:ArrowPathIcon"
             tooltip="刷新"
             placement="top"
-            @click="gridRef?.openCustom()"
+            @click="getList()"
           />
           <IconButton
             icon="HOutline:Cog6ToothIcon"
@@ -93,7 +107,30 @@
         </div>
       </div>
 
-      <vxe-grid v-bind="gridConfig" ref="gridRef">
+      <vxe-grid v-bind="gridConfig" ref="gridRef" @checkbox-change="handleCheckboxChange">
+        <template #column-operation="{ row }">
+          <el-button
+            type="primary"
+            :icon="menuStore.iconComponents.Edit"
+            link
+            @click="vxeTableCreateRef?.showDialog(row)"
+            v-permission="['role:edit']"
+          >
+            编辑
+          </el-button>
+          <el-popconfirm
+            title="确定要删除选中的数据吗？"
+            :placement="POPCONFIRM_CONFIG.placement"
+            :width="POPCONFIRM_CONFIG.width"
+            @confirm="deleteDataHandle([row.id])"
+          >
+            <template #reference>
+              <el-button type="danger" :icon="menuStore.iconComponents.Delete" link>
+                删除
+              </el-button>
+            </template>
+          </el-popconfirm>
+        </template>
         <!-- 操作按钮自定义slot -->
         <!-- <template #operation-left>
           <el-button type="primary" :icon="menuStore.iconComponents.Plus">新增数据 </el-button>
@@ -122,14 +159,23 @@
         <el-pagination
           v-model:current-page="pagination.page"
           v-model:page-size="pagination.pageSize"
-          :layout="PAGINATION_CONFIG.layout"
+          :layout="
+            menuStore.isMobile ? PAGINATION_CONFIG.mobileLayout : PAGINATION_CONFIG.desktopLayout
+          "
           :page-sizes="PAGINATION_CONFIG.pageSizes"
           :total="pagination.total"
           @change="getList"
           :teleported="!isFullscreen"
+          :pager-count="
+            menuStore.isMobile
+              ? PAGINATION_CONFIG.mobilePagerCount
+              : PAGINATION_CONFIG.desktopPagerCount
+          "
         />
       </div>
     </el-card>
+
+    <VxeTableCreate ref="vxeTableCreateRef" @refresh="refresh" />
   </div>
 </template>
 
@@ -138,6 +184,7 @@ import { useFullscreen } from '@vueuse/core'
 import { useTableHeight } from '@/composables/useTableHeight'
 import { POPCONFIRM_CONFIG, PAGINATION_CONFIG } from '@/config/elementConfig'
 import IconButton from '@/components/button/IconButton.vue'
+import VxeTableCreate from '@/views/demo/vxeTable/create.vue'
 import type { VxeGridProps, VxeGridInstance } from 'vxe-table'
 import type { FormInstance } from 'element-plus'
 
@@ -150,13 +197,16 @@ const vxeTableCardRef = useTemplateRef('vxeTableCardRef')
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const queryFormCardRef = useTemplateRef<HTMLElement>('queryFormCardRef')
 const paginationRef = useTemplateRef<HTMLElement>('paginationRef')
-
+const operationContainerRef = useTemplateRef<HTMLElement>('operationContainerRef')
+const vxeTableCreateRef = useTemplateRef<InstanceType<typeof VxeTableCreate> | null>(
+  'vxeTableCreateRef',
+)
 // 全屏功能
 const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(vxeTableCardRef)
 
 // 动态计算表格高度
-const tableHeight = useTableHeight(queryFormCardRef, paginationRef, {
-  tableCardPadding: 22,
+const tableHeight = useTableHeight(queryFormCardRef, paginationRef, operationContainerRef, {
+  tableCardPadding: 21,
   isFullscreenRef: isFullscreen,
 })
 
@@ -185,6 +235,29 @@ const pagination = ref({
   pageSize: 20,
   total: 0,
 })
+
+// 表格数据类型
+interface TableRowData {
+  id: number
+  name: string
+  role: string
+  sex: string
+  age: number
+  address: string
+}
+
+// 选中的记录（响应式）
+const selectedRecords = ref<TableRowData[]>([])
+
+// 选中的 ID 数组（计算属性）
+const selectedIds = computed(() => {
+  return selectedRecords.value.map((item) => String(item.id))
+})
+
+// 处理复选框变化事件
+const handleCheckboxChange = ({ records }: { records: TableRowData[] }) => {
+  selectedRecords.value = records
+}
 
 const gridConfig = ref<VxeGridProps>({
   loading: false,
@@ -253,6 +326,14 @@ const gridConfig = ref<VxeGridProps>({
       minWidth: 120,
     },
     { field: 'address', title: '地址', minWidth: 120, showOverflow: true },
+    {
+      title: '操作',
+      minWidth: 150,
+      fixed: 'right',
+      slots: {
+        default: 'column-operation',
+      },
+    },
   ],
   data: [],
 })
@@ -309,6 +390,21 @@ const getList = async () => {
 const reset = () => {
   queryFormRef.value?.resetFields()
   pagination.value.page = 1
+  getList()
+}
+
+// 删除数据
+const deleteDataHandle = (ids: string[]) => {
+  ElMessage.success(`删除成功${ids}`)
+  // 清空选中状态
+  selectedRecords.value = []
+  gridRef.value?.clearCheckboxRow()
+  getList()
+}
+
+// 刷新
+const refresh = (type: 'create' | 'update') => {
+  pagination.value.page = type === 'create' ? 1 : pagination.value.page
   getList()
 }
 
