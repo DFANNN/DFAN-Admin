@@ -7,7 +7,13 @@
     @close="close"
   >
     <el-scrollbar max-height="60vh">
-      <el-form ref="submitFormRef" :model="submitForm" label-width="100px" label-position="right">
+      <el-form
+        ref="submitFormRef"
+        :model="submitForm"
+        label-width="100px"
+        label-position="right"
+        :rules="formRules"
+      >
         <el-form-item label="姓名" prop="name">
           <el-input v-model="submitForm.name" placeholder="请输入姓名" />
         </el-form-item>
@@ -15,10 +21,10 @@
           <el-input v-model="submitForm.role" placeholder="请输入角色" />
         </el-form-item>
         <el-form-item label="性别" prop="sex">
-          <el-radio-group v-model="submitForm.sex" placeholder="请选择性别">
-            <el-radio label="0">男</el-radio>
-            <el-radio label="1">女</el-radio>
-          </el-radio-group>
+          <el-select v-model="submitForm.sex" placeholder="请选择性别">
+            <el-option label="男" value="0" />
+            <el-option label="女" value="1" />
+          </el-select>
         </el-form-item>
         <el-form-item label="年龄" prop="age">
           <el-input-number
@@ -26,6 +32,7 @@
             placeholder="请输入年龄"
             :controls="false"
             style="width: 100%"
+            align="left"
           />
         </el-form-item>
         <el-form-item label="地址" prop="address">
@@ -41,7 +48,8 @@
 </template>
 
 <script setup lang="ts">
-import type { FormInstance } from 'element-plus'
+import { useCloned } from '@vueuse/core'
+import type { FormInstance, FormRules } from 'element-plus'
 
 defineOptions({ name: 'VxeTableCreate' })
 
@@ -61,9 +69,13 @@ const submitForm = ref({
   address: '',
 })
 
-const confirm = () => {
+const confirm = async () => {
+  await submitFormRef.value?.validate()
+  // 深拷贝数据
+  const { cloned } = useCloned(submitForm.value)
+  console.log(cloned.value)
+  emits('refresh', submitForm.value.id ? 'update' : 'create', cloned.value)
   ElMessage.success(submitForm.value.id ? '编辑成功' : '新增成功')
-  emits('refresh', submitForm.value.id ? 'update' : 'create')
   close()
 }
 
@@ -88,6 +100,15 @@ interface IData {
   sex: string
   age: number | null
   address: string
+}
+
+// 表单验证规则
+const formRules: FormRules = {
+  name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
+  role: [{ required: true, message: '请输入角色', trigger: 'blur' }],
+  sex: [{ required: true, message: '请选择性别', trigger: 'change' }],
+  age: [{ required: true, message: '请输入年龄', trigger: 'blur' }],
+  address: [{ required: true, message: '请输入地址', trigger: 'blur' }],
 }
 
 const showDialog = (data: IData | undefined) => {

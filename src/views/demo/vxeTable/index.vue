@@ -40,74 +40,7 @@
     </el-card>
 
     <el-card shadow="never" class="card-mt-16" ref="vxeTableCardRef">
-      <div class="operation-container">
-        <div class="operation-container-left" ref="operationContainerRef">
-          <el-button
-            type="primary"
-            :icon="menuStore.iconComponents.Plus"
-            @click="vxeTableCreateRef?.showDialog(undefined)"
-          >
-            <template #default v-if="!menuStore.isMobile">新增数据</template>
-          </el-button>
-          <el-popconfirm
-            title="确定要删除选中的数据吗？"
-            :placement="POPCONFIRM_CONFIG.placement"
-            :width="POPCONFIRM_CONFIG.width"
-            @confirm="deleteDataHandle(selectedIds)"
-          >
-            <template #reference>
-              <el-button
-                type="danger"
-                :icon="menuStore.iconComponents.Delete"
-                :disabled="!selectedIds.length"
-              >
-                <template #default v-if="!menuStore.isMobile">批量删除</template>
-              </el-button>
-            </template>
-          </el-popconfirm>
-        </div>
-        <div class="operation-container-right">
-          <IconButton
-            icon="HOutline:ArrowsPointingOutIcon"
-            tooltip="全屏"
-            placement="top"
-            @click="toggleFullscreen"
-            v-if="!menuStore.isMobile"
-          />
-          <IconButton
-            icon="HOutline:ArrowUpTrayIcon"
-            tooltip="导入"
-            placement="top"
-            @click="gridRef?.openImport()"
-          />
-          <IconButton
-            icon="HOutline:ArrowDownTrayIcon"
-            tooltip="导出"
-            placement="top"
-            @click="gridRef?.openExport()"
-          />
-          <IconButton
-            icon="HOutline:PrinterIcon"
-            tooltip="打印"
-            placement="top"
-            @click="gridRef?.openPrint()"
-          />
-          <IconButton
-            icon="HOutline:ArrowPathIcon"
-            tooltip="刷新"
-            placement="top"
-            @click="getList()"
-          />
-          <IconButton
-            icon="HOutline:Cog6ToothIcon"
-            tooltip="列设置"
-            placement="top"
-            @click="gridRef?.openCustom()"
-          />
-        </div>
-      </div>
-
-      <vxe-grid v-bind="gridConfig" ref="gridRef" @checkbox-change="handleCheckboxChange">
+      <vxe-grid v-bind="gridConfig" ref="gridRef" v-on="gridEvents">
         <template #column-operation="{ row }">
           <el-button
             type="primary"
@@ -118,18 +51,14 @@
           >
             编辑
           </el-button>
-          <el-popconfirm
-            title="确定要删除选中的数据吗？"
-            :placement="POPCONFIRM_CONFIG.placement"
-            :width="POPCONFIRM_CONFIG.width"
-            @confirm="deleteDataHandle([row.id])"
+          <el-button
+            type="danger"
+            :icon="menuStore.iconComponents.Delete"
+            link
+            @click="deleteDataHandle(row)"
           >
-            <template #reference>
-              <el-button type="danger" :icon="menuStore.iconComponents.Delete" link>
-                删除
-              </el-button>
-            </template>
-          </el-popconfirm>
+            删除
+          </el-button>
         </template>
         <!-- 操作按钮自定义slot -->
         <!-- <template #operation-left>
@@ -155,45 +84,32 @@
           />
         </template> -->
       </vxe-grid>
-      <div class="pagination-container" ref="paginationRef">
-        <el-pagination
-          v-model:current-page="pagination.page"
-          v-model:page-size="pagination.pageSize"
-          :layout="
-            menuStore.isMobile ? PAGINATION_CONFIG.mobileLayout : PAGINATION_CONFIG.desktopLayout
-          "
-          :page-sizes="PAGINATION_CONFIG.pageSizes"
-          :total="pagination.total"
-          @change="getList"
-          :teleported="!isFullscreen"
-          :pager-count="
-            menuStore.isMobile
-              ? PAGINATION_CONFIG.mobilePagerCount
-              : PAGINATION_CONFIG.desktopPagerCount
-          "
-        />
-      </div>
-    </el-card>
 
-    <VxeTableCreate ref="vxeTableCreateRef" @refresh="refresh" />
+      <VxeTableCreate ref="vxeTableCreateRef" @refresh="refresh" />
+    </el-card>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useFullscreen } from '@vueuse/core'
 import { useTableHeight } from '@/composables/useTableHeight'
-import { POPCONFIRM_CONFIG, PAGINATION_CONFIG } from '@/config/elementConfig'
-import IconButton from '@/components/button/IconButton.vue'
 import VxeTableCreate from '@/views/demo/vxeTable/create.vue'
-import type { VxeGridProps, VxeGridInstance } from 'vxe-table'
+import {
+  type VxeGridProps,
+  type VxeGridInstance,
+  type VxeGridListeners,
+  type VxeTableEvents,
+} from 'vxe-table'
 import type { FormInstance } from 'element-plus'
+import { useClipboard } from '@vueuse/core'
 
 defineOptions({ name: 'VxeTableView' })
 
 const menuStore = useMenuStore()
 
+// 使用 VueUse 的复制功能
+const { copy } = useClipboard()
+
 const gridRef = useTemplateRef<VxeGridInstance>('gridRef')
-const vxeTableCardRef = useTemplateRef('vxeTableCardRef')
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const queryFormCardRef = useTemplateRef<HTMLElement>('queryFormCardRef')
 const paginationRef = useTemplateRef<HTMLElement>('paginationRef')
@@ -201,13 +117,19 @@ const operationContainerRef = useTemplateRef<HTMLElement>('operationContainerRef
 const vxeTableCreateRef = useTemplateRef<InstanceType<typeof VxeTableCreate> | null>(
   'vxeTableCreateRef',
 )
-// 全屏功能
-const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(vxeTableCardRef)
+
+interface IAllData {
+  id: number
+  name: string
+  role: string
+  sex: string
+  age: number
+  address: string
+}
 
 // 动态计算表格高度
 const tableHeight = useTableHeight(queryFormCardRef, paginationRef, operationContainerRef, {
   tableCardPadding: 21,
-  isFullscreenRef: isFullscreen,
 })
 
 // 性别选项
@@ -223,17 +145,13 @@ const ageOptions = [
   { label: '大于50岁', value: 50 },
 ]
 
+// 所有数据
+const allData = ref<IAllData[]>([])
+
 const queryForm = ref({
   name: '',
   sex: '',
   age: undefined,
-})
-
-// 分页
-const pagination = ref({
-  page: 1,
-  pageSize: 20,
-  total: 0,
 })
 
 // 表格数据类型
@@ -246,38 +164,65 @@ interface TableRowData {
   address: string
 }
 
-// 选中的记录（响应式）
-const selectedRecords = ref<TableRowData[]>([])
-
-// 选中的 ID 数组（计算属性）
-const selectedIds = computed(() => {
-  return selectedRecords.value.map((item) => String(item.id))
-})
-
-// 处理复选框变化事件
-const handleCheckboxChange = ({ records }: { records: TableRowData[] }) => {
-  selectedRecords.value = records
-}
-
 const gridConfig = ref<VxeGridProps>({
   loading: false,
   height: tableHeight.value, // 表格高度
   printConfig: {}, // 打印配置
   importConfig: {}, // 导入数据配置
   exportConfig: {}, // 导出数据配置
-  // // 工具栏配置
-  // toolbarConfig: {
-  //   custom: true, // 自定义工具栏
-  //   zoom: false, // 最大化显示
-  //   print: true, // 打印
-  //   import: true, // 导入数据
-  //   export: true, // 导出数据
-  //   refresh: true, // 刷新数据
-  //   slots: {
-  //     buttons: 'operation-left', // 操作按钮自定义slot
-  //     tools: 'operation-right', // 工具栏按钮自定义slot
-  //   },
-  // },
+  // 工具栏配置
+  toolbarConfig: {
+    custom: true, // 自定义工具栏
+    zoom: true, // 最大化显示
+    print: true, // 打印
+    import: true, // 导入数据
+    export: true, // 导出数据
+    refresh: true, // 刷新数据
+    buttons: [
+      { name: '新增', icon: 'vxe-icon-add', code: 'add', status: 'primary' }, // code 用于事件监听
+      { name: '删除', icon: 'vxe-icon-delete', code: 'delete', status: 'error' },
+    ],
+    // 工具栏按钮自定义slot
+    // slots: {
+    //   buttons: 'operation-left', // 操作按钮自定义slot
+    //   tools: 'operation-right', // 工具栏按钮自定义slot
+    // },
+  },
+  // 右键菜单
+  menuConfig: {
+    body: {
+      options: [
+        [
+          {
+            code: 'copy',
+            name: '复制内容（Ctrl+C）',
+            prefixConfig: { icon: 'vxe-icon-copy' },
+            visible: true,
+            disabled: false,
+          },
+        ],
+        [
+          {
+            code: 'fixed',
+            name: '冻结列',
+            children: [
+              { code: 'cancelFixed', name: '取消冻结' },
+              {
+                code: 'fixedLeft',
+                name: '冻结在左侧',
+                prefixConfig: { icon: 'vxe-icon-fixed-left' },
+              },
+              {
+                code: 'fixedRight',
+                name: '冻结在右侧',
+                prefixConfig: { icon: 'vxe-icon-fixed-right' },
+              },
+            ],
+          },
+        ],
+      ],
+    },
+  },
   // 复选框配置
   checkboxConfig: {
     labelField: 'id', // 复选框的值
@@ -289,6 +234,89 @@ const gridConfig = ref<VxeGridProps>({
   rowConfig: {
     isHover: true, // 支持鼠标悬停
     drag: true, // 支持拖拽
+  },
+  // 分页配置
+  pagerConfig: {
+    currentPage: 1,
+    pageSize: 20,
+    total: 0,
+  },
+  // 代理配置
+  proxyConfig: {
+    // 是否自动加载查询数据
+    autoLoad: true,
+    ajax: {
+      // 查询方法：当分页、排序、筛选改变时会自动调用
+      query: async ({ page }) => {
+        console.log(`output->query 被调用`, page)
+
+        // 模拟接口延迟
+        await new Promise((resolve) => setTimeout(resolve, 500))
+
+        const { currentPage = 1, pageSize = 20 } = page
+
+        // 从所有数据中截取当前页的数据
+        const result = allData.value.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+
+        // 必须返回 { result: 数据数组, page: { total: 总数 } } 格式
+        return {
+          result: result,
+          page: {
+            total: allData.value.length,
+          },
+        }
+      },
+
+      // 删除方法：当工具栏删除按钮被点击时会自动调用
+      delete: async ({ body }) => {
+        console.log(`output->delete 被调用`, body)
+
+        // 模拟接口延迟
+        await new Promise((resolve) => setTimeout(resolve, 500))
+
+        // body.removeRecords 是要删除的记录数组
+        const deleteIds = body.removeRecords.map((item: TableRowData) => item.id)
+
+        // 从 allData 中删除这些记录
+        allData.value = allData.value.filter((item) => !deleteIds.includes(item.id))
+
+        ElMessage.success(`成功删除 ${deleteIds.length} 条数据`)
+
+        // 返回 true 表示删除成功，VxeTable 会自动刷新数据
+        return true
+      },
+
+      // 可选：保存方法（用于行内编辑）
+      save: async ({ body }) => {
+        console.log(`output->save 被调用`, body)
+
+        // 模拟接口延迟
+        await new Promise((resolve) => setTimeout(resolve, 500))
+
+        // body.insertRecords 是新增的记录
+        // body.updateRecords 是修改的记录
+        // body.removeRecords 是删除的记录
+
+        if (body.insertRecords.length > 0) {
+          // 处理新增
+          allData.value.push(...body.insertRecords)
+          ElMessage.success(`成功新增 ${body.insertRecords.length} 条数据`)
+        }
+
+        if (body.updateRecords.length > 0) {
+          // 处理修改
+          body.updateRecords.forEach((record: TableRowData) => {
+            const index = allData.value.findIndex((item) => item.id === record.id)
+            if (index !== -1) {
+              allData.value[index] = record
+            }
+          })
+          ElMessage.success(`成功修改 ${body.updateRecords.length} 条数据`)
+        }
+
+        return true
+      },
+    },
   },
   columns: [
     {
@@ -356,60 +384,120 @@ const addressOptions = [
   'Chengdu',
 ]
 
-// 模拟请求接口，随机生成数据
-const getList = async () => {
-  gridConfig.value.loading = true
+// 随机生成1000条数据
+const generateData = (count = 1000) => {
+  const list = new Array(count)
 
-  try {
-    // 模拟接口耗时
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    const { page, pageSize } = pagination.value
-
-    const list = Array.from({ length: pageSize }, (_, index) => {
-      const id = (page - 1 + 1000) * pageSize + index + 1
-
-      return {
-        id,
-        name: `Test${id}`,
-        role: roleOptions[randomInt(0, roleOptions.length - 1)],
-        sex: Math.random() > 0.5 ? '0' : '1', // 0: 男, 1: 女
-        age: randomInt(8, 60),
-        address: addressOptions[randomInt(0, addressOptions.length - 1)],
-      }
-    })
-
-    gridConfig.value.data = list
-    pagination.value.total = 200
-  } finally {
-    gridConfig.value.loading = false
+  for (let i = 0; i < count; i++) {
+    list[i] = {
+      id: i + 1,
+      name: `Test${i + 1}`,
+      role: roleOptions[randomInt(0, roleOptions.length - 1)],
+      sex: Math.random() > 0.5 ? '0' : '1', // 0: 男, 1: 女
+      age: randomInt(8, 60),
+      address: addressOptions[randomInt(0, addressOptions.length - 1)],
+    }
   }
+
+  allData.value = list
+}
+
+// 搜索方法
+const getList = () => {
+  // 重置到第一页
+  const pagerConfig = gridConfig.value.pagerConfig
+  if (pagerConfig) {
+    pagerConfig.currentPage = 1
+  }
+  // 使用 commitProxy 重新查询数据
+  gridRef.value?.commitProxy('query')
 }
 
 // 重置查询条件并重新获取数据
 const reset = () => {
   queryFormRef.value?.resetFields()
-  pagination.value.page = 1
-  getList()
+  // 使用 commitProxy 重新查询数据
+  gridRef.value?.commitProxy('query')
 }
 
-// 删除数据
-const deleteDataHandle = (ids: string[]) => {
-  ElMessage.success(`删除成功${ids}`)
-  // 清空选中状态
-  selectedRecords.value = []
-  gridRef.value?.clearCheckboxRow()
-  getList()
+// 删除数据（行内删除按钮使用）
+const deleteDataHandle = async (row: IAllData) => {
+  try {
+    // 方法1: 通过 setCheckboxRow 选中该行（row: 要选中的行数据, checked: 是否选中）
+    await gridRef.value?.setCheckboxRow(row, true)
+
+    // 调用 commitProxy('delete') 会触发 proxyConfig.ajax.delete 方法（删除选中行）
+    await gridRef.value?.commitProxy('delete')
+  } catch (error) {
+    console.error('删除失败:', error)
+    ElMessage.error('删除失败')
+  }
 }
 
 // 刷新
-const refresh = (type: 'create' | 'update') => {
-  pagination.value.page = type === 'create' ? 1 : pagination.value.page
-  getList()
+const refresh = (type: 'create' | 'update', data: IAllData) => {
+  // 如果是新增，跳转到第一页
+  if (type === 'create') {
+    const pagerConfig = gridConfig.value.pagerConfig
+    if (pagerConfig) {
+      pagerConfig.currentPage = 1
+    }
+    const newData = {
+      ...data,
+      id: allData.value.length + 1,
+    }
+    allData.value.unshift(newData)
+  }
+
+  if (type === 'update') {
+    const index = allData.value.findIndex((item) => item.id === data.id)
+    if (index !== -1) allData.value[index] = data
+  }
+  // 使用 commitProxy 重新查询数据
+  gridRef.value?.commitProxy('query')
+}
+
+// 工具栏按钮点击
+const toolbarButtonClick = async (params: { code: string }) => {
+  if (params.code === 'add') {
+    vxeTableCreateRef.value?.showDialog(undefined)
+  }
+}
+
+// 右键菜单点击事件
+const menuClick: VxeTableEvents.MenuClick<IAllData> = ({ menu, row, column }) => {
+  console.log('menuClick 参数：', { menu, row, column })
+
+  if (menu.code === 'copy') {
+    // 获取当前单元格的值
+    const cellValue = row[column.field as keyof IAllData]
+
+    if (cellValue !== null && cellValue !== undefined) {
+      // 使用 VueUse 的 copy 方法复制内容
+      copy(String(cellValue))
+        .then(() => {
+          ElMessage.success(`已复制: ${cellValue}`)
+        })
+        .catch(() => {
+          ElMessage.error('复制失败')
+        })
+    } else {
+      ElMessage.warning('该单元格没有内容')
+    }
+  }
+}
+
+// 表格事件(所有)
+const gridEvents: VxeGridListeners = {
+  // 使用 proxyConfig 后，分页变化会自动触发 query，不需要手动处理 pageChange 事件
+  toolbarButtonClick: toolbarButtonClick,
+  menuClick: menuClick,
 }
 
 onMounted(() => {
-  getList()
+  // 生成模拟数据
+  generateData()
+  // proxyConfig 设置了 autoLoad: true，会自动加载数据，不需要手动调用
 })
 </script>
 
@@ -423,14 +511,21 @@ onMounted(() => {
 .operation-right-button {
   margin-right: 0.5rem !important;
 }
+</style>
 
-.operation-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  .operation-container-right {
-    display: flex;
-    align-items: center;
-  }
+<style>
+.vxe-context-menu--option-wrapper,
+.vxe-table--context-menu-clild-wrapper {
+  border-bottom: 1px solid var(--el-border-color);
+}
+
+.vxe-context-menu--option-wrapper li.link--active,
+.vxe-table--context-menu-clild-wrapper li.link--active {
+  background-color: var(--el-bg-color-page);
+}
+
+.vxe-context-menu--option-wrapper li.link--active > .vxe-context-menu--link,
+.vxe-table--context-menu-clild-wrapper li.link--active > .vxe-context-menu--link {
+  color: var(--el-text-color-regular);
 }
 </style>

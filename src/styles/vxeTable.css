@@ -27,7 +27,8 @@
   --vxe-ui-table-row-hover-checkbox-checked-background-color: var(
     --el-bg-color-page
   ); /* 表格行悬停复选框选中背景颜色 */
-
+  --vxe-ui-table-menu-background-color: var(--el-bg-color); /* 表格右键菜单背景颜色 */
+  --vxe-ui-base-popup-border-color: var(--el-border-color); /* 弹窗边框颜色 */
   /*loading*/
   --vxe-ui-loading-background-color: var(--el-mask-color-extra-light); /* 加载背景颜色  */
 
