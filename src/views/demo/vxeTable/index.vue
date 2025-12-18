@@ -284,7 +284,7 @@ const gridConfig = ref<VxeGridProps>({
       {
         field: 'age',
         title: '年龄',
-        itemRender: { name: 'VxeNumberInput' },
+        itemRender: { name: 'VxeNumberInput', props: { controls: false } },
       },
       {
         itemRender: {
