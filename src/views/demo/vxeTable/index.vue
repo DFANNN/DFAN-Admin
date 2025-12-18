@@ -1,45 +1,6 @@
 <template>
   <div class="vxe-table-view-container">
-    <el-card shadow="never" class="card-clear-mb" ref="queryFormCardRef">
-      <el-form :model="queryForm" label-width="auto" ref="queryFormRef" @keyup.enter="getList">
-        <el-row :gutter="10">
-          <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-            <el-form-item label="姓名" prop="name">
-              <el-input v-model="queryForm.name" placeholder="请输入" />
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-            <el-form-item label="性别" prop="sex">
-              <el-select v-model="queryForm.sex" placeholder="请选择">
-                <el-option label="男" value="0" />
-                <el-option label="女" value="1" />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-            <el-form-item label="年龄" prop="age">
-              <el-input-number
-                v-model="queryForm.age"
-                :controls="false"
-                align="left"
-                placeholder="请输入"
-                style="width: 100%"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-            <el-form-item>
-              <el-button type="primary" :icon="menuStore.iconComponents.Search" @click="getList"
-                >搜索</el-button
-              >
-              <el-button :icon="menuStore.iconComponents.Refresh" @click="reset">重置</el-button>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-    </el-card>
-
-    <el-card shadow="never" class="card-mt-16" ref="vxeTableCardRef">
+    <el-card shadow="never" ref="vxeTableCardRef" class="vxe-table-card">
       <vxe-grid v-bind="gridConfig" ref="gridRef" v-on="gridEvents">
         <template #column-operation="{ row }">
           <el-button
@@ -91,7 +52,6 @@
 </template>
 
 <script setup lang="ts">
-import { useTableHeight } from '@/composables/useTableHeight'
 import VxeTableCreate from '@/views/demo/vxeTable/create.vue'
 import {
   type VxeGridProps,
@@ -99,7 +59,6 @@ import {
   type VxeGridListeners,
   type VxeTableEvents,
 } from 'vxe-table'
-import type { FormInstance } from 'element-plus'
 import { useClipboard } from '@vueuse/core'
 
 defineOptions({ name: 'VxeTableView' })
@@ -110,10 +69,6 @@ const menuStore = useMenuStore()
 const { copy } = useClipboard()
 
 const gridRef = useTemplateRef<VxeGridInstance>('gridRef')
-const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
-const queryFormCardRef = useTemplateRef<HTMLElement>('queryFormCardRef')
-const paginationRef = useTemplateRef<HTMLElement>('paginationRef')
-const operationContainerRef = useTemplateRef<HTMLElement>('operationContainerRef')
 const vxeTableCreateRef = useTemplateRef<InstanceType<typeof VxeTableCreate> | null>(
   'vxeTableCreateRef',
 )
@@ -126,11 +81,6 @@ interface IAllData {
   age: number
   address: string
 }
-
-// 动态计算表格高度
-const tableHeight = useTableHeight(queryFormCardRef, paginationRef, operationContainerRef, {
-  tableCardPadding: 21,
-})
 
 // 性别选项
 const sexOptions = [
@@ -148,12 +98,6 @@ const ageOptions = [
 // 所有数据
 const allData = ref<IAllData[]>([])
 
-const queryForm = ref({
-  name: '',
-  sex: '',
-  age: undefined,
-})
-
 // 表格数据类型
 interface TableRowData {
   id: number
@@ -165,8 +109,16 @@ interface TableRowData {
 }
 
 const gridConfig = ref<VxeGridProps>({
+  // 虚拟滚动配置
+  virtualYConfig: {
+    enabled: true, // 是否启用虚拟滚动
+    gt: 0, // 滚动阈值
+  },
+  // 自动监听父元素的变化去重新计算表格
+  autoResize: true,
   loading: false,
-  height: tableHeight.value, // 表格高度
+  height: '100%', // 表格高度
+  minHeight: 500, // 最小高度
   printConfig: {}, // 打印配置
   importConfig: {}, // 导入数据配置
   exportConfig: {}, // 导出数据配置
@@ -240,6 +192,7 @@ const gridConfig = ref<VxeGridProps>({
     currentPage: 1,
     pageSize: 20,
     total: 0,
+    pageSizes: [20, 50, 200, 500, 1000],
   },
   // 代理配置
   proxyConfig: {
@@ -247,8 +200,8 @@ const gridConfig = ref<VxeGridProps>({
     autoLoad: true,
     ajax: {
       // 查询方法：当分页、排序、筛选改变时会自动调用
-      query: async ({ page }) => {
-        console.log(`output->query 被调用`, page)
+      query: async ({ page, form }) => {
+        console.log(`output->query 被调用`, page, form)
 
         // 模拟接口延迟
         await new Promise((resolve) => setTimeout(resolve, 500))
@@ -318,6 +271,32 @@ const gridConfig = ref<VxeGridProps>({
       },
     },
   },
+  // 表单
+  formConfig: {
+    data: {
+      name: '',
+      sex: '',
+      age: undefined,
+    },
+    items: [
+      { field: 'name', title: '姓名', itemRender: { name: 'VxeInput' } },
+      { field: 'sex', title: '性别', itemRender: { name: 'VxeSelect', options: sexOptions } },
+      {
+        field: 'age',
+        title: '年龄',
+        itemRender: { name: 'VxeNumberInput' },
+      },
+      {
+        itemRender: {
+          name: 'VxeButtonGroup',
+          options: [
+            { type: 'submit', content: '搜索', status: 'primary' },
+            { type: 'reset', content: '重置' },
+          ],
+        },
+      },
+    ],
+  },
   columns: [
     {
       type: 'seq',
@@ -331,6 +310,7 @@ const gridConfig = ref<VxeGridProps>({
       sortable: true, // 支持排序
       dragSort: true, // 支持拖拽排序
       minWidth: 120,
+      showOverflow: true,
     },
     {
       field: 'sex',
@@ -366,11 +346,6 @@ const gridConfig = ref<VxeGridProps>({
   data: [],
 })
 
-// 监听表格高度变化，更新 gridConfig
-watch(tableHeight, (newHeight) => {
-  gridConfig.value.height = newHeight
-})
-
 // 随机工具函数
 const randomInt = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min
 
@@ -400,24 +375,6 @@ const generateData = (count = 1000) => {
   }
 
   allData.value = list
-}
-
-// 搜索方法
-const getList = () => {
-  // 重置到第一页
-  const pagerConfig = gridConfig.value.pagerConfig
-  if (pagerConfig) {
-    pagerConfig.currentPage = 1
-  }
-  // 使用 commitProxy 重新查询数据
-  gridRef.value?.commitProxy('query')
-}
-
-// 重置查询条件并重新获取数据
-const reset = () => {
-  queryFormRef.value?.resetFields()
-  // 使用 commitProxy 重新查询数据
-  gridRef.value?.commitProxy('query')
 }
 
 // 删除数据（行内删除按钮使用）
@@ -490,7 +447,9 @@ const menuClick: VxeTableEvents.MenuClick<IAllData> = ({ menu, row, column }) =>
 // 表格事件(所有)
 const gridEvents: VxeGridListeners = {
   // 使用 proxyConfig 后，分页变化会自动触发 query，不需要手动处理 pageChange 事件
+  // 工具栏按钮点击事件
   toolbarButtonClick: toolbarButtonClick,
+  // 右键菜单点击事件
   menuClick: menuClick,
 }
 
@@ -507,9 +466,13 @@ onMounted(() => {
   overflow: hidden;
   width: 100%;
   height: 100%;
-}
-.operation-right-button {
-  margin-right: 0.5rem !important;
+  display: flex;
+  .vxe-table-card {
+    flex: 1;
+    :deep(.el-card__body) {
+      height: 100%;
+    }
+  }
 }
 </style>
 
