@@ -1,63 +1,60 @@
 <template>
-  <el-dialog
+  <BaseDialog
     v-model="open"
     :title="submitForm.id ? '编辑角色' : '新增角色'"
-    :width="menuStore.isMobile ? '90%' : '600px'"
-    :close-on-click-modal="false"
+    width="600"
     @close="close"
   >
-    <el-scrollbar max-height="60vh">
-      <el-form
-        ref="submitFormRef"
-        :model="submitForm"
-        :rules="formRules"
-        label-width="100px"
-        label-position="right"
-      >
-        <el-form-item label="角色名称" prop="name">
-          <el-input v-model="submitForm.name" placeholder="请输入角色名称" />
-        </el-form-item>
-        <el-form-item label="角色编码" prop="code">
-          <el-input
-            v-model="submitForm.code"
-            placeholder="请输入角色编码"
-            :disabled="!!submitForm.id"
-          />
-        </el-form-item>
-        <el-form-item label="角色描述" prop="description">
-          <el-input
-            v-model="submitForm.description"
-            type="textarea"
-            :rows="3"
-            placeholder="请输入角色描述"
-          />
-        </el-form-item>
-        <el-form-item label="状态" prop="status">
-          <el-radio-group v-model="submitForm.status">
-            <el-radio label="active">启用</el-radio>
-            <el-radio label="inactive">禁用</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="菜单权限" prop="menuIds">
-          <el-tree
-            ref="menuTreeRef"
-            :data="menuList"
-            :props="{ label: 'title', children: 'children' }"
-            show-checkbox
-            default-expand-all
-            node-key="id"
-            @check="handleMenuCheck as unknown"
-            style="width: 100%"
-          />
-        </el-form-item>
-      </el-form>
-    </el-scrollbar>
+    <el-form
+      ref="submitFormRef"
+      :model="submitForm"
+      :rules="formRules"
+      label-width="100px"
+      label-position="right"
+    >
+      <el-form-item label="角色名称" prop="name">
+        <el-input v-model="submitForm.name" placeholder="请输入角色名称" />
+      </el-form-item>
+      <el-form-item label="角色编码" prop="code">
+        <el-input
+          v-model="submitForm.code"
+          placeholder="请输入角色编码"
+          :disabled="!!submitForm.id"
+        />
+      </el-form-item>
+      <el-form-item label="角色描述" prop="description">
+        <el-input
+          v-model="submitForm.description"
+          type="textarea"
+          :rows="3"
+          placeholder="请输入角色描述"
+        />
+      </el-form-item>
+      <el-form-item label="状态" prop="status">
+        <el-radio-group v-model="submitForm.status">
+          <el-radio label="active">启用</el-radio>
+          <el-radio label="inactive">禁用</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="菜单权限" prop="menuIds">
+        <el-tree
+          ref="menuTreeRef"
+          :data="menuList"
+          :props="{ label: 'title', children: 'children' }"
+          show-checkbox
+          default-expand-all
+          node-key="id"
+          @check="handleMenuCheck as unknown"
+          style="width: 100%"
+        />
+      </el-form-item>
+    </el-form>
 
     <template #footer>
       <el-button @click="close">取消</el-button>
       <el-button type="primary" :loading="submitLoading" @click="confirm">确定</el-button>
     </template>
-  </el-dialog>
+  </BaseDialog>
 </template>
 
 <script setup lang="ts">
@@ -69,7 +66,6 @@ import type { IMenuItem } from '@/types/system/menu'
 defineOptions({ name: 'RoleCreate' })
 
 const emits = defineEmits(['refresh'])
-const menuStore = useMenuStore()
 
 const submitFormRef = useTemplateRef<FormInstance>('submitFormRef')
 const menuTreeRef = useTemplateRef<InstanceType<typeof ElTree> | null>('menuTreeRef')

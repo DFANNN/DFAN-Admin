@@ -1,9 +1,8 @@
 <template>
-  <el-dialog
+  <BaseDialog
     v-model="open"
     :title="submitForm.id ? '编辑用户' : '新增用户'"
-    :width="menuStore.isMobile ? '90%' : '600px'"
-    :close-on-click-modal="false"
+    width="600"
     @close="close"
   >
     <el-form
@@ -54,19 +53,18 @@
       <el-button @click="close">取消</el-button>
       <el-button type="primary" :loading="submitLoading" @click="confirm">确定</el-button>
     </template>
-  </el-dialog>
+  </BaseDialog>
 </template>
 
 <script setup lang="ts">
-import { createUser, userInfo, updateUser } from '@/api/user'
 import { rolePage } from '@/api/role'
-import { type FormInstance, type FormRules } from 'element-plus'
+import { createUser, userInfo, updateUser } from '@/api/user'
 import type { IRoleItem } from '@/types/system/role'
+import { type FormInstance, type FormRules } from 'element-plus'
 
 defineOptions({ name: 'UserCreate' })
 
 const emits = defineEmits(['refresh'])
-const menuStore = useMenuStore()
 
 const submitFormRef = useTemplateRef<FormInstance>('submitFormRef')
 

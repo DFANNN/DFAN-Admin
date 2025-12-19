@@ -23,6 +23,7 @@ export default defineConfig(({ mode }) => {
       }),
       Components({
         resolvers: [ElementPlusResolver()],
+        dirs: ['src/components'],
       }),
     ],
     resolve: {

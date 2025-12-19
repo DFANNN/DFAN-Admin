@@ -1,9 +1,8 @@
 <template>
-  <el-dialog
+  <BaseDialog
     v-model="open"
     :title="submitForm.id ? '编辑菜单' : '新增菜单'"
-    :width="menuStore.isMobile ? '90%' : '600px'"
-    :close-on-click-modal="false"
+    width="600"
     @close="close"
   >
     <el-form
@@ -70,7 +69,7 @@
       <el-button @click="close">取消</el-button>
       <el-button type="primary" :loading="submitLoading" @click="confirm">确定</el-button>
     </template>
-  </el-dialog>
+  </BaseDialog>
 
   <SelectIconDialog ref="selectIconDialogRef" @getSelectIcon="getSelectIcon" />
 </template>

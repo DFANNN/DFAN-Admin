@@ -9,7 +9,7 @@
   >
     <div class="action-btn" :style="{ width: size, height: size }" @click="handleClick">
       <el-icon :style="{ fontSize: iconSize }">
-        <component :is="menuStore.iconComponents[icon]" />
+        <component :is="iconComponent" />
       </el-icon>
     </div>
   </el-tooltip>
@@ -19,8 +19,8 @@
 const menuStore = useMenuStore()
 
 interface Props {
-  // 图标 需要传入在menuStore.iconComponents中的图标名称
-  icon: string
+  // 图标：可以是字符串（从 menuStore.iconComponents 中获取）或直接传入图标组件
+  icon: string | Component
   // Tooltip 提示内容（可选，不传则不显示 tooltip）
   tooltip?: string
   //  Tooltip 位置（默认：bottom）
@@ -40,7 +40,7 @@ interface Emits {
   (e: 'click', event: MouseEvent): void
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   placement: 'bottom',
   effect: 'dark',
   showAfter: 200,
@@ -53,6 +53,14 @@ const emits = defineEmits<Emits>()
 const handleClick = (event: MouseEvent) => {
   emits('click', event)
 }
+
+// 计算图标组件：如果是字符串则从 menuStore.iconComponents 获取，否则直接使用
+const iconComponent = computed(() => {
+  if (typeof props.icon === 'string') {
+    return menuStore.iconComponents[props.icon]
+  }
+  return props.icon
+})
 </script>
 
 <style scoped lang="scss">
