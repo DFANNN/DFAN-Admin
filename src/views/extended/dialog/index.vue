@@ -1,21 +1,45 @@
 <template>
   <div class="dialog-doc-container">
-    <el-card shadow="never" class="main-card">
-      <!-- 页面头部说明 -->
-      <div class="intro-section">
-        <h1 class="intro-title">BaseDialog</h1>
-        <p class="intro-subtitle">基于 Element Plus Dialog 封装的增强型对话框组件</p>
-        <div class="intro-features">
-          <el-tag type="success" size="large" effect="plain">全屏功能</el-tag>
-          <el-tag type="success" size="large" effect="plain">可拖拽</el-tag>
-          <el-tag type="success" size="large" effect="plain">可调整大小</el-tag>
-          <el-tag type="success" size="large" effect="plain">移动端自适应</el-tag>
-          <el-tag type="success" size="large" effect="plain">自定义图标</el-tag>
-          <el-tag type="success" size="large" effect="plain">加载状态</el-tag>
-          <el-tag type="info" size="large" effect="plain">完全兼容 Element Plus API</el-tag>
+    <!-- 页面头部说明 -->
+    <div class="hero-section">
+      <div class="hero-content">
+        <div class="hero-badge">组件文档</div>
+        <h1 class="hero-title">BaseDialog</h1>
+        <p class="hero-subtitle">基于 Element Plus Dialog 封装的增强型对话框组件</p>
+        <div class="hero-features">
+          <div class="feature-badge">
+            <el-icon class="feature-icon"><FullScreen /></el-icon>
+            <span>全屏功能</span>
+          </div>
+          <div class="feature-badge">
+            <el-icon class="feature-icon"><Rank /></el-icon>
+            <span>可拖拽</span>
+          </div>
+          <div class="feature-badge">
+            <el-icon class="feature-icon"><Expand /></el-icon>
+            <span>可调整大小</span>
+          </div>
+          <div class="feature-badge">
+            <el-icon class="feature-icon"><Iphone /></el-icon>
+            <span>移动端自适应</span>
+          </div>
+          <div class="feature-badge">
+            <el-icon class="feature-icon"><Setting /></el-icon>
+            <span>自定义图标</span>
+          </div>
+          <div class="feature-badge">
+            <el-icon class="feature-icon"><Loading /></el-icon>
+            <span>加载状态</span>
+          </div>
+          <div class="feature-badge feature-badge-info">
+            <el-icon class="feature-icon"><Check /></el-icon>
+            <span>完全兼容 Element Plus API</span>
+          </div>
         </div>
       </div>
+    </div>
 
+    <div class="content-wrapper">
       <!-- 示例部分 -->
       <div class="examples-section">
         <!-- 基础用法 -->
@@ -533,13 +557,23 @@
           </div>
         </el-card>
       </div>
-    </el-card>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import BaseDialog from '@/components/dialog/BaseDialog.vue'
-import { Warning, DocumentCopy } from '@element-plus/icons-vue'
+import {
+  Warning,
+  DocumentCopy,
+  FullScreen,
+  Rank,
+  Expand,
+  Iphone,
+  Setting,
+  Loading,
+  Check,
+} from '@element-plus/icons-vue'
 import { useClipboard } from '@vueuse/core'
 
 defineOptions({ name: 'DialogView' })
@@ -1010,136 +1044,211 @@ const slotsData = [
   height: 100%;
   display: flex;
   flex-direction: column;
+  background: var(--el-bg-color-page);
+  overflow: hidden;
 }
 
-.main-card {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+// Hero 区域
+.hero-section {
+  background: linear-gradient(
+    135deg,
+    var(--el-color-primary-light-9) 0%,
+    var(--el-color-primary-light-8) 100%
+  );
+  padding: 60px 24px;
+  position: relative;
   overflow: hidden;
 
-  :deep(.el-card__body) {
-    flex: 1;
-    overflow-y: auto;
-    padding: 24px;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+      radial-gradient(circle at 20% 50%, rgba(64, 158, 255, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(64, 158, 255, 0.1) 0%, transparent 50%);
+    pointer-events: none;
   }
-}
 
-// 介绍部分
-.intro-section {
-  padding: 32px 0 40px;
-  text-align: center;
-  border-bottom: 1px solid var(--el-border-color-lighter);
-  margin-bottom: 40px;
+  .hero-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
 
-  .intro-title {
-    margin: 0 0 12px 0;
-    font-size: 2rem;
+  .hero-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--el-color-primary);
+    margin-bottom: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .hero-title {
+    margin: 0 0 16px 0;
+    font-size: 3rem;
     font-weight: 700;
     color: var(--el-text-color-primary);
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
   }
 
-  .intro-subtitle {
-    margin: 0 0 24px 0;
-    font-size: 1rem;
+  .hero-subtitle {
+    margin: 0 0 32px 0;
+    font-size: 1.125rem;
     color: var(--el-text-color-regular);
     line-height: 1.6;
+    opacity: 0.9;
   }
 
-  .intro-features {
+  .hero-features {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
     justify-content: center;
     align-items: center;
   }
+
+  .feature-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--el-text-color-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
+
+    .feature-icon {
+      font-size: 1rem;
+      color: var(--el-color-primary);
+    }
+
+    &.feature-badge-info {
+      background: rgba(64, 158, 255, 0.1);
+      color: var(--el-color-primary);
+      border: 1px solid rgba(64, 158, 255, 0.2);
+
+      .feature-icon {
+        color: var(--el-color-primary);
+      }
+    }
+  }
+}
+
+.content-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  padding: 40px 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 // 示例部分
 .examples-section {
   margin-bottom: 60px;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
   gap: 24px;
 }
 
 // 示例分组
 .example-group {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
   gap: 24px;
-}
-
-.section-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--el-text-color-primary);
-  margin: 0 0 32px 0;
-  padding-bottom: 12px;
-  border-bottom: 2px solid var(--el-border-color-lighter);
+  grid-column: 1 / -1;
 }
 
 .example-card {
-  margin-bottom: 32px;
-  border: 1px solid var(--el-border-color-lighter);
-  border-radius: 12px;
-  overflow: hidden;
-  transition: all 0.3s ease;
   background: var(--el-bg-color);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid var(--el-border-color-lighter);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 
   &:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    border-color: var(--el-border-color);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    border-color: var(--el-color-primary-light-7);
   }
 
   :deep(.el-card__header) {
-    padding: 20px 24px;
-    background: var(--el-bg-color-page);
+    padding: 24px 28px;
+    background: linear-gradient(
+      135deg,
+      var(--el-bg-color-page) 0%,
+      var(--el-fill-color-lighter) 100%
+    );
     border-bottom: 1px solid var(--el-border-color-lighter);
 
     h3 {
       margin: 0;
-      font-size: 1.125rem;
+      font-size: 1.25rem;
       font-weight: 600;
       color: var(--el-text-color-primary);
+      letter-spacing: -0.01em;
     }
   }
 
   :deep(.el-card__body) {
-    padding: 24px;
+    padding: 28px;
   }
 }
 
 .example-desc {
-  margin: 0 0 20px 0;
+  margin: 0 0 24px 0;
   color: var(--el-text-color-regular);
   line-height: 1.7;
   font-size: 0.9375rem;
 }
 
 .example-demo {
-  padding: 32px;
-  background: linear-gradient(
-    135deg,
-    var(--el-bg-color-page) 0%,
-    var(--el-fill-color-lighter) 100%
-  );
-  border-radius: 8px;
-  margin-bottom: 20px;
-  min-height: 120px;
+  padding: 40px;
+  background: var(--el-bg-color-page);
+  border-radius: 12px;
+  margin-bottom: 24px;
+  min-height: 140px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--el-border-color-lighter);
+  border: 2px dashed var(--el-border-color-lighter);
+  position: relative;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: var(--el-color-primary-light-7);
+    background: var(--el-fill-color-lighter);
+  }
 
   code {
-    background: var(--el-fill-color-light);
-    padding: 3px 8px;
-    border-radius: 4px;
+    background: var(--el-color-primary-light-9);
+    padding: 4px 10px;
+    border-radius: 6px;
     font-size: 0.875em;
     color: var(--el-color-primary);
-    font-weight: 500;
+    font-weight: 600;
+    border: 1px solid var(--el-color-primary-light-7);
   }
 
   ul {
@@ -1148,7 +1257,7 @@ const slotsData = [
     padding-left: 24px;
 
     li {
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       line-height: 1.8;
       color: var(--el-text-color-regular);
     }
@@ -1157,22 +1266,25 @@ const slotsData = [
 
 .example-demo-group {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 24px;
-  margin-bottom: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-bottom: 24px;
 }
 
 .example-demo-item {
   .demo-item-title {
-    margin: 0 0 12px 0;
-    font-size: 0.9375rem;
+    margin: 0 0 16px 0;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--el-text-color-primary);
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--el-border-color-lighter);
   }
 
   .example-demo {
     margin-bottom: 0;
-    min-height: 100px;
+    min-height: 120px;
+    padding: 32px;
   }
 }
 
@@ -1182,32 +1294,44 @@ const slotsData = [
 
   :deep(.el-collapse-item) {
     border: 1px solid var(--el-border-color-lighter);
-    border-radius: 8px;
+    border-radius: 12px;
     overflow: hidden;
     background: var(--el-bg-color);
+    margin-bottom: 12px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      border-color: var(--el-color-primary-light-7);
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 
   :deep(.el-collapse-item__header) {
-    padding: 12px 16px;
+    padding: 14px 20px;
     font-weight: 500;
     color: var(--el-text-color-regular);
-    background: var(--el-bg-color-page);
+    background: var(--el-fill-color-lighter);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: background-color 0.2s;
+    transition: all 0.2s ease;
 
     &:hover {
-      background: var(--el-fill-color-lighter);
+      background: var(--el-color-primary-light-9);
+      color: var(--el-color-primary);
     }
 
     .copy-btn {
       margin-left: auto;
-      opacity: 0.7;
-      transition: opacity 0.2s;
+      opacity: 0.6;
+      transition: all 0.2s ease;
 
       &:hover {
         opacity: 1;
+        transform: scale(1.05);
       }
     }
   }
@@ -1222,8 +1346,8 @@ const slotsData = [
 
   pre {
     margin: 0;
-    padding: 20px;
-    background: var(--el-fill-color-darker);
+    padding: 24px;
+    background: #1e1e1e;
     border-radius: 0;
     overflow-x: auto;
     border-top: 1px solid var(--el-border-color-lighter);
@@ -1231,8 +1355,8 @@ const slotsData = [
     code {
       font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
       font-size: 0.875rem;
-      line-height: 1.7;
-      color: var(--el-text-color-primary);
+      line-height: 1.8;
+      color: #d4d4d4;
       white-space: pre;
       display: block;
     }
