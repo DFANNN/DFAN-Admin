@@ -4,6 +4,7 @@
     :width="computedWidth"
     :show-close="false"
     :fullscreen="fullscreenValue"
+    :draggable="draggable"
     class="base-dialog"
     v-bind="attrs"
     @update:model-value="handleDialogUpdate"
@@ -109,6 +110,8 @@ interface IProps {
   mobileBreakpoint?: number
   // 默认插槽的最大高度（默认：60vh,经过我的测试，这个值适配的最好，如果需要更大的高度，可以传入更大的值）如果不设置会导致内容过长对话框超出屏幕
   defaultSlotMaxHeight?: string | number
+  // 拖拽功能
+  draggable?: boolean
 }
 
 // 组件事件类型
@@ -140,6 +143,7 @@ const props = withDefaults(defineProps<IProps>(), {
   mobileWidth: '90%',
   mobileBreakpoint: 992,
   defaultSlotMaxHeight: '60vh',
+  draggable: true,
 })
 
 const emits = defineEmits<IEmits>()
