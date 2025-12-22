@@ -6,6 +6,7 @@
     :fullscreen="fullscreenValue"
     :draggable="draggable"
     class="base-dialog"
+    :class="{ 'is-resizable': resizable }"
     v-bind="attrs"
     @update:model-value="handleDialogUpdate"
   >
@@ -153,7 +154,11 @@ const attrs = useAttrs()
 // 确定按钮加载状态
 const confirmLoading = ref(false)
 // 内部维护全屏状态
-const fullscreenValue = ref(props.fullscreen ?? false)
+const fullscreenValue = ref(false)
+
+watchEffect(() => {
+  fullscreenValue.value = props.fullscreen ?? false
+})
 
 // 响应式监听窗口宽度
 const { width: windowWidth } = useWindowSize()
@@ -251,7 +256,6 @@ const confirm = async () => {
 .base-dialog {
   min-height: 10rem;
   min-width: 20rem;
-  resize: both;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -263,6 +267,12 @@ const confirm = async () => {
     flex-shrink: 0;
   }
 }
+
+/* 开启拖拽调整大小 */
+.base-dialog.is-resizable {
+  resize: both;
+}
+
 .base-dialog.is-fullscreen {
   resize: none;
   width: 100vw !important;
