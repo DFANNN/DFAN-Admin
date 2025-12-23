@@ -44,11 +44,12 @@
     <template #footer>
       <slot name="footer">
         <template v-if="showFooter">
-          <el-button @click="close">{{ cancelText }}</el-button>
+          <el-button @click="close" v-if="showCancelButton">{{ cancelText }}</el-button>
           <el-button
             type="primary"
             :loading="showConfirmLoading ? confirmLoading : false"
             @click="confirm"
+            v-if="showConfirmButton"
             >{{ confirmText }}</el-button
           >
         </template>
@@ -79,6 +80,10 @@ interface IProps {
   showFullscreenButton?: boolean
   // 是否显示关闭按钮
   showClose?: boolean
+  // 是否显示footer的取消按钮(默认显示)
+  showCancelButton?: boolean
+  // 是否显示footer的确定按钮(默认显示)
+  showConfirmButton?: boolean
   // 是否显示footer
   showFooter?: boolean
   // 取消按钮文本
@@ -145,6 +150,8 @@ const props = withDefaults(defineProps<IProps>(), {
   mobileBreakpoint: 992,
   defaultSlotMaxHeight: '60vh',
   draggable: true,
+  showCancelButton: true,
+  showConfirmButton: true,
 })
 
 const emits = defineEmits<IEmits>()
