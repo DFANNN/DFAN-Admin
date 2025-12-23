@@ -116,6 +116,16 @@
                 </el-form-item>
               </el-col>
               <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                <el-form-item label="是否显示取消按钮" prop="showCancelButton">
+                  <el-switch v-model="dialogForm.showCancelButton" />
+                </el-form-item>
+              </el-col>
+              <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                <el-form-item label="是否显示确定按钮" prop="showConfirmButton">
+                  <el-switch v-model="dialogForm.showConfirmButton" />
+                </el-form-item>
+              </el-col>
+              <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                 <el-form-item prop="showConfirmLoading">
                   <template #label>
                     <span class="label-with-tooltip">
@@ -318,6 +328,26 @@
           </div>
         </el-form>
 
+        <!-- Dialog 快捷调用演示 -->
+        <el-divider />
+        <div class="form-section">
+          <div class="section-title">Dialog 快捷调用演示</div>
+          <div class="dialog-demo-buttons">
+            <el-button @click="showInfoDialog">info</el-button>
+            <el-button @click="showSuccessDialog">success</el-button>
+            <el-button @click="showWarningDialog">warning</el-button>
+            <el-button @click="showErrorDialog">error</el-button>
+            <el-button @click="showConfirmDialog">confirm</el-button>
+          </div>
+          <div class="dialog-demo-description">
+            <span>Dialog 快捷调用支持 BaseDialog 组件的所有属性，新增属性：</span>
+            <span class="property-item"><code>icon</code> 自定义图标</span>、
+            <span class="property-item"><code>content</code> 对话框内容</span>、
+            <span class="property-item"><code>onClose</code> 关闭回调</span>、
+            <span class="property-item"><code>onConfirm</code> 确认回调</span>
+          </div>
+        </div>
+
         <!-- 事件说明 -->
         <el-divider />
         <div class="event-section">
@@ -401,6 +431,8 @@
         :showFullscreenButton="dialogForm.showFullscreenButton"
         :showClose="dialogForm.showClose"
         :showFooter="dialogForm.showFooter"
+        :showCancelButton="dialogForm.showCancelButton"
+        :showConfirmButton="dialogForm.showConfirmButton"
         :confirmText="dialogForm.confirmText"
         :cancelText="dialogForm.cancelText"
         :showConfirmLoading="dialogForm.showConfirmLoading"
@@ -432,6 +464,8 @@
 </template>
 
 <script setup lang="ts">
+import { Dialog } from '@/utils/dialog'
+
 defineOptions({ name: 'DialogView' })
 
 const menuStore = useMenuStore()
@@ -448,6 +482,8 @@ const dialogForm = ref({
   showFullscreenButton: true,
   showClose: true,
   showFooter: true,
+  showCancelButton: true,
+  showConfirmButton: true,
   confirmText: '确定',
   cancelText: '取消',
   mobileAdaptive: true,
@@ -470,6 +506,77 @@ const handleConfirm = async () => {
 
 const handleClose = () => {
   ElMessage.success('关闭了对话框')
+}
+
+// Dialog 快捷调用演示
+const showInfoDialog = () => {
+  Dialog.info({
+    title: '系统维护通知',
+    content:
+      '今晚 23:00 将进行例行维护，预计 2 小时。期间只读功能可用，写入操作将暂缓，请提前保存进度。',
+    confirmText: '好的，知道了',
+    onConfirm: () => {
+      ElMessage.success('已知悉维护时间')
+    },
+  })
+}
+
+const showSuccessDialog = () => {
+  Dialog.success({
+    title: '批量任务完成',
+    content: '批量清理完成：共处理 18 条记录，成功 17 条，跳过 1 条（已被锁定）。',
+    confirmText: '查看日志',
+    onConfirm: () => {
+      ElMessage.success('已跳转到日志中心')
+    },
+  })
+}
+
+const showWarningDialog = () => {
+  Dialog.warning({
+    title: '数据异常提醒',
+    content:
+      '检测到 3 条待处理数据存在缺失字段，后续导出可能失败。建议先修复后再继续操作，是否忽略并继续？',
+    showCancelButton: true,
+    confirmText: '仍要继续',
+    onConfirm: () => {
+      ElMessage.success('选择继续执行')
+    },
+    onClose: () => {
+      ElMessage.info('已返回修复数据')
+    },
+  })
+}
+
+const showErrorDialog = () => {
+  Dialog.error({
+    title: '导出失败',
+    content:
+      '导出失败：网络连接异常（超时 15s）。请检查网络后重试，或切换到“异步导出”模式稍后下载。',
+    confirmText: '重试',
+    showCancelButton: true,
+    onConfirm: () => {
+      ElMessage.success('已开始重试导出')
+    },
+    onClose: () => {
+      ElMessage.info('已取消导出')
+    },
+  })
+}
+
+const showConfirmDialog = () => {
+  Dialog.confirm({
+    title: '删除确认',
+    content: '确定要删除选中的 5 条数据吗？删除后无法恢复，相关报表将重新统计。',
+    confirmText: '确认删除',
+    cancelText: '再想想',
+    showCancelButton: true,
+    onConfirm: async () => {
+      await new Promise((resolve) => setTimeout(resolve, 500))
+      ElMessage.success('已删除并重新统计')
+    },
+    onClose: () => ElMessage.info('已取消删除'),
+  })
 }
 </script>
 
@@ -504,6 +611,34 @@ const handleClose = () => {
       margin-bottom: 24px;
       padding-bottom: 16px;
       border-bottom: 1px solid var(--el-border-color-lighter);
+    }
+
+    .dialog-demo-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .dialog-demo-description {
+      margin-top: 12px;
+      color: var(--el-text-color-regular);
+      font-size: 0.875rem;
+      line-height: 1.8;
+
+      code {
+        padding: 2px 6px;
+        margin: 0 2px;
+        background-color: var(--el-fill-color-light);
+        border-radius: 3px;
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+        font-size: 0.8125rem;
+        color: var(--el-color-primary);
+      }
+
+      .property-item {
+        margin: 0 2px;
+      }
     }
 
     .form-section {
