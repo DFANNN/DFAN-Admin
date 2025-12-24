@@ -8,7 +8,10 @@ import type { IMenuItem } from '@/types/system/menu'
 
 export const useMenuStore = defineStore('menu', () => {
   // el-icon 图标映射
-  const elIcons: Record<string, Component> = ElIcons
+  const elIcons: Record<string, Component> = {}
+  Object.keys(ElIcons).forEach((key) => {
+    elIcons[`Element:${key}`] = ElIcons[key as keyof typeof ElIcons] as Component
+  })
   // heroicons outline 图标映射
   const heroOutlineIcons: Record<string, Component> = {}
   Object.keys(HeroOutlineIcons).forEach((key) => {

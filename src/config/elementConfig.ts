@@ -45,4 +45,5 @@ export const PAGINATION_CONFIG = {
 export const POPCONFIRM_CONFIG = {
   width: 220,
   placement: 'top',
+  showAfter: 200,
 }
