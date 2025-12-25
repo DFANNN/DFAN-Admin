@@ -40,9 +40,7 @@
     <el-scrollbar :max-height="computedDefaultSlotMaxHeight" v-if="useScrollbar">
       <slot> </slot>
     </el-scrollbar>
-    <div v-else>
-      <slot> </slot>
-    </div>
+    <slot v-else> </slot>
 
     <template #footer>
       <slot name="footer">
