@@ -37,10 +37,7 @@
       </div>
     </template>
 
-    <el-scrollbar :max-height="computedDefaultSlotMaxHeight" v-if="useScrollbar">
-      <slot> </slot>
-    </el-scrollbar>
-    <slot v-else> </slot>
+    <slot> </slot>
 
     <template #footer>
       <slot name="footer">
@@ -115,12 +112,8 @@ interface IProps {
   mobileWidth?: string | number
   // 移动端断点（默认：992，单位：px）
   mobileBreakpoint?: number
-  // 默认插槽的最大高度（默认：60vh,经过我的测试，这个值适配的最好，如果需要更大的高度，可以传入更大的值）如果不设置会导致内容过长对话框超出屏幕
-  defaultSlotMaxHeight?: string | number
   // 拖拽功能
   draggable?: boolean
-  // 是否使用el-scrollbar包裹内容
-  useScrollbar?: boolean
 }
 
 // 组件事件类型
@@ -151,11 +144,9 @@ const props = withDefaults(defineProps<IProps>(), {
   mobileAdaptive: true,
   mobileWidth: '90%',
   mobileBreakpoint: 992,
-  defaultSlotMaxHeight: '60vh',
   draggable: true,
   showCancelButton: true,
   showConfirmButton: true,
-  useScrollbar: true,
 })
 
 const emits = defineEmits<IEmits>()
@@ -169,12 +160,6 @@ const fullscreenValue = ref(false)
 
 watchEffect(() => {
   fullscreenValue.value = props.fullscreen ?? false
-})
-
-// 计算默认插槽的最大高度
-const computedDefaultSlotMaxHeight = computed(() => {
-  if (fullscreenValue.value) return '100%'
-  return props.defaultSlotMaxHeight
 })
 
 // 响应式监听窗口宽度

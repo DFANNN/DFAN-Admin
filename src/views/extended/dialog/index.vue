@@ -297,35 +297,6 @@
               </el-col>
             </el-row>
           </div>
-
-          <el-divider />
-
-          <!-- 其他配置 -->
-          <div class="form-section">
-            <div class="section-title">其他配置</div>
-            <el-row :gutter="20">
-              <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-                <el-form-item prop="defaultSlotMaxHeight">
-                  <template #label>
-                    <span class="label-with-tooltip">
-                      <span>默认插槽最大高度</span>
-                      <el-tooltip
-                        content="对话框内容区域的最大高度，防止内容过长导致对话框超出屏幕。支持视口单位（如：60vh）或固定像素值（如：500px），默认：60vh"
-                        placement="top"
-                      >
-                        <el-icon class="label-tooltip-icon">
-                          <component
-                            :is="menuStore.iconComponents['HOutline:QuestionMarkCircleIcon']"
-                          />
-                        </el-icon>
-                      </el-tooltip>
-                    </span>
-                  </template>
-                  <el-input v-model="dialogForm.defaultSlotMaxHeight" />
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </div>
         </el-form>
 
         <!-- Dialog 快捷调用演示 -->
@@ -489,7 +460,6 @@ const dialogForm = ref({
   mobileAdaptive: true,
   mobileWidth: '90%',
   mobileBreakpoint: 992,
-  defaultSlotMaxHeight: '60vh',
   closeIcon: 'HOutline:XMarkIcon',
   closeIconSize: '1.5rem',
   fullscreenIcon: 'HOutline:ArrowsPointingOutIcon',
