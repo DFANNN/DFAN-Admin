@@ -4,7 +4,7 @@
     :title="title"
     :width="width"
     :show-footer="false"
-    :use-scrollbar="false"
+    style="height: 60vh"
   >
     <div
       class="icon-selector-dialog-container"
@@ -30,13 +30,15 @@
       </div>
       <div class="icon-content">
         <transition name="fade-slide" mode="out-in">
-          <div :key="activeMenu">
+          <div :key="activeMenu" style="height: 100%">
             <el-input v-model="searchValue" placeholder="搜索图标名称" clearable>
               <template #prefix>
                 <el-icon><component :is="menuStore.iconComponents['Element:Search']" /></el-icon>
               </template>
             </el-input>
-            <el-scrollbar :height="400">
+            <el-scrollbar
+              :class="menuStore.isMobile ? 'icon-list-scrollbar-mobile' : 'icon-list-scrollbar'"
+            >
               <div class="icon-list">
                 <template v-for="icon in filteredIconList" :key="icon">
                   <!-- 紧凑模式：使用 tooltip -->
@@ -47,14 +49,23 @@
                     :width="POPCONFIRM_CONFIG.width"
                     :show-after="POPCONFIRM_CONFIG.showAfter"
                   >
-                    <div class="icon-item">
+                    <div
+                      class="icon-item"
+                      :class="{ active: currentIcon === icon }"
+                      @click="selectIcon(icon)"
+                    >
                       <el-icon :size="22">
                         <component :is="menuStore.iconComponents[icon]" />
                       </el-icon>
                     </div>
                   </el-tooltip>
                   <!-- 宽松模式：不使用 tooltip，显示名称 -->
-                  <div v-else class="icon-item">
+                  <div
+                    v-else
+                    class="icon-item"
+                    :class="{ active: currentIcon === icon }"
+                    @click="selectIcon(icon)"
+                  >
                     <el-icon :size="24">
                       <component :is="menuStore.iconComponents[icon]" />
                     </el-icon>
@@ -83,6 +94,10 @@ interface IProps {
   density?: 'compact' | 'spacious'
 }
 
+interface IEmits {
+  (e: 'selectIcon', icon: string, component: Component): void
+}
+
 type IActiveMenu = 'Element:' | 'HOutline:' | 'HSolid:'
 
 interface IIconMenuItem {
@@ -97,8 +112,13 @@ const props = withDefaults(defineProps<IProps>(), {
   density: 'compact',
 })
 
+const emits = defineEmits<IEmits>()
+
 const open = ref(false)
 const menuStore = useMenuStore()
+
+// 当前选中的图标
+const currentIcon = ref('')
 
 // 搜索框的值
 const searchValue = ref('')
@@ -126,17 +146,47 @@ const filteredIconList = computed(() => {
   return activeIconList.value.filter((name) => name.toLowerCase().includes(search))
 })
 
-const showDialog = () => {
+const selectIcon = (icon: string) => {
+  currentIcon.value = icon
+  emits('selectIcon', icon, menuStore.iconComponents[icon] as Component)
+  closeDialog()
+}
+
+/**
+ * 打开图标选择器
+ * @param currentIconValue 当前选中的图标
+ */
+const showDialog = (currentIconValue: string = '') => {
+  currentIcon.value = currentIconValue
   open.value = true
 }
 
+/**
+ * 关闭图标选择器
+ */
+const closeDialog = () => {
+  open.value = false
+  searchValue.value = ''
+}
+
+/**
+ * 清除数据
+ */
+const clearData = () => {
+  currentIcon.value = ''
+  searchValue.value = ''
+  activeMenu.value = 'Element:'
+}
 defineExpose({
   showDialog,
+  closeDialog,
+  clearData,
 })
 </script>
 
 <style scoped lang="scss">
 .icon-selector-dialog-container {
+  height: 100%;
   display: flex;
   gap: 1rem;
   .icon-menu {
@@ -273,8 +323,15 @@ defineExpose({
       }
     }
     .icon-content {
+      height: 100%;
       padding: 0.25rem;
     }
   }
+}
+.icon-list-scrollbar {
+  height: calc(100% - 2rem);
+}
+.icon-list-scrollbar-mobile {
+  height: calc(100% - 6rem);
 }
 </style>
