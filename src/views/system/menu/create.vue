@@ -48,10 +48,11 @@
             </template>
           </el-input>
           <el-button
-            :icon="menuStore.iconComponents.Search"
-            @click="selectIconDialogRef?.showDialog(submitForm.icon)"
-            >{{ menuStore.isMobile ? null : '选择图标' }}</el-button
+            :icon="menuStore.iconComponents['Element:Search']"
+            @click="iconSelectorDialogRef?.showDialog(submitForm.icon)"
           >
+            <template #default v-if="!menuStore.isMobile">选择图标</template>
+          </el-button>
         </div>
       </el-form-item>
       <el-form-item label="排序" prop="order">
@@ -71,12 +72,12 @@
     </template>
   </BaseDialog>
 
-  <SelectIconDialog ref="selectIconDialogRef" @getSelectIcon="getSelectIcon" />
+  <IconSelectorDialog ref="iconSelectorDialogRef" @selectIcon="getSelectIcon" />
 </template>
 
 <script setup lang="ts">
 import { menuPage, createMenu, updateMenu, menuInfo } from '@/api/menu'
-import SelectIconDialog from '@/components/SelectIconDialog.vue'
+import IconSelectorDialog from '@/components/dialog/IconSelectorDialog.vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import type { IMenuItem, IMenuType } from '@/types/system/menu'
 
@@ -85,8 +86,8 @@ defineOptions({ name: 'MenuCreate' })
 const menuStore = useMenuStore()
 const emits = defineEmits(['refresh'])
 const submitFormRef = useTemplateRef<FormInstance>('submitFormRef')
-const selectIconDialogRef = useTemplateRef<InstanceType<typeof SelectIconDialog> | null>(
-  'selectIconDialogRef',
+const iconSelectorDialogRef = useTemplateRef<InstanceType<typeof IconSelectorDialog> | null>(
+  'iconSelectorDialogRef',
 )
 
 const open = ref(false)
