@@ -513,6 +513,20 @@ const defaultMenuTreeData = [
         isBuiltIn: true,
         children: [],
       },
+      {
+        id: 'menu_20',
+        type: 'menu',
+        path: '/extended/textEllipsis',
+        title: '文本省略器',
+        icon: 'HOutline:EllipsisHorizontalIcon',
+        parentId: 'menu_17', // 扩展组件目录
+        order: 2,
+        status: 'active',
+        createTime: '2025-12-12 14:00:12',
+        updateTime: '2025-12-12 14:00:12',
+        isBuiltIn: true,
+        children: [],
+      },
     ],
   },
   {
