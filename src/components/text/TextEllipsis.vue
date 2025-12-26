@@ -1,15 +1,25 @@
 <template>
-  <div class="text-ellipsis-container">
+  <div class="text-ellipsis-container" :style="{ width: computedWidth }">
     <!-- tooltip 提示 -->
-    <el-tooltip :content="props.text" :disabled="!isEllipsis" v-if="tooltipType === 'element'">
+    <el-tooltip
+      v-if="tooltipType === 'element'"
+      :content="textStr"
+      :disabled="!showTooltip"
+      v-bind="attrs"
+    >
+      <template #content>
+        <slot name="content">
+          <div :style="{ width: computedWidth }">{{ textStr }}</div>
+        </slot>
+      </template>
       <div
         ref="textRef"
         class="text-ellipsis-content"
-        :class="{ 'is-expanded': !isEllipsis, 'is-clickable': clickable && isEllipsis }"
+        :class="{ 'is-expanded': expanded, 'is-clickable': clickable && isEllipsis }"
         :style="ellipsisStyle"
         @click="handleClick"
       >
-        {{ text }}
+        {{ textStr }}
       </div>
     </el-tooltip>
 
@@ -18,12 +28,12 @@
       v-else
       ref="textRef"
       class="text-ellipsis-content"
-      :class="{ 'is-expanded': !isEllipsis, 'is-clickable': clickable }"
+      :class="{ 'is-expanded': expanded, 'is-clickable': clickable && isEllipsis }"
       :style="ellipsisStyle"
-      :title="tooltipType === 'native' && isEllipsis ? text : undefined"
+      :title="tooltipType === 'native' && showTooltip ? textStr : undefined"
       @click="handleClick"
     >
-      {{ text }}
+      {{ textStr }}
     </div>
   </div>
 </template>
@@ -31,9 +41,11 @@
 <script setup lang="ts">
 interface IProps {
   // 要展示的文本内容
-  text: string
+  text: string | number
   // 展示行数，超过此行数后省略（默认：1）
   line?: number
+  // 宽度，超过此宽度后省略（默认：100%），支持字符串（vh, rem, px, 百分比）或数字（默认 px）
+  width?: string | number
   // 是否允许点击展开/收起（默认：false）
   clickable?: boolean
   // tooltip 提示类型（默认：'element', 原生：'native', 不显示：'none'）
@@ -45,14 +57,49 @@ const props = withDefaults(defineProps<IProps>(), {
   line: 1,
   clickable: true,
   tooltipType: 'element',
+  width: '100%',
 })
 
+const attrs = useAttrs()
+
 // 省略状态
-const isEllipsis = ref(true)
+const isEllipsis = ref(false)
+// 展开状态
+const expanded = ref(false)
+// 文本Ref
 const textRef = useTemplateRef<HTMLDivElement>('textRef')
+
+// 文本字符串
+const textStr = computed(() => {
+  return String(props.text)
+})
+
+// 宽度计算
+const computedWidth = computed(() => {
+  // 如果是数字，直接转换为 px
+  if (typeof props.width === 'number') {
+    return `${props.width}px`
+  }
+  // 如果是字符串，检查是否为纯数字（不带单位）
+  const widthStr = String(props.width).trim()
+  // 使用正则判断是否为纯数字（可能包含小数点）
+  if (/^\d+(\.\d+)?$/.test(widthStr)) {
+    return `${widthStr}px`
+  }
+  // 如果已经包含单位，直接返回
+  return widthStr
+})
+
+// 是否显示 tooltip
+const showTooltip = computed(() => {
+  return props.tooltipType !== 'none' && isEllipsis.value && !expanded.value
+})
 
 // 省略样式
 const ellipsisStyle = computed(() => {
+  if (expanded.value) {
+    return {}
+  }
   return {
     '-webkit-line-clamp': String(props.line),
     'line-clamp': String(props.line),
@@ -63,8 +110,6 @@ const ellipsisStyle = computed(() => {
 const checkEllipsis = async () => {
   await nextTick()
   if (textRef.value) {
-    console.log(`output->textRef.value.scrollHeight`, textRef.value.scrollHeight)
-    console.log(`output->textRef.value.clientHeight`, textRef.value.clientHeight)
     isEllipsis.value = textRef.value.scrollHeight > textRef.value.clientHeight
   }
 }
@@ -79,7 +124,7 @@ watch(
 
 // 点击事件
 const handleClick = () => {
-  if (props.clickable) isEllipsis.value = !isEllipsis.value
+  if (props.clickable && isEllipsis.value) expanded.value = !expanded.value
 }
 </script>
 
