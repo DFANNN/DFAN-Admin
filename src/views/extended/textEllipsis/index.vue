@@ -38,7 +38,6 @@
               :show-after="ellipsisForm.showAfter"
               :hide-after="ellipsisForm.hideAfter"
               :offset="ellipsisForm.offset"
-              :transition="ellipsisForm.transition"
             />
           </div>
         </div>
@@ -246,26 +245,6 @@
                   <el-input-number v-model="ellipsisForm.offset" :min="0" style="width: 100%" />
                 </el-form-item>
               </el-col>
-              <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-                <el-form-item prop="transition">
-                  <template #label>
-                    <span class="label-with-tooltip">
-                      <span>动画名称</span>
-                      <el-tooltip
-                        content="Tooltip 的动画名称，仅在 tooltipType 为 'element' 时生效"
-                        placement="top"
-                      >
-                        <el-icon class="label-tooltip-icon">
-                          <component
-                            :is="menuStore.iconComponents['HOutline:QuestionMarkCircleIcon']"
-                          />
-                        </el-icon>
-                      </el-tooltip>
-                    </span>
-                  </template>
-                  <el-input v-model="ellipsisForm.transition" placeholder="如：el-fade-in-linear" />
-                </el-form-item>
-              </el-col>
             </el-row>
           </div>
         </el-form>
@@ -324,7 +303,6 @@ interface EllipsisForm {
   showAfter: number
   hideAfter: number
   offset: number
-  transition: string
 }
 
 const ellipsisForm = ref<EllipsisForm>({
@@ -339,7 +317,6 @@ const ellipsisForm = ref<EllipsisForm>({
   showAfter: 0,
   hideAfter: 200,
   offset: 12,
-  transition: '',
 })
 </script>
 
