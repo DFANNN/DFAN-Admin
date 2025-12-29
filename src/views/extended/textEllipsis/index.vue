@@ -31,6 +31,7 @@
               :line="ellipsisForm.line"
               :width="ellipsisForm.width"
               :clickable="ellipsisForm.clickable"
+              :copyable="ellipsisForm.copyable"
               :tooltip-type="ellipsisForm.tooltipType"
               :placement="ellipsisForm.placement"
               :effect="ellipsisForm.effect"
@@ -89,6 +90,11 @@
               <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                 <el-form-item label="是否可点击展开" prop="clickable">
                   <el-switch v-model="ellipsisForm.clickable" />
+                </el-form-item>
+              </el-col>
+              <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                <el-form-item label="是否可复制" prop="copyable">
+                  <el-switch v-model="ellipsisForm.copyable" />
                 </el-form-item>
               </el-col>
               <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
@@ -311,6 +317,7 @@ interface EllipsisForm {
   line: number
   width: string | number
   clickable: boolean
+  copyable: boolean
   tooltipType: 'element' | 'native' | 'none'
   placement: string
   effect: 'dark' | 'light'
@@ -325,6 +332,7 @@ const ellipsisForm = ref<EllipsisForm>({
   line: 2,
   width: '100%',
   clickable: true,
+  copyable: false,
   tooltipType: 'element',
   placement: 'top',
   effect: 'dark',

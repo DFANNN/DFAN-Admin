@@ -35,10 +35,21 @@
     >
       {{ textStr }}
     </div>
+
+    <!-- 复制按钮 -->
+    <el-tooltip v-if="copyable" content="复制" placement="top">
+      <div class="copy-button" @click.stop="handleCopy">
+        <el-icon>
+          <component :is="menuStore.iconComponents['HOutline:ClipboardDocumentIcon']" />
+        </el-icon>
+      </div>
+    </el-tooltip>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useClipboard } from '@vueuse/core'
+
 interface IProps {
   // 要展示的文本内容
   text: string | number
@@ -50,6 +61,8 @@ interface IProps {
   clickable?: boolean
   // tooltip 提示类型（默认：'element', 原生：'native', 不显示：'none'）
   tooltipType?: 'element' | 'native' | 'none'
+  // 是否显示复制按钮（默认：false）
+  copyable?: boolean
 }
 
 const props = withDefaults(defineProps<IProps>(), {
@@ -58,9 +71,14 @@ const props = withDefaults(defineProps<IProps>(), {
   clickable: true,
   tooltipType: 'element',
   width: '100%',
+  copyable: false,
 })
 
 const attrs = useAttrs()
+const menuStore = useMenuStore()
+
+// 使用 VueUse 的复制功能
+const { copy } = useClipboard()
 
 // 省略状态
 const isEllipsis = ref(false)
@@ -126,12 +144,21 @@ watch(
 const handleClick = () => {
   if (props.clickable && isEllipsis.value) expanded.value = !expanded.value
 }
+
+// 复制事件
+const handleCopy = async () => {
+  try {
+    await copy(textStr.value)
+    ElMessage.success('复制成功')
+  } catch {
+    ElMessage.error('复制失败')
+  }
+}
 </script>
 
 <style scoped lang="scss">
 .text-ellipsis-container {
   position: relative;
-  display: inline-block;
   width: 100%;
   .text-ellipsis-content {
     word-break: break-word; // 可以在单词中间换行
@@ -157,6 +184,37 @@ const handleClick = () => {
         opacity: 0.8;
       }
     }
+  }
+
+  .copy-button {
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    cursor: pointer;
+    color: var(--el-text-color-secondary);
+    background-color: var(--el-bg-color);
+    border: 1px solid var(--el-border-color);
+    border-radius: 0.25rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+    opacity: 0;
+    z-index: 10;
+
+    &:hover {
+      color: var(--el-color-primary);
+      border-color: var(--el-color-primary);
+      background-color: var(--el-color-primary-light-9);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  &:hover .copy-button {
+    opacity: 1;
   }
 }
 </style>
