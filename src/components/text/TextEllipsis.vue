@@ -5,11 +5,12 @@
       v-if="tooltipType === 'element'"
       :content="textStr"
       :disabled="!showTooltip"
+      :append-to="targetElement"
       v-bind="attrs"
     >
       <template #content>
         <slot name="content">
-          <div :style="{ width: computedWidth }">{{ textStr }}</div>
+          <div>{{ textStr }}</div>
         </slot>
       </template>
       <div
@@ -86,6 +87,8 @@ const isEllipsis = ref(false)
 const expanded = ref(false)
 // 文本Ref
 const textRef = useTemplateRef<HTMLDivElement>('textRef')
+// 目标元素
+const targetElement = ref('')
 
 // 文本字符串
 const textStr = computed(() => {
@@ -154,6 +157,10 @@ const handleCopy = async () => {
     ElMessage.error('复制失败')
   }
 }
+
+onMounted(() => {
+  targetElement.value = '.text-ellipsis-container'
+})
 </script>
 
 <style scoped lang="scss">
