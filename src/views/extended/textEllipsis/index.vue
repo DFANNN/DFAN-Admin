@@ -5,7 +5,7 @@
         <div class="card-header">
           <span class="card-title">TextEllipsis 组件演示</span>
           <div class="card-description">
-            <p>文本省略器组件，支持多行文本截断、点击展开/收起、Tooltip 提示等功能</p>
+            <p>文本省略器组件，支持多行文本截断、点击展开/收起、一键复制、Tooltip 提示等功能</p>
             <p class="description-text">
               以下功能为扩展功能，其余功能支持 Element Plus Tooltip
               的相关属性（如：placement、effect、popper-class 等）， 更多详情请查看
