@@ -1,9 +1,13 @@
 /* 公共动画样式 */
 
-/* 路由切换过渡动画 */
+/* ==================== 常用动画 ==================== */
+
+/* 1. fade-slide - 淡入淡出 + 水平滑动 */
 .fade-slide-enter-active,
 .fade-slide-leave-active {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all var(--animation-duration, 0.3s)
+    var(--animation-easing, cubic-bezier(0.4, 0, 0.2, 1));
+  transition-delay: var(--animation-delay, 0s);
 }
 
 .fade-slide-enter-from {
@@ -20,4 +24,463 @@
 .fade-slide-leave-from {
   opacity: 1;
   transform: translateX(0);
+}
+
+/* 2. fade - 纯淡入淡出 */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity var(--animation-duration, 0.3s)
+    var(--animation-easing, cubic-bezier(0.4, 0, 0.2, 1));
+  transition-delay: var(--animation-delay, 0s);
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
+}
+
+/* 3. slide-up - 向上滑动 */
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: all var(--animation-duration, 0.3s)
+    var(--animation-easing, cubic-bezier(0.4, 0, 0.2, 1));
+  transition-delay: var(--animation-delay, 0s);
+}
+
+.slide-up-enter-from {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.slide-up-leave-to {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+
+.slide-up-enter-to,
+.slide-up-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 4. slide-down - 向下滑动 */
+.slide-down-enter-active,
+.slide-down-leave-active {
+  transition: all var(--animation-duration, 0.3s)
+    var(--animation-easing, cubic-bezier(0.4, 0, 0.2, 1));
+  transition-delay: var(--animation-delay, 0s);
+}
+
+.slide-down-enter-from {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+
+.slide-down-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.slide-down-enter-to,
+.slide-down-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 5. slide-left - 向左滑动 */
+.slide-left-enter-active,
+.slide-left-leave-active {
+  transition: all var(--animation-duration, 0.3s)
+    var(--animation-easing, cubic-bezier(0.4, 0, 0.2, 1));
+  transition-delay: var(--animation-delay, 0s);
+}
+
+.slide-left-enter-from {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.slide-left-leave-to {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.slide-left-enter-to,
+.slide-left-leave-from {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* 6. slide-right - 向右滑动 */
+.slide-right-enter-active,
+.slide-right-leave-active {
+  transition: all var(--animation-duration, 0.3s)
+    var(--animation-easing, cubic-bezier(0.4, 0, 0.2, 1));
+  transition-delay: var(--animation-delay, 0s);
+}
+
+.slide-right-enter-from {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.slide-right-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.slide-right-enter-to,
+.slide-right-leave-from {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* 7. zoom - 缩放效果 */
+.zoom-enter-active,
+.zoom-leave-active {
+  transition: all var(--animation-duration, 0.3s)
+    var(--animation-easing, cubic-bezier(0.4, 0, 0.2, 1));
+  transition-delay: var(--animation-delay, 0s);
+}
+
+.zoom-enter-from,
+.zoom-leave-to {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.zoom-enter-to,
+.zoom-leave-from {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 8. scale - 缩放 + 淡入淡出 */
+.scale-enter-active,
+.scale-leave-active {
+  transition: all var(--animation-duration, 0.3s)
+    var(--animation-easing, cubic-bezier(0.4, 0, 0.2, 1));
+  transition-delay: var(--animation-delay, 0s);
+}
+
+.scale-enter-from {
+  opacity: 0;
+  transform: scale(0);
+}
+
+.scale-leave-to {
+  opacity: 0;
+  transform: scale(0);
+}
+
+.scale-enter-to,
+.scale-leave-from {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 9. rotate - 旋转效果 */
+.rotate-enter-active,
+.rotate-leave-active {
+  transition: all var(--animation-duration, 0.3s)
+    var(--animation-easing, cubic-bezier(0.4, 0, 0.2, 1));
+  transition-delay: var(--animation-delay, 0s);
+}
+
+.rotate-enter-from {
+  opacity: 0;
+  transform: rotate(-180deg) scale(0.8);
+}
+
+.rotate-leave-to {
+  opacity: 0;
+  transform: rotate(180deg) scale(0.8);
+}
+
+.rotate-enter-to,
+.rotate-leave-from {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+/* 10. bounce - 弹跳效果 */
+.bounce-enter-active {
+  animation: bounce-in var(--animation-duration, 0.5s)
+    var(--animation-easing, cubic-bezier(0.68, -0.55, 0.265, 1.55));
+  animation-delay: var(--animation-delay, 0s);
+  animation-fill-mode: both;
+}
+
+.bounce-leave-active {
+  animation: bounce-out var(--animation-duration, 0.5s)
+    var(--animation-easing, cubic-bezier(0.68, -0.55, 0.265, 1.55));
+  animation-delay: var(--animation-delay, 0s);
+  animation-fill-mode: both;
+}
+
+.bounce-enter-from {
+  opacity: 0;
+  transform: scale(0.3);
+}
+
+.bounce-leave-to {
+  opacity: 0;
+  transform: scale(0.3);
+}
+
+.bounce-enter-to,
+.bounce-leave-from {
+  opacity: 1;
+  transform: scale(1);
+}
+
+@keyframes bounce-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes bounce-out {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+}
+
+/* ==================== 炫酷动画 ==================== */
+
+/* 11. flip-3d - 3D 翻转效果 */
+.flip-3d-enter-active,
+.flip-3d-leave-active {
+  transition: all var(--animation-duration, 0.6s)
+    var(--animation-easing, cubic-bezier(0.4, 0, 0.2, 1));
+  transition-delay: var(--animation-delay, 0s);
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.flip-3d-enter-from {
+  opacity: 0;
+  transform: rotateY(-90deg);
+}
+
+.flip-3d-leave-to {
+  opacity: 0;
+  transform: rotateY(90deg);
+}
+
+.flip-3d-enter-to,
+.flip-3d-leave-from {
+  opacity: 1;
+  transform: rotateY(0deg);
+}
+
+/* 12. rotate-3d - 3D 旋转效果 */
+.rotate-3d-enter-active,
+.rotate-3d-leave-active {
+  transition: all var(--animation-duration, 0.8s)
+    var(--animation-easing, cubic-bezier(0.4, 0, 0.2, 1));
+  transition-delay: var(--animation-delay, 0s);
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.rotate-3d-enter-from {
+  opacity: 0;
+  transform: rotateX(90deg) rotateY(90deg) scale(0.8);
+}
+
+.rotate-3d-leave-to {
+  opacity: 0;
+  transform: rotateX(-90deg) rotateY(-90deg) scale(0.8);
+}
+
+.rotate-3d-enter-to,
+.rotate-3d-leave-from {
+  opacity: 1;
+  transform: rotateX(0deg) rotateY(0deg) scale(1);
+}
+
+/* 13. blur-fade - 模糊淡入淡出 */
+.blur-fade-enter-active,
+.blur-fade-leave-active {
+  transition: all var(--animation-duration, 0.4s)
+    var(--animation-easing, cubic-bezier(0.4, 0, 0.2, 1));
+  transition-delay: var(--animation-delay, 0s);
+}
+
+.blur-fade-enter-from {
+  opacity: 0;
+  filter: blur(10px);
+  transform: scale(1.1);
+}
+
+.blur-fade-leave-to {
+  opacity: 0;
+  filter: blur(10px);
+  transform: scale(0.9);
+}
+
+.blur-fade-enter-to,
+.blur-fade-leave-from {
+  opacity: 1;
+  filter: blur(0);
+  transform: scale(1);
+}
+
+/* 14. elastic - 弹性效果 */
+.elastic-enter-active {
+  animation: elastic-in var(--animation-duration, 0.6s)
+    var(--animation-easing, cubic-bezier(0.68, -0.55, 0.265, 1.55));
+  animation-delay: var(--animation-delay, 0s);
+  animation-fill-mode: both;
+}
+
+.elastic-leave-active {
+  animation: elastic-out var(--animation-duration, 0.4s)
+    var(--animation-easing, cubic-bezier(0.68, -0.55, 0.265, 1.55));
+  animation-delay: var(--animation-delay, 0s);
+  animation-fill-mode: both;
+}
+
+.elastic-enter-from {
+  opacity: 0;
+  transform: scale(0) translateY(-50px);
+}
+
+.elastic-leave-to {
+  opacity: 0;
+  transform: scale(0.5) translateY(50px);
+}
+
+.elastic-enter-to,
+.elastic-leave-from {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+@keyframes elastic-in {
+  0% {
+    opacity: 0;
+    transform: scale(0) translateY(-50px);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2) translateY(10px);
+  }
+  70% {
+    transform: scale(0.9) translateY(-5px);
+  }
+  85% {
+    transform: scale(1.05) translateY(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes elastic-out {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.5) translateY(50px);
+  }
+}
+
+/* 15. glow - 发光效果 */
+.glow-enter-active {
+  animation: glow-in var(--animation-duration, 0.5s)
+    var(--animation-easing, cubic-bezier(0.4, 0, 0.2, 1));
+  animation-delay: var(--animation-delay, 0s);
+  animation-fill-mode: both;
+}
+
+.glow-leave-active {
+  animation: glow-out var(--animation-duration, 0.6s)
+    var(--animation-easing, cubic-bezier(0.4, 0, 0.2, 1));
+  animation-delay: var(--animation-delay, 0s);
+  animation-fill-mode: both;
+}
+
+.glow-enter-from {
+  opacity: 0;
+  transform: scale(0.8);
+  filter: brightness(0.5) drop-shadow(0 0 0px rgba(255, 255, 255, 0));
+}
+
+.glow-leave-to {
+  opacity: 0;
+  transform: scale(0.8);
+  filter: brightness(0.5) drop-shadow(0 0 0px rgba(255, 255, 255, 0));
+}
+
+.glow-enter-to,
+.glow-leave-from {
+  opacity: 1;
+  transform: scale(1);
+  filter: brightness(1) drop-shadow(0 0 20px rgba(255, 255, 255, 0.8));
+}
+
+@keyframes glow-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+    filter: brightness(0.5) drop-shadow(0 0 0px rgba(255, 255, 255, 0));
+  }
+  50% {
+    filter: brightness(1.2) drop-shadow(0 0 30px rgba(255, 255, 255, 1));
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: brightness(1) drop-shadow(0 0 20px rgba(255, 255, 255, 0.8));
+  }
+}
+
+@keyframes glow-out {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+    filter: brightness(1) drop-shadow(0 0 20px rgba(255, 255, 255, 0.8));
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1);
+    filter: brightness(1.3) drop-shadow(0 0 40px rgba(255, 255, 255, 1));
+  }
+  60% {
+    opacity: 0.8;
+    transform: scale(0.95);
+    filter: brightness(0.9) drop-shadow(0 0 25px rgba(255, 255, 255, 0.6));
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8);
+    filter: brightness(0.5) drop-shadow(0 0 0px rgba(255, 255, 255, 0));
+  }
 }
