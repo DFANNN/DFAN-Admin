@@ -1,6 +1,4 @@
-/* 公共动画样式 */
-
-/* ==================== 常用动画 ==================== */
+/* 内置transition动画样式 */
 
 /* 1. fade-slide - 淡入淡出 + 水平滑动 */
 .fade-slide-enter-active,
@@ -156,6 +154,94 @@
 
 .zoom-enter-to,
 .zoom-leave-from {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 7.1. zoom-in-top - 从顶部缩放进入 */
+.zoom-in-top-enter-active,
+.zoom-in-top-leave-active {
+  transition:
+    opacity var(--animation-duration, 0.3s) var(--animation-easing, cubic-bezier(0.4, 0, 0.2, 1)),
+    transform var(--animation-duration, 0.3s) var(--animation-easing, cubic-bezier(0.4, 0, 0.2, 1));
+  transition-delay: var(--animation-delay, 0s);
+  transform-origin: center top;
+}
+
+.zoom-in-top-enter-from,
+.zoom-in-top-leave-to {
+  opacity: 0;
+  transform: scaleY(0);
+}
+
+.zoom-in-top-enter-to,
+.zoom-in-top-leave-from {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+/* 7.3. zoom-in-bottom - 从底部缩放进入 */
+.zoom-in-bottom-enter-active,
+.zoom-in-bottom-leave-active {
+  transition:
+    opacity var(--animation-duration, 0.3s) var(--animation-easing, cubic-bezier(0.4, 0, 0.2, 1)),
+    transform var(--animation-duration, 0.3s) var(--animation-easing, cubic-bezier(0.4, 0, 0.2, 1));
+  transition-delay: var(--animation-delay, 0s);
+  transform-origin: center bottom;
+}
+
+.zoom-in-bottom-enter-from,
+.zoom-in-bottom-leave-to {
+  opacity: 0;
+  transform: scaleY(0);
+}
+
+.zoom-in-bottom-enter-to,
+.zoom-in-bottom-leave-from {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+/* 7.4. zoom-in-left - 从左侧缩放进入 */
+.zoom-in-left-enter-active,
+.zoom-in-left-leave-active {
+  transition:
+    opacity var(--animation-duration, 0.3s) var(--animation-easing, cubic-bezier(0.4, 0, 0.2, 1)),
+    transform var(--animation-duration, 0.3s) var(--animation-easing, cubic-bezier(0.4, 0, 0.2, 1));
+  transition-delay: var(--animation-delay, 0s);
+  transform-origin: top left;
+}
+
+.zoom-in-left-enter-from,
+.zoom-in-left-leave-to {
+  opacity: 0;
+  transform: scale(0.45);
+}
+
+.zoom-in-left-enter-to,
+.zoom-in-left-leave-from {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 7.5. zoom-in-right - 从右侧缩放进入 */
+.zoom-in-right-enter-active,
+.zoom-in-right-leave-active {
+  transition:
+    opacity var(--animation-duration, 0.3s) var(--animation-easing, cubic-bezier(0.4, 0, 0.2, 1)),
+    transform var(--animation-duration, 0.3s) var(--animation-easing, cubic-bezier(0.4, 0, 0.2, 1));
+  transition-delay: var(--animation-delay, 0s);
+  transform-origin: top right;
+}
+
+.zoom-in-right-enter-from,
+.zoom-in-right-leave-to {
+  opacity: 0;
+  transform: scale(0.45);
+}
+
+.zoom-in-right-enter-to,
+.zoom-in-right-leave-from {
   opacity: 1;
   transform: scale(1);
 }

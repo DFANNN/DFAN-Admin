@@ -1,5 +1,5 @@
 @import '@/styles/theme.css'; /* 主题样式 */
-@import '@/styles/commonAnimation.css'; /* 公共动画样式 */
+@import '@/styles/transitionAnimation.css'; /* 内置transition动画样式 */
 @import '@/styles/nprogress.css'; /* NProgress 进度条样式 */
 @import '@/styles/common.scss'; /* 公共样式 */
 
