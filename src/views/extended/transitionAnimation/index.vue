@@ -57,7 +57,18 @@
         <el-form :model="animationForm" label-width="auto">
           <!-- 基础配置 -->
           <div class="form-section">
-            <div class="section-title">基础配置</div>
+            <div class="section-title">
+              <span>基础配置</span>
+              <el-button
+                type="primary"
+                size="small"
+                :icon="CopyDocument"
+                @click="copyCode"
+                style="margin-left: 12px"
+              >
+                复制代码
+              </el-button>
+            </div>
             <el-row :gutter="20">
               <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                 <el-form-item prop="type">
@@ -317,6 +328,9 @@
 </template>
 
 <script setup lang="ts">
+import { CopyDocument } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
+
 defineOptions({ name: 'TransitionAnimationView' })
 
 const menuStore = useMenuStore()
@@ -379,6 +393,54 @@ const resetAnimation = () => {
     showLogo.value = true
   }, 100)
 }
+
+// 生成代码字符串
+const generateCode = () => {
+  const { type, duration, delay, easing, mode } = animationForm.value
+
+  // 构建 style 对象字符串
+  const styleProps: string[] = []
+  if (duration !== 0.3) {
+    styleProps.push(`'--animation-duration': '${duration}s'`)
+  }
+  if (delay !== 0) {
+    styleProps.push(`'--animation-delay': '${delay}s'`)
+  }
+  if (easing !== 'cubic-bezier(0.4, 0, 0.2, 1)') {
+    styleProps.push(`'--animation-easing': '${easing}'`)
+  }
+
+  const styleStr = styleProps.length > 0 ? ` :style="{ ${styleProps.join(', ')} }"` : ''
+  const modeStr = mode !== 'default' ? ` mode="${mode}"` : ''
+
+  return `<Transition name="${type}"${modeStr}${styleStr}>
+    <div v-if="show">内容</div>
+  </Transition>`
+}
+
+// 复制代码到剪贴板
+const copyCode = async () => {
+  const code = generateCode()
+  try {
+    await navigator.clipboard.writeText(code)
+    ElMessage.success('代码已复制到剪贴板')
+  } catch {
+    // 降级方案：使用传统方法
+    const textarea = document.createElement('textarea')
+    textarea.value = code
+    textarea.style.position = 'fixed'
+    textarea.style.opacity = '0'
+    document.body.appendChild(textarea)
+    textarea.select()
+    try {
+      document.execCommand('copy')
+      ElMessage.success('代码已复制到剪贴板')
+    } catch {
+      ElMessage.error('复制失败，请手动复制')
+    }
+    document.body.removeChild(textarea)
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -426,6 +488,8 @@ const resetAnimation = () => {
         margin-bottom: 16px;
         padding-left: 8px;
         border-left: 3px solid var(--el-color-primary);
+        display: flex;
+        align-items: center;
       }
 
       &:last-child {
