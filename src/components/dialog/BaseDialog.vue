@@ -19,6 +19,7 @@
         </div>
         <div class="base-dialog-header-buttons">
           <template v-if="showFullscreenButton">
+            <!-- 自己的项目中使用可更换为自己项目的图标 -->
             <IconButton
               :icon="fullscreenIcon"
               :iconSize="fullscreenIconSize"

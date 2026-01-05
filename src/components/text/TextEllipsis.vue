@@ -41,6 +41,7 @@
     <el-tooltip v-if="copyable" content="复制" placement="top">
       <div class="copy-button" @click.stop="handleCopy">
         <el-icon>
+          <!-- 复制图标，可更换为自己项目的图标 -->
           <component :is="menuStore.iconComponents['HOutline:ClipboardDocumentIcon']" />
         </el-icon>
       </div>
