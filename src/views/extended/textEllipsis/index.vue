@@ -17,6 +17,24 @@
               >
                 Element Plus Tooltip 文档
               </el-link>
+              。
+            </p>
+            <p class="description-text">
+              <strong>独立使用：</strong>
+              如果你不想使用整个项目，也可以直接复制
+              <code>TextEllipsis</code> 组件源码到自己的项目中使用。该组件主要依赖于
+              <code>element-plus</code>（使用 <code>el-tooltip</code> 组件）和
+              <code>@vueuse/core</code>（使用
+              <code>useClipboard</code>，用于复制功能），使用前请确保已安装这些依赖。组件源码地址：
+              <el-link
+                href="https://github.com/DFANNN/DFAN-Admin/blob/main/src/components/text/TextEllipsis.vue"
+                target="_blank"
+                type="primary"
+                :underline="false"
+              >
+                TextEllipsis.vue
+              </el-link>
+              ，欢迎直接使用或根据需求进行二次开发。
             </p>
           </div>
         </div>
@@ -24,7 +42,18 @@
       <div class="form-container">
         <!-- 效果预览 -->
         <div class="preview-section">
-          <div class="section-title">效果预览</div>
+          <div class="section-title">
+            <span>效果预览</span>
+            <el-button
+              type="primary"
+              size="small"
+              :icon="CopyDocument"
+              @click="copyCode"
+              style="margin-left: 12px"
+            >
+              复制代码
+            </el-button>
+          </div>
           <div class="preview-content">
             <TextEllipsis
               :text="ellipsisForm.text"
@@ -277,12 +306,60 @@
             </div>
           </div>
         </div>
+
+        <!-- 组件属性说明 -->
+        <el-divider />
+        <div class="usage-section">
+          <div class="section-title">组件属性介绍</div>
+          <div class="usage-info">
+            <div class="usage-item">
+              <h4 class="usage-title">TextEllipsis 组件属性介绍</h4>
+              <p class="usage-description">
+                以下为组件的扩展属性，其余属性（如
+                <code>placement</code>、<code>effect</code>、<code>popper-class</code>
+                等）支持 Element Plus Tooltip 的相关属性，更多详情请查看
+                <el-link
+                  href="https://element-plus.org/zh-CN/component/tooltip"
+                  target="_blank"
+                  type="primary"
+                  :underline="false"
+                >
+                  Element Plus Tooltip 文档
+                </el-link>
+                。
+              </p>
+              <div class="comparison-table">
+                <el-table :data="propsTableData" border style="width: 100%">
+                  <el-table-column prop="name" label="属性名" width="150">
+                    <template #default="{ row }">
+                      <strong>{{ row.name }}</strong>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="type" label="类型" width="200">
+                    <template #default="{ row }">
+                      <code>{{ row.type }}</code>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="default" label="默认值" width="120">
+                    <template #default="{ row }">
+                      <code>{{ row.default }}</code>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="description" label="说明" min-width="200" />
+                </el-table>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </el-card>
   </div>
 </template>
 
 <script setup lang="ts">
+import { CopyDocument } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
+
 defineOptions({ name: 'TextEllipsisView' })
 
 const menuStore = useMenuStore()
@@ -318,6 +395,130 @@ const ellipsisForm = ref<EllipsisForm>({
   hideAfter: 200,
   offset: 12,
 })
+
+// 组件属性表格数据
+const propsTableData = [
+  {
+    name: 'text',
+    type: 'string | number',
+    default: '-',
+    description: '要展示的文本内容（必需）',
+  },
+  {
+    name: 'line',
+    type: 'number',
+    default: '1',
+    description: '展示行数，超过此行数后省略',
+  },
+  {
+    name: 'width',
+    type: 'string | number',
+    default: "'100%'",
+    description: '宽度，超过此宽度后省略，支持字符串（vh, rem, px, 百分比）或数字（默认 px）',
+  },
+  {
+    name: 'clickable',
+    type: 'boolean',
+    default: 'false',
+    description: '是否允许点击展开/收起',
+  },
+  {
+    name: 'copyable',
+    type: 'boolean',
+    default: 'false',
+    description: '是否显示复制按钮',
+  },
+  {
+    name: 'tooltipType',
+    type: "'element' | 'native' | 'none'",
+    default: "'element'",
+    description:
+      'Tooltip 提示类型，element: Element Plus Tooltip（默认），native: 原生 title 属性，none: 不显示',
+  },
+]
+
+// 生成代码字符串
+const generateCode = () => {
+  const {
+    line,
+    width,
+    clickable,
+    copyable,
+    tooltipType,
+    placement,
+    effect,
+    showAfter,
+    hideAfter,
+    offset,
+  } = ellipsisForm.value
+
+  const props: string[] = []
+
+  // text 属性（使用示例）
+  props.push(`text="你的文本内容"`)
+
+  // 其他属性
+  if (line !== 1) {
+    props.push(`:line="${line}"`)
+  }
+  if (width !== '100%') {
+    if (typeof width === 'number') {
+      props.push(`:width="${width}"`)
+    } else {
+      props.push(`width="${width}"`)
+    }
+  }
+  if (!clickable) {
+    props.push(`:clickable="false"`)
+  }
+  if (copyable) {
+    props.push(`:copyable="true"`)
+  }
+  if (tooltipType !== 'element') {
+    props.push(`tooltip-type="${tooltipType}"`)
+  }
+  if (placement !== 'top') {
+    props.push(`placement="${placement}"`)
+  }
+  if (effect !== 'dark') {
+    props.push(`effect="${effect}"`)
+  }
+  if (showAfter !== 0) {
+    props.push(`:show-after="${showAfter}"`)
+  }
+  if (hideAfter !== 200) {
+    props.push(`:hide-after="${hideAfter}"`)
+  }
+  if (offset !== 12) {
+    props.push(`:offset="${offset}"`)
+  }
+
+  return `<TextEllipsis ${props.join(' ')} />`
+}
+
+// 复制代码到剪贴板
+const copyCode = async () => {
+  const code = generateCode()
+  try {
+    await navigator.clipboard.writeText(code)
+    ElMessage.success('代码已复制到剪贴板')
+  } catch {
+    // 降级方案：使用传统方法
+    const textarea = document.createElement('textarea')
+    textarea.value = code
+    textarea.style.position = 'fixed'
+    textarea.style.opacity = '0'
+    document.body.appendChild(textarea)
+    textarea.select()
+    try {
+      document.execCommand('copy')
+      ElMessage.success('代码已复制到剪贴板')
+    } catch {
+      ElMessage.error('复制失败，请手动复制')
+    }
+    document.body.removeChild(textarea)
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -433,6 +634,71 @@ const ellipsisForm = ref<EllipsisForm>({
       }
     }
 
+    .usage-section {
+      margin-top: 24px;
+
+      .section-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--el-text-color-primary);
+        margin-bottom: 16px;
+        padding-left: 8px;
+        border-left: 3px solid var(--el-color-primary);
+      }
+
+      .usage-info {
+        .usage-item {
+          margin-bottom: 32px;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          .usage-title {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            color: var(--el-text-color-primary);
+            margin-bottom: 12px;
+          }
+
+          .usage-description {
+            margin: 0 0 12px 0;
+            color: var(--el-text-color-regular);
+            font-size: 0.875rem;
+            line-height: 1.6;
+
+            code {
+              padding: 2px 6px;
+              background-color: var(--el-fill-color-light);
+              border-radius: 3px;
+              font-size: 0.8125rem;
+              color: var(--el-color-primary);
+            }
+          }
+
+          .comparison-table {
+            margin-top: 16px;
+
+            :deep(.el-table) {
+              .el-table__cell {
+                padding: 12px 0;
+
+                code {
+                  padding: 2px 6px;
+                  background-color: var(--el-fill-color-light);
+                  border-radius: 3px;
+                  font-size: 0.8125rem;
+                  color: var(--el-color-primary);
+                  font-family:
+                    'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
     .preview-section {
       .section-title {
         font-size: 1rem;
@@ -441,6 +707,8 @@ const ellipsisForm = ref<EllipsisForm>({
         margin-bottom: 16px;
         padding-left: 8px;
         border-left: 3px solid var(--el-color-primary);
+        display: flex;
+        align-items: center;
       }
 
       .preview-content {

@@ -24,13 +24,39 @@
               </el-link>
               。
             </p>
+            <p class="description-text">
+              <strong>独立使用：</strong>
+              这些动画是纯 CSS 样式，如果你不想使用整个项目，也可以直接复制 CSS
+              文件到自己的项目中使用。 只需要将 CSS 文件引入到项目中，然后使用 Vue 的
+              <code>Transition</code> 组件配合相应的类名即可。 CSS 文件地址：
+              <el-link
+                href="https://github.com/DFANNN/DFAN-Admin/blob/main/src/styles/transitionAnimation.css"
+                target="_blank"
+                type="primary"
+                :underline="false"
+              >
+                transitionAnimation.css
+              </el-link>
+              ，欢迎直接使用或根据需求进行修改。
+            </p>
           </div>
         </div>
       </template>
       <div class="form-container">
         <!-- 效果预览 -->
         <div class="preview-section">
-          <div class="section-title">效果预览</div>
+          <div class="section-title">
+            <span>效果预览</span>
+            <el-button
+              type="primary"
+              size="small"
+              :icon="CopyDocument"
+              @click="copyCode"
+              style="margin-left: 12px"
+            >
+              复制代码
+            </el-button>
+          </div>
           <div class="preview-content">
             <div class="preview-wrapper">
               <Transition
@@ -59,15 +85,6 @@
           <div class="form-section">
             <div class="section-title">
               <span>基础配置</span>
-              <el-button
-                type="primary"
-                size="small"
-                :icon="CopyDocument"
-                @click="copyCode"
-                style="margin-left: 12px"
-              >
-                复制代码
-              </el-button>
             </div>
             <el-row :gutter="20">
               <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
@@ -289,35 +306,40 @@
             </div>
 
             <div class="usage-item">
-              <h4 class="usage-title">动画类型说明</h4>
-              <div class="animation-types">
-                <div class="type-group">
-                  <h5>基础动画</h5>
-                  <ul>
-                    <li><strong>fade-slide</strong>：淡入淡出 + 水平滑动，适合大多数场景</li>
-                    <li><strong>fade</strong>：纯淡入淡出，简洁优雅</li>
-                    <li><strong>slide-up/down/left/right</strong>：各方向的滑动效果</li>
-                  </ul>
-                </div>
-                <div class="type-group">
-                  <h5>缩放动画</h5>
-                  <ul>
-                    <li><strong>zoom</strong>：中心缩放效果</li>
-                    <li><strong>zoom-in-*</strong>：从指定方向缩放进入</li>
-                    <li><strong>scale</strong>：缩放 + 淡入淡出</li>
-                  </ul>
-                </div>
-                <div class="type-group">
-                  <h5>特效动画</h5>
-                  <ul>
-                    <li><strong>rotate</strong>：旋转效果，富有动感</li>
-                    <li><strong>bounce</strong>：弹跳效果，活泼有趣</li>
-                    <li><strong>flip-3d / rotate-3d</strong>：3D 效果，视觉冲击力强</li>
-                    <li><strong>blur-fade</strong>：模糊淡入淡出，朦胧美感</li>
-                    <li><strong>elastic</strong>：弹性效果，自然流畅</li>
-                    <li><strong>glow</strong>：发光效果，科技感十足</li>
-                  </ul>
-                </div>
+              <h4 class="usage-title">CSS 变量属性介绍</h4>
+              <p class="usage-description">
+                以下是通过 CSS 变量实现的自定义属性，可以通过 <code>style</code> 属性传递给
+                <code>Transition</code> 组件。其余属性（如 <code>name</code>、<code>mode</code>
+                等）请查看
+                <el-link
+                  href="https://cn.vuejs.org/guide/built-ins/transition.html"
+                  target="_blank"
+                  type="primary"
+                  :underline="false"
+                >
+                  Vue Transition 文档
+                </el-link>
+                。
+              </p>
+              <div class="comparison-table">
+                <el-table :data="cssVarsTableData" border style="width: 100%">
+                  <el-table-column prop="name" label="CSS 变量名" width="200">
+                    <template #default="{ row }">
+                      <strong>{{ row.name }}</strong>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="type" label="类型" width="150">
+                    <template #default="{ row }">
+                      <code>{{ row.type }}</code>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="default" label="默认值" width="150">
+                    <template #default="{ row }">
+                      <code>{{ row.default }}</code>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="description" label="说明" min-width="200" />
+                </el-table>
               </div>
             </div>
           </div>
@@ -373,6 +395,28 @@ const animationForm = ref<AnimationForm>({
 })
 
 const showLogo = ref(true)
+
+// CSS 变量属性表格数据
+const cssVarsTableData = [
+  {
+    name: '--animation-duration',
+    type: 'string',
+    default: '0.3s',
+    description: '动画持续时长，单位：秒（s），默认：0.3s',
+  },
+  {
+    name: '--animation-delay',
+    type: 'string',
+    default: '0s',
+    description: '动画开始前的延迟时间，单位：秒（s），默认：0s',
+  },
+  {
+    name: '--animation-easing',
+    type: 'string',
+    default: 'cubic-bezier(0.4, 0, 0.2, 1)',
+    description: '动画的缓动函数，控制动画的速度曲线，可以使用 CSS 缓动函数',
+  },
+]
 
 // 计算动画样式，通过 CSS 变量传递动画参数
 const animationStyle = computed(() => {
@@ -605,35 +649,16 @@ const copyCode = async () => {
             }
           }
 
-          .animation-types {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+          .comparison-table {
             margin-top: 16px;
 
-            .type-group {
-              h5 {
-                font-size: 0.875rem;
-                font-weight: 600;
-                color: var(--el-text-color-primary);
-                margin-bottom: 8px;
-              }
-
-              ul {
-                margin: 0;
-                padding-left: 20px;
-                color: var(--el-text-color-regular);
-                font-size: 0.875rem;
-                line-height: 1.8;
-
-                li {
-                  margin-bottom: 4px;
-
-                  strong {
-                    color: var(--el-color-primary);
-                    font-weight: 600;
-                  }
-                }
+            :deep(.el-table) {
+              code {
+                background-color: var(--el-fill-color-light);
+                padding: 2px 6px;
+                border-radius: 3px;
+                font-size: 0.875em;
+                color: var(--el-color-primary);
               }
             }
           }
