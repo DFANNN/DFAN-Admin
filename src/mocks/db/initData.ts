@@ -530,9 +530,9 @@ const defaultMenuTreeData = [
       {
         id: 'menu_21',
         type: 'menu',
-        path: '/extended/animation',
-        title: '动画组件',
-        icon: 'HOutline:PlayCircleIcon',
+        path: '/extended/hoverAnimation',
+        title: 'Hover动画组件',
+        icon: 'HOutline:CursorArrowRaysIcon',
         parentId: 'menu_17',
         order: 3,
         status: 'active',

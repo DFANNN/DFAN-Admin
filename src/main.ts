@@ -8,6 +8,7 @@ import { loadingFadeOut } from 'virtual:app-loading' // 全局loading
 import { worker } from '@/mocks/browser' // 模拟数据
 import { initData } from '@/mocks/db/initData' // indexedDB数据库初始化数据
 import { permissionDirective } from '@/directives/permission' // 自定义权限指令
+import { MotionPlugin } from '@vueuse/motion' // Motion 动画插件
 import VXETablePlugin from '@/plugins/vxeTable'
 import { createApp, nextTick } from 'vue'
 import { createPinia } from 'pinia'
@@ -61,6 +62,9 @@ const startApp = async () => {
 
   app.use(createPinia())
   app.use(router)
+
+  // 注册 Motion 动画插件
+  app.use(MotionPlugin)
 
   // 注册自定义指令
   app.directive('permission', permissionDirective)
