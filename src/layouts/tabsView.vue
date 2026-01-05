@@ -1,10 +1,12 @@
 <template>
   <div class="tabs-container">
-    <div class="tabs-left-icon" @click="slideLeft">
-      <el-icon>
-        <component :is="menuStore.iconComponents['HOutline:ChevronLeftIcon']" />
-      </el-icon>
-    </div>
+    <HoverAnimateWrapper name="rubber">
+      <div class="tabs-left-icon" @click="slideLeft">
+        <el-icon>
+          <component :is="menuStore.iconComponents['HOutline:ChevronLeftIcon']" />
+        </el-icon>
+      </div>
+    </HoverAnimateWrapper>
     <div class="tabs-pages" ref="tabsPagesRef">
       <div
         class="tabs-page-item"
@@ -14,26 +16,34 @@
         :ref="(el) => setTabRef(el, tab.path)"
         @click="navigation(tab.path)"
       >
-        <el-icon class="tabs-page-icon" size="18">
-          <component :is="menuStore.iconComponents[tab.icon as string]" />
-        </el-icon>
-        <div>{{ tab.title }}</div>
-        <el-icon v-if="tab.closable" class="close-icon" @click.stop="handleClose(tab)">
-          <component :is="menuStore.iconComponents['HSolid:XMarkIcon']" />
-        </el-icon>
+        <HoverAnimateWrapper name="wobble" :duration="700">
+          <div style="display: flex; align-items: center; gap: 0.5rem">
+            <el-icon class="tabs-page-icon" size="18">
+              <component :is="menuStore.iconComponents[tab.icon as string]" />
+            </el-icon>
+            <div>{{ tab.title }}</div>
+            <el-icon v-if="tab.closable" class="close-icon" @click.stop="handleClose(tab)">
+              <component :is="menuStore.iconComponents['HSolid:XMarkIcon']" />
+            </el-icon>
+          </div>
+        </HoverAnimateWrapper>
       </div>
     </div>
-    <div class="tabs-right-icon" @click="slideRight">
-      <el-icon>
-        <component :is="menuStore.iconComponents['HOutline:ChevronRightIcon']" />
-      </el-icon>
-    </div>
+    <HoverAnimateWrapper name="rubber">
+      <div class="tabs-right-icon" @click="slideRight">
+        <el-icon>
+          <component :is="menuStore.iconComponents['HOutline:ChevronRightIcon']" />
+        </el-icon>
+      </div>
+    </HoverAnimateWrapper>
     <div class="tabs-dropdown">
       <el-dropdown trigger="click" class="tabs-dropdown-wrapper">
         <div class="tabs-dropdown-icon">
-          <el-icon>
-            <component :is="menuStore.iconComponents['MoreFilled']" />
-          </el-icon>
+          <HoverAnimateWrapper name="rubber">
+            <el-icon>
+              <component :is="menuStore.iconComponents['Element:MoreFilled']" />
+            </el-icon>
+          </HoverAnimateWrapper>
         </div>
         <template #dropdown>
           <el-dropdown-menu>
@@ -236,8 +246,6 @@ const slideRight = () => {
     color: var(--el-text-color-regular);
     &:hover {
       color: var(--el-color-primary);
-      animation: jello;
-      animation-duration: 1s;
     }
   }
   .tabs-right-icon {
@@ -249,8 +257,6 @@ const slideRight = () => {
     color: var(--el-text-color-regular);
     &:hover {
       color: var(--el-color-primary);
-      animation: jello;
-      animation-duration: 1s;
     }
   }
   .tabs-pages {
@@ -297,10 +303,6 @@ const slideRight = () => {
         background-color: var(--el-fill-color-light);
         border-radius: 0.625rem 0.625rem 0.875rem 0.875rem;
         font-weight: bold;
-        .tabs-page-icon {
-          animation: jello;
-          animation-duration: 1s;
-        }
       }
 
       &.active {
@@ -354,8 +356,6 @@ const slideRight = () => {
         color: var(--el-text-color-regular);
         &:hover {
           color: var(--el-color-primary);
-          animation: jello;
-          animation-duration: 1s;
         }
       }
     }

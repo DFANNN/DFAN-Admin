@@ -6,9 +6,11 @@
       :max="99"
       :offset="[-5, 5]"
     >
-      <div class="action-btn">
-        <el-icon><component :is="menuStore.iconComponents['HOutline:BellAlertIcon']" /></el-icon>
-      </div>
+      <HoverAnimateWrapper name="bell" intensity="light" :duration="600">
+        <div class="action-btn">
+          <el-icon><component :is="menuStore.iconComponents['HOutline:BellAlertIcon']" /></el-icon>
+        </div>
+      </HoverAnimateWrapper>
     </el-badge>
 
     <template #dropdown>
@@ -126,8 +128,6 @@ const goToProfile = () => {
     background: var(--el-fill-color-light);
     color: var(--el-color-primary);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    animation: jello;
-    animation-duration: 1s;
   }
 
   .el-icon {

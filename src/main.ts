@@ -2,7 +2,6 @@ import '@/styles/index.css' // 公共样式
 import 'element-plus/theme-chalk/dark/css-vars.css' // Element Plus 深色模式样式
 import 'element-plus/dist/index.css' // Element Plus 样式
 import 'nprogress/nprogress.css' // NProgress 样式
-import 'animate.css' // Animate.css 样式
 import { APP_CONFIG } from '@/config/app.config' // 全局应用配置
 import { loadingFadeOut } from 'virtual:app-loading' // 全局loading
 import { worker } from '@/mocks/browser' // 模拟数据

@@ -6,7 +6,7 @@
           <span class="card-title">Hover 动画演示</span>
           <div class="card-description">
             <p>
-              本项目基于 <code>@vueuse/motion</code> 封装了 15 种精美的 Hover
+              本项目基于 <code>@vueuse/motion</code> 封装了 17 种精美的 Hover
               动画效果，简化了使用方式，只需传入动画名称 <code>name</code>
               属性即可开箱即用。这些动画涵盖了弹性、变换、特效、动感和创意等多种类型，可以满足各种交互场景的悬停反馈需求。
             </p>
@@ -36,17 +36,42 @@
               <br />
               两者解决不同的问题，可以同时使用，互不冲突。
             </p>
+            <p class="description-text">
+              <strong>独立使用：</strong>
+              如果你不想使用整个项目，也可以直接复制
+              <code>HoverAnimateWrapper</code> 组件源码到自己的项目中使用。该组件主要依赖于
+              <code>@vueuse/motion</code>，使用前请确保已安装该依赖。组件源码地址：
+              <el-link
+                href="https://github.com/DFANNN/DFAN-Admin/blob/main/src/components/animation/HoverAnimateWrapper.vue"
+                target="_blank"
+                type="primary"
+                :underline="false"
+              >
+                HoverAnimateWrapper.vue
+              </el-link>
+              ，欢迎直接使用或根据需求进行二次开发。
+            </p>
           </div>
         </div>
       </template>
       <div class="form-container">
         <!-- 效果预览 -->
         <div class="preview-section">
-          <div class="section-title">效果预览</div>
+          <div class="section-title">
+            <span>效果预览</span>
+            <el-button
+              type="primary"
+              size="small"
+              :icon="CopyDocument"
+              @click="copyCode"
+              style="margin-left: 12px"
+            >
+              复制代码
+            </el-button>
+          </div>
           <div class="preview-content">
             <div class="preview-wrapper">
               <HoverAnimateWrapper
-                :key="`${animationForm.type}-${animationForm.duration}-${animationForm.intensity}-${animationForm.tag}`"
                 :name="animationForm.type"
                 :duration="animationForm.duration"
                 :intensity="animationForm.intensity"
@@ -70,15 +95,6 @@
           <div class="form-section">
             <div class="section-title">
               <span>基础配置</span>
-              <el-button
-                type="primary"
-                size="small"
-                :icon="CopyDocument"
-                @click="copyCode"
-                style="margin-left: 12px"
-              >
-                复制代码
-              </el-button>
             </div>
             <el-row :gutter="20">
               <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
@@ -87,7 +103,7 @@
                     <span class="label-with-tooltip">
                       <span>动画类型</span>
                       <el-tooltip
-                        content="选择要使用的动画效果类型，共 15 种内置动画可选"
+                        content="选择要使用的动画效果类型，共 17 种内置动画可选"
                         placement="top"
                       >
                         <el-icon class="label-tooltip-icon">
@@ -117,8 +133,10 @@
                       <el-option label="shake（震动效果）" value="shake" />
                       <el-option label="wobble（摆动效果）" value="wobble" />
                       <el-option label="swing（摇摆效果）" value="swing" />
+                      <el-option label="bell（摇铃效果）" value="bell" />
                       <el-option label="magnet（磁吸效果）" value="magnet" />
                       <el-option label="squeeze（挤压效果）" value="squeeze" />
+                      <el-option label="float（漂浮效果）" value="float" />
                     </el-option-group>
                   </el-select>
                 </el-form-item>
@@ -238,44 +256,24 @@
             <div class="usage-item">
               <h4 class="usage-title">HoverAnimateWrapper 组件属性介绍</h4>
               <div class="comparison-table">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>属性名</th>
-                      <th>类型</th>
-                      <th>默认值</th>
-                      <th>说明</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><strong>name</strong></td>
-                      <td><code>HoverAnimationName</code></td>
-                      <td><code>'scale'</code></td>
-                      <td>
-                        动画类型名称，可选值：jelly、bounce、rubber、elastic、scale、lift、tilt、rotate、flip、pulse、shake、wobble、swing、magnet、squeeze
-                      </td>
-                    </tr>
-                    <tr>
-                      <td><strong>tag</strong></td>
-                      <td><code>string</code></td>
-                      <td><code>'div'</code></td>
-                      <td>组件渲染的 HTML 标签类型，如 div、span、button、a 等</td>
-                    </tr>
-                    <tr>
-                      <td><strong>duration</strong></td>
-                      <td><code>number</code></td>
-                      <td><code>300</code></td>
-                      <td>动画持续时长，单位：毫秒（ms）</td>
-                    </tr>
-                    <tr>
-                      <td><strong>intensity</strong></td>
-                      <td><code>'light' | 'normal' | 'strong'</code></td>
-                      <td><code>'normal'</code></td>
-                      <td>动画强度，light 为轻微，normal 为正常，strong 为强烈</td>
-                    </tr>
-                  </tbody>
-                </table>
+                <el-table :data="propsTableData" border style="width: 100%">
+                  <el-table-column prop="name" label="属性名" width="120">
+                    <template #default="{ row }">
+                      <strong>{{ row.name }}</strong>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="type" label="类型" width="200">
+                    <template #default="{ row }">
+                      <code>{{ row.type }}</code>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="default" label="默认值" width="120">
+                    <template #default="{ row }">
+                      <code>{{ row.default }}</code>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="description" label="说明" min-width="200" />
+                </el-table>
               </div>
             </div>
           </div>
@@ -307,6 +305,35 @@ const animationForm = ref<AnimationForm>({
   intensity: 'normal',
   tag: 'div',
 })
+
+// 组件属性表格数据
+const propsTableData = [
+  {
+    name: 'name',
+    type: 'HoverAnimationName',
+    default: "'scale'",
+    description:
+      '动画类型名称，可选值：jelly、bounce、rubber、elastic、scale、lift、tilt、rotate、flip、pulse、shake、wobble、swing、bell、magnet、squeeze、float',
+  },
+  {
+    name: 'tag',
+    type: 'string',
+    default: "'div'",
+    description: '组件渲染的 HTML 标签类型，如 div、span、button、a 等',
+  },
+  {
+    name: 'duration',
+    type: 'number',
+    default: '300',
+    description: '动画持续时长，单位：毫秒（ms）',
+  },
+  {
+    name: 'intensity',
+    type: "'light' | 'normal' | 'strong'",
+    default: "'normal'",
+    description: '动画强度，light 为轻微，normal 为正常，strong 为强烈',
+  },
+]
 
 // 生成代码字符串
 const generateCode = () => {
@@ -522,51 +549,14 @@ const copyCode = async () => {
 
           .comparison-table {
             margin-top: 16px;
-            overflow-x: auto;
 
-            table {
-              width: 100%;
-              border-collapse: collapse;
-              font-size: 0.875rem;
-
-              thead {
+            :deep(.el-table) {
+              code {
                 background-color: var(--el-fill-color-light);
-
-                th {
-                  padding: 12px;
-                  text-align: left;
-                  font-weight: 600;
-                  color: var(--el-text-color-primary);
-                  border-bottom: 2px solid var(--el-border-color);
-                }
-              }
-
-              tbody {
-                tr {
-                  border-bottom: 1px solid var(--el-border-color);
-
-                  &:hover {
-                    background-color: var(--el-fill-color-lighter);
-                  }
-
-                  td {
-                    padding: 12px;
-                    color: var(--el-text-color-regular);
-                    line-height: 1.6;
-
-                    strong {
-                      color: var(--el-text-color-primary);
-                    }
-
-                    code {
-                      background-color: var(--el-fill-color-light);
-                      padding: 2px 6px;
-                      border-radius: 3px;
-                      font-size: 0.875em;
-                      color: var(--el-color-primary);
-                    }
-                  }
-                }
+                padding: 2px 6px;
+                border-radius: 3px;
+                font-size: 0.875em;
+                color: var(--el-color-primary);
               }
             }
           }

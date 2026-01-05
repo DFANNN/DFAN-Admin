@@ -11,11 +11,13 @@
           effect="dark"
           v-if="APP_CONFIG.showThemeConfig"
         >
-          <div class="action-btn" @click="themeStore.themeConfigDrawerOpen = true">
-            <el-icon
-              ><component :is="menuStore.iconComponents['HOutline:Cog6ToothIcon']"
-            /></el-icon>
-          </div>
+          <HoverAnimateWrapper name="rotate">
+            <div class="action-btn" @click="themeStore.themeConfigDrawerOpen = true">
+              <el-icon
+                ><component :is="menuStore.iconComponents['HOutline:Cog6ToothIcon']"
+              /></el-icon>
+            </div>
+          </HoverAnimateWrapper>
         </el-tooltip>
       </div>
 
@@ -324,8 +326,6 @@ onMounted(() => {
         &:hover {
           background: var(--el-fill-color-light);
           color: var(--el-color-primary);
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
 
         .el-icon {

@@ -1,6 +1,7 @@
 <template>
   <div>
     <Motion
+      :key="motionKey"
       :is="tag"
       :initial="initial"
       :hovered="hoverConfig"
@@ -34,8 +35,10 @@ export type HoverAnimationName =
   | 'shake'
   | 'wobble'
   | 'swing'
+  | 'bell'
   | 'magnet'
   | 'squeeze'
+  | 'float'
 
 // Props 定义
 interface Props {
@@ -227,6 +230,27 @@ const hoverPresets = computed<Record<HoverAnimationName, Variant>>(() => {
       },
     },
 
+    // 摇铃效果 - 顶部固定，底部左右摆动，像摇动铃铛一样
+    bell: {
+      rotate: [
+        0,
+        20 * intensity,
+        -20 * intensity,
+        15 * intensity,
+        -15 * intensity,
+        10 * intensity,
+        -10 * intensity,
+        5 * intensity,
+        -5 * intensity,
+        0,
+      ],
+      transformOrigin: 'top center',
+      transition: {
+        duration: duration * 1.5,
+        ease: 'easeInOut',
+      },
+    },
+
     // 磁吸效果 - 向鼠标方向移动
     magnet: {
       scale: 1.08 * intensity,
@@ -247,6 +271,16 @@ const hoverPresets = computed<Record<HoverAnimationName, Variant>>(() => {
         type: 'spring',
         stiffness: 400,
         damping: 15,
+      },
+    },
+
+    // 漂浮效果 - 上下缓慢浮动，轻盈感
+    float: {
+      y: [0, -15 * intensity, 0],
+      transition: {
+        duration: duration * 2,
+        ease: 'easeInOut',
+        repeat: Infinity,
       },
     },
   }
@@ -275,6 +309,11 @@ const transitionConfig = computed(() => {
     duration: props.duration,
     ease: 'easeOut',
   }
+})
+
+// 生成 Motion 组件的 key，当 props 变化时强制重新渲染
+const motionKey = computed(() => {
+  return `${props.name}-${props.duration}-${props.intensity}-${props.tag}`
 })
 </script>
 

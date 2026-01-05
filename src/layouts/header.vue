@@ -11,18 +11,20 @@
         placement="bottom"
         effect="dark"
       >
-        <div class="action-btn" @click="handleMenuToggle">
-          <el-icon
-            ><component
-              :is="
-                menuStore.isMobile
-                  ? menuStore.iconComponents['HOutline:Bars3CenterLeftIcon']
-                  : menuStore.isCollapse
-                    ? menuStore.iconComponents['HOutline:Bars3BottomRightIcon']
-                    : menuStore.iconComponents['HOutline:Bars3BottomLeftIcon']
-              "
-          /></el-icon>
-        </div>
+        <HoverAnimateWrapper name="rubber">
+          <div class="action-btn" @click="handleMenuToggle">
+            <el-icon
+              ><component
+                :is="
+                  menuStore.isMobile
+                    ? menuStore.iconComponents['HOutline:Bars3CenterLeftIcon']
+                    : menuStore.isCollapse
+                      ? menuStore.iconComponents['HOutline:Bars3BottomRightIcon']
+                      : menuStore.iconComponents['HOutline:Bars3BottomLeftIcon']
+                "
+            /></el-icon>
+          </div>
+        </HoverAnimateWrapper>
       </el-tooltip>
       <BreadcrumbView :showIcon="false" v-if="!menuStore.isMobile" />
     </div>
@@ -30,36 +32,42 @@
     <!-- 右侧操作区 -->
     <div class="header-right">
       <div class="action-buttons">
+        <!-- 主题配置 -->
         <el-tooltip
           content="主题配置"
           placement="bottom"
           effect="dark"
           v-if="APP_CONFIG.showThemeConfig"
         >
-          <div class="action-btn" @click="themeStore.themeConfigDrawerOpen = true">
-            <el-icon
-              ><component :is="menuStore.iconComponents['HOutline:Cog6ToothIcon']"
-            /></el-icon>
-          </div>
+          <HoverAnimateWrapper name="rotate">
+            <div class="action-btn" @click="themeStore.themeConfigDrawerOpen = true">
+              <el-icon
+                ><component :is="menuStore.iconComponents['HOutline:Cog6ToothIcon']"
+              /></el-icon>
+            </div>
+          </HoverAnimateWrapper>
         </el-tooltip>
 
+        <!-- 全屏 -->
         <el-tooltip
           :content="isFullscreen ? '退出全屏' : '全屏'"
           placement="bottom"
           effect="dark"
           v-if="!menuStore.isMobile"
         >
-          <div class="action-btn" @click="toggleFullscreen">
-            <el-icon>
-              <component
-                :is="
-                  isFullscreen
-                    ? menuStore.iconComponents['HOutline:ArrowsPointingInIcon']
-                    : menuStore.iconComponents['HOutline:ArrowsPointingOutIcon']
-                "
-              />
-            </el-icon>
-          </div>
+          <HoverAnimateWrapper name="pulse">
+            <div class="action-btn" @click="toggleFullscreen">
+              <el-icon>
+                <component
+                  :is="
+                    isFullscreen
+                      ? menuStore.iconComponents['HOutline:ArrowsPointingInIcon']
+                      : menuStore.iconComponents['HOutline:ArrowsPointingOutIcon']
+                  "
+                />
+              </el-icon>
+            </div>
+          </HoverAnimateWrapper>
         </el-tooltip>
 
         <!-- 国际化 -->
@@ -155,10 +163,6 @@ const handleMenuToggle = () => {
     background: var(--el-fill-color-light);
     color: var(--el-color-primary);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-
-    // 直接使用 animate.css 定义的动画名称
-    animation: jello;
-    animation-duration: 1s;
   }
 
   .el-icon {

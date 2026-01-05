@@ -17,6 +17,7 @@
         <component :is="menuStore.iconComponents['HOutline:ChevronDownIcon']" />
       </el-icon>
     </div>
+
     <template #dropdown>
       <div class="user-menu-wrapper">
         <!-- 用户信息头部 -->
@@ -172,8 +173,6 @@ onBeforeUnmount(() => {
   &:hover {
     .arrow-icon {
       color: var(--el-color-primary);
-      animation: jello;
-      animation-duration: 1s;
     }
   }
 

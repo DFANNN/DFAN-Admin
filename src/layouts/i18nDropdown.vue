@@ -1,8 +1,11 @@
 <template>
   <el-dropdown trigger="click" ref="notificationDropdownRef">
-    <div class="action-btn">
-      <el-icon><component :is="menuStore.iconComponents['HOutline:GlobeAltIcon']" /></el-icon>
-    </div>
+    <HoverAnimateWrapper name="rotate">
+      <div class="action-btn">
+        <el-icon><component :is="menuStore.iconComponents['HOutline:GlobeAltIcon']" /></el-icon>
+      </div>
+    </HoverAnimateWrapper>
+
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item
@@ -53,8 +56,6 @@ const currentLanguage = ref<string>('CN')
     background: var(--el-fill-color-light);
     color: var(--el-color-primary);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    animation: jello;
-    animation-duration: 1s;
   }
 
   .el-icon {
