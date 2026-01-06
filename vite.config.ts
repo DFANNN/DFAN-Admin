@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
       }),
       Components({
         resolvers: [ElementPlusResolver()],
-        dirs: ['src/components'],
+        dirs: ['src/components'], // 指定组件目录,注册为全局组件
       }),
     ],
     resolve: {

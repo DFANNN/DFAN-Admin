@@ -12,11 +12,10 @@
           v-if="APP_CONFIG.showThemeConfig"
         >
           <HoverAnimateWrapper name="rotate">
-            <div class="action-btn" @click="themeStore.themeConfigDrawerOpen = true">
-              <el-icon
-                ><component :is="menuStore.iconComponents['HOutline:Cog6ToothIcon']"
-              /></el-icon>
-            </div>
+            <IconButton
+              icon="HOutline:Cog6ToothIcon"
+              @click="themeStore.themeConfigDrawerOpen = true"
+            />
           </HoverAnimateWrapper>
         </el-tooltip>
       </div>
@@ -311,26 +310,6 @@ onMounted(() => {
         color: var(--el-text-color-primary);
         letter-spacing: 0.5px;
         flex: 1;
-      }
-      .action-btn {
-        width: 36px;
-        height: 36px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        color: var(--el-text-color-regular);
-        background: transparent;
-        &:hover {
-          background: var(--el-fill-color-light);
-          color: var(--el-color-primary);
-        }
-
-        .el-icon {
-          font-size: 1.25rem;
-        }
       }
     }
     .login-form-wrapper {

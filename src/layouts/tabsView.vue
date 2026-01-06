@@ -1,12 +1,14 @@
 <template>
   <div class="tabs-container">
     <HoverAnimateWrapper name="rubber">
-      <div class="tabs-left-icon" @click="slideLeft">
-        <el-icon>
-          <component :is="menuStore.iconComponents['HOutline:ChevronLeftIcon']" />
-        </el-icon>
-      </div>
+      <IconButton
+        icon="HOutline:ChevronLeftIcon"
+        size="1.75rem"
+        tooltip="向左滑动"
+        @click="slideLeft"
+      />
     </HoverAnimateWrapper>
+
     <div class="tabs-pages" ref="tabsPagesRef">
       <div
         class="tabs-page-item"
@@ -29,20 +31,21 @@
         </HoverAnimateWrapper>
       </div>
     </div>
+
     <HoverAnimateWrapper name="rubber">
-      <div class="tabs-right-icon" @click="slideRight">
-        <el-icon>
-          <component :is="menuStore.iconComponents['HOutline:ChevronRightIcon']" />
-        </el-icon>
-      </div>
+      <IconButton
+        icon="HOutline:ChevronRightIcon"
+        size="1.75rem"
+        tooltip="向右滑动"
+        @click="slideRight"
+      />
     </HoverAnimateWrapper>
+
     <div class="tabs-dropdown">
       <el-dropdown trigger="click" class="tabs-dropdown-wrapper">
         <div class="tabs-dropdown-icon">
           <HoverAnimateWrapper name="rubber">
-            <el-icon>
-              <component :is="menuStore.iconComponents['Element:MoreFilled']" />
-            </el-icon>
+            <IconButton icon="HOutline:EllipsisHorizontalIcon" size="1.75rem" />
           </HoverAnimateWrapper>
         </div>
         <template #dropdown>
@@ -237,28 +240,6 @@ const slideRight = () => {
   display: flex;
   align-items: center;
 
-  .tabs-left-icon {
-    padding: 0 0.5rem;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    color: var(--el-text-color-regular);
-    &:hover {
-      color: var(--el-color-primary);
-    }
-  }
-  .tabs-right-icon {
-    padding: 0 0.5rem;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    color: var(--el-text-color-regular);
-    &:hover {
-      color: var(--el-color-primary);
-    }
-  }
   .tabs-pages {
     padding: 0 1.25rem;
     height: 2.5rem;
@@ -350,7 +331,6 @@ const slideRight = () => {
       cursor: pointer;
       margin-right: 0.5rem;
       .tabs-dropdown-icon {
-        padding: 0 0.5rem;
         display: flex;
         align-items: center;
         color: var(--el-text-color-regular);

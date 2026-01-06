@@ -7,9 +7,7 @@
       :offset="[-5, 5]"
     >
       <HoverAnimateWrapper name="bell" intensity="light" :duration="600">
-        <div class="action-btn">
-          <el-icon><component :is="menuStore.iconComponents['HOutline:BellAlertIcon']" /></el-icon>
-        </div>
+        <IconButton icon="HOutline:BellAlertIcon" />
       </HoverAnimateWrapper>
     </el-badge>
 
@@ -44,10 +42,10 @@
                     <component
                       :is="
                         message.type === 'system'
-                          ? menuStore.iconComponents['InfoFilled']
+                          ? menuStore.iconComponents['Element:InfoFilled']
                           : message.type === 'user'
-                            ? menuStore.iconComponents['User']
-                            : menuStore.iconComponents['Document']
+                            ? menuStore.iconComponents['Element:User']
+                            : menuStore.iconComponents['Element:Document']
                       "
                     />
                   </el-icon>
@@ -112,28 +110,6 @@ const goToProfile = () => {
   position: absolute;
 }
 
-.action-btn {
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  color: var(--el-text-color-regular);
-  background: transparent;
-
-  &:hover {
-    background: var(--el-fill-color-light);
-    color: var(--el-color-primary);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  }
-
-  .el-icon {
-    font-size: 1.25rem;
-  }
-}
 .notification-dropdown {
   width: 22rem;
   background: var(--el-bg-color);
