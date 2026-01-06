@@ -105,6 +105,8 @@ const handleMenuToggle = () => {
 .menu-container {
   flex: 1;
   height: 100%;
+  min-width: 0; // 允许 flex 子元素收缩
+  overflow: hidden; // 防止溢出
 }
 
 .header-right {

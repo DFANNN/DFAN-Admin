@@ -111,12 +111,14 @@ const navigation = (key: string) => {
   width: 13.75rem;
   &.el-menu--horizontal {
     width: 100%;
+    min-width: 0; // 允许收缩
     height: 49px;
     border: none !important;
     border-bottom: none !important;
     border-top: none !important;
     border-left: none !important;
     border-right: none !important;
+    white-space: nowrap; // 防止菜单项换行
 
     .el-menu-item:nth-child(1) {
       height: 49px;
@@ -136,6 +138,8 @@ const navigation = (key: string) => {
       border-top: none !important;
       border-left: none !important;
       border-right: none !important;
+      flex-shrink: 0; // 防止菜单项收缩
+      white-space: nowrap; // 防止文字换行
     }
 
     :deep(.el-sub-menu) {
@@ -153,6 +157,8 @@ const navigation = (key: string) => {
         border-top: none !important;
         border-left: none !important;
         border-right: none !important;
+        flex-shrink: 0; // 防止子菜单标题收缩
+        white-space: nowrap; // 防止文字换行
       }
     }
   }
