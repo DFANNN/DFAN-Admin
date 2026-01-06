@@ -5,10 +5,23 @@
     :placement="placement"
     :effect="effect"
     :show-after="showAfter"
-    :disabled="!tooltip"
+    :disabled="!tooltip || disabled"
   >
-    <div class="action-btn" :style="{ width: size, height: size }" @click="handleClick">
-      <el-icon :style="{ fontSize: iconSize }">
+    <div
+      class="action-btn"
+      :class="{
+        'is-disabled': disabled || loading,
+        'is-loading': loading,
+        [`action-btn--${type}`]: type !== 'default',
+      }"
+      :style="{ width: size, height: size }"
+      @click="handleClick"
+    >
+      <!-- 如果是独立使用 请替换为自己的图标库  -->
+      <el-icon v-if="loading" :style="{ fontSize: iconSize }" class="loading-icon">
+        <component :is="loadingIconComponent" />
+      </el-icon>
+      <el-icon v-else :style="{ fontSize: iconSize }">
         <component :is="iconComponent" />
       </el-icon>
     </div>
@@ -33,6 +46,14 @@ interface Props {
   size?: string
   // 图标尺寸（默认：1.5rem）
   iconSize?: string
+  // 是否禁用（默认：false）
+  disabled?: boolean
+  // 按钮类型（默认：default）
+  type?: 'default' | 'primary' | 'success' | 'warning' | 'danger'
+  // 是否加载中（默认：false）
+  loading?: boolean
+  // 加载图标（可选，默认使用 ArrowPathIcon）
+  loadingIcon?: string | Component
 }
 
 interface Emits {
@@ -46,11 +67,16 @@ const props = withDefaults(defineProps<Props>(), {
   showAfter: 200,
   size: '2rem',
   iconSize: '1.25rem',
+  disabled: false,
+  type: 'default',
+  loading: false,
+  loadingIcon: 'HOutline:ArrowPathIcon',
 })
 
 const emits = defineEmits<Emits>()
 
 const handleClick = (event: MouseEvent) => {
+  if (props.disabled || props.loading) return
   emits('click', event)
 }
 
@@ -60,6 +86,14 @@ const iconComponent = computed(() => {
     return menuStore.iconComponents[props.icon]
   }
   return props.icon
+})
+
+// 计算加载图标组件
+const loadingIconComponent = computed(() => {
+  if (typeof props.loadingIcon === 'string') {
+    return menuStore.iconComponents[props.loadingIcon]
+  }
+  return props.loadingIcon
 })
 </script>
 
@@ -77,14 +111,84 @@ const iconComponent = computed(() => {
   color: var(--el-text-color-regular);
   background: transparent;
 
-  &:hover {
+  &:hover:not(.is-disabled) {
     background: var(--el-fill-color-light);
     color: var(--el-color-primary);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   }
 
+  &.is-disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    color: var(--el-text-color-placeholder);
+  }
+
+  &.is-loading {
+    cursor: not-allowed;
+  }
+
   .el-icon {
     font-size: 1.5rem;
+  }
+
+  .loading-icon {
+    animation: rotating 2s linear infinite;
+  }
+
+  // 默认类型（已有样式，无需额外样式）
+
+  // Primary 类型
+  &.action-btn--primary {
+    color: var(--el-color-primary);
+
+    &:hover:not(.is-disabled) {
+      background: var(--el-color-primary-light-9);
+      color: var(--el-color-primary);
+      box-shadow: 0 4px 12px var(--el-color-primary-light-7);
+    }
+  }
+
+  // Success 类型
+  &.action-btn--success {
+    color: var(--el-color-success);
+
+    &:hover:not(.is-disabled) {
+      background: var(--el-color-success-light-9);
+      color: var(--el-color-success);
+      box-shadow: 0 4px 12px var(--el-color-success-light-7);
+    }
+  }
+
+  // Warning 类型
+  &.action-btn--warning {
+    color: var(--el-color-warning);
+
+    &:hover:not(.is-disabled) {
+      background: var(--el-color-warning-light-9);
+      color: var(--el-color-warning);
+      box-shadow: 0 4px 12px var(--el-color-warning-light-7);
+    }
+  }
+
+  // Danger 类型
+  &.action-btn--danger {
+    color: var(--el-color-danger);
+
+    &:hover:not(.is-disabled) {
+      background: var(--el-color-danger-light-9);
+      color: var(--el-color-danger);
+      box-shadow: 0 4px 12px var(--el-color-danger-light-7);
+    }
+  }
+}
+
+// 旋转动画
+@keyframes rotating {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
 </style>
