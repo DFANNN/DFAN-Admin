@@ -95,8 +95,8 @@
       </div>
     </div>
 
-    <!-- 区域配色 -->
-    <Transition name="el-zoom-in-left">
+    <!-- 侧边栏配色 -->
+    <Transition name="slide-left">
       <div
         class="config-section"
         v-if="themeStore.themeMode !== 'dark' && themeStore.layout !== 'topMode'"

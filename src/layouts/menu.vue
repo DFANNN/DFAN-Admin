@@ -11,7 +11,7 @@
       class="menu-container"
       :class="{ '--menu-border': menuStore.isMobile }"
     >
-      <Transition :name="themeStore.layout === 'leftMode' ? 'el-zoom-in-top' : 'el-zoom-in-left'">
+      <Transition name="bounce">
         <el-menu-item class="logo" v-if="themeStore.showLogo">
           <img :src="APP_CONFIG.logoSrc" alt="logo" class="logo-img" />
           <span class="logo-title" :style="{ color: logoTitleColor }">{{ APP_CONFIG.name }}</span>
