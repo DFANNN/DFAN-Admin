@@ -1,155 +1,145 @@
 <template>
   <div class="login-container">
-    <div class="login-left">
-      <!-- logo -->
-      <div class="logo-section">
-        <img :src="APP_CONFIG.logoSrc" alt="logo" class="logo-img" />
-        <h1 class="logo-title">{{ APP_CONFIG.name }}</h1>
-        <el-tooltip
-          content="主题配置"
-          placement="bottom"
-          effect="dark"
-          v-if="APP_CONFIG.showThemeConfig"
-        >
-          <HoverAnimateWrapper name="rotate">
-            <IconButton
-              icon="HOutline:Cog6ToothIcon"
-              @click="themeStore.themeConfigDrawerOpen = true"
-            />
-          </HoverAnimateWrapper>
-        </el-tooltip>
-      </div>
+    <div class="card-wrapper">
+      <!-- 背景装饰圆圈 -->
+      <div class="bg-decoration-orange"></div>
+      <div class="bg-decoration-blue"></div>
 
-      <!--  登录 -->
-      <div class="login-form-wrapper">
-        <div class="form-header">
-          <h2 class="welcome-title">欢迎回来</h2>
-          <p class="welcome-subtitle">请输入您的账号信息登录系统</p>
+      <div class="login-card">
+        <!-- 顶部区域 -->
+        <div class="login-card-top">
+          <!-- logo -->
+          <div class="brand">
+            <img :src="APP_CONFIG.logoSrc" alt="logo" class="logo" />
+            <span class="brand-name">{{ APP_CONFIG.name }}</span>
+          </div>
+          <!-- 操作按钮 -->
+          <div class="top-actions">
+            <I18nDropdown />
+            <HoverAnimateWrapper name="rotate">
+              <IconButton
+                icon="HOutline:Cog6ToothIcon"
+                tooltip="主题配置"
+                @click="themeStore.themeConfigDrawerOpen = true"
+              />
+            </HoverAnimateWrapper>
+          </div>
         </div>
 
-        <el-form
-          ref="loginFormRef"
-          :model="loginForm"
-          :rules="loginRules"
-          class="login-form"
-          size="large"
-          @keyup.enter="handleLogin"
-        >
-          <el-form-item>
-            <el-select
-              v-model="rolePreset"
-              placeholder="请选择登录身份"
-              class="preset-select"
-              @change="applyPreset"
+        <!-- 底部区域 -->
+        <div class="login-card-bottom">
+          <!-- 左侧动画区域 -->
+          <div class="lottie-animation-wrap">
+            <LottieAnimation :animationData="helloLottie" width="100%" height="100%" />
+          </div>
+
+          <!-- 右侧表单区域 -->
+          <div class="login-form-wrap">
+            <!-- 标题 -->
+            <h2 class="title">欢迎回来</h2>
+            <p class="subtitle">请输入您的账号信息登录系统</p>
+
+            <!-- 登录表单 -->
+            <el-form
+              ref="loginFormRef"
+              :model="loginForm"
+              :rules="loginRules"
+              label-position="top"
+              class="login-form"
             >
-              <el-option
-                v-for="item in roleOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </el-form-item>
+              <el-form-item>
+                <el-select
+                  v-model="rolePreset"
+                  placeholder="请选择登录身份"
+                  class="preset-select"
+                  @change="applyPreset"
+                >
+                  <el-option
+                    v-for="item in roleOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </el-form-item>
+              <el-form-item prop="username">
+                <el-input v-model="loginForm.username" placeholder="请输入用户名/邮箱" />
+              </el-form-item>
 
-          <el-form-item prop="username">
-            <el-input
-              v-model="loginForm.username"
-              placeholder="请输入用户名"
-              :prefix-icon="menuStore.iconComponents['User']"
-            />
-          </el-form-item>
+              <el-form-item prop="password">
+                <el-input
+                  v-model="loginForm.password"
+                  type="password"
+                  show-password
+                  placeholder="请输入密码"
+                />
+              </el-form-item>
 
-          <el-form-item prop="password">
-            <el-input
-              v-model="loginForm.password"
-              type="password"
-              placeholder="请输入密码"
-              :prefix-icon="menuStore.iconComponents['Lock']"
-              show-password
-            />
-          </el-form-item>
-
-          <div class="form-options">
-            <el-checkbox v-model="loginForm.remember" @change="handleRememberChange">
-              记住我
-            </el-checkbox>
-            <el-link type="primary" :underline="false">忘记密码？</el-link>
-          </div>
-
-          <el-button type="primary" :loading="loading" class="login-btn" @click="handleLogin">
-            登录
-          </el-button>
-
-          <el-divider>
-            <span class="divider-text">或使用以下方式登录</span>
-          </el-divider>
-
-          <div class="social-login">
-            <div class="social-btn">
-              <el-tooltip content="Google登录" placement="bottom" effect="dark">
-                <el-icon><component :is="menuStore.iconComponents['ChromeFilled']" /></el-icon>
-              </el-tooltip>
-            </div>
-            <div class="social-btn">
-              <el-tooltip content="Element登录" placement="bottom" effect="dark">
-                <el-icon><component :is="menuStore.iconComponents['ElemeFilled']" /></el-icon>
-              </el-tooltip>
-            </div>
-            <div class="social-btn">
-              <el-tooltip content="Switch登录" placement="bottom" effect="dark">
-                <el-icon><component :is="menuStore.iconComponents['SwitchFilled']" /></el-icon>
-              </el-tooltip>
-            </div>
-          </div>
-        </el-form>
-      </div>
-    </div>
-    <div class="login-right">
-      <div class="brand-background"></div>
-      <div class="brand-content">
-        <el-carousel
-          :interval="APP_CONFIG.carousel.interval"
-          indicator-position="outside"
-          height="100%"
-          class="logo-carousel"
-        >
-          <el-carousel-item v-for="(logo, index) in APP_CONFIG.carousel.items" :key="index">
-            <div class="logo-slide">
-              <div class="logo-frame">
-                <img :src="logo.src" :alt="logo.alt" class="logo-image" />
+              <div class="form-options">
+                <el-checkbox v-model="loginForm.remember" @change="handleRememberChange"
+                  >记住我</el-checkbox
+                >
+                <el-link type="primary" :underline="false">忘记密码？</el-link>
               </div>
-              <h3 class="logo-title">{{ logo.title }}</h3>
-              <p v-if="logo.description" class="logo-desc">{{ logo.description }}</p>
-              <div v-if="logo.tags?.length" class="logo-tags">
-                <span v-for="tag in logo.tags" :key="tag" class="logo-tag">{{ tag }}</span>
-              </div>
+
+              <el-button type="primary" class="submit-btn" :loading="loading" @click="handleLogin">
+                登录
+              </el-button>
+            </el-form>
+
+            <!-- 其他登录方式 -->
+            <div class="divider">
+              <el-divider>
+                <span class="divider-text">或使用以下方式登录</span>
+              </el-divider>
             </div>
-          </el-carousel-item>
-        </el-carousel>
-      </div>
-      <div class="brand-decoration">
-        <div class="decoration-circle circle-1"></div>
-        <div class="decoration-circle circle-2"></div>
-        <div class="decoration-circle circle-3"></div>
+
+            <div class="social-login">
+              <el-button class="social-btn">
+                <template #icon>
+                  <el-icon><Iphone /></el-icon>
+                </template>
+                手机号登录
+              </el-button>
+              <el-button class="social-btn">
+                <template #icon>
+                  <el-icon><FullScreen /></el-icon>
+                </template>
+                扫码登录
+              </el-button>
+            </div>
+
+            <p class="register-link">
+              还没有账号？
+              <el-link type="primary" :underline="false">立即注册</el-link>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
 
     <ThemeConfig />
+
+    <!-- 版权信息 -->
+    <div class="login-copyright">Copyright &copy; 2025 DFANNN</div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { APP_CONFIG } from '@/config/app.config'
+import helloLottie from '@/assets/lotties/hello.json'
+import LottieAnimation from '@/components/animation/LottieAnimation.vue'
 import ThemeConfig from '@/components/ThemeConfig.vue'
+import I18nDropdown from '@/layouts/i18nDropdown.vue'
 import { login } from '@/api/login'
 import { ElMessage } from 'element-plus'
+import { Iphone, FullScreen } from '@element-plus/icons-vue'
 import type { FormInstance, FormRules } from 'element-plus'
 
 defineOptions({ name: 'LoginView' })
 
 const router = useRouter()
 const themeStore = useThemeStore()
-const menuStore = useMenuStore()
 
 const loginFormRef = useTemplateRef<FormInstance>('loginFormRef')
 
@@ -166,8 +156,9 @@ const loginForm = ref({
 
 type RolePreset = 'super_admin' | 'normal' | 'noperm'
 
+// 默认角色
 const rolePreset = ref<RolePreset>('super_admin')
-
+// 角色选项
 const roleOptions: Array<{
   label: string
   value: RolePreset
@@ -178,6 +169,7 @@ const roleOptions: Array<{
   { label: '无权限用户', value: 'noperm', preset: { username: 'user3', password: 'user3' } },
 ]
 
+// 切换角色
 const applyPreset = (value: RolePreset) => {
   const target = roleOptions.find((item) => item.value === value)
   if (!target) return
@@ -208,6 +200,7 @@ const handleRememberChange = (value: boolean | string | number) => {
   }
 }
 
+// 登录
 const handleLogin = async () => {
   await loginFormRef.value?.validate()
   loading.value = true
@@ -227,7 +220,7 @@ const handleLogin = async () => {
   }
 }
 
-const loginRules = ref<FormRules>({
+const loginRules = reactive<FormRules>({
   username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
   password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
 })
@@ -241,387 +234,272 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .login-container {
-  display: flex;
+  min-height: 100vh;
   width: 100%;
-  height: 100vh;
-  background: var(--el-bg-color);
-  overflow: hidden;
+  background-color: var(--el-bg-color-page);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
-  .login-left {
-    flex: 0 0 45%;
-    display: flex;
-    flex-direction: column;
-    background: var(--el-bg-color);
-    padding: 40px 60px;
+  overflow: hidden;
+  padding: 20px;
+
+  .card-wrapper {
+    width: 100%;
     position: relative;
-    z-index: 2;
-    // 异形右边缘 - 圆润的曲线
-    clip-path: polygon(
-      0% 0%,
-      100% 0%,
-      100% 3%,
-      99.5% 6%,
-      100% 10%,
-      99% 15%,
-      100% 20%,
-      99.5% 25%,
-      100% 30%,
-      99% 35%,
-      100% 40%,
-      99.5% 45%,
-      100% 50%,
-      99% 55%,
-      100% 60%,
-      99.5% 65%,
-      100% 70%,
-      99% 75%,
-      100% 80%,
-      99.5% 85%,
-      100% 90%,
-      99% 93%,
-      100% 96%,
-      99.7% 98%,
-      100% 100%,
-      0% 100%
-    );
-
-    @media (max-width: 992px) {
-      flex: 1;
-      padding: 30px 24px;
-      clip-path: none; // 移动端取消异形效果
-    }
-
-    .logo-section {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 60px;
-      animation: slideDown 0.6s ease-out;
-      .logo-img {
-        width: 40px;
-        height: 40px;
-        flex-shrink: 0;
-        object-fit: contain;
-      }
-      .logo-title {
-        font-size: 24px;
-        font-weight: 700;
-        color: var(--el-text-color-primary);
-        letter-spacing: 0.5px;
-        flex: 1;
-      }
-    }
-    .login-form-wrapper {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      max-width: 420px;
-      margin: 0 auto;
-      width: 100%;
-      animation: fadeInUp 0.8s ease-out 0.2s backwards;
-
-      .form-header {
-        margin-bottom: 40px;
-        .welcome-title {
-          font-size: 36px;
-          font-weight: 800;
-          color: var(--el-text-color-primary);
-          margin-bottom: 12px;
-          letter-spacing: 0.5px;
-          line-height: 1.2;
-        }
-        .welcome-subtitle {
-          font-size: 15px;
-          color: var(--el-text-color-regular);
-          line-height: 1.6;
-        }
-      }
-      .login-form {
-        .form-options {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          margin-bottom: 28px;
-        }
-
-        .preset-select {
-          width: 100%;
-          margin-bottom: 8px;
-        }
-
-        .login-btn {
-          width: 100%;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          letter-spacing: 5px;
-          margin-bottom: 32px;
-
-          &:hover {
-            transform: translateY(-2px);
-          }
-        }
-
-        .divider-text {
-          font-size: 12px;
-          color: var(--el-text-color-placeholder);
-        }
-
-        .social-login {
-          display: flex;
-          justify-content: center;
-          gap: 16px;
-          .social-btn {
-            width: 48px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            color: var(--el-text-color-regular);
-            font-size: 20px;
-
-            &:hover {
-              color: var(--el-color-primary);
-              transform: translateY(-2px);
-            }
-          }
-        }
-      }
-    }
-  }
-  .login-right {
-    flex: 1;
-    position: relative;
-    background: var(--login-brand-bg);
+    z-index: 10;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 60px;
+
+    // 背景装饰 (保留原始颜色)
+    .bg-decoration-orange {
+      position: absolute;
+      bottom: -100px;
+      left: -100px;
+      width: 400px;
+      height: 400px;
+      background-color: #f99c7d;
+      border-radius: 50%;
+      opacity: 0.8;
+      z-index: -1;
+      animation: float-orange 20s infinite ease-in-out;
+      filter: blur(20px);
+    }
+
+    .bg-decoration-blue {
+      position: absolute;
+      top: -120px;
+      right: -100px;
+      width: 350px;
+      height: 450px;
+      background-color: #5bbff9;
+      border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+      opacity: 0.8;
+      z-index: -1;
+      transform: rotate(15deg);
+      animation: float-blue 25s infinite ease-in-out;
+      filter: blur(20px);
+    }
+  }
+
+  .login-card {
+    width: 1200px;
+    max-width: 95%;
+    background: var(--el-bg-color-overlay);
+    border-radius: 16px;
+    box-shadow: var(--el-box-shadow-light);
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
     overflow: hidden;
-    color: var(--login-brand-text-color);
-    // 异形左边缘 - 与左侧互补的圆润曲线
-    clip-path: polygon(
-      0% 0%,
-      0.3% 2%,
-      0% 4%,
-      0.5% 7%,
-      0% 10%,
-      1% 15%,
-      0% 20%,
-      0.5% 25%,
-      0% 30%,
-      1% 35%,
-      0% 40%,
-      0.5% 45%,
-      0% 50%,
-      1% 55%,
-      0% 60%,
-      0.5% 65%,
-      0% 70%,
-      1% 75%,
-      0% 80%,
-      0.5% 85%,
-      0% 90%,
-      1% 93%,
-      0% 96%,
-      0.3% 98%,
-      0% 100%,
-      100% 100%,
-      100% 0%
-    );
+    padding: 2.5rem;
 
-    @media (max-width: 992px) {
-      display: none;
-    }
-
-    .brand-background {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-image: var(--login-brand-bg-pattern);
-      animation: float 25s infinite ease-in-out alternate;
-    }
-
-    .brand-content {
-      position: relative;
-      z-index: 3;
-      width: 100%;
-      max-width: 500px;
-      height: 100%;
+    .login-card-top {
       display: flex;
+      justify-content: space-between;
       align-items: center;
+      margin-bottom: 2rem;
 
-      .logo-carousel {
-        width: 100%;
-        height: 100vh;
-
-        :deep(.el-carousel__container) {
-          height: 100%;
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        .logo {
+          width: 2.5rem;
+          height: 2.5rem;
         }
-
-        :deep(.el-carousel__item) {
-          display: flex;
-          align-items: center;
-          justify-content: center;
+        .brand-name {
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: var(--el-text-color-primary);
         }
       }
 
-      .logo-slide {
-        text-align: center;
-        animation: fadeInScale 0.8s ease-out;
-
-        .logo-frame {
-          margin-bottom: 32px;
-          display: inline-flex;
-          padding: 0;
-          background: transparent;
-          border-radius: 0;
-          border: none;
-          max-width: 320px;
-          transition: transform 0.3s ease;
-
-          &:hover {
-            transform: scale(1.05);
-          }
+      .top-actions {
+        display: flex;
+        align-items: center;
+        .el-link {
+          font-size: 0.9rem;
+          color: var(--el-text-color-secondary);
         }
+      }
+    }
 
-        .logo-image {
-          width: 100%;
-          height: auto;
-        }
+    .login-card-bottom {
+      display: flex;
+      gap: 2rem;
 
-        .logo-title {
-          font-size: 32px;
+      .lottie-animation-wrap {
+        flex: 1.1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 400px;
+      }
+
+      .login-form-wrap {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        .title {
+          font-size: 1.75rem;
           font-weight: 700;
-          margin-bottom: 16px;
-          letter-spacing: 0.5px;
-          color: var(--login-brand-text-color);
+          color: var(--el-text-color-primary);
+          margin-bottom: 0.5rem;
         }
 
-        .logo-desc {
-          font-size: 16px;
-          line-height: 1.8;
-          margin-bottom: 32px;
-          color: var(--login-brand-desc-color);
-          opacity: 0.95;
-        }
-
-        .logo-tags {
-          display: flex;
-          justify-content: center;
-          gap: 12px;
-          flex-wrap: wrap;
-
-          .logo-tag {
-            padding: 8px 20px;
-            background: var(--login-brand-tag-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 500;
-            border: 1px solid var(--login-brand-tag-border);
-            color: var(--login-brand-text-color);
-            transition: all 0.3s ease;
-
-            &:hover {
-              background: color-mix(in srgb, var(--login-brand-tag-bg) 60%, #ffffff);
-              transform: translateY(-2px);
-              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            }
-          }
-        }
-      }
-    }
-
-    .brand-decoration {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      pointer-events: none;
-      z-index: 2;
-
-      .decoration-circle {
-        position: absolute;
-        border-radius: 50%;
-        background: var(--login-brand-decoration-bg);
-        backdrop-filter: blur(20px);
-        animation: floatCircle 20s infinite ease-in-out;
-
-        &.circle-1 {
-          width: 200px;
-          height: 200px;
-          top: 10%;
-          right: 10%;
-          animation-delay: 0s;
-        }
-
-        &.circle-2 {
-          width: 150px;
-          height: 150px;
-          bottom: 15%;
-          left: 15%;
-          animation-delay: 5s;
-        }
-
-        &.circle-3 {
-          width: 100px;
-          height: 100px;
-          top: 50%;
-          right: 20%;
-          animation-delay: 10s;
+        .subtitle {
+          font-size: 0.95rem;
+          color: var(--el-text-color-secondary);
+          margin-bottom: 2rem;
         }
       }
     }
   }
+
+  .social-login {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+
+    .social-btn {
+      flex: 1;
+      height: 2.75rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+
+      .social-icon {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+
+  .divider {
+    margin-bottom: 2rem;
+
+    .divider-text {
+      font-size: 12px;
+      color: var(--el-text-color-placeholder);
+    }
+  }
+
+  .login-form {
+    :deep(.el-form-item__label) {
+      font-weight: 600;
+      color: var(--el-text-color-primary);
+      margin-bottom: 8px;
+      padding: 0;
+    }
+
+    :deep(.el-input__wrapper),
+    :deep(.el-select__wrapper) {
+      padding: 8px 16px;
+      border-radius: 8px;
+      box-shadow: 0 0 0 1px var(--el-border-color) inset;
+      min-height: 44px;
+
+      &.is-focus {
+        box-shadow: 0 0 0 1px var(--el-color-primary) inset;
+      }
+    }
+
+    :deep(.el-select) {
+      width: 100%;
+    }
+
+    .form-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+
+      :deep(.el-checkbox__label) {
+        color: var(--el-text-color-regular);
+        font-size: 0.85rem;
+      }
+    }
+
+    .submit-btn {
+      width: 100%;
+      height: 3rem;
+      border-radius: 0.75rem;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  .register-link {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--el-text-color-secondary);
+
+    .el-link {
+      font-weight: 600;
+    }
+  }
+
+  .login-copyright {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--el-text-color-placeholder);
+    z-index: 20;
+  }
 }
 
-/* Animations */
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes floatCircle {
+@keyframes float-orange {
   0%,
   100% {
-    transform: translate(0, 0) scale(1);
+    transform: translate(0, 0);
   }
   50% {
-    transform: translate(20px, -20px) scale(1.1);
+    transform: translate(30px, -20px);
   }
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
+@keyframes float-blue {
+  0%,
+  100% {
+    transform: rotate(15deg) translate(0, 0);
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  50% {
+    transform: rotate(20deg) translate(-20px, 30px);
   }
 }
 
-@keyframes fadeInScale {
-  from {
-    opacity: 0;
-    transform: scale(0.85);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
+:deep(.el-divider__text) {
+  background-color: var(--el-bg-color-overlay);
+}
+
+@media (max-width: 992px) {
+  .login-container {
+    padding: 10px;
+
+    .card-wrapper {
+      width: 100%;
+    }
+
+    .login-card {
+      width: 98%;
+      max-width: 98%;
+      padding: 2rem 1.5rem;
+
+      .login-card-bottom {
+        flex-direction: column; // 移动端垂直排列
+
+        .lottie-animation-wrap {
+          display: none;
+        }
+      }
+    }
   }
 }
 </style>
