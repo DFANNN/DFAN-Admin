@@ -157,7 +157,9 @@ DFAN-Admin/
 
 ## 📄 许可证
 
-[MIT License](https://www.google.com/search?q=./LICENSE)
+Copyright (c) 2025 DFANNN
+
+本项目采用 [MIT License](./LICENSE) 开源协议。
 
 ---
 
