@@ -8,7 +8,9 @@ import Lottie, { type AnimationItem } from 'lottie-web'
 interface IProps {
   // lottie 文件(json 文件)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  animationData: any
+  animationData?: any
+  // lottie 路径
+  path?: string
   // 宽度
   width: string | number
   // 高度
@@ -47,6 +49,7 @@ onMounted(() => {
     loop: props.loop,
     autoplay: props.autoplay,
     animationData: props.animationData,
+    path: props.path,
   })
 })
 
