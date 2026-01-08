@@ -21,3 +21,11 @@ export type IUserPermissionsResponse = ICommonResponse<{
   menus: IMenuItem[]
   buttonPermissions: string[]
 }>
+
+// 登录模式类型
+export type ILoginMode = 'login' | 'forgot' | 'mobile' | 'qr' | 'register'
+
+// 登录模式事件类型
+export interface IEmits {
+  (e: 'goToMode', mode: ILoginMode): void
+}
