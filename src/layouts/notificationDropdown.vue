@@ -1,5 +1,11 @@
 <template>
-  <el-dropdown trigger="click" placement="bottom-end" ref="notificationDropdownRef">
+  <el-dropdown
+    trigger="click"
+    :show-arrow="false"
+    placement="bottom-end"
+    ref="notificationDropdownRef"
+    popper-class="notification-dropdown-popper"
+  >
     <el-badge
       :value="userStore.unreadCount"
       :hidden="userStore.unreadCount === 0"
@@ -197,6 +203,17 @@ const goToProfile = () => {
     padding: 1rem;
     border-top: 1px solid var(--el-border-color-lighter);
     text-align: center;
+  }
+}
+</style>
+
+<style lang="scss">
+.notification-dropdown-popper {
+  border-radius: 8px !important;
+  overflow: hidden;
+  .el-dropdown-menu {
+    border-radius: 8px !important;
+    overflow: hidden;
   }
 }
 </style>

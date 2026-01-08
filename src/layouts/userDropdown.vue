@@ -1,5 +1,11 @@
 <template>
-  <el-dropdown @command="handleCommand" trigger="click" placement="bottom-end">
+  <el-dropdown
+    @command="handleCommand"
+    trigger="click"
+    :show-arrow="false"
+    placement="bottom-end"
+    popper-class="user-dropdown-popper"
+  >
     <div class="user-card">
       <div class="avatar-wrapper">
         <div class="user-avatar">
@@ -234,7 +240,6 @@ onBeforeUnmount(() => {
 }
 
 .user-menu-wrapper {
-  margin-top: 8px;
   background: var(--el-bg-color);
   border-radius: 8px;
   overflow: hidden;
@@ -393,6 +398,15 @@ onBeforeUnmount(() => {
     font-size: 14px;
     color: var(--el-text-color-primary);
     line-height: 1.5;
+  }
+}
+</style>
+
+<style lang="scss">
+.user-dropdown-popper {
+  border-radius: 8px !important;
+  .el-dropdown-menu {
+    border-radius: 8px !important;
   }
 }
 </style>

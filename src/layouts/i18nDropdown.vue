@@ -1,5 +1,10 @@
 <template>
-  <el-dropdown trigger="click" ref="notificationDropdownRef">
+  <el-dropdown
+    trigger="click"
+    :show-arrow="false"
+    ref="notificationDropdownRef"
+    popper-class="i18n-dropdown-popper"
+  >
     <HoverAnimateWrapper name="rotate">
       <IconButton icon="HOutline:GlobeAltIcon" />
     </HoverAnimateWrapper>
@@ -92,6 +97,15 @@ const currentLanguage = ref<string>('CN')
 
   .language-name {
     color: var(--el-color-primary);
+  }
+}
+</style>
+
+<style lang="scss">
+.i18n-dropdown-popper {
+  border-radius: 8px !important;
+  .el-dropdown-menu {
+    border-radius: 8px !important;
   }
 }
 </style>

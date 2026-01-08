@@ -42,7 +42,12 @@
     </HoverAnimateWrapper>
 
     <div class="tabs-dropdown">
-      <el-dropdown trigger="click" class="tabs-dropdown-wrapper">
+      <el-dropdown
+        trigger="click"
+        :show-arrow="false"
+        class="tabs-dropdown-wrapper"
+        popper-class="tabs-dropdown-popper"
+      >
         <div class="tabs-dropdown-icon">
           <HoverAnimateWrapper name="rubber">
             <IconButton icon="HOutline:EllipsisHorizontalIcon" size="1.75rem" />
@@ -361,6 +366,15 @@ const slideRight = () => {
   &:focus-visible {
     background: var(--el-fill-color-light) !important;
     color: var(--el-color-primary);
+  }
+}
+</style>
+
+<style lang="scss">
+.tabs-dropdown-popper {
+  border-radius: 8px !important;
+  .el-dropdown-menu {
+    border-radius: 8px !important;
   }
 }
 </style>
