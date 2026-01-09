@@ -44,7 +44,7 @@
                     class="text-indigo-500"
                   />
                 </el-icon>
-                <span>上海 · 研发中心</span>
+                <span>{{ address.country }} · {{ address.region }} · {{ address.city }}</span>
               </div>
               <div
                 class="flex items-center gap-2 text-xs font-semibold px-3 py-2 text-(--el-text-color-primary) bg-(--el-bg-color-page) rounded-lg"
@@ -55,7 +55,7 @@
                     class="text-emerald-500"
                   />
                 </el-icon>
-                <span>2026年1月8日</span>
+                <span>{{ currentDate }}</span>
               </div>
             </div>
           </div>
@@ -190,11 +190,22 @@
 </template>
 
 <script setup lang="ts">
+import dayjs from 'dayjs'
 import VChart from 'vue-echarts'
 import LottieAnimation from '@/components/animation/LottieAnimation.vue'
 import workTimeLottie from '@/assets/lotties/welcome.json'
 
 const menuStore = useMenuStore()
+
+// 当前日期
+const currentDate = ref('')
+
+// 地址信息
+const address = ref({
+  country: '',
+  region: '',
+  city: '',
+})
 
 // 创建小折线图
 const createMiniLineChart = (data: number[], color: string) => {
@@ -266,6 +277,30 @@ const statCards = computed(() => [
     chartOption: createMiniLineChart([50, 55, 60, 65, 70, 75, 76], '#ef4444'),
   },
 ])
+
+// 获取地址信息
+const getAddress = () => {
+  fetch('https://ipapi.co/json/')
+    .then((res) => res.json())
+    .then((data) => {
+      address.value = {
+        country: data.country_name,
+        region: data.region,
+        city: data.city,
+      }
+    })
+}
+
+// 获取当前日期
+const getCurrentDate = () => {
+  currentDate.value = dayjs().format('YYYY-MM-DD')
+  console.log(`currentDate->`, currentDate.value)
+}
+
+onMounted(() => {
+  getCurrentDate()
+  getAddress()
+})
 </script>
 
 <style scoped lang="scss">
