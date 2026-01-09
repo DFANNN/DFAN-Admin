@@ -2,10 +2,11 @@
 @import '@/styles/transitionAnimation.css'; /* 内置transition动画样式 */
 @import '@/styles/nprogress.css'; /* NProgress 进度条样式 */
 @import '@/styles/common.scss'; /* 公共样式 */
+@import 'tailwindcss'; /* Tailwind CSS 样式 */
 
 /* 全局重置样式 */
 * {
-  margin: 0;
-  padding: 0;
+  /* margin: 0; */
+  /* padding: 0; */
   box-sizing: border-box;
 }

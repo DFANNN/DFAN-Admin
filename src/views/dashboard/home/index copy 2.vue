@@ -379,7 +379,7 @@ use([
   GridComponent,
 ])
 
-defineOptions({ name: '403View' })
+defineOptions({ name: 'WorkbenchView' })
 
 const themeStore = useThemeStore()
 provide(
