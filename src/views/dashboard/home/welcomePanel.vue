@@ -1,192 +1,174 @@
 <template>
-  <div
-    class="flex flex-col bg-(--el-bg-color-overlay) p-6 md:p-8 lg:p-12 rounded-2xl md:rounded-4xl shadow-xl gap-8"
-  >
+  <el-card class="welcome-panel-card">
     <!-- 上半部分：包含用户信息、进度和统计卡片 -->
-    <div class="flex flex-col xl:flex-row justify-between gap-8 xl:gap-0">
-      <div class="flex-1">
-        <div class="flex flex-col lg:flex-row items-center lg:items-start xl:items-center gap-6">
-          <div>
-            <HoverAnimateWrapper>
-              <el-avatar
-                :size="80"
-                src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
-                class="cursor-pointer border-4 rounded-full shadow-xl"
+    <el-scrollbar :max-height="620">
+      <div class="flex flex-col xl:flex-row justify-between p-6 lg:p-8">
+        <div class="flex-1">
+          <div class="flex flex-col lg:flex-row items-center lg:items-start xl:items-center gap-6">
+            <div>
+              <HoverAnimateWrapper>
+                <el-avatar
+                  :size="80"
+                  :src="userStore.userInfo?.avatar"
+                  class="cursor-pointer border-4 rounded-full shadow-xl"
+                />
+              </HoverAnimateWrapper>
+            </div>
+            <div class="flex flex-col gap-4 items-center lg:items-start text-center lg:text-left">
+              <h2 class="flex text-2xl md:text-3xl font-black text-(--el-text-color-primary)">
+                <div>{{ userStore.userInfo?.name }}，欢迎回来！</div>
+                <div>👋</div>
+              </h2>
+              <p class="text-(--el-text-color-regular) italic text-sm md:base">
+                “ 凡事豫则立，不豫则废。” —— 开启您高效的一天。
+              </p>
+              <div class="flex flex-wrap justify-center lg:justify-start items-center gap-3">
+                <div
+                  class="flex items-center gap-2 text-xs font-semibold px-3 py-2 text-(--el-text-color-primary) bg-(--el-bg-color-page) rounded-lg"
+                >
+                  <el-icon>
+                    <component
+                      :is="menuStore.iconComponents['Element:Orange']"
+                      class="text-orange-500"
+                    />
+                  </el-icon>
+                  <span>晴 22℃</span>
+                </div>
+                <div
+                  class="flex items-center gap-2 text-xs font-semibold px-3 py-2 text-(--el-text-color-primary) bg-(--el-bg-color-page) rounded-lg"
+                >
+                  <el-icon>
+                    <component
+                      :is="menuStore.iconComponents['Element:Monitor']"
+                      class="text-indigo-500"
+                    />
+                  </el-icon>
+                  <span>{{ address.country }} · {{ address.region }} · {{ address.city }}</span>
+                </div>
+                <div
+                  class="flex items-center gap-2 text-xs font-semibold px-3 py-2 text-(--el-text-color-primary) bg-(--el-bg-color-page) rounded-lg"
+                >
+                  <el-icon>
+                    <component
+                      :is="menuStore.iconComponents['Element:Calendar']"
+                      class="text-emerald-500"
+                    />
+                  </el-icon>
+                  <span>{{ currentDate }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="flex-1 flex justify-center lg:justify-end xl:justify-center">
+              <LottieAnimation
+                :animationData="workTimeLottie"
+                :width="180"
+                :height="140"
+                class="hidden lg:block"
               />
-            </HoverAnimateWrapper>
-          </div>
-          <div class="flex flex-col gap-4 items-center lg:items-start text-center lg:text-left">
-            <h2 class="flex gap-2 text-2xl md:text-3xl font-black text-(--el-text-color-primary)">
-              David Fan，欢迎回来！
-              <div>👋</div>
-            </h2>
-            <p class="text-(--el-text-color-regular) italic text-sm md:base">
-              “ 凡事豫则立，不豫则废。” —— 开启您高效的一天。
-            </p>
-            <div class="flex flex-wrap justify-center lg:justify-start items-center gap-3">
-              <div
-                class="flex items-center gap-2 text-xs font-semibold px-3 py-2 text-(--el-text-color-primary) bg-(--el-bg-color-page) rounded-lg"
-              >
-                <el-icon>
-                  <component
-                    :is="menuStore.iconComponents['Element:Orange']"
-                    class="text-orange-500"
-                  />
-                </el-icon>
-                <span>晴 22℃</span>
-              </div>
-              <div
-                class="flex items-center gap-2 text-xs font-semibold px-3 py-2 text-(--el-text-color-primary) bg-(--el-bg-color-page) rounded-lg"
-              >
-                <el-icon>
-                  <component
-                    :is="menuStore.iconComponents['Element:Monitor']"
-                    class="text-indigo-500"
-                  />
-                </el-icon>
-                <span>{{ address.country }} · {{ address.region }} · {{ address.city }}</span>
-              </div>
-              <div
-                class="flex items-center gap-2 text-xs font-semibold px-3 py-2 text-(--el-text-color-primary) bg-(--el-bg-color-page) rounded-lg"
-              >
-                <el-icon>
-                  <component
-                    :is="menuStore.iconComponents['Element:Calendar']"
-                    class="text-emerald-500"
-                  />
-                </el-icon>
-                <span>{{ currentDate }}</span>
-              </div>
             </div>
           </div>
-          <div class="flex-1 flex justify-center lg:justify-end xl:justify-center">
-            <LottieAnimation
-              :animationData="workTimeLottie"
-              :width="180"
-              :height="140"
-              class="hidden lg:block"
-            />
-          </div>
-        </div>
-        <div
-          class="flex flex-col md:flex-row px-2 md:px-6 py-6 md:py-10 items-center gap-6 md:gap-0"
-        >
-          <div class="flex w-full md:flex-1 flex-col gap-2">
-            <div class="text-xs font-semibold text-(--el-text-color-secondary)">今日任务进度</div>
-            <div class="flex items-center gap-2">
-              <div class="flex items-center gap-2 shrink-0">
-                <span class="text-xl font-extrabold text-(--el-color-primary)">12</span>
-                <span class="text-sm font-semibold text-(--el-text-color-secondary)">/ 16</span>
-              </div>
-              <el-progress :percentage="75" :stroke-width="8" class="flex-1" />
-            </div>
-          </div>
-          <div class="hidden md:block mx-7">
-            <el-divider direction="vertical" />
-          </div>
-          <div class="flex w-full md:flex-1 flex-col gap-2">
-            <div class="text-xs font-semibold text-(--el-text-color-secondary)">待处理审批</div>
-            <div class="flex items-center gap-2">
-              <div class="flex items-center gap-2 shrink-0">
-                <span class="text-xl font-extrabold text-(--el-color-primary)">4</span>
-                <span class="text-sm font-semibold text-(--el-text-color-secondary)">个任务</span>
-              </div>
-              <div class="flex items-center">
-                <el-avatar
-                  :size="20"
-                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=1"
-                  class="border-2 rounded-full shadow-xl"
-                />
-                <el-avatar
-                  :size="20"
-                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=2"
-                  class="border-2 rounded-full shadow-xl ml-[-8px]"
-                />
-                <span class="text-xs ml-1 font-semibold text-(--el-text-color-secondary)">+2</span>
-              </div>
-            </div>
-          </div>
-          <div class="hidden md:block mx-7">
-            <el-divider direction="vertical" />
-          </div>
-          <div class="flex w-full md:flex-1 flex-col gap-2">
-            <div class="text-xs font-semibold text-(--el-text-color-secondary)">团队活跃度</div>
-            <div class="flex items-center gap-2">
-              <div class="text-xl font-extrabold text-(--el-color-primary)">98%</div>
-              <div
-                class="text-xs font-semibold text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-md"
-              >
-                High
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="hidden xl:block mx-7 my-6">
-        <div class="w-px h-full border-(--el-border-color) border-l"></div>
-      </div>
-
-      <div class="flex-1 xl:flex-[0.8] grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div
-          v-for="item in statCards"
-          :key="item.label"
-          class="flex flex-col justify-between p-4 rounded-2xl relative transition-all duration-300 cursor-pointer hover:shadow-xl hover:translate-y-[-4px]"
-        >
           <div
-            class="flex items-center justify-center w-9 h-9 rounded-[10px] p-2 mb-3"
-            :style="{ color: item.color, backgroundColor: item.color + '10' }"
+            class="flex flex-col md:flex-row px-2 md:px-6 py-6 md:py-10 items-center gap-6 md:gap-0"
           >
-            <el-icon size="18">
-              <component :is="menuStore.iconComponents[item.icon]" />
-            </el-icon>
-          </div>
-          <div>
-            <div class="text-[13px] font-semibold text-(--el-text-color-secondary) mb-1">
-              {{ item.label }}
+            <div class="flex w-full md:flex-1 flex-col gap-2">
+              <div class="text-xs font-semibold text-(--el-text-color-secondary)">今日任务进度</div>
+              <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2 shrink-0">
+                  <span class="text-xl font-extrabold text-(--el-color-primary)">12</span>
+                  <span class="text-sm font-semibold text-(--el-text-color-secondary)">/ 16</span>
+                </div>
+                <el-progress :percentage="75" :stroke-width="8" class="flex-1" />
+              </div>
             </div>
-            <div class="flex items-baseline gap-2">
-              <span class="text-[20px] font-extrabold text-(--el-text-color-primary)">{{
-                item.value
-              }}</span>
-              <span
-                class="text-xs font-bold px-2 py-1 rounded-md"
-                :class="
-                  item.trendType === 'up'
-                    ? 'text-emerald-500 bg-emerald-500/10'
-                    : 'text-red-500 bg-red-500/10'
-                "
-                >{{ item.trend }}</span
-              >
+            <div class="hidden md:block mx-7">
+              <el-divider direction="vertical" />
+            </div>
+            <div class="flex w-full md:flex-1 flex-col gap-2">
+              <div class="text-xs font-semibold text-(--el-text-color-secondary)">待处理审批</div>
+              <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2 shrink-0">
+                  <span class="text-xl font-extrabold text-(--el-color-primary)">4</span>
+                  <span class="text-sm font-semibold text-(--el-text-color-secondary)">个任务</span>
+                </div>
+                <div class="flex items-center">
+                  <el-avatar
+                    :size="20"
+                    src="https://api.dicebear.com/7.x/avataaars/svg?seed=1"
+                    class="border-2 rounded-full shadow-xl"
+                  />
+                  <el-avatar
+                    :size="20"
+                    src="https://api.dicebear.com/7.x/avataaars/svg?seed=2"
+                    class="border-2 rounded-full shadow-xl -ml-2"
+                  />
+                  <span class="text-xs ml-1 font-semibold text-(--el-text-color-secondary)"
+                    >+2</span
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="hidden md:block mx-7">
+              <el-divider direction="vertical" />
+            </div>
+            <div class="flex w-full md:flex-1 flex-col gap-2">
+              <div class="text-xs font-semibold text-(--el-text-color-secondary)">团队活跃度</div>
+              <div class="flex items-center gap-2">
+                <div class="text-xl font-extrabold text-(--el-color-primary)">98%</div>
+                <div
+                  class="text-xs font-semibold text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-md"
+                >
+                  High
+                </div>
+              </div>
             </div>
           </div>
-          <div class="w-20 h-10 opacity-60 absolute -bottom-1 -right-1">
-            <VChart class="w-full h-full" :option="item.chartOption" autoresize />
+        </div>
+
+        <div class="hidden xl:block mx-7 my-6">
+          <div class="w-px h-full border-(--el-border-color) border-l"></div>
+        </div>
+
+        <div class="flex-1 xl:flex-[0.8] grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div
+            v-for="item in statCards"
+            :key="item.label"
+            class="flex flex-col justify-between p-4 rounded-2xl relative transition-all duration-300 cursor-pointer hover:shadow-xl hover:-translate-y-1"
+          >
+            <div
+              class="flex items-center justify-center w-9 h-9 rounded-[10px] p-2 mb-3"
+              :style="{ color: item.color, backgroundColor: item.color + '10' }"
+            >
+              <el-icon size="18">
+                <component :is="menuStore.iconComponents[item.icon]" />
+              </el-icon>
+            </div>
+            <div>
+              <div class="text-[13px] font-semibold text-(--el-text-color-secondary) mb-1">
+                {{ item.label }}
+              </div>
+              <div class="flex items-baseline gap-2">
+                <span class="text-[20px] font-extrabold text-(--el-text-color-primary)">{{
+                  item.value
+                }}</span>
+                <span
+                  class="text-xs font-bold px-2 py-1 rounded-md"
+                  :class="
+                    item.trendType === 'up'
+                      ? 'text-emerald-500 bg-emerald-500/10'
+                      : 'text-red-500 bg-red-500/10'
+                  "
+                  >{{ item.trend }}</span
+                >
+              </div>
+            </div>
+            <div class="w-20 h-10 opacity-60 absolute -bottom-1 -right-1">
+              <VChart class="w-full h-full" :option="item.chartOption" autoresize />
+            </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- 底部操作按钮 -->
-    <div
-      class="flex flex-wrap gap-3 justify-center lg:justify-start pt-6 border-t border-(--el-border-color) border-dashed"
-    >
-      <el-button type="primary" size="large" round>
-        工作台概览
-        <el-icon class="ml-2">
-          <component :is="menuStore.iconComponents['Element:Right']" />
-        </el-icon>
-      </el-button>
-      <el-button size="large" round>任务管理</el-button>
-      <el-button size="large" circle>
-        <template #icon>
-          <el-icon>
-            <component :is="menuStore.iconComponents['Element:Notification']" />
-          </el-icon>
-        </template>
-      </el-button>
-    </div>
-  </div>
+    </el-scrollbar>
+  </el-card>
 </template>
 
 <script setup lang="ts">
@@ -195,6 +177,7 @@ import VChart from 'vue-echarts'
 import LottieAnimation from '@/components/animation/LottieAnimation.vue'
 import workTimeLottie from '@/assets/lotties/welcome.json'
 
+const userStore = useUserStore()
 const menuStore = useMenuStore()
 
 // 当前日期
@@ -294,7 +277,6 @@ const getAddress = () => {
 // 获取当前日期
 const getCurrentDate = () => {
   currentDate.value = dayjs().format('YYYY-MM-DD')
-  console.log(`currentDate->`, currentDate.value)
 }
 
 onMounted(() => {
@@ -306,5 +288,9 @@ onMounted(() => {
 <style scoped lang="scss">
 .el-divider--vertical {
   height: 2.5rem;
+}
+.welcome-panel-card {
+  border: none;
+  border-radius: 1rem;
 }
 </style>
