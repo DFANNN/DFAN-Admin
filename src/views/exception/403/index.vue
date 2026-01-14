@@ -1,132 +1,221 @@
 <template>
-  <div class="workbench-container">
-    <!-- 背景装饰 -->
+  <div class="analysis-container">
+    <!-- 背景装饰圆圈 (保留登录页风格) -->
     <div class="bg-decoration-orange"></div>
     <div class="bg-decoration-blue"></div>
-    <div class="bg-decoration-purple"></div>
 
-    <div class="workbench-content">
-      <!-- 顶部：一体化超级欢迎看板 -->
+    <div class="analysis-content">
+      <!-- 第一行：业务简报 + 核心运营指标 -->
       <el-row :gutter="20" class="row-gap">
-        <el-col :span="24">
-          <el-card class="hero-card" shadow="never">
-            <div class="hero-inner">
-              <!-- 左侧：欢迎与丰富信息 -->
-              <div class="hero-left">
-                <div class="welcome-section">
-                  <div class="user-info-box">
-                    <HoverAnimateWrapper name="scale" intensity="light">
-                      <el-avatar
-                        :size="80"
-                        src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
-                        class="hero-avatar"
-                      />
-                    </HoverAnimateWrapper>
-                    <div class="text-content">
-                      <h2 class="greeting">
-                        {{ userName }}，欢迎回来！
-                        <span class="wave">👋</span>
-                      </h2>
-                      <p class="motto">“ 凡事豫则立，不豫则废。” —— 开启您高效的一天。</p>
-                      <div class="info-badges">
-                        <div class="info-tag weather">
-                          <el-icon><Orange /></el-icon>
-                          <span>晴 22℃</span>
-                        </div>
-                        <div class="info-tag location">
-                          <el-icon><Monitor /></el-icon>
-                          <span>上海 · 研发中心</span>
-                        </div>
-                        <div class="info-tag date">
-                          <el-icon><Calendar /></el-icon>
-                          <span>2026年1月8日</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="hero-lottie-container">
-                    <LottieAnimation :animationData="helloLottie" :width="180" :height="140" />
-                  </div>
-                </div>
-
-                <!-- 新增：丰富内容区 -->
-                <div class="hero-rich-content">
-                  <div class="rich-item">
-                    <div class="item-label">今日任务进度</div>
-                    <div class="item-value-box">
-                      <span class="current">12</span><span class="total">/ 16</span>
-                      <el-progress
-                        :percentage="75"
-                        :stroke-width="8"
-                        color="#6366f1"
-                        class="mini-progress"
-                      />
-                    </div>
-                  </div>
-                  <el-divider direction="vertical" />
-                  <div class="rich-item">
-                    <div class="item-label">待处理审批</div>
-                    <div class="item-value-box">
-                      <span class="highlight">4</span><span class="unit">个任务</span>
-                      <div class="avatar-stack-mini">
-                        <el-avatar
-                          :size="20"
-                          src="https://api.dicebear.com/7.x/avataaars/svg?seed=1"
-                        />
-                        <el-avatar
-                          :size="20"
-                          src="https://api.dicebear.com/7.x/avataaars/svg?seed=2"
-                        />
-                        <span class="more">+2</span>
-                      </div>
-                    </div>
-                  </div>
-                  <el-divider direction="vertical" />
-                  <div class="rich-item">
-                    <div class="item-label">团队活跃度</div>
-                    <div class="item-value-box">
-                      <span class="highlight">98%</span>
-                      <span class="status-badge">High</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="hero-actions">
-                  <el-button type="primary" size="large" round class="btn-main">
-                    工作台概览 <el-icon class="el-icon--right"><Right /></el-icon>
-                  </el-button>
-                  <el-button size="large" round class="btn-sub">任务管理</el-button>
-                  <el-button size="large" circle class="btn-icon"
-                    ><el-icon><Notification /></el-icon
-                  ></el-button>
+        <el-col :xs="24" :lg="10">
+          <el-card class="welcome-card" shadow="never">
+            <div class="welcome-inner">
+              <div class="welcome-text">
+                <span class="greeting">Business Overview</span>
+                <h2>全球业务运营中心</h2>
+                <p>
+                  本月业绩增长势头强劲，已完成季度目标的 76%，建议加大对移动端大促活动的资源投入。
+                </p>
+                <div class="action-group">
+                  <el-button type="primary" class="main-btn">生成月报</el-button>
+                  <el-button link class="secondary-btn">业绩预测</el-button>
                 </div>
               </div>
+              <div class="welcome-lottie">
+                <LottieAnimation :animationData="helloLottie" :width="180" :height="140" />
+              </div>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :xs="24" :sm="8" :lg="4" v-for="item in businessStats" :key="item.label">
+          <el-card class="top-stat-card" :class="item.type" shadow="never">
+            <div class="stat-icon-bg">
+              <el-icon><component :is="item.icon" /></el-icon>
+            </div>
+            <div class="stat-info">
+              <div class="stat-value">
+                {{ item.value }} <span class="trend">{{ item.trend }}</span>
+              </div>
+              <div class="stat-label">{{ item.label }}</div>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
 
-              <!-- 中间装饰分割 -->
-              <div class="hero-divider"></div>
+      <!-- 全新的巨幕深度分析图表：营收与利润全景 -->
+      <el-row :gutter="20" class="row-gap">
+        <el-col :span="24">
+          <el-card class="big-analysis-card" shadow="never">
+            <template #header>
+              <div class="card-header">
+                <div class="header-left">
+                  <span class="title">年度营收与净利润增长深度分析</span>
+                  <el-tag size="small" type="primary" effect="plain" class="ml-10"
+                    >数据已脱敏</el-tag
+                  >
+                </div>
+                <div class="header-right">
+                  <el-radio-group v-model="analysisTimeRange" size="small">
+                    <el-radio-button label="1y">近1年</el-radio-button>
+                    <el-radio-button label="2y">近2年</el-radio-button>
+                  </el-radio-group>
+                  <el-divider direction="vertical" />
+                  <el-button :icon="HSolidArrowPathIcon" circle size="small" />
+                </div>
+              </div>
+            </template>
+            <div class="big-chart-container">
+              <VChart class="chart" :option="revenueProfitOption" autoresize />
+            </div>
+            <div class="big-chart-footer">
+              <div class="footer-item" v-for="f in revenueInsights" :key="f.label">
+                <div class="item-top">
+                  <div class="dot" :style="{ backgroundColor: f.color }"></div>
+                  <span class="lab">{{ f.label }}</span>
+                </div>
+                <div class="item-bottom">
+                  <span class="val">{{ f.value }}</span>
+                  <span class="trend" :class="f.trendType">{{ f.trend }}</span>
+                </div>
+              </div>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
 
-              <!-- 右侧：集成核心指标 -->
-              <div class="hero-right">
-                <div class="stats-integrated-grid">
-                  <div v-for="item in statCards" :key="item.label" class="integrated-stat-item">
-                    <div
-                      class="stat-icon"
-                      :style="{ color: item.color, backgroundColor: item.color + '10' }"
-                    >
-                      <el-icon><component :is="item.icon" /></el-icon>
+      <!-- 第三行：市场份额 + 热销品类 + 业绩目标 -->
+      <el-row :gutter="20" class="row-gap">
+        <el-col :xs="24" :md="12" :lg="8">
+          <el-card class="chart-card" shadow="never">
+            <template #header>
+              <div class="card-header">
+                <span class="title">全球市场份额分布</span>
+                <el-icon class="more-icon"><HSolidChartIcon /></el-icon>
+              </div>
+            </template>
+            <div class="donut-chart-wrap small">
+              <VChart class="chart" :option="marketShareOption" autoresize />
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :xs="24" :md="12" :lg="8">
+          <el-card class="chart-card" shadow="never">
+            <template #header>
+              <div class="card-header">
+                <span class="title">热销商品类目 TOP 5</span>
+                <el-icon class="more-icon"><HSolidCartIcon /></el-icon>
+              </div>
+            </template>
+            <div class="donut-chart-wrap small">
+              <VChart class="chart" :option="topCategoriesOption" autoresize />
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :xs="24" :md="24" :lg="8">
+          <div class="vertical-stack">
+            <el-card class="goals-card" shadow="never">
+              <div class="goals-inner">
+                <div class="icon-box">
+                  <el-icon><HSolidTrophyIcon /></el-icon>
+                </div>
+                <div class="goal-info">
+                  <div class="title">Q1 销售额目标</div>
+                  <div class="percent">76.4%</div>
+                </div>
+                <el-progress :percentage="76.4" color="#f99c7d" :show-text="false" />
+              </div>
+            </el-card>
+            <el-card class="profile-card" shadow="never">
+              <div class="profile-inner">
+                <div class="badge">Today's Operation Manager</div>
+                <el-avatar
+                  :size="64"
+                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=Operation"
+                />
+                <div class="name">David Fan</div>
+                <div class="role">高级运营专家 / 增长黑客</div>
+              </div>
+            </el-card>
+          </div>
+        </el-col>
+      </el-row>
+
+      <!-- 第四行：排行榜 + 运营大事件 -->
+      <el-row :gutter="20" class="row-gap">
+        <el-col :xs="24" :lg="16">
+          <el-card class="employees-card" shadow="never">
+            <template #header>
+              <div class="card-header">
+                <span class="title">各渠道销售表现实时榜单</span>
+                <el-icon class="more-icon"><HSolidEllipsisVerticalIcon /></el-icon>
+              </div>
+            </template>
+            <el-table :data="channelSales" style="width: 100%" class="custom-table">
+              <el-table-column label="渠道名称" width="250">
+                <template #default="{ row }">
+                  <div class="profile-cell">
+                    <div class="project-icon" :style="{ backgroundColor: row.color }">
+                      {{ row.name.charAt(0) }}
                     </div>
-                    <div class="stat-info">
-                      <div class="stat-label">{{ item.label }}</div>
-                      <div class="stat-value-wrap">
-                        <span class="stat-value">{{ item.value }}</span>
-                        <span class="stat-trend" :class="item.trendType">
-                          {{ item.trend }}
-                        </span>
-                      </div>
+                    <div class="name-role">
+                      <div class="name">{{ row.name }}</div>
+                      <div class="role">负责人: {{ row.owner }}</div>
                     </div>
-                    <div class="stat-mini-chart">
-                      <VChart class="mini-v-chart" :option="item.chartOption" autoresize />
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column prop="revenue" label="销售额">
+                <template #default="{ row }">
+                  <div class="font-bold">￥{{ row.revenue }}</div>
+                </template>
+              </el-table-column>
+              <el-table-column label="达成率">
+                <template #default="{ row }">
+                  <el-progress
+                    :percentage="row.achievement"
+                    :color="row.achievement > 90 ? '#10b981' : '#5bbff9'"
+                  />
+                </template>
+              </el-table-column>
+              <el-table-column prop="status" label="状态">
+                <template #default="{ row }">
+                  <el-tag :type="row.statusType" effect="dark" round>{{ row.status }}</el-tag>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-card>
+        </el-col>
+        <el-col :xs="24" :lg="8">
+          <el-card class="schedules-card" shadow="never">
+            <template #header>
+              <div class="card-header">
+                <span class="title">近期运营大事件</span>
+                <el-icon class="more-icon"><HSolidEllipsisVerticalIcon /></el-icon>
+              </div>
+            </template>
+            <div class="date-tabs">
+              <el-button-group>
+                <el-button type="primary" size="small">待开启</el-button>
+                <el-button size="small">进行中</el-button>
+                <el-button size="small">回顾</el-button>
+              </el-button-group>
+            </div>
+            <div class="schedule-list">
+              <div class="schedule-item" v-for="item in events" :key="item.id">
+                <div class="time">{{ item.date }}</div>
+                <div class="event-card" :style="{ borderLeftColor: item.color }">
+                  <div class="event-title">{{ item.title }}</div>
+                  <div class="event-time">
+                    <el-icon><HSolidCalendarIcon /></el-icon> 时间: {{ item.range }}
+                  </div>
+                  <div class="event-participants">
+                    <div class="custom-avatar-group">
+                      <el-avatar
+                        :size="24"
+                        src="https://api.dicebear.com/7.x/avataaars/svg?seed=prom"
+                      />
                     </div>
+                    <span class="more">策划中...</span>
                   </div>
                 </div>
               </div>
@@ -135,196 +224,115 @@
         </el-col>
       </el-row>
 
-      <!-- 中部主要内容 -->
+      <!-- 第五行：特色营销推荐 (全宽展现) -->
       <el-row :gutter="20">
-        <!-- 左侧：项目与动态 -->
-        <el-col :xs="24" :lg="16">
-          <!-- 正在进行的项目 -->
-          <el-card class="modern-card project-section" shadow="never">
-            <template #header>
-              <div class="card-header">
-                <div class="header-left">
-                  <el-icon class="header-icon"><Collection /></el-icon>
-                  <span class="title">正在进行的项目</span>
-                </div>
-                <el-button link type="primary">管理所有项目</el-button>
-              </div>
-            </template>
-            <div class="project-grid-premium">
-              <div v-for="item in projects" :key="item.id" class="project-item-premium">
-                <HoverAnimateWrapper name="lift" intensity="light" class="w-full h-full">
-                  <div class="project-inner">
-                    <div class="item-header">
-                      <div class="icon-wrap" :style="{ backgroundColor: item.color + '15' }">
-                        <el-icon :style="{ color: item.color }"
-                          ><component :is="item.icon"
-                        /></el-icon>
-                      </div>
-                      <span class="project-name">{{ item.name }}</span>
-                    </div>
-                    <p class="desc">{{ item.desc }}</p>
-                    <div class="progress-wrap">
-                      <div class="progress-header">
-                        <span>完成进度</span>
-                        <span>{{ item.progress }}%</span>
-                      </div>
-                      <el-progress
-                        :percentage="item.progress"
-                        :color="item.color"
-                        :show-text="false"
-                        :stroke-width="6"
-                      />
-                    </div>
-                    <div class="item-footer">
-                      <div class="avatar-group">
-                        <el-avatar
-                          v-for="n in 3"
-                          :key="n"
-                          :size="24"
-                          :src="`https://api.dicebear.com/7.x/avataaars/svg?seed=${item.name + n}`"
-                        />
-                        <div class="more-avatars">+{{ Math.floor(Math.random() * 10) }}</div>
-                      </div>
-                      <span class="time">{{ item.time }}</span>
-                    </div>
-                  </div>
-                </HoverAnimateWrapper>
-              </div>
+        <el-col :span="24">
+          <el-card class="featured-card full-banner" shadow="never">
+            <div class="featured-img">
+              <img
+                src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80"
+                alt="marketing"
+              />
             </div>
-          </el-card>
-
-          <!-- 动态追踪 (仿参考图列表) -->
-          <el-card class="modern-card activity-section" shadow="never">
-            <template #header>
-              <div class="card-header">
-                <div class="header-left">
-                  <el-icon class="header-icon"><StarFilled /></el-icon>
-                  <span class="title">团队动态与最新评价</span>
-                </div>
+            <div class="featured-content">
+              <div class="content-left">
+                <h3>2026 年货节全球营销方案</h3>
+                <p>深挖跨境电商增长潜力，通过 AI 精准投放实现 GMV 翻倍增长。</p>
               </div>
-            </template>
-            <div class="activity-list-premium">
-              <div v-for="item in activities" :key="item.id" class="activity-item-premium">
-                <div class="user-avatar-box">
-                  <el-avatar :size="40" :src="item.avatar" />
-                  <div class="status-dot" :class="item.online ? 'online' : ''"></div>
+              <div class="participants">
+                <div class="custom-avatar-group">
+                  <el-avatar :size="32" src="https://api.dicebear.com/7.x/avataaars/svg?seed=m1" />
+                  <el-avatar :size="32" src="https://api.dicebear.com/7.x/avataaars/svg?seed=m2" />
+                  <el-avatar :size="32" src="https://api.dicebear.com/7.x/avataaars/svg?seed=m3" />
                 </div>
-                <div class="activity-content">
-                  <div class="activity-header">
-                    <span class="name">{{ item.name }}</span>
-                    <span class="time">{{ item.time }}</span>
-                  </div>
-                  <div class="activity-body">
-                    <span class="action">{{ item.action }}</span>
-                    <span class="target">{{ item.target }}</span>
-                    <div v-if="item.comment" class="comment-box">"{{ item.comment }}"</div>
-                  </div>
-                  <div class="activity-footer">
-                    <el-tag size="small" :type="item.tagType" effect="plain" round>{{
-                      item.tag
-                    }}</el-tag>
-                    <div class="actions">
-                      <el-icon><ChatDotRound /></el-icon>
-                      <span>回复</span>
-                    </div>
-                  </div>
-                </div>
+                <span class="more">+35 团队成员在线讨论</span>
               </div>
             </div>
           </el-card>
         </el-col>
+      </el-row>
 
-        <!-- 右侧：快捷工具与效能 -->
-        <el-col :xs="24" :lg="8">
-          <!-- 便捷工具 -->
-          <el-card class="modern-card shortcut-section" shadow="never">
+      <!-- 第四行：渠道排行 + 运营大事件 -->
+      <el-row :gutter="20">
+        <el-col :xs="24" :lg="16">
+          <el-card class="employees-card" shadow="never">
             <template #header>
               <div class="card-header">
-                <div class="header-left">
-                  <el-icon class="header-icon"><Monitor /></el-icon>
-                  <span class="title">便捷工具</span>
-                </div>
+                <span class="title">各渠道销售表现实时榜单</span>
+                <el-icon class="more-icon"><HSolidEllipsisVerticalIcon /></el-icon>
               </div>
             </template>
-            <div class="shortcut-grid-premium">
-              <div v-for="item in shortcuts" :key="item.label" class="shortcut-wrapper">
-                <HoverAnimateWrapper name="jelly" intensity="normal">
-                  <div class="shortcut-item-premium">
-                    <div class="icon-box" :style="{ '--icon-color': item.color }">
-                      <el-icon><component :is="item.icon" /></el-icon>
+            <el-table :data="channelSales" style="width: 100%" class="custom-table">
+              <el-table-column label="渠道名称" width="250">
+                <template #default="{ row }">
+                  <div class="profile-cell">
+                    <div class="project-icon" :style="{ backgroundColor: row.color }">
+                      {{ row.name.charAt(0) }}
                     </div>
-                    <span class="label">{{ item.label }}</span>
+                    <div class="name-role">
+                      <div class="name">{{ row.name }}</div>
+                      <div class="role">负责人: {{ row.owner }}</div>
+                    </div>
                   </div>
-                </HoverAnimateWrapper>
-              </div>
-            </div>
+                </template>
+              </el-table-column>
+              <el-table-column prop="revenue" label="销售额">
+                <template #default="{ row }">
+                  <div class="font-bold">￥{{ row.revenue }}</div>
+                </template>
+              </el-table-column>
+              <el-table-column label="达成率">
+                <template #default="{ row }">
+                  <el-progress
+                    :percentage="row.achievement"
+                    :color="row.achievement > 90 ? '#10b981' : '#5bbff9'"
+                  />
+                </template>
+              </el-table-column>
+              <el-table-column prop="status" label="状态">
+                <template #default="{ row }">
+                  <el-tag :type="row.statusType" effect="dark" round>{{ row.status }}</el-tag>
+                </template>
+              </el-table-column>
+            </el-table>
           </el-card>
-
-          <!-- 工作效能分析 -->
-          <el-card class="modern-card efficiency-section" shadow="never">
+        </el-col>
+        <el-col :xs="24" :lg="8">
+          <el-card class="schedules-card" shadow="never">
             <template #header>
               <div class="card-header">
-                <div class="header-left">
-                  <el-icon class="header-icon"><ElPieChart /></el-icon>
-                  <span class="title">本周工作效能</span>
-                </div>
+                <span class="title">近期运营大事件</span>
+                <el-icon class="more-icon"><HSolidEllipsisVerticalIcon /></el-icon>
               </div>
             </template>
-            <div class="efficiency-content">
-              <div class="chart-wrap-premium">
-                <VChart class="chart" :option="efficiencyOption" autoresize />
-              </div>
-              <div class="efficiency-stats">
-                <div class="stat-row">
-                  <span class="lab">任务完成率</span>
-                  <span class="val">92%</span>
-                </div>
-                <el-progress :percentage="92" color="#6366f1" :show-text="false" />
-                <div class="stat-row mt-12">
-                  <span class="lab">代码质量评分</span>
-                  <span class="val">A+</span>
-                </div>
-                <el-progress :percentage="88" color="#10b981" :show-text="false" />
-              </div>
+            <div class="date-tabs">
+              <el-button-group>
+                <el-button type="primary" size="small">待开启</el-button>
+                <el-button size="small">进行中</el-button>
+                <el-button size="small">回顾</el-button>
+              </el-button-group>
             </div>
-          </el-card>
-
-          <!-- 团队伙伴 -->
-          <el-card class="modern-card team-section" shadow="never">
-            <template #header>
-              <div class="card-header">
-                <div class="header-left">
-                  <el-icon class="header-icon"><UserFilled /></el-icon>
-                  <span class="title">在线伙伴</span>
-                </div>
-                <el-button link type="primary"
-                  ><el-icon><Plus /></el-icon> 邀请</el-button
-                >
-              </div>
-            </template>
-            <div class="team-list-premium">
-              <div v-for="item in team" :key="item.name" class="team-item-premium">
-                <div class="avatar-wrap">
-                  <el-avatar :size="38" :src="item.avatar" />
-                  <div class="status-indicator" :class="item.status"></div>
-                </div>
-                <div class="info">
-                  <div class="name">{{ item.name }}</div>
-                  <div class="role">{{ item.role }}</div>
-                </div>
-                <div class="team-actions">
-                  <el-button circle size="small"
-                    ><el-icon><ChatDotRound /></el-icon
-                  ></el-button>
+            <div class="schedule-list">
+              <div class="schedule-item" v-for="item in events" :key="item.id">
+                <div class="time">{{ item.date }}</div>
+                <div class="event-card" :style="{ borderLeftColor: item.color }">
+                  <div class="event-title">{{ item.title }}</div>
+                  <div class="event-time">
+                    <el-icon><HSolidCalendarIcon /></el-icon> 时间: {{ item.range }}
+                  </div>
+                  <div class="event-participants">
+                    <div class="custom-avatar-group">
+                      <el-avatar
+                        :size="24"
+                        src="https://api.dicebear.com/7.x/avataaars/svg?seed=prom"
+                      />
+                    </div>
+                    <span class="more">策划中...</span>
+                  </div>
                 </div>
               </div>
             </div>
           </el-card>
-
-          <!-- 装饰插画 -->
-          <div class="decorative-illustration">
-            <img src="@/assets/animals/小狗.svg" alt="decoration" class="floating-img" />
-          </div>
         </el-col>
       </el-row>
     </div>
@@ -336,50 +344,45 @@ import { ref, computed, provide } from 'vue'
 import { useThemeStore } from '@/stores/theme'
 import { THEME_KEY } from 'vue-echarts'
 import LottieAnimation from '@/components/animation/LottieAnimation.vue'
-import HoverAnimateWrapper from '@/components/animation/HoverAnimateWrapper.vue'
 import helloLottie from '@/assets/lotties/hello.json'
 import {
-  Collection,
-  Monitor,
-  Setting,
-  User,
-  ChatDotRound,
-  Notification,
-  Document,
-  PieChart as ElPieChart,
-  Calendar,
-  Opportunity,
-  VideoPlay,
-  Orange,
-  Plus,
-  Right,
-  UserFilled,
-  StarFilled,
-} from '@element-plus/icons-vue'
+  BanknotesIcon as HSolidBanknotesIcon,
+  ShoppingCartIcon as HSolidCartIcon,
+  UserPlusIcon as HSolidUserPlusIcon,
+  EllipsisVerticalIcon as HSolidEllipsisVerticalIcon,
+  TrophyIcon as HSolidTrophyIcon,
+  CalendarIcon as HSolidCalendarIcon,
+  ArrowPathIcon as HSolidArrowPathIcon,
+} from '@heroicons/vue/20/solid'
 
-// ECharts 核心
+// ECharts 相关的引入
 import { use } from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
-import { LineChart, RadarChart } from 'echarts/charts'
+import { LineChart, PieChart, BarChart, FunnelChart, RadarChart } from 'echarts/charts'
 import {
   TitleComponent,
   TooltipComponent,
   LegendComponent,
   GridComponent,
+  DatasetComponent,
+  TransformComponent,
 } from 'echarts/components'
 import VChart from 'vue-echarts'
 
 use([
   CanvasRenderer,
   LineChart,
+  PieChart,
+  BarChart,
+  FunnelChart,
   RadarChart,
   TitleComponent,
   TooltipComponent,
   LegendComponent,
   GridComponent,
+  DatasetComponent,
+  TransformComponent,
 ])
-
-defineOptions({ name: '403View' })
 
 const themeStore = useThemeStore()
 provide(
@@ -387,627 +390,364 @@ provide(
   computed(() => themeStore.themeMode),
 )
 
-const userName = ref('David Fan')
+defineOptions({ name: 'AnalysisView' })
 
-// 核心指标小卡片数据
-const statCards = computed(() => [
+// 1. 核心运营指标
+const businessStats = [
   {
-    label: '本周任务完成',
-    value: '52',
-    trend: '+12%',
-    trendType: 'up',
-    color: '#6366f1',
-    icon: Calendar,
-    chartOption: createMiniLineChart([30, 40, 35, 50, 49, 60, 52], '#6366f1'),
+    label: 'Total Revenue',
+    value: '￥1,284,500',
+    trend: '+15.2%',
+    icon: HSolidBanknotesIcon,
+    type: 'blue',
   },
+  { label: 'Total Orders', value: '8,429', trend: '+8.4%', icon: HSolidCartIcon, type: 'orange' },
   {
-    label: '项目活跃度',
-    value: '84%',
-    trend: '+5%',
-    trendType: 'up',
-    color: '#10b981',
-    icon: Opportunity,
-    chartOption: createMiniLineChart([70, 75, 72, 80, 78, 85, 84], '#10b981'),
-  },
-  {
-    label: '待办处理率',
-    value: '92%',
-    trend: '-2%',
-    trendType: 'down',
-    color: '#f59e0b',
-    icon: Document,
-    chartOption: createMiniLineChart([95, 94, 96, 92, 93, 91, 92], '#f59e0b'),
-  },
-  {
-    label: '团队协作值',
-    value: '76',
-    trend: '+18%',
-    trendType: 'up',
-    color: '#ef4444',
-    icon: UserFilled,
-    chartOption: createMiniLineChart([50, 55, 60, 65, 70, 75, 76], '#ef4444'),
-  },
-])
-
-function createMiniLineChart(data: number[], color: string) {
-  return {
-    grid: { left: 0, right: 0, top: 10, bottom: 0 },
-    xAxis: { type: 'category', show: false },
-    yAxis: { type: 'value', show: false },
-    series: [
-      {
-        data,
-        type: 'line',
-        smooth: true,
-        symbol: 'none',
-        lineStyle: { color, width: 2 },
-        areaStyle: {
-          color: {
-            type: 'linear',
-            x: 0,
-            y: 0,
-            x2: 0,
-            y2: 1,
-            colorStops: [
-              { offset: 0, color: color + '30' },
-              { offset: 1, color: 'transparent' },
-            ],
-          },
-        },
-      },
-    ],
-  }
-}
-
-// 正在进行的项目
-const projects = [
-  {
-    id: 1,
-    name: 'Vue Admin Next',
-    desc: '基于 Vue 3 + Element Plus 的中后台管理系统，目前进入 Beta 测试阶段。',
-    group: '前端组',
-    time: '2025-12-01',
-    icon: Monitor,
-    color: '#4f46e5',
-    progress: 85,
-  },
-  {
-    id: 2,
-    name: 'AI 数据中心',
-    desc: '利用 LLM 大模型进行深度数据清洗与多维度智能化分析平台。',
-    group: '算法组',
-    time: '2026-01-05',
-    icon: Opportunity,
-    color: '#10b981',
-    progress: 45,
-  },
-  {
-    id: 3,
-    name: 'DFAN 移动端',
-    desc: '全新的 React Native 跨平台应用，完美适配 iOS 和 Android。',
-    group: '移动组',
-    time: '2025-11-20',
-    icon: VideoPlay,
-    color: '#f59e0b',
-    progress: 72,
-  },
-  {
-    id: 4,
-    name: '自动化测试云',
-    desc: '基于 Playwright 的云端自动化测试框架，大幅提升 CI/CD 交付效率。',
-    group: '测试组',
-    time: '2026-01-08',
-    icon: Setting,
-    color: '#ef4444',
-    progress: 94,
-  },
-  {
-    id: 5,
-    name: '低代码引擎',
-    desc: '可视化图形化拖拽搭建工具，支持复杂业务逻辑配置。',
-    group: '研发中心',
-    time: '2025-10-15',
-    icon: Collection,
-    color: '#8b5cf6',
-    progress: 30,
-  },
-  {
-    id: 6,
-    name: '监控告警 2.0',
-    desc: '全方位分布式系统性能监控，支持毫秒级异常预警与链路追踪。',
-    group: '运维组',
-    time: '2026-01-02',
-    icon: Notification,
-    color: '#06b6d4',
-    progress: 68,
+    label: 'New Members',
+    value: '1,562',
+    trend: '+22.1%',
+    icon: HSolidUserPlusIcon,
+    type: 'indigo',
   },
 ]
 
-interface Activity {
-  id: number
-  name: string
-  avatar: string
-  action: string
-  target: string
-  comment?: string
-  time: string
-  online: boolean
-  tag: string
-  tagType: 'success' | 'primary' | 'warning' | 'info' | 'danger'
-}
-
-// 动态追踪
-const activities = ref<Activity[]>([
-  {
-    id: 1,
-    name: '林东东',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Lucky',
-    action: '在',
-    target: '项目组 007',
-    comment: '这个界面的阴影处理得非常棒，很有质感！',
-    time: '刚刚',
-    online: true,
-    tag: 'UI 评价',
-    tagType: 'success',
+// 2. 巨幕图表：营收与利润 (硬核工业视觉版)
+const analysisTimeRange = ref('1y')
+const revenueProfitOption = computed(() => ({
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: { type: 'cross', label: { backgroundColor: '#6a7985' } },
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderWidth: 0,
+    boxShadow: '0 8px 24px rgba(0,0,0,0.1)',
   },
-  {
-    id: 2,
-    name: '张三',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Jack',
-    action: '发表了关于',
-    target: 'UI 优化的建议',
-    comment: '建议在移动端把侧边栏改为底部导航栏，用户体验会更好。',
-    time: '10 分钟前',
-    online: false,
-    tag: '产品建议',
-    tagType: 'primary',
+  legend: { data: ['年度营收', '净利润', '去年同期', '利润率'], bottom: 0, itemGap: 20 },
+  grid: { left: '3%', right: '4%', bottom: '10%', top: '10%', containLabel: true },
+  xAxis: {
+    type: 'category',
+    boundaryGap: false,
+    data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+    axisLine: { lineStyle: { color: '#9ca3af' } },
+    axisTick: { show: false },
   },
-  {
-    id: 3,
-    name: '李四',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Lily',
-    action: '提交了代码到',
-    target: 'main 分支',
-    time: '1 小时前',
-    online: true,
-    tag: '代码提交',
-    tagType: 'warning',
-  },
-  {
-    id: 4,
-    name: '王五',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Mimi',
-    action: '创建了新任务',
-    target: '周报系统对接',
-    time: '3 小时前',
-    online: true,
-    tag: '任务管理',
-    tagType: 'info',
-  },
-])
-
-const shortcuts = [
-  { label: '主页', icon: Monitor, color: '#4f46e5' },
-  { label: '管理', icon: Setting, color: '#10b981' },
-  { label: '用户', icon: User, color: '#f59e0b' },
-  { label: '分析', icon: ElPieChart, color: '#ef4444' },
-  { label: '消息', icon: ChatDotRound, color: '#8b5cf6' },
-  { label: '文档', icon: Document, color: '#06b6d4' },
-  { label: '日程', icon: Calendar, color: '#ec4899' },
-  { label: '设置', icon: Orange, color: '#f97316' },
-]
-
-const team = [
-  {
-    name: 'David Fan',
-    role: '高级研发工程师',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix',
-    status: 'online',
-  },
-  {
-    name: 'Alice Zhang',
-    role: 'UI 设计师',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alice',
-    status: 'online',
-  },
-  {
-    name: 'Mike Lee',
-    role: '产品经理',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Mike',
-    status: 'busy',
-  },
-  {
-    name: 'Sarah Sun',
-    role: '后端架构师',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah',
-    status: 'online',
-  },
-]
-
-// 效能图表配置 (雷达图更适合展示多维度效能)
-const efficiencyOption = computed(() => ({
-  radar: {
-    indicator: [
-      { name: '代码质量', max: 100 },
-      { name: '交付速度', max: 100 },
-      { name: '沟通协作', max: 100 },
-      { name: '技术深度', max: 100 },
-      { name: '业务理解', max: 100 },
-    ],
-    splitArea: { show: false },
-    axisLine: { lineStyle: { color: '#e2e8f0' } },
-  },
+  yAxis: [
+    {
+      type: 'value',
+      name: '金额 (k)',
+      axisLine: { show: false },
+      splitLine: { lineStyle: { type: 'dashed', color: '#e5e7eb' } },
+    },
+    {
+      type: 'value',
+      name: '利润率 (%)',
+      min: 0,
+      max: 100,
+      axisLine: { show: false },
+      splitLine: { show: false },
+    },
+  ],
   series: [
     {
-      type: 'radar',
-      data: [
-        {
-          value: [85, 90, 80, 95, 88],
-          name: '个人能力',
-          itemStyle: { color: '#6366f1' },
-          areaStyle: { color: 'rgba(99, 102, 241, 0.2)' },
+      name: '年度营收',
+      type: 'line',
+      smooth: true,
+      lineStyle: { width: 0 },
+      showSymbol: false,
+      areaStyle: {
+        opacity: 0.8,
+        color: {
+          type: 'linear',
+          x: 0,
+          y: 0,
+          x2: 0,
+          y2: 1,
+          colorStops: [
+            { offset: 0, color: '#5bbff9' },
+            { offset: 1, color: '#2563eb' },
+          ],
         },
+      },
+      data: [120, 132, 101, 134, 290, 230, 210, 250, 220, 280, 310, 330],
+    },
+    {
+      name: '去年同期',
+      type: 'line',
+      symbol: 'none',
+      lineStyle: { type: 'dashed', width: 2, color: '#94a3b8' },
+      data: [100, 110, 95, 120, 200, 180, 190, 210, 180, 230, 260, 300],
+    },
+    {
+      name: '净利润',
+      type: 'line',
+      smooth: true,
+      lineStyle: { width: 4, color: '#f99c7d' },
+      symbol: 'circle',
+      symbolSize: 8,
+      itemStyle: { color: '#f99c7d', borderColor: '#fff', borderWidth: 2 },
+      data: [80, 92, 70, 84, 150, 130, 110, 140, 120, 160, 190, 240],
+    },
+    {
+      name: '利润率',
+      type: 'line',
+      yAxisIndex: 1,
+      lineStyle: { type: 'dashed', color: '#10b981', width: 2 },
+      symbol: 'none',
+      data: [66, 69, 69, 62, 52, 56, 52, 56, 54, 57, 61, 72],
+    },
+  ],
+}))
+
+const revenueInsights = [
+  { label: '年度平均利润率', value: '64.5%', trend: '+3.2%', trendType: 'up', color: '#10b981' },
+  { label: '最高月营收', value: '￥330k', trend: '12月', trendType: 'neutral', color: '#5bbff9' },
+  { label: '营销成本 (CAC)', value: '￥42k', trend: '-5.1%', trendType: 'up', color: '#f99c7d' },
+]
+
+// 3. 全球市场份额饼图
+const marketShareOption = computed(() => ({
+  tooltip: { trigger: 'item', backgroundColor: 'rgba(255, 255, 255, 0.9)', borderWidth: 0 },
+  legend: { bottom: '5%', icon: 'circle', itemGap: 15, textStyle: { color: '#64748b' } },
+  series: [
+    {
+      name: '市场份额',
+      type: 'pie',
+      radius: ['45%', '70%'],
+      center: ['50%', '45%'],
+      avoidLabelOverlap: false,
+      itemStyle: { borderRadius: 8, borderColor: '#fff', borderWidth: 2 },
+      label: { show: false },
+      emphasis: { label: { show: true, fontSize: '14', fontWeight: 'bold' } },
+      data: [
+        { value: 45, name: '北美地区', itemStyle: { color: '#6366f1' } },
+        { value: 25, name: '欧洲市场', itemStyle: { color: '#f99c7d' } },
+        { value: 20, name: '亚太地区', itemStyle: { color: '#10b981' } },
+        { value: 10, name: '其他', itemStyle: { color: '#94a3b8' } },
       ],
     },
   ],
 }))
+
+// 4. 热销品类柱状图
+const topCategoriesOption = computed(() => ({
+  tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+  grid: { left: '3%', right: '8%', bottom: '3%', top: '5%', containLabel: true },
+  xAxis: { type: 'value', axisLine: { show: false }, splitLine: { lineStyle: { type: 'dashed' } } },
+  yAxis: {
+    type: 'category',
+    data: ['电子产品', '户外运动', '居家生活', '美妆个护', '服装鞋帽'],
+    axisLine: { show: false },
+    axisTick: { show: false },
+    axisLabel: { color: '#64748b' },
+  },
+  series: [
+    {
+      name: '销量 (k)',
+      type: 'bar',
+      barWidth: '40%',
+      itemStyle: {
+        borderRadius: [0, 20, 20, 0],
+        color: {
+          type: 'linear',
+          x: 0,
+          y: 0,
+          x2: 1,
+          y2: 0,
+          colorStops: [
+            { offset: 0, color: '#5bbff9' },
+            { offset: 1, color: '#2563eb' },
+          ],
+        },
+      },
+      data: [820, 732, 601, 534, 490],
+    },
+  ],
+}))
+
+// 4. 渠道销售数据
+const channelSales = [
+  {
+    name: '移动端 App',
+    owner: 'David Fan',
+    revenue: '542,800',
+    achievement: 92,
+    status: '引领增长',
+    statusType: 'success',
+    color: '#8b5cf6',
+  },
+  {
+    name: '天猫旗舰店',
+    owner: 'Alice Zhang',
+    revenue: '320,400',
+    achievement: 88,
+    status: '稳健运行',
+    statusType: 'primary',
+    color: '#ef4444',
+  },
+  {
+    name: '抖音直播间',
+    owner: 'Mike Lee',
+    revenue: '281,000',
+    achievement: 105,
+    status: '爆发期',
+    statusType: 'warning',
+    color: '#f59e0b',
+  },
+]
+
+// 5. 运营事件
+const events = [
+  { id: 1, date: '1月20日', title: '2026 年货节启动', range: '01.20 - 02.10', color: '#ef4444' },
+  { id: 2, date: '2月14日', title: '情人节专项大促', range: '02.10 - 02.15', color: '#f99c7d' },
+]
 </script>
 
 <style scoped lang="scss">
-.workbench-container {
+.analysis-container {
   min-height: calc(100vh - 80px);
-  background-color: #f6f8fc;
+  background-color: #f4f7fa;
   position: relative;
   overflow-x: hidden;
   padding: 24px;
 
-  // 背景装饰
   .bg-decoration-orange {
     position: absolute;
     bottom: -150px;
     left: -100px;
     width: 500px;
     height: 500px;
-    background: radial-gradient(circle, rgba(249, 156, 125, 0.15) 0%, transparent 70%);
-    filter: blur(60px);
+    background-color: #f99c7d;
+    border-radius: 50%;
+    opacity: 0.12;
     z-index: 0;
     animation: float-orange 20s infinite ease-in-out;
+    filter: blur(40px);
   }
+
   .bg-decoration-blue {
     position: absolute;
     top: -150px;
     right: -100px;
     width: 450px;
     height: 550px;
-    background: radial-gradient(circle, rgba(91, 191, 249, 0.15) 0%, transparent 70%);
-    filter: blur(60px);
+    background-color: #5bbff9;
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    opacity: 0.12;
     z-index: 0;
+    transform: rotate(15deg);
     animation: float-blue 25s infinite ease-in-out;
-  }
-  .bg-decoration-purple {
-    position: absolute;
-    top: 20%;
-    left: 40%;
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, rgba(139, 92, 246, 0.08) 0%, transparent 70%);
-    filter: blur(50px);
-    z-index: 0;
+    filter: blur(40px);
   }
 
-  .workbench-content {
+  .analysis-content {
     position: relative;
     z-index: 1;
   }
-
   .row-gap {
     margin-bottom: 24px;
   }
-
-  // 1. 一体化超级欢迎看板 (Hero Card)
-  .hero-card {
+  .el-card {
     border: none;
-    border-radius: 28px;
-    background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.95) 0%,
-      rgba(255, 255, 255, 0.8) 100%
-    );
-    backdrop-filter: blur(20px);
-    box-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.7);
-    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  }
 
-    .hero-inner {
+  // Welcome Card
+  .welcome-card {
+    background: #fff;
+    height: 100%;
+    .welcome-inner {
       display: flex;
-      padding: 32px;
-      gap: 40px;
-      min-height: 320px;
-
-      .hero-left {
-        flex: 1.8;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-
-        .welcome-section {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-
-          .user-info-box {
-            display: flex;
-            gap: 24px;
-            .hero-avatar {
-              border: 4px solid #fff;
-              box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.15);
-            }
-            .text-content {
-              .greeting {
-                font-size: 28px;
-                font-weight: 900;
-                color: #1e293b;
-                margin: 0 0 10px 0;
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                .wave {
-                  animation: wave 2.5s infinite;
-                  transform-origin: 70% 70%;
-                }
-              }
-              .motto {
-                color: #64748b;
-                font-size: 15px;
-                font-style: italic;
-                margin: 0 0 16px 0;
-              }
-              .info-badges {
-                display: flex;
-                gap: 12px;
-                .info-tag {
-                  display: inline-flex;
-                  align-items: center;
-                  gap: 6px;
-                  padding: 4px 12px;
-                  background: #f1f5f9;
-                  border-radius: 10px;
-                  font-size: 12px;
-                  color: #475569;
-                  font-weight: 600;
-                  &.weather .el-icon {
-                    color: #f97316;
-                  }
-                  &.location .el-icon {
-                    color: #6366f1;
-                  }
-                  &.date .el-icon {
-                    color: #10b981;
-                  }
-                }
-              }
-            }
-          }
-          .hero-lottie-container {
-            margin-top: -30px;
-            margin-right: -20px;
-          }
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      .welcome-text {
+        .greeting {
+          font-size: 14px;
+          color: var(--el-color-primary);
+          font-weight: 600;
+          margin-bottom: 8px;
+          display: block;
         }
-
-        .hero-rich-content {
-          display: flex;
-          align-items: center;
-          background: rgba(255, 255, 255, 0.5);
-          padding: 20px 24px;
-          border-radius: 20px;
-          margin: 24px 0;
-          border: 1px solid rgba(255, 255, 255, 0.5);
-
-          .rich-item {
-            flex: 1;
-            .item-label {
-              font-size: 12px;
-              color: #94a3b8;
-              font-weight: 600;
-              margin-bottom: 8px;
-              text-transform: uppercase;
-              letter-spacing: 0.5px;
-            }
-            .item-value-box {
-              display: flex;
-              align-items: center;
-              gap: 8px;
-              .current {
-                font-size: 22px;
-                font-weight: 800;
-                color: #1e293b;
-              }
-              .total {
-                font-size: 14px;
-                color: #94a3b8;
-                font-weight: 600;
-              }
-              .highlight {
-                font-size: 22px;
-                font-weight: 800;
-                color: #6366f1;
-              }
-              .unit {
-                font-size: 13px;
-                color: #64748b;
-                font-weight: 600;
-              }
-              .mini-progress {
-                flex: 1;
-                max-width: 100px;
-              }
-              .status-badge {
-                font-size: 11px;
-                padding: 2px 8px;
-                background: #dcfce7;
-                color: #10b981;
-                border-radius: 6px;
-                font-weight: 700;
-              }
-
-              .avatar-stack-mini {
-                display: flex;
-                align-items: center;
-                .el-avatar {
-                  border: 2px solid #fff;
-                  margin-left: -8px;
-                  &:first-child {
-                    margin-left: 0;
-                  }
-                }
-                .more {
-                  margin-left: 6px;
-                  font-size: 11px;
-                  color: #94a3b8;
-                  font-weight: 700;
-                }
-              }
-            }
-          }
-          .el-divider--vertical {
-            height: 40px;
-            margin: 0 30px;
-            opacity: 0.5;
-          }
+        h2 {
+          font-size: 26px;
+          color: #1f2937;
+          margin: 0 0 12px 0;
+          font-weight: 700;
         }
-
-        .hero-actions {
+        p {
+          color: #6b7280;
+          font-size: 14px;
+          margin-bottom: 24px;
+          line-height: 1.6;
+          max-width: 320px;
+        }
+        .action-group {
           display: flex;
-          align-items: center;
           gap: 16px;
-          .btn-main {
-            padding: 12px 32px;
-            font-weight: 700;
-            box-shadow: 0 8px 20px -4px rgba(99, 102, 241, 0.4);
-          }
-          .btn-sub {
-            padding: 12px 32px;
-            font-weight: 600;
-            background: #fff;
-            border-color: #e2e8f0;
-            &:hover {
-              border-color: #6366f1;
-              color: #6366f1;
-            }
-          }
-          .btn-icon {
-            border-color: #e2e8f0;
-            color: #64748b;
-            &:hover {
-              border-color: #6366f1;
-              color: #6366f1;
-              background: #f5f7ff;
-            }
-          }
-        }
-      }
-
-      .hero-divider {
-        width: 1px;
-        background: linear-gradient(to bottom, transparent, #e2e8f0, transparent);
-      }
-
-      .hero-right {
-        flex: 0.7;
-        .stats-integrated-grid {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 16px;
-          height: 100%;
-
-          .integrated-stat-item {
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 20px;
-            padding: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-
-            &:hover {
-              background: #fff;
-              transform: translateY(-4px);
-              box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.05);
-            }
-
-            .stat-icon {
-              width: 36px;
-              height: 36px;
-              border-radius: 10px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-size: 18px;
-              margin-bottom: 12px;
-            }
-
-            .stat-info {
-              .stat-label {
-                font-size: 13px;
-                color: #94a3b8;
-                font-weight: 600;
-                margin-bottom: 4px;
-              }
-              .stat-value-wrap {
-                display: flex;
-                align-items: baseline;
-                gap: 8px;
-                .stat-value {
-                  font-size: 20px;
-                  font-weight: 800;
-                  color: #1e293b;
-                }
-                .stat-trend {
-                  font-size: 11px;
-                  font-weight: 700;
-                  padding: 2px 6px;
-                  border-radius: 6px;
-                  &.up {
-                    background: #dcfce7;
-                    color: #10b981;
-                  }
-                  &.down {
-                    background: #fee2e2;
-                    color: #ef4444;
-                  }
-                }
-              }
-            }
-
-            .stat-mini-chart {
-              position: absolute;
-              bottom: -5px;
-              right: -5px;
-              width: 80px;
-              height: 40px;
-              opacity: 0.6;
-              .mini-v-chart {
-                width: 100%;
-                height: 100%;
-              }
-            }
+          align-items: center;
+          .main-btn {
+            border-radius: 12px;
+            padding: 10px 24px;
           }
         }
       }
     }
   }
 
-  // 3. 通用现代卡片
-  .modern-card {
-    border: none;
-    border-radius: 24px;
-    background: #fff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    margin-bottom: 24px;
+  // Top Stats
+  .top-stat-card {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 24px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
 
+    &.blue {
+      background: linear-gradient(135deg, #5bbff9 0%, #2563eb 100%);
+    }
+    &.orange {
+      background: linear-gradient(135deg, #f99c7d 0%, #ea580c 100%);
+    }
+    &.indigo {
+      background: linear-gradient(135deg, #818cf8 0%, #4f46e5 100%);
+    }
+
+    .stat-icon-bg {
+      width: 48px;
+      height: 48px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-right: 16px;
+    }
+
+    .stat-info {
+      .stat-value {
+        font-size: 22px;
+        font-weight: 700;
+        .trend {
+          font-size: 12px;
+          font-weight: normal;
+          margin-left: 4px;
+          opacity: 0.8;
+        }
+      }
+      .stat-label {
+        font-size: 14px;
+        opacity: 0.8;
+        margin-top: 4px;
+      }
+    }
+  }
+
+  // Big Chart Card
+  .big-analysis-card {
     .card-header {
       display: flex;
       justify-content: space-between;
@@ -1015,370 +755,336 @@ const efficiencyOption = computed(() => ({
       .header-left {
         display: flex;
         align-items: center;
-        gap: 12px;
-        .header-icon {
-          font-size: 20px;
-          color: #6366f1;
-        }
         .title {
-          font-weight: 800;
-          font-size: 17px;
-          color: #1e293b;
+          font-weight: 700;
+          font-size: 18px;
+        }
+        .ml-10 {
+          margin-left: 10px;
+        }
+      }
+    }
+    .big-chart-container {
+      height: 450px;
+      width: 100%;
+      margin: 20px 0;
+    }
+    .big-chart-footer {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      padding: 24px;
+      border-top: 1px dashed #e5e7eb;
+      background: #f9fafb;
+      border-radius: 0 0 20px 20px;
+
+      .footer-item {
+        background: #fff;
+        padding: 16px;
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+        transition: all 0.3s ease;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .item-top {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+          }
+          .lab {
+            color: #64748b;
+            font-size: 13px;
+            font-weight: 500;
+          }
+        }
+
+        .item-bottom {
+          display: flex;
+          align-items: baseline;
+          justify-content: space-between;
+          .val {
+            font-weight: 700;
+            color: #1e293b;
+            font-size: 20px;
+          }
+          .trend {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 20px;
+            &.up {
+              color: #10b981;
+              background: #f0fdf4;
+            }
+            &.down {
+              color: #ef4444;
+              background: #fef2f2;
+            }
+            &.neutral {
+              color: #64748b;
+              background: #f1f5f9;
+            }
+          }
         }
       }
     }
   }
 
-  // 4. 项目网格 (高级版)
-  .project-grid-premium {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-    padding: 10px 0;
-
-    .project-inner {
-      background: #f8fafc;
-      padding: 24px;
-      border-radius: 20px;
-      border: 1px solid #f1f5f9;
-      height: 100%;
+  .chart-card {
+    .card-header {
       display: flex;
-      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+    }
+  }
 
-      .item-header {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        margin-bottom: 16px;
-        .icon-wrap {
+  // Funnel
+  .traffic-dist-card {
+    .card-header {
+      font-weight: 600;
+    }
+    .donut-chart-wrap {
+      height: 320px;
+    }
+  }
+
+  // Vertical Stack
+  .vertical-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 100%;
+    .goals-card {
+      background: #fff7ed;
+      .goals-inner {
+        .icon-box {
           width: 40px;
           height: 40px;
-          border-radius: 12px;
+          background: #f97316;
+          color: #fff;
+          border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 20px;
+          margin-bottom: 12px;
         }
-        .project-name {
-          font-weight: 700;
-          color: #1e293b;
-          font-size: 16px;
-        }
-      }
-      .desc {
-        color: #64748b;
-        font-size: 14px;
-        line-height: 1.6;
-        height: 44px;
-        overflow: hidden;
-        margin-bottom: 20px;
-      }
-      .progress-wrap {
-        margin-bottom: 20px;
-        .progress-header {
+        .goal-info {
           display: flex;
           justify-content: space-between;
-          font-size: 12px;
-          color: #94a3b8;
-          font-weight: 600;
+          align-items: flex-end;
           margin-bottom: 8px;
+          .title {
+            font-weight: 600;
+            font-size: 14px;
+          }
+          .percent {
+            font-size: 18px;
+            font-weight: 700;
+          }
         }
       }
-      .item-footer {
+    }
+    .profile-card {
+      text-align: center;
+      flex: 1;
+      .profile-inner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px 0;
+        .badge {
+          color: #f97316;
+          font-size: 12px;
+          font-weight: 600;
+          margin-bottom: 12px;
+        }
+        .name {
+          font-size: 18px;
+          font-weight: 700;
+          margin: 12px 0 4px 0;
+        }
+        .role {
+          color: #6b7280;
+          font-size: 13px;
+        }
+      }
+    }
+  }
+
+  // Featured
+  .featured-card {
+    padding: 0;
+    overflow: hidden;
+    height: 100%;
+    &.full-banner {
+      .featured-img {
+        height: 240px;
+      }
+      .featured-content {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-top: auto;
-        .avatar-group {
-          display: flex;
-          align-items: center;
-          .el-avatar {
-            border: 2px solid #fff;
-            margin-left: -10px;
-            &:first-child {
-              margin-left: 0;
-            }
-          }
-          .more-avatars {
-            margin-left: 8px;
-            font-size: 12px;
-            color: #94a3b8;
-            font-weight: 600;
-          }
+        .content-left {
+          flex: 1;
         }
-        .time {
-          font-size: 12px;
-          color: #cbd5e1;
+      }
+    }
+    .featured-img {
+      height: 180px;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+    .featured-content {
+      padding: 20px;
+      h3 {
+        font-size: 18px;
+        margin: 0 0 10px 0;
+        font-weight: 700;
+      }
+      p {
+        color: #6b7280;
+        font-size: 14px;
+        margin-bottom: 20px;
+        line-height: 1.5;
+      }
+      .participants {
+        display: flex;
+        align-items: center;
+        .more {
+          margin-left: 10px;
+          color: #6b7280;
+          font-size: 13px;
         }
       }
     }
   }
 
-  // 5. 动态列表 (高级版)
-  .activity-list-premium {
-    .activity-item-premium {
-      display: flex;
-      gap: 20px;
-      padding: 24px 0;
-      border-bottom: 1px solid #f1f5f9;
-      &:last-child {
-        border-bottom: none;
-      }
-
-      .user-avatar-box {
-        position: relative;
-        flex-shrink: 0;
-        .status-dot {
-          position: absolute;
-          bottom: 2px;
-          right: 2px;
-          width: 10px;
-          height: 10px;
-          border-radius: 50%;
-          background: #cbd5e1;
-          border: 2px solid #fff;
-          &.online {
-            background: #10b981;
-          }
-        }
-      }
-
-      .activity-content {
-        flex: 1;
-        .activity-header {
-          display: flex;
-          justify-content: space-between;
-          margin-bottom: 8px;
-          .name {
-            font-weight: 700;
-            color: #1e293b;
-            font-size: 15px;
-          }
-          .time {
-            font-size: 12px;
-            color: #94a3b8;
-          }
-        }
-        .activity-body {
-          margin-bottom: 12px;
-          .action {
-            color: #64748b;
-            margin-right: 6px;
-          }
-          .target {
-            color: #6366f1;
-            font-weight: 600;
-          }
-          .comment-box {
-            margin-top: 10px;
-            background: #f8fafc;
-            padding: 12px 16px;
-            border-radius: 12px;
-            font-size: 14px;
-            color: #475569;
-            font-style: italic;
-            border-left: 4px solid #e2e8f0;
-          }
-        }
-        .activity-footer {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          .actions {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: #94a3b8;
-            font-size: 13px;
-            cursor: pointer;
-            &:hover {
-              color: #6366f1;
-            }
-          }
-        }
-      }
+  .donut-chart-wrap {
+    height: 320px;
+    &.small {
+      height: 260px;
     }
   }
 
-  // 6. 快捷导航 (高级版)
-  .shortcut-grid-premium {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    padding: 10px 0;
-
-    .shortcut-wrapper {
-      width: 100%;
+  // Table
+  .custom-table {
+    :deep(.el-table__header) th {
+      background: #f9fafb;
+      color: #4b5563;
+      font-weight: 600;
     }
-
-    .shortcut-item-premium {
+    .profile-cell {
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 10px;
-      padding: 12px 0;
-      border-radius: 16px;
-      transition: all 0.3s;
-
-      &:hover {
-        background: #f1f5f9;
-        .icon-box {
-          background: #fff;
-          transform: translateY(-2px);
-          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
-      }
-
-      .icon-box {
-        width: 54px;
-        height: 54px;
-        background: #f8fafc;
-        border-radius: 16px;
+      gap: 12px;
+      .project-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        color: #fff;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 26px;
-        color: var(--icon-color);
-        transition: all 0.3s;
+        font-weight: 700;
       }
-      .label {
-        font-size: 13px;
-        color: #475569;
+      .name {
         font-weight: 600;
+        color: #1f2937;
+      }
+      .role {
+        font-size: 12px;
+        color: #6b7280;
       }
     }
   }
 
-  // 7. 效能分析与进度
-  .efficiency-content {
-    .chart-wrap-premium {
-      height: 260px;
-      width: 100%;
-      margin-bottom: 20px;
+  // Schedules
+  .schedules-card {
+    .card-header {
+      font-weight: 600;
     }
-    .efficiency-stats {
-      padding: 0 10px;
-      .stat-row {
+    .date-tabs {
+      margin-bottom: 24px;
+      .el-button-group {
+        width: 100%;
         display: flex;
-        justify-content: space-between;
-        margin-bottom: 8px;
-        .lab {
-          font-size: 13px;
-          color: #64748b;
-          font-weight: 500;
+        .el-button {
+          flex: 1;
+          border-radius: 8px;
         }
-        .val {
-          font-size: 14px;
-          color: #1e293b;
-          font-weight: 700;
-        }
-      }
-      .mt-12 {
-        margin-top: 16px;
       }
     }
-  }
-
-  // 8. 团队列表 (高级版)
-  .team-list-premium {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    .team-item-premium {
+    .schedule-list {
       display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 8px;
-      border-radius: 14px;
-      transition: background 0.2s;
-      &:hover {
-        background: #f8fafc;
-      }
-
-      .avatar-wrap {
-        position: relative;
-        .status-indicator {
-          position: absolute;
-          bottom: 0;
-          right: 0;
-          width: 10px;
-          height: 10px;
-          border-radius: 50%;
-          border: 2px solid #fff;
-          &.online {
-            background: #10b981;
-          }
-          &.busy {
-            background: #ef4444;
-          }
-          &.offline {
-            background: #cbd5e1;
-          }
+      flex-direction: column;
+      gap: 20px;
+      .schedule-item {
+        display: flex;
+        gap: 16px;
+        .time {
+          width: 60px;
+          color: #9ca3af;
+          font-size: 13px;
+          padding-top: 4px;
         }
-      }
-      .info {
-        flex: 1;
-        .name {
-          font-weight: 700;
-          color: #1e293b;
-          font-size: 14px;
-        }
-        .role {
-          font-size: 12px;
-          color: #94a3b8;
+        .event-card {
+          flex: 1;
+          border-left: 4px solid;
+          background: #f9fafb;
+          border-radius: 0 12px 12px 0;
+          padding: 16px;
+          .event-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+          }
+          .event-time {
+            font-size: 12px;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 12px;
+          }
+          .event-participants {
+            display: flex;
+            align-items: center;
+            .more {
+              margin-left: 8px;
+              color: #9ca3af;
+              font-size: 11px;
+            }
+          }
         }
       }
     }
   }
 
-  // 9. 装饰元素
-  .decorative-illustration {
-    margin-top: 30px;
+  .custom-avatar-group {
     display: flex;
-    justify-content: center;
-    .floating-img {
-      width: 180px;
-      animation: float 4s infinite ease-in-out;
-      opacity: 0.8;
+    align-items: center;
+    .el-avatar {
+      border: 2px solid #fff;
+      margin-left: -12px;
+      &:first-child {
+        margin-left: 0;
+      }
     }
-  }
-}
-
-// 动画
-@keyframes wave {
-  0% {
-    transform: rotate(0deg);
-  }
-  10% {
-    transform: rotate(14deg);
-  }
-  20% {
-    transform: rotate(-8deg);
-  }
-  30% {
-    transform: rotate(14deg);
-  }
-  40% {
-    transform: rotate(-4deg);
-  }
-  50% {
-    transform: rotate(10deg);
-  }
-  60% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(0deg);
-  }
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-15px);
   }
 }
 
@@ -1399,17 +1105,5 @@ const efficiencyOption = computed(() => ({
   50% {
     transform: rotate(20deg) translate(-30px, 40px);
   }
-}
-
-:deep(.el-card__header) {
-  border-bottom: 1px solid #f8fafc;
-  padding: 20px 24px;
-}
-
-.w-full {
-  width: 100%;
-}
-.h-full {
-  height: 100%;
 }
 </style>

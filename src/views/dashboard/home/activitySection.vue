@@ -13,7 +13,7 @@
       <div
         v-for="item in activities"
         :key="item.id"
-        class="flex gap-5 py-6 border-b border-(--el-border-color) last:border-none"
+        class="flex gap-5 py-6 border-b border-(--el-border-color-extra-light) last:border-none"
       >
         <div class="relative shrink h-10 w-10">
           <el-avatar :size="40" :src="item.avatar" />

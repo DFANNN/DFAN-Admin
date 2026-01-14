@@ -1,6 +1,6 @@
 import { use } from 'echarts/core' // echart 核心
 import { CanvasRenderer } from 'echarts/renderers' // echart 渲染器
-import { LineChart, RadarChart } from 'echarts/charts' // echart 图表
+import { LineChart, RadarChart, PieChart, BarChart } from 'echarts/charts' // echart 图表
 import {
   TitleComponent,
   TooltipComponent,
@@ -12,6 +12,8 @@ use([
   CanvasRenderer,
   LineChart,
   RadarChart,
+  PieChart,
+  BarChart,
   TitleComponent,
   TooltipComponent,
   GridComponent,

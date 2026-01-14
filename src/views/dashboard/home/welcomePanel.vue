@@ -1,6 +1,6 @@
 <template>
   <el-card class="welcome-panel-card">
-    <!-- 上半部分：包含用户信息、进度和统计卡片 -->
+    <!-- 欢迎面板 -->
     <el-scrollbar :max-height="620">
       <div class="flex flex-col xl:flex-row justify-between p-6 lg:p-8">
         <div class="flex-1">
