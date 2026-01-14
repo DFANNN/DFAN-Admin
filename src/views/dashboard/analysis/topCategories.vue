@@ -24,7 +24,7 @@ const colorTrigger = ref(0)
 
 // 4. 热销品类柱状图
 const topCategoriesOption = computed(() => {
-  colorTrigger.value
+  void colorTrigger.value
   const style = getComputedStyle(document.documentElement)
 
   return {

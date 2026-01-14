@@ -24,7 +24,7 @@ const colorTrigger = ref(0)
 
 // 全球市场份额饼图
 const marketShareOption = computed(() => {
-  colorTrigger.value
+  void colorTrigger.value
   const style = getComputedStyle(document.documentElement)
 
   return {

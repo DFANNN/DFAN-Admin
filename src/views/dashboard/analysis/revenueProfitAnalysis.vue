@@ -30,7 +30,6 @@
 import VChart from 'vue-echarts'
 
 type ITimeRange = '1y' | '2y'
-const themeStore = useThemeStore()
 
 // 触发器变量（仅仅用来主题或者颜色变化时触发revenueProfitOption 更新的变量）
 const colorTrigger = ref(0)
@@ -68,7 +67,7 @@ const rawData = ref<
 })
 
 const revenueProfitOption = computed(() => {
-  colorTrigger.value
+  void colorTrigger.value
 
   const style = getComputedStyle(document.documentElement)
   const data = rawData.value[analysisTimeRange.value]
