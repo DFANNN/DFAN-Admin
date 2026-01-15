@@ -30,11 +30,8 @@
 
 <script setup lang="ts">
 import VChart from 'vue-echarts'
-import { useWindowSize } from '@vueuse/core'
 
 type ITimeRange = '1y' | '2y'
-
-const { width } = useWindowSize()
 
 // 触发器变量（仅仅用来主题或者颜色变化时触发revenueProfitOption 更新的变量）
 const colorTrigger = ref(0)

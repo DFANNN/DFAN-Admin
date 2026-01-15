@@ -4,9 +4,6 @@
     <template #header>
       <div class="flex justify-between items-center gap-3 font-bold">
         <span>各渠道销售表现实时榜单</span>
-        <!-- <el-icon>
-          <component :is="menuStore.iconComponents['HOutline:ChartPieIcon']" />
-        </el-icon> -->
         <IconButton icon="HOutline:EllipsisHorizontalIcon" size="1.5rem" />
       </div>
     </template>
@@ -50,8 +47,6 @@
 </template>
 
 <script setup lang="ts">
-const menuStore = useMenuStore()
-
 // 渠道销售数据
 const channelSales = ref([
   {

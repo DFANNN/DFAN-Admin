@@ -3,9 +3,6 @@
     <template #header>
       <div class="flex justify-between items-center gap-3 font-bold">
         <span>热销商品类目 TOP 5</span>
-        <!-- <el-icon>
-          <component :is="menuStore.iconComponents['HOutline:ChartBarIcon']" />
-        </el-icon> -->
         <IconButton icon="HOutline:EllipsisHorizontalIcon" size="1.5rem" />
       </div>
     </template>
@@ -17,8 +14,6 @@
 
 <script setup lang="ts">
 import VChart from 'vue-echarts'
-
-const menuStore = useMenuStore()
 
 // 触发器变量（仅仅用来主题或者颜色变化时触发revenueProfitOption 更新的变量）
 const colorTrigger = ref(0)
