@@ -1,12 +1,13 @@
 <template>
   <!-- 各渠道销售表现实时榜单 -->
-  <el-card class="channel-sales-card">
+  <el-card class="channel-sales-card" shadow="never">
     <template #header>
       <div class="flex justify-between items-center gap-3 font-bold">
         <span>各渠道销售表现实时榜单</span>
-        <el-icon>
+        <!-- <el-icon>
           <component :is="menuStore.iconComponents['HOutline:ChartPieIcon']" />
-        </el-icon>
+        </el-icon> -->
+        <IconButton icon="HOutline:EllipsisHorizontalIcon" size="1.5rem" />
       </div>
     </template>
 
@@ -25,12 +26,12 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="revenue" label="销售额">
+        <el-table-column prop="revenue" label="销售额" min-width="150">
           <template #default="{ row }">
             <div class="font-bold">￥{{ row.revenue }}</div>
           </template>
         </el-table-column>
-        <el-table-column label="达成率">
+        <el-table-column label="达成率" min-width="180">
           <template #default="{ row }">
             <el-progress
               :percentage="row.achievement"
@@ -38,7 +39,7 @@
             />
           </template>
         </el-table-column>
-        <el-table-column prop="status" label="状态">
+        <el-table-column prop="status" label="状态" min-width="100">
           <template #default="{ row }">
             <el-tag :type="row.statusType" effect="dark" round>{{ row.status }}</el-tag>
           </template>
@@ -75,7 +76,7 @@ const channelSales = ref([
     name: '抖音直播间',
     owner: 'Mike Lee',
     revenue: '281,000',
-    achievement: 105,
+    achievement: 100,
     status: '爆发期',
     statusType: 'warning',
     color: '#f59e0b',

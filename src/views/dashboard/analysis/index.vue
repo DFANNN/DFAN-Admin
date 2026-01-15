@@ -6,7 +6,7 @@
       <el-col :xs="24" :md="12" :lg="8">
         <MarketShare ref="marketShareRef" />
       </el-col>
-      <el-col :xs="24" :md="12" :lg="8">
+      <el-col :xs="24" :md="12" :lg="8" class="mt-4 min-[992px]:mt-0">
         <TopCategories ref="topCategoriesRef" />
       </el-col>
       <el-col :xs="24" :md="24" :lg="8" class="mt-4 min-[1200px]:mt-0">

@@ -1,6 +1,6 @@
 <template>
   <!-- 营销目标和今日之星 -->
-  <el-card class="common-card">
+  <el-card class="common-card" shadow="never">
     <div class="flex flex-col gap-2">
       <div class="flex items-center justify-center w-10 h-10 rounded-full bg-[#f97316]">
         <el-icon size="20">
@@ -22,7 +22,7 @@
       />
     </div>
   </el-card>
-  <el-card class="common-card mt-2">
+  <el-card class="common-card mt-2" shadow="never">
     <div class="flex flex-col items-center justify-center gap-4">
       <div class="text-[#f97316] text-xs font-semibold">Today's Operation Manager</div>
       <el-avatar :size="64" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Operation" />

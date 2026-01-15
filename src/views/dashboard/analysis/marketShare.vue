@@ -1,11 +1,12 @@
 <template>
-  <el-card class="market-share-card">
+  <el-card class="market-share-card" shadow="never">
     <template #header>
       <div class="flex justify-between items-center gap-3 font-bold">
         <span>全球市场份额分布</span>
-        <el-icon>
+        <!-- <el-icon>
           <component :is="menuStore.iconComponents['HOutline:ChartPieIcon']" />
-        </el-icon>
+        </el-icon> -->
+        <IconButton icon="HOutline:EllipsisHorizontalIcon" size="1.5rem" />
       </div>
     </template>
     <div class="h-65 w-full">

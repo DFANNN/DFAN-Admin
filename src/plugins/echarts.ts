@@ -6,6 +6,7 @@ import {
   TooltipComponent,
   GridComponent,
   LegendComponent,
+  DataZoomComponent,
 } from 'echarts/components' // echart 组件
 
 use([
@@ -18,4 +19,5 @@ use([
   TooltipComponent,
   GridComponent,
   LegendComponent,
+  DataZoomComponent,
 ])

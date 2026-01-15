@@ -1,15 +1,16 @@
 <template>
   <!-- 各渠道销售表现实时榜单 -->
-  <el-card class="operational-event-card">
+  <el-card class="operational-event-card" shadow="never">
     <template #header>
       <div class="flex justify-between items-center gap-3 font-bold">
         <span>近期运营大事件</span>
-        <el-icon size="20">
+        <!-- <el-icon size="20">
           <component
             :is="menuStore.iconComponents['HOutline:ChartPieIcon']"
             class="text-(--el-color-primary)"
           />
-        </el-icon>
+        </el-icon> -->
+        <IconButton icon="HOutline:EllipsisHorizontalIcon" size="1.5rem" />
       </div>
     </template>
 

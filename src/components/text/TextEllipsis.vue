@@ -59,7 +59,7 @@ interface IProps {
   line?: number
   // 宽度，超过此宽度后省略（默认：100%），支持字符串（vh, rem, px, 百分比）或数字（默认 px）
   width?: string | number
-  // 是否允许点击展开/收起（默认：false）
+  // 是否允许点击展开/收起（默认：true）
   clickable?: boolean
   // tooltip 提示类型（默认：'element', 原生：'native', 不显示：'none'）
   tooltipType?: 'element' | 'native' | 'none'

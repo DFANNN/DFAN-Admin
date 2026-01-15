@@ -1,11 +1,12 @@
 <template>
-  <el-card class="top-categories-card">
+  <el-card class="top-categories-card" shadow="never">
     <template #header>
       <div class="flex justify-between items-center gap-3 font-bold">
         <span>热销商品类目 TOP 5</span>
-        <el-icon>
+        <!-- <el-icon>
           <component :is="menuStore.iconComponents['HOutline:ChartBarIcon']" />
-        </el-icon>
+        </el-icon> -->
+        <IconButton icon="HOutline:EllipsisHorizontalIcon" size="1.5rem" />
       </div>
     </template>
     <div class="h-65 w-full">

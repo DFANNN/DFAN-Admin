@@ -1,16 +1,18 @@
 <template>
-  <el-card class="revenue-profit--analysis-card">
+  <el-card class="revenue-profit--analysis-card" shadow="never">
     <template #header>
-      <div class="flex items-center justify-between">
-        <div class="flex items-center">
-          <div class="text-[18px] font-bold">年度营收与净利润增长深度分析</div>
+      <div class="flex items-center justify-between gap-2">
+        <div class="flex flex-1 items-center">
+          <div class="text-[18px] font-bold">
+            <TextEllipsis text="年度营收与净利润增长深度分析" :clickable="false" />
+          </div>
           <div
-            class="ml-4 text-xs font-semibold text-(--el-color-primary) bg-(--el-color-primary-light-7) px-2 py-1 rounded-md"
+            class="ml-4 text-xs font-semibold text-(--el-color-primary) bg-(--el-color-primary-light-7) px-2 py-1 rounded-md hidden sm:block"
           >
             数据已脱敏
           </div>
         </div>
-        <div class="flex items-center gap-2">
+        <div class="flex shrink-0 items-center sm:gap-2">
           <el-radio-group v-model="analysisTimeRange" size="small">
             <el-radio-button label="1y">近1年</el-radio-button>
             <el-radio-button label="2y">近2年</el-radio-button>
@@ -28,8 +30,11 @@
 
 <script setup lang="ts">
 import VChart from 'vue-echarts'
+import { useWindowSize } from '@vueuse/core'
 
 type ITimeRange = '1y' | '2y'
+
+const { width } = useWindowSize()
 
 // 触发器变量（仅仅用来主题或者颜色变化时触发revenueProfitOption 更新的变量）
 const colorTrigger = ref(0)
@@ -68,7 +73,6 @@ const rawData = ref<
 
 const revenueProfitOption = computed(() => {
   void colorTrigger.value
-
   const style = getComputedStyle(document.documentElement)
   const data = rawData.value[analysisTimeRange.value]
 
@@ -95,7 +99,7 @@ const revenueProfitOption = computed(() => {
       itemGap: 20,
       textStyle: { color: style.getPropertyValue('--el-text-color-regular') },
     },
-    grid: { left: '3%', right: '4%', bottom: '10%', top: '10%', containLabel: true },
+    grid: { left: '3%', right: '4%', bottom: 60, top: '10%', containLabel: true },
     xAxis: {
       type: 'category',
       boundaryGap: false,
@@ -104,6 +108,26 @@ const revenueProfitOption = computed(() => {
       axisTick: { show: false },
       axisLabel: { color: style.getPropertyValue('--el-text-color-regular') },
     },
+    // dataZoom: [
+    //   {
+    //     type: 'inside',
+    //     xAxisIndex: 0,
+    //     zoomOnMouseWheel: true,
+    //     moveOnMouseMove: true,
+    //     moveOnMouseWheel: true,
+    //   },
+    //   {
+    //     type: 'slider',
+    //     height: 20,
+    //     // 滑块选中区域
+    //     fillerColor: style.getPropertyValue('--el-color-primary-light-5'),
+    //     // 文字
+    //     textStyle: {
+    //       color: style.getPropertyValue('--el-text-color-secondary'),
+    //       fontSize: 12,
+    //     },
+    //   },
+    // ],
     yAxis: [
       {
         type: 'value',
