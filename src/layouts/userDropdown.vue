@@ -8,9 +8,7 @@
   >
     <div class="user-card">
       <div class="avatar-wrapper">
-        <div class="user-avatar">
-          <img :src="userStore.userInfo?.avatar" alt="avatar" />
-        </div>
+        <el-avatar :size="36" :src="userStore.userInfo?.avatar" />
         <span class="status-badge"></span>
       </div>
       <div class="user-info">
@@ -19,9 +17,6 @@
         }}</span>
         <span class="user-role-badge ellipsis-text">{{ userRoleName }}</span>
       </div>
-      <el-icon class="arrow-icon">
-        <component :is="menuStore.iconComponents['HOutline:ChevronDownIcon']" />
-      </el-icon>
     </div>
 
     <template #dropdown>
@@ -29,9 +24,7 @@
         <!-- 用户信息头部 -->
         <div class="user-header">
           <div class="avatar-wrapper">
-            <div class="header-avatar">
-              <img :src="userStore.userInfo?.avatar" alt="avatar" />
-            </div>
+            <el-avatar :size="48" :src="userStore.userInfo?.avatar" />
             <span class="status-badge"></span>
           </div>
           <div class="user-info">
@@ -219,12 +212,11 @@ onBeforeUnmount(() => {
       display: inline-block;
       align-items: center;
       padding: 2px 8px;
-      background: color-mix(in srgb, var(--el-color-primary) 10%, transparent);
+      background: var(--el-color-primary-light-9);
       color: var(--el-color-primary);
       font-size: 11px;
       font-weight: 500;
-      border-radius: 10px;
-      border: 1px solid color-mix(in srgb, var(--el-color-primary) 20%, transparent);
+      border-radius: 4px;
       white-space: nowrap;
       line-height: 1.2;
       max-width: 100px;
@@ -291,13 +283,12 @@ onBeforeUnmount(() => {
         display: inline-block;
         align-items: center;
         padding: 3px 10px;
-        background: color-mix(in srgb, var(--el-color-primary) 10%, transparent);
+        background: var(--el-color-primary-light-9);
         color: var(--el-color-primary);
         font-size: 11px;
         font-weight: 500;
-        border-radius: 12px;
+        border-radius: 4px;
         line-height: 1.2;
-        border: 1px solid color-mix(in srgb, var(--el-color-primary) 20%, transparent);
         max-width: 100px;
       }
     }

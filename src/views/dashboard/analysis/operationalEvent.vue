@@ -1,15 +1,9 @@
 <template>
-  <!-- 各渠道销售表现实时榜单 -->
+  <!-- 近期运营大事件 -->
   <el-card class="operational-event-card" shadow="never">
     <template #header>
       <div class="flex justify-between items-center gap-3 font-bold">
         <span>近期运营大事件</span>
-        <!-- <el-icon size="20">
-          <component
-            :is="menuStore.iconComponents['HOutline:ChartPieIcon']"
-            class="text-(--el-color-primary)"
-          />
-        </el-icon> -->
         <IconButton icon="HOutline:EllipsisHorizontalIcon" size="1.5rem" />
       </div>
     </template>
@@ -53,8 +47,17 @@
               时间: {{ item.range }}
             </div>
             <div class="flex items-center gap-4">
-              <el-avatar :size="24" src="https://api.dicebear.com/7.x/avataaars/svg?seed=prom" />
-              <span class="text-xs text-(--el-text-color-secondary)">策划中...</span>
+              <el-avatar
+                :size="24"
+                :src="`https://api.dicebear.com/7.x/avataaars/svg?seed=${item.id}`"
+              />
+              <span class="text-xs text-(--el-text-color-secondary)">{{
+                currentEventTab === 'toBeOpened'
+                  ? '策划中...'
+                  : currentEventTab === 'inProgress'
+                    ? '进行中...'
+                    : '已结束'
+              }}</span>
             </div>
           </div>
         </div>

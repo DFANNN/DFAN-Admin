@@ -49,7 +49,7 @@ export async function initDefaultUsers(): Promise<void> {
           roleId: superAdminRole ? superAdminRole.id : undefined, // 分配为超级管理员角色（单角色）
           createTime: now,
           updateTime: now,
-          avatar: new URL('@/assets/animals/狐狸.svg', import.meta.url).href,
+          avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alice',
         },
         {
           id: `user2_${Date.now()}`,

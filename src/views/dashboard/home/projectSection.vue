@@ -9,7 +9,7 @@
           </el-icon>
           <span>正在进行的项目</span>
         </div>
-        <el-button link type="primary">管理所有项目</el-button>
+        <IconButton icon="HOutline:EllipsisHorizontalIcon" size="1.5rem" />
       </div>
     </template>
     <el-scrollbar :height="500">

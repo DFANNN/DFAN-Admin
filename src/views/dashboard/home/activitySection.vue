@@ -2,11 +2,14 @@
   <!-- 团队动态与最新评价 -->
   <el-card class="activity-section-card" shadow="never">
     <template #header>
-      <div class="flex items-center gap-3">
-        <el-icon>
-          <component :is="menuStore.iconComponents['HOutline:SparklesIcon']" />
-        </el-icon>
-        <span>团队动态与最新评价</span>
+      <div class="flex justify-between items-center">
+        <div class="flex items-center gap-3">
+          <el-icon>
+            <component :is="menuStore.iconComponents['HOutline:SparklesIcon']" />
+          </el-icon>
+          <span>团队动态与最新评价</span>
+        </div>
+        <IconButton icon="HOutline:EllipsisHorizontalIcon" size="1.5rem" />
       </div>
     </template>
     <el-scrollbar :height="540">

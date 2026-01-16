@@ -201,7 +201,7 @@ onMounted(() => {
   .subtitle {
     font-size: 0.95rem;
     color: var(--el-text-color-secondary);
-    margin-bottom: 2rem;
+    margin-bottom: 1.7rem;
   }
 
   .login-form {
