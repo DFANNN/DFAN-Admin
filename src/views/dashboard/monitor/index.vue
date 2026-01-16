@@ -27,6 +27,8 @@ import ThroughputPanel from '@/views/dashboard/monitor/throughputPanel.vue'
 import NodePanel from '@/views/dashboard/monitor/nodePanel.vue'
 import MapPanel from '@/views/dashboard/monitor/mapPanel.vue'
 
+defineOptions({ name: 'MonitorView' })
+
 const themeStore = useThemeStore()
 const mapPanelRef = useTemplateRef<InstanceType<typeof MapPanel> | null>('mapPanelRef')
 const resourcePanelRef = useTemplateRef<InstanceType<typeof ResourcePanel> | null>(
