@@ -8,9 +8,7 @@
           </el-icon>
           <span>在线伙伴</span>
         </div>
-        <el-button link type="primary" :icon="menuStore.iconComponents['HOutline:PlusSmallIcon']">
-          邀请
-        </el-button>
+        <IconButton icon="HOutline:EllipsisHorizontalIcon" size="1.5rem" />
       </div>
     </template>
     <el-scrollbar :height="280">

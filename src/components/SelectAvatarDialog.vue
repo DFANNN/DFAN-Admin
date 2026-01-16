@@ -1,5 +1,5 @@
 <template>
-  <el-dialog
+  <BaseDialog
     v-model="open"
     title="选择头像"
     :width="menuStore.isMobile ? '90%' : '800px'"
@@ -106,13 +106,13 @@
         >确定</el-button
       >
     </template>
-  </el-dialog>
+  </BaseDialog>
 </template>
 
 <script setup lang="ts">
-import { APP_CONFIG } from '@/config/app.config'
 import { ElMessage } from 'element-plus'
 import type { UploadFile } from 'element-plus'
+import BaseDialog from './dialog/BaseDialog.vue'
 
 defineOptions({ name: 'SelectAvatarDialog' })
 
@@ -133,9 +133,16 @@ const selectedAvatar = ref<string | number | null>(null)
 const avatarSearchText = ref('')
 
 // 获取所有头像
-const allAvatars = computed(() => {
-  return APP_CONFIG.systemAvatar
-})
+const allAvatars = ref(
+  Array.from({ length: 100 }, (_, index) => {
+    return {
+      id: index + 1,
+      title: String(index + 1),
+      alt: String(index + 1),
+      src: `https://api.dicebear.com/7.x/avataaars/svg?seed=${index + 1}`,
+    }
+  }),
+)
 
 // 过滤后的头像列表
 const filteredAvatars = computed(() => {
