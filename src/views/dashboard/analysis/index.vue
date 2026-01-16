@@ -44,6 +44,7 @@ const revenueProfitAnalysisRef = useTemplateRef<InstanceType<typeof RevenueProfi
   'revenueProfitAnalysisRef',
 )
 
+//  监听主题色和主题模式变化，更新图表颜色
 watch(
   [() => themeStore.themeMode, () => themeStore.primaryColor],
   async () => {

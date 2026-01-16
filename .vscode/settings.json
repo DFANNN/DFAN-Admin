@@ -10,5 +10,5 @@
   },
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "cSpell.words": ["DFAN", "echart", "POPCONFIRM", "Shenzhen", "VITE", "vueuse"]
+  "cSpell.words": ["DFAN", "echart", "echarts", "POPCONFIRM", "Shenzhen", "VITE", "vueuse"]
 }
