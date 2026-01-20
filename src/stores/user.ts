@@ -24,6 +24,18 @@ export const useUserStore = defineStore('user', () => {
   // 角色信息
   const roleList = ref<IRoleItem[]>([])
 
+  // 用户角色名称
+  const userRoleName = computed(() => {
+    return roleList.value.find((role) => role.id === userInfo.value?.roleId)?.name ?? '无权限'
+  })
+
+  // 地址信息
+  const address = ref({
+    country: '',
+    region: '',
+    city: '',
+  })
+
   // 获取用户信息
   const getUserInfo = async () => {
     const { data: res } = await userInfoRequest()
@@ -55,6 +67,19 @@ export const useUserStore = defineStore('user', () => {
   // 清除用户信息
   const clearUserInfo = () => {
     userInfo.value = null
+  }
+
+  // 获取地址信息
+  const getAddress = () => {
+    fetch('https://ipapi.co/json/')
+      .then((res) => res.json())
+      .then((data) => {
+        address.value = {
+          country: data.country_name,
+          region: data.region,
+          city: data.city,
+        }
+      })
   }
 
   // --------------- 个人中心 ---------------
@@ -278,12 +303,18 @@ export const useUserStore = defineStore('user', () => {
     router.replace('/login')
   }
 
+  onMounted(() => {
+    getAddress()
+  })
+
   return {
     userInfo,
     roleList,
     userMessages,
     unreadCount,
     currentMenu,
+    userRoleName,
+    address,
     getUserInfo,
     clearUserInfo,
     getUserRoleName,

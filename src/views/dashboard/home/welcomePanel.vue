@@ -5,23 +5,28 @@
       <div class="flex flex-col xl:flex-row justify-between p-6 lg:p-8">
         <div class="flex-1">
           <div class="flex flex-col lg:flex-row items-center lg:items-start xl:items-center gap-6">
-            <div>
-              <HoverAnimateWrapper>
-                <el-avatar
-                  :size="80"
-                  :src="userStore.userInfo?.avatar"
-                  class="cursor-pointer border-4 rounded-full shadow-xl"
-                />
-              </HoverAnimateWrapper>
+            <div class="relative shrink-0">
+              <el-avatar :size="110" :src="userStore.userInfo?.avatar" />
+              <div
+                class="absolute h-5 w-5 bottom-2 right-2 rounded-full border-3 border-(--el-bg-color) bg-(--el-color-success)"
+              ></div>
             </div>
+
             <div class="flex flex-col gap-4 items-center lg:items-start text-center lg:text-left">
-              <h2 class="flex text-2xl md:text-3xl font-black text-(--el-text-color-primary)">
-                <div>{{ userStore.userInfo?.name }}，欢迎回来！</div>
+              <h2
+                class="flex text-2xl md:text-3xl font-black text-(--el-text-color-primary) cursor-pointer"
+              >
+                <TextEllipsis
+                  :text="`${userStore.userInfo?.name!}，欢迎回来！`"
+                  :clickable="false"
+                  class="text-2xl md:text-3xl font-black text-(--el-text-color-primary)"
+                />
                 <div>👋</div>
               </h2>
-              <p class="text-(--el-text-color-regular) italic text-sm md:base">
-                “ 凡事豫则立，不豫则废。” —— 开启您高效的一天。
-              </p>
+              <TextEllipsis
+                text="“ 凡事豫则立，不豫则废。” —— 开启您高效的一天。"
+                class="text-(--el-text-color-regular) italic text-sm md:base cursor-pointer"
+              />
               <div class="flex flex-wrap justify-center lg:justify-start items-center gap-3">
                 <div
                   class="flex items-center gap-2 text-xs font-semibold px-3 py-2 text-(--el-text-color-primary) bg-(--el-bg-color-page) rounded-lg"
@@ -43,7 +48,10 @@
                       class="text-indigo-500"
                     />
                   </el-icon>
-                  <span>{{ address.country }} · {{ address.region }} · {{ address.city }}</span>
+                  <span
+                    >{{ userStore.address.country }} · {{ userStore.address.region }} ·
+                    {{ userStore.address.city }}</span
+                  >
                 </div>
                 <div
                   class="flex items-center gap-2 text-xs font-semibold px-3 py-2 text-(--el-text-color-primary) bg-(--el-bg-color-page) rounded-lg"
@@ -183,13 +191,6 @@ const menuStore = useMenuStore()
 // 当前日期
 const currentDate = ref('')
 
-// 地址信息
-const address = ref({
-  country: '',
-  region: '',
-  city: '',
-})
-
 // 创建小折线图
 const createMiniLineChart = (data: number[], color: string) => {
   return {
@@ -261,19 +262,6 @@ const statCards = computed(() => [
   },
 ])
 
-// 获取地址信息
-const getAddress = () => {
-  fetch('https://ipapi.co/json/')
-    .then((res) => res.json())
-    .then((data) => {
-      address.value = {
-        country: data.country_name,
-        region: data.region,
-        city: data.city,
-      }
-    })
-}
-
 // 获取当前日期
 const getCurrentDate = () => {
   currentDate.value = dayjs().format('YYYY-MM-DD')
@@ -281,7 +269,6 @@ const getCurrentDate = () => {
 
 onMounted(() => {
   getCurrentDate()
-  getAddress()
 })
 </script>
 
