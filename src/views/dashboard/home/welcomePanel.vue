@@ -17,14 +17,14 @@
                 class="flex text-2xl md:text-3xl font-black text-(--el-text-color-primary) cursor-pointer"
               >
                 <TextEllipsis
-                  :text="`${userStore.userInfo?.name!}，欢迎回来！`"
+                  :text="`${userStore.userInfo?.name! || userStore.userInfo?.username!}，欢迎回来！`"
                   :clickable="false"
                   class="text-2xl md:text-3xl font-black text-(--el-text-color-primary)"
                 />
                 <div>👋</div>
               </h2>
               <TextEllipsis
-                text="“ 凡事豫则立，不豫则废。” —— 开启您高效的一天。"
+                :text="`“ ${userStore.userInfo?.bio} ”`"
                 class="text-(--el-text-color-regular) italic text-sm md:base cursor-pointer"
               />
               <div class="flex flex-wrap justify-center lg:justify-start items-center gap-3">

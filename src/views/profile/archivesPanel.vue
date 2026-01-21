@@ -16,7 +16,7 @@
       </div>
       <div class="info-cell">
         <label>账号状态</label>
-        <span>{{ userStore.userInfo?.status }}</span>
+        <span>{{ userStore.userInfo?.status === 'active' ? '启用' : '禁用' }}</span>
       </div>
       <div class="info-cell">
         <label>加入时间</label>
@@ -24,15 +24,18 @@
       </div>
       <div class="info-cell">
         <label>联系邮箱</label>
-        <span>{{ userStore.userInfo?.email ?? '未设置' }}</span>
+        <span>{{ userStore.userInfo?.email || '未设置' }}</span>
       </div>
 
       <el-divider />
 
-      <div class="flex flex-wrap gap-2">
-        <el-tag v-for="skill in skills" :key="skill.name" :type="skill.type">{{
-          skill.name
-        }}</el-tag>
+      <div>
+        <div class="text-sm font-bold text-(--el-text-color-secondary) mb-2">个人标签</div>
+        <div class="flex flex-wrap gap-2">
+          <el-tag v-for="skill in skills" :key="skill.name" :type="skill.type">{{
+            skill.name
+          }}</el-tag>
+        </div>
       </div>
     </div>
   </el-card>
@@ -45,15 +48,17 @@ const userStore = useUserStore()
 type TagType = 'success' | 'info' | 'warning' | 'danger' | 'primary'
 
 // 技能标签
-const skills = ref<{ name: string; type: TagType }[]>([
-  { name: 'Vue 3.x', type: 'primary' },
-  { name: 'TypeScript', type: 'success' },
-  { name: 'Element Plus', type: 'warning' },
-  { name: 'SCSS/Less', type: 'info' },
-  { name: 'Node.js', type: 'danger' },
-  { name: 'Docker', type: 'primary' },
-  { name: 'Micro-Frontend', type: 'success' },
-])
+const skills = computed(() => {
+  const tags = userStore.userInfo?.tags
+  if (!tags) return []
+  return tags.split(',').map((tag) => ({
+    name: tag.trim(),
+    // 随机type
+    type: ['success', 'info', 'warning', 'danger', 'primary'][
+      Math.floor(Math.random() * 5)
+    ] as TagType,
+  }))
+})
 </script>
 
 <style scoped lang="scss">
@@ -75,12 +80,12 @@ const skills = ref<{ name: string; type: TagType }[]>([
   margin-bottom: 1.25rem;
   label {
     display: block;
-    font-size: 0.75rem;
+    font-size: 14px;
     color: var(--el-text-color-secondary);
     margin-bottom: 0.25rem;
   }
   span {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
   }
   &:last-child {

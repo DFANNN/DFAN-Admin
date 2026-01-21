@@ -15,6 +15,8 @@ export interface IUserItem {
   isBuiltIn?: boolean
   createTime?: string
   updateTime?: string
+  bio?: string // 个人简介
+  tags?: string // 个人标签，逗号分隔
 }
 
 // 用户列表查询参数
@@ -68,6 +70,9 @@ export interface IUpdateUserProfileParams {
   name: string
   phone: string
   email: string
+  avatar: string
+  bio: string
+  tags: string
 }
 
 // 修改密码参数

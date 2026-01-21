@@ -1,19 +1,21 @@
 import { defineStore } from 'pinia'
 import { userInfoRequest } from '@/api/login'
 import { rolePage } from '@/api/role'
-import { updateProfile, updatePasswordRequest, updateAvatarRequest } from '@/api/user'
+import { updateProfile, updatePasswordRequest, updateAvatarRequest, deleteUser } from '@/api/user'
+
+import { ElMessage } from 'element-plus'
+import router, { resetRouter } from '@/router'
+import { useMenuStore } from './menu'
+import { useTabsStore } from './tabs'
+import defaultAvatarSvg from '@/assets/defaultAvatar.svg'
+import type { IRoleItem } from '@/types/system/role'
+import type { ICurrentTab, IMenuTab } from '@/types/profile'
 import type {
   IUserItem,
   IUserMessageItem,
   IUpdateUserProfileParams,
   IUpdatePasswordParams,
 } from '@/types/system/user'
-import type { IRoleItem } from '@/types/system/role'
-import { ElMessage } from 'element-plus'
-import router, { resetRouter } from '@/router'
-import { useMenuStore } from './menu'
-import { useTabsStore } from './tabs'
-import defaultAvatarSvg from '@/assets/defaultAvatar.svg'
 
 export const useUserStore = defineStore('user', () => {
   // 默认头像占位
@@ -41,6 +43,7 @@ export const useUserStore = defineStore('user', () => {
     const { data: res } = await userInfoRequest()
     if (res.code !== 200) return
     userInfo.value = res.data
+    userInfo.value.bio = userInfo.value.bio || '这个人很懒，什么都没留下~'
     if (!userInfo.value?.avatar) {
       userInfo.value.avatar = defaultAvatarImg.value
     }
@@ -83,6 +86,54 @@ export const useUserStore = defineStore('user', () => {
   }
 
   // --------------- 个人中心 ---------------
+
+  const currentTab = ref<ICurrentTab>('personalInfo')
+
+  // 导航菜单
+  const menuTabs = ref<IMenuTab[]>([
+    { id: 'personalInfo', name: '个人资料', icon: 'HOutline:UserIcon' },
+    { id: 'projects', name: '我的项目', icon: 'HOutline:Square3Stack3DIcon' },
+    { id: 'permissions', name: '我的权限', icon: 'HOutline:ShieldCheckIcon' },
+    { id: 'logs', name: '登录日志', icon: 'HOutline:ListBulletIcon' },
+    { id: 'settings', name: '修改资料', icon: 'HOutline:Cog6ToothIcon' },
+  ])
+
+  // 修改用户个人信息
+  const updateUserProfile = async (data: IUpdateUserProfileParams) => {
+    const { data: res } = await updateProfile(data)
+    if (res.code !== 200) return
+    getUserInfo()
+    ElMessage.success('修改个人资料成功')
+  }
+
+  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+
+  // 注销用户
+  const deleteUserAccount = async () => {
+    const { data: res } = await deleteUser([userInfo.value!.id])
+    if (res.code !== 200) return
+    ElMessage.success('注销账户成功,2秒后跳转至登录页面...')
+    await delay(2000)
+    logout()
+  }
+
+  // 退出登录
+  const logout = () => {
+    localStorage.removeItem('token')
+    const menuStore = useMenuStore()
+    const tabsStore = useTabsStore()
+    menuStore.clearUserPermissions()
+    clearUserInfo()
+    tabsStore.clearTabs()
+    resetRouter()
+    router.replace('/login')
+  }
+
+  onMounted(() => {
+    getAddress()
+  })
+
+  // --------------- 个人中心 (旧的) ---------------
 
   // 当前选择的菜单
   const currentMenu = ref<string>('info')
@@ -275,14 +326,6 @@ export const useUserStore = defineStore('user', () => {
     userMessages.value = []
   }
 
-  // 修改用户个人信息
-  const updateUserProfile = async (data: IUpdateUserProfileParams) => {
-    const { data: res } = await updateProfile(data)
-    if (res.code !== 200) return
-    getUserInfo()
-    ElMessage.success('修改个人信息成功')
-  }
-
   // 修改密码
   const updatePassword = async (data: IUpdatePasswordParams) => {
     const { data: res } = await updatePasswordRequest(data)
@@ -290,22 +333,6 @@ export const useUserStore = defineStore('user', () => {
     ElMessage.success('修改密码成功,请重新登录')
     setTimeout(() => logout(), 1000)
   }
-
-  // 退出登录
-  const logout = () => {
-    localStorage.removeItem('token')
-    const menuStore = useMenuStore()
-    const tabsStore = useTabsStore()
-    menuStore.clearUserPermissions()
-    clearUserInfo()
-    tabsStore.clearTabs()
-    resetRouter()
-    router.replace('/login')
-  }
-
-  onMounted(() => {
-    getAddress()
-  })
 
   return {
     userInfo,
@@ -315,6 +342,8 @@ export const useUserStore = defineStore('user', () => {
     currentMenu,
     userRoleName,
     address,
+    currentTab,
+    menuTabs,
     getUserInfo,
     clearUserInfo,
     getUserRoleName,
@@ -326,5 +355,6 @@ export const useUserStore = defineStore('user', () => {
     updatePassword,
     logout,
     updateAvatar,
+    deleteUserAccount,
   }
 })

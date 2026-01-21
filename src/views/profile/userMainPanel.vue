@@ -15,7 +15,7 @@
         <div class="flex flex-col gap-4 items-center md:items-start text-center md:text-left">
           <div class="flex items-center gap-2">
             <TextEllipsis
-              :text="userStore.userInfo?.name!"
+              :text="userStore.userInfo?.name! || userStore.userInfo?.username!"
               :clickable="false"
               class="text-2xl font-extrabold"
             />
@@ -29,7 +29,7 @@
             </div>
           </div>
           <TextEllipsis
-            text="“ 凡是过往，皆为序章。在技术的海洋里，我们都是逐浪人。 ”"
+            :text="`“ ${userStore.userInfo?.bio} ”`"
             class="italic text-sm text-(--el-text-color-regular)"
           />
           <div
@@ -64,11 +64,11 @@
     </div>
     <div class="mt-9 flex gap-11 justify-center xl:justify-start">
       <div
-        v-for="item in menuTabs"
+        v-for="item in userStore.menuTabs"
         :key="item.id"
         class="relative py-4 text-sm font-semibold text-(--el-text-color-regular) cursor-pointer flex items-center gap-2 hover:text-(--el-color-primary)"
-        :class="{ active: currentTab === item.id }"
-        @click="currentTab = item.id"
+        :class="{ active: userStore.currentTab === item.id }"
+        @click="userStore.currentTab = item.id"
       >
         <el-icon size="18">
           <component :is="menuStore.iconComponents[item.icon]" />
@@ -83,23 +83,12 @@
 const userStore = useUserStore()
 const menuStore = useMenuStore()
 
-const currentTab = ref('overview')
-
 // 统计数据
 const stats = ref([
   { label: '系统工单', value: '1,284' },
   { label: '代码质量', value: '98%' },
   { label: '负责项目', value: '15' },
 ])
-
-// 导航菜单
-const menuTabs = [
-  { id: 'overview', name: '全景概览', icon: 'HOutline:RocketLaunchIcon' },
-  { id: 'projects', name: '我的项目', icon: 'HOutline:Square3Stack3DIcon' },
-  { id: 'permissions', name: '我的权限', icon: 'HOutline:ShieldCheckIcon' },
-  { id: 'logs', name: '登录日志', icon: 'HOutline:ListBulletIcon' },
-  { id: 'settings', name: '修改资料', icon: 'HOutline:Cog6ToothIcon' },
-]
 </script>
 
 <style scoped lang="scss">

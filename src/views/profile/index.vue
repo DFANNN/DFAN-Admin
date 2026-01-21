@@ -3,15 +3,23 @@
     <GradientHeader />
     <div class="relative left-0 -top-50 px-2 md:px-10">
       <userMainPanel />
-      <el-row :gutter="20" class="mt-4">
-        <el-col :lg="6">
-          <ArchivesPanel />
-          <teamPanel class="mt-4" />
-        </el-col>
-        <el-col :lg="18" class="mt-4 min-[1200px]:mt-0">
-          <ActivityPanel />
-        </el-col>
-      </el-row>
+      <div class="mt-4">
+        <Transition name="slide-up" :style="{ '--animation-duration': '0.6s' }" mode="out-in">
+          <el-row :gutter="20" v-if="userStore.currentTab === 'personalInfo'">
+            <el-col :lg="6">
+              <ArchivesPanel />
+              <teamPanel class="mt-4" />
+            </el-col>
+            <el-col :lg="18" class="mt-4 min-[1200px]:mt-0">
+              <!-- <ActivityPanel /> -->
+              <PersonalInfoPanel />
+            </el-col>
+          </el-row>
+          <MyProject v-else-if="userStore.currentTab === 'projects'" />
+          <MyPermission v-else-if="userStore.currentTab === 'permissions'" />
+          <LoginLogs v-else-if="userStore.currentTab === 'logs'" />
+        </Transition>
+      </div>
     </div>
   </div>
 </template>
@@ -22,8 +30,14 @@ import userMainPanel from '@/views/profile/userMainPanel.vue'
 import ArchivesPanel from '@/views/profile/archivesPanel.vue'
 import teamPanel from '@/views/profile/teamPanel.vue'
 import ActivityPanel from '@/views/profile/activityPanel.vue'
+import MyProject from '@/views/profile/myProject.vue'
+import MyPermission from '@/views/profile/myPermission.vue'
+import LoginLogs from '@/views/profile/loginLogs.vue'
+import PersonalInfoPanel from '@/views/profile/personalInfoPanel.vue'
 
 defineOptions({ name: 'ProfileView' })
+
+const userStore = useUserStore()
 </script>
 
 <style scoped lang="scss"></style>
