@@ -78,8 +78,6 @@
 </template>
 
 <script setup lang="ts">
-import { Icon } from 'vxe-pc-ui'
-
 const userStore = useUserStore()
 const menuStore = useMenuStore()
 

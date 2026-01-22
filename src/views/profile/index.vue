@@ -17,7 +17,8 @@
           </el-row>
           <MyProject v-else-if="userStore.currentTab === 'projects'" />
           <MyPermission v-else-if="userStore.currentTab === 'permissions'" />
-          <LoginLogs v-else-if="userStore.currentTab === 'logs'" />
+          <!-- <ActivityPanel v-else-if="userStore.currentTab === 'messages'" /> -->
+          <LoginLogs v-else />
         </Transition>
       </div>
     </div>
