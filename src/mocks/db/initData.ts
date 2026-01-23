@@ -50,6 +50,8 @@ export async function initDefaultUsers(): Promise<void> {
           createTime: now,
           updateTime: now,
           avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alice',
+          bio: '全宇宙最强管理员，掌控一切！',
+          tags: 'vue3,typescript,admin',
         },
         {
           id: `user2_${Date.now()}`,

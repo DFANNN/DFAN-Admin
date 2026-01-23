@@ -1,53 +1,35 @@
 <template>
-  <div class="profile-container">
-    <div class="profile-left">
-      <ProfileMenu />
-    </div>
-    <div class="profile-right">
-      <Transition name="fade-slide" mode="out-in">
-        <component :is="componentMap[userStore.currentMenu]" />
-      </Transition>
+  <div>
+    <GradientHeader />
+    <div class="relative left-0 -top-50 px-2 md:px-10">
+      <userMainPanel />
+      <div class="mt-4">
+        <Transition name="slide-up" :style="{ '--animation-duration': '0.6s' }" mode="out-in">
+          <div :key="userStore.currentTab">
+            <MyInformation v-if="userStore.currentTab === 'personalInfo'" />
+            <MyProject v-else-if="userStore.currentTab === 'projects'" />
+            <MyPermission v-else-if="userStore.currentTab === 'permissions'" />
+            <MyMessages v-else-if="userStore.currentTab === 'messages'" />
+            <LoginLogs v-else />
+          </div>
+        </Transition>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import MyMessage from '@/views/profile/myMessage.vue'
-import ProfileMenu from '@/views/profile/profileMenu.vue'
-import ProfileInfo from '@/views/profile/profileInfo.vue'
-import UpdatePassword from '@/views/profile/updatePassword.vue'
+import GradientHeader from '@/views/profile/gradientHeader.vue'
+import userMainPanel from '@/views/profile/userMainPanel.vue'
+import MyInformation from '@/views/profile/myInformation.vue'
+import MyProject from '@/views/profile/myProject.vue'
+import MyPermission from '@/views/profile/myPermission.vue'
+import MyMessages from '@/views/profile/myMessages.vue'
+import LoginLogs from '@/views/profile/loginLogs.vue'
 
 defineOptions({ name: 'ProfileView' })
 
 const userStore = useUserStore()
-
-const componentMap: Record<string, Component> = {
-  info: ProfileInfo,
-  password: UpdatePassword,
-  messages: MyMessage,
-}
 </script>
 
-<style scoped lang="scss">
-.profile-container {
-  flex: 1;
-  display: flex;
-  gap: 1rem;
-  height: 100%;
-  .profile-left {
-    width: 18.75rem;
-    transition: all 0.3s ease;
-  }
-  .profile-right {
-    flex: 1;
-  }
-}
-@media (max-width: 992px) {
-  .profile-container {
-    flex-direction: column;
-    .profile-left {
-      width: 100%;
-    }
-  }
-}
-</style>
+<style scoped lang="scss"></style>

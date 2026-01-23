@@ -1,7 +1,7 @@
 <template>
   <BaseDialog
     v-model="open"
-    title="选择头像"
+    title="修改头像"
     :width="menuStore.isMobile ? '90%' : '800px'"
     :close-on-click-modal="false"
     @close="close"
@@ -47,7 +47,9 @@
                   </el-icon>
                   <div class="upload-text">
                     <div class="upload-text-main">拖拽图片到此处或点击上传</div>
-                    <div class="upload-text-tip">支持 JPG、PNG、GIF 等格式，建议大小不超过 2MB</div>
+                    <div class="upload-text-tip">
+                      支持 JPG、PNG、GIF 等格式，建议大小不超过 2MB 。
+                    </div>
                   </div>
                 </div>
                 <div v-else class="upload-preview-content">
@@ -98,13 +100,7 @@
 
     <template #footer>
       <el-button @click="close">取消</el-button>
-      <el-button
-        type="primary"
-        :disabled="!selectedAvatar"
-        :loading="updateAvatarLoading"
-        @click="updateAvatar"
-        >确定</el-button
-      >
+      <el-button type="primary" :disabled="!selectedAvatar" @click="updateAvatar">确定</el-button>
     </template>
   </BaseDialog>
 </template>
@@ -116,18 +112,22 @@ import BaseDialog from './dialog/BaseDialog.vue'
 
 defineOptions({ name: 'SelectAvatarDialog' })
 
+interface IEmits {
+  (e: 'getAvatar', avatar: string): void
+}
+
+const emits = defineEmits<IEmits>()
+
 const menuStore = useMenuStore()
-const userStore = useUserStore()
 
 const open = ref(false)
-const updateAvatarLoading = ref(false)
 
 // 当前选中的菜单
 const activeMenu = ref<'upload' | 'cat'>('upload')
 // 当前选中的头像id
 const selectedAvatarId = ref<string | number | null>(null)
 // 当前选中的头像
-const selectedAvatar = ref<string | number | null>(null)
+const selectedAvatar = ref<string | null>(null)
 
 // 搜索框内容
 const avatarSearchText = ref('')
@@ -188,13 +188,8 @@ const uploadFile = (uploadFile: UploadFile) => {
 // 修改头像
 const updateAvatar = async () => {
   if (!selectedAvatar.value) return
-  updateAvatarLoading.value = true
-  try {
-    await userStore.updateAvatar(selectedAvatar.value as string)
-    close()
-  } finally {
-    updateAvatarLoading.value = false
-  }
+  emits('getAvatar', selectedAvatar.value)
+  close()
 }
 
 const close = () => {

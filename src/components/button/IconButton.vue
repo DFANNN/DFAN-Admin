@@ -105,7 +105,7 @@ const loadingIconComponent = computed(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0.5rem;
+  border-radius: 0.25rem;
   cursor: pointer;
   transition: all 0.3s ease;
   color: var(--el-text-color-regular);
@@ -114,7 +114,7 @@ const loadingIconComponent = computed(() => {
   &:hover:not(.is-disabled) {
     background: var(--el-fill-color-light);
     color: var(--el-color-primary);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    // box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   }
 
   &.is-disabled {
@@ -144,7 +144,7 @@ const loadingIconComponent = computed(() => {
     &:hover:not(.is-disabled) {
       background: var(--el-color-primary-light-9);
       color: var(--el-color-primary);
-      box-shadow: 0 4px 12px var(--el-color-primary-light-7);
+      // box-shadow: 0 4px 12px var(--el-color-primary-light-7);
     }
   }
 
@@ -155,7 +155,7 @@ const loadingIconComponent = computed(() => {
     &:hover:not(.is-disabled) {
       background: var(--el-color-success-light-9);
       color: var(--el-color-success);
-      box-shadow: 0 4px 12px var(--el-color-success-light-7);
+      // box-shadow: 0 4px 12px var(--el-color-success-light-7);
     }
   }
 
@@ -166,7 +166,7 @@ const loadingIconComponent = computed(() => {
     &:hover:not(.is-disabled) {
       background: var(--el-color-warning-light-9);
       color: var(--el-color-warning);
-      box-shadow: 0 4px 12px var(--el-color-warning-light-7);
+      // box-shadow: 0 4px 12px var(--el-color-warning-light-7);
     }
   }
 
@@ -177,7 +177,7 @@ const loadingIconComponent = computed(() => {
     &:hover:not(.is-disabled) {
       background: var(--el-color-danger-light-9);
       color: var(--el-color-danger);
-      box-shadow: 0 4px 12px var(--el-color-danger-light-7);
+      // box-shadow: 0 4px 12px var(--el-color-danger-light-7);
     }
   }
 }

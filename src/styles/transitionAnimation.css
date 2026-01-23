@@ -570,3 +570,27 @@
     filter: brightness(0.5) drop-shadow(0 0 0px rgba(255, 255, 255, 0));
   }
 }
+
+/* ==================== transition group 动画 ==================== */
+
+/* slide-left - 向左滑动 */
+.group-slide-left-enter-active,
+.group-slide-left-leave-active {
+  transition: all var(--animation-duration, 0.5s) var(--animation-easing, ease);
+}
+.group-slide-left-enter-from,
+.group-slide-left-leave-to {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+/* slide-up - 向右滑动 */
+.group-slide-right-enter-active,
+.group-slide-right-leave-active {
+  transition: all var(--animation-duration, 0.5s) var(--animation-easing, ease);
+}
+.group-slide-right-enter-from,
+.group-slide-right-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}

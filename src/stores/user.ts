@@ -1,19 +1,22 @@
 import { defineStore } from 'pinia'
 import { userInfoRequest } from '@/api/login'
 import { rolePage } from '@/api/role'
-import { updateProfile, updatePasswordRequest, updateAvatarRequest } from '@/api/user'
+import { updateProfile, updatePasswordRequest, updateAvatarRequest, deleteUser } from '@/api/user'
+
+import { ElMessage } from 'element-plus'
+import router, { resetRouter } from '@/router'
+import { useMenuStore } from './menu'
+import { useTabsStore } from './tabs'
+import defaultAvatarSvg from '@/assets/defaultAvatar.svg'
+import defaultSystemAvatar from '@/assets/images/defaultSystemAvatar.svg'
+import type { IRoleItem } from '@/types/system/role'
+import type { ICurrentTab, ITabsMenuData } from '@/types/profile'
 import type {
   IUserItem,
   IUserMessageItem,
   IUpdateUserProfileParams,
   IUpdatePasswordParams,
 } from '@/types/system/user'
-import type { IRoleItem } from '@/types/system/role'
-import { ElMessage } from 'element-plus'
-import router, { resetRouter } from '@/router'
-import { useMenuStore } from './menu'
-import { useTabsStore } from './tabs'
-import defaultAvatarSvg from '@/assets/defaultAvatar.svg'
 
 export const useUserStore = defineStore('user', () => {
   // 默认头像占位
@@ -24,11 +27,24 @@ export const useUserStore = defineStore('user', () => {
   // 角色信息
   const roleList = ref<IRoleItem[]>([])
 
+  // 用户角色名称
+  const userRoleName = computed(() => {
+    return roleList.value.find((role) => role.id === userInfo.value?.roleId)?.name ?? '无权限'
+  })
+
+  // 地址信息
+  const address = ref({
+    country: '',
+    region: '',
+    city: '',
+  })
+
   // 获取用户信息
   const getUserInfo = async () => {
     const { data: res } = await userInfoRequest()
     if (res.code !== 200) return
     userInfo.value = res.data
+    userInfo.value.bio = userInfo.value.bio || '这个人很懒，什么都没留下~'
     if (!userInfo.value?.avatar) {
       userInfo.value.avatar = defaultAvatarImg.value
     }
@@ -57,167 +73,172 @@ export const useUserStore = defineStore('user', () => {
     userInfo.value = null
   }
 
+  // 获取地址信息
+  const getAddress = () => {
+    fetch('https://ipapi.co/json/')
+      .then((res) => res.json())
+      .then((data) => {
+        address.value = {
+          country: data.country_name,
+          region: data.region,
+          city: data.city,
+        }
+      })
+  }
+
   // --------------- 个人中心 ---------------
 
-  // 当前选择的菜单
-  const currentMenu = ref<string>('info')
+  const currentTab = ref<ICurrentTab>('personalInfo')
+
+  // 导航菜单
+  const menuTabs = ref<ITabsMenuData[]>([
+    { key: 'personalInfo', label: '我的资料', icon: 'HOutline:UserIcon' },
+    { key: 'projects', label: '我的项目', icon: 'HOutline:Square3Stack3DIcon' },
+    { key: 'permissions', label: '我的权限', icon: 'HOutline:ShieldCheckIcon' },
+    { key: 'messages', label: '我的消息', icon: 'HOutline:BellAlertIcon' },
+    { key: 'logs', label: '登录日志', icon: 'HOutline:ListBulletIcon' },
+  ])
+
+  // 修改用户个人信息
+  const updateUserProfile = async (data: IUpdateUserProfileParams) => {
+    const { data: res } = await updateProfile(data)
+    if (res.code !== 200) return
+    getUserInfo()
+    ElMessage.success('修改个人资料成功')
+  }
+
+  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+
+  // 注销用户
+  const deleteUserAccount = async () => {
+    const { data: res } = await deleteUser([userInfo.value!.id])
+    if (res.code !== 200) return
+    ElMessage.success('注销账户成功,2秒后跳转至登录页面...')
+    await delay(2000)
+    logout()
+  }
+
+  // 退出登录
+  const logout = () => {
+    localStorage.removeItem('token')
+    const menuStore = useMenuStore()
+    const tabsStore = useTabsStore()
+    menuStore.clearUserPermissions()
+    clearUserInfo()
+    tabsStore.clearTabs()
+    resetRouter()
+    router.replace('/login')
+  }
 
   // 用户消息
   const userMessages = ref<IUserMessageItem[]>([
-    // 系统通知
     {
       id: '1',
       title: '系统维护通知',
       content: '系统将于今晚 22:00-24:00 进行维护升级，期间可能无法访问，请提前做好准备。',
       type: 'system',
       read: false,
-      time: '2024-01-15 10:30:00',
+      time: '2026-01-22 08:30:00',
+      avatar: defaultSystemAvatar,
     },
     {
       id: '2',
-      title: '新功能上线',
-      content: '个人中心功能已上线，您可以在这里管理个人信息和查看消息通知。',
-      type: 'system',
+      title: 'David Fan',
+      content: '今天的任务清单已经更新，别忘了先喝一杯水💧再开工哦！',
+      type: 'user',
       read: false,
-      time: '2024-01-14 14:20:00',
+      time: '2026-01-22 08:45:00',
+      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix',
     },
     {
       id: '3',
+      title: '新功能上线',
+      content: '个人中心功能已上线，您可以管理个人信息和查看消息通知。',
+      type: 'system',
+      read: false,
+      time: '2026-01-21 17:20:00',
+      avatar: defaultSystemAvatar,
+    },
+    {
+      id: '4',
+      title: 'Alice L.',
+      content: '你的排行榜进度更新了，你现在是第 2 名，冲呀！🏆',
+      type: 'user',
+      read: true,
+      time: '2026-01-21 16:10:00',
+      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=AliceL',
+    },
+    {
+      id: '5',
       title: '安全提醒',
-      content: '为了您的账户安全，建议定期修改密码，并启用双重验证。',
+      content: '请定期修改密码，并启用双重验证，保护账户安全。',
       type: 'system',
       read: true,
-      time: '2024-01-13 09:15:00',
+      time: '2026-01-21 09:30:00',
+      avatar: defaultSystemAvatar,
+    },
+    {
+      id: '6',
+      title: 'Bob T.',
+      content: '刚完成了你的好友排行榜更新，你现在是第 3 名，加油！🚀',
+      type: 'user',
+      read: false,
+      time: '2026-01-20 14:25:00',
+      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=BobT',
+    },
+    {
+      id: '7',
+      title: 'Charlie W.',
+      content: '今天运气不错，收到了系统送的隐藏小彩蛋🎁，快去看看吧！',
+      type: 'user',
+      read: false,
+      time: '2026-01-20 10:15:00',
+      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=CharlieW',
+    },
+    {
+      id: '8',
+      title: '数据库性能优化通知',
+      content: '系统将在今晚 23:00 进行数据库性能优化，期间部分服务可能会出现短暂波动。',
+      type: 'system',
+      read: false,
+      time: '2026-01-19 18:10:00',
+      avatar: defaultSystemAvatar,
+    },
+    {
+      id: '9',
+      title: 'Eve K.',
+      content: '别忘了今天下午的团队茶歇☕，顺便检查看看谁偷吃了蛋糕😂',
+      type: 'user',
+      read: false,
+      time: '2026-01-19 15:45:00',
+      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=EveK',
     },
     {
       id: '10',
-      title: '数据库性能优化通知',
-      content: '系统将在今晚 23:00 进行数据库性能优化，期间部分服务可能会出现短暂波动，请您谅解。',
-      type: 'system',
-      read: false,
-      time: '2024-01-15 09:10:00',
-    },
-    {
-      id: '11',
       title: '服务网络升级',
       content: '为提升访问速度，我们将于本周内进行网络带宽扩容，升级期间不影响正常使用。',
       type: 'system',
       read: false,
-      time: '2024-01-14 18:40:00',
+      time: '2026-01-18 09:50:00',
+      avatar: defaultSystemAvatar,
+    },
+    {
+      id: '11',
+      title: 'Frank H.',
+      content: '你的收藏夹里新增了一个神秘物品🔮，快去查看吧！',
+      type: 'user',
+      read: true,
+      time: '2026-01-18 08:40:00',
+      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=FrankH',
     },
     {
       id: '12',
-      title: '隐私政策更新',
-      content: '我们的隐私政策已于今日更新，请前往设置中心查看最新内容。',
-      type: 'system',
-      read: false,
-      time: '2024-01-14 09:30:00',
-    },
-    {
-      id: '13',
-      title: '系统版本升级公告',
-      content: '系统已升级至 V2.1.0，带来更稳定的体验及多项功能优化。',
-      type: 'system',
-      read: false,
-      time: '2024-01-13 18:00:00',
-    },
-    {
-      id: '14',
-      title: 'API 调用限制调整',
-      content: '由于系统策略调整，部分 API 的调用限制已变更，请查看文档以了解最新规则。',
-      type: 'system',
-      read: true,
-      time: '2024-01-13 12:50:00',
-    },
-    {
-      id: '15',
-      title: '缓存系统更新',
-      content: '我们已完成缓存系统的升级，数据读取速度和稳定性将得到显著提升。',
-      type: 'system',
-      read: true,
-      time: '2024-01-12 11:20:00',
-    },
-    {
-      id: '16',
-      title: '账号安全通知',
-      content: '近期检测到异常登录行为增多，建议所有用户开启登录提醒并启用双重认证。',
-      type: 'system',
-      read: false,
-      time: '2024-01-12 08:45:00',
-    },
-    {
-      id: '17',
-      title: '功能调整说明',
-      content: '由于使用率较低，系统将于本月底下线旧版数据导出功能，请尽快迁移至新版导出工具。',
-      type: 'system',
-      read: false,
-      time: '2024-01-11 19:00:00',
-    },
-    {
-      id: '18',
-      title: '消息通知优化',
-      content: '我们优化了消息推送机制，现在可以更快地接收到系统和业务通知。',
-      type: 'system',
-      read: true,
-      time: '2024-01-11 09:40:00',
-    },
-    {
-      id: '19',
-      title: '异常故障恢复通知',
-      content: '今日上午发生的短暂访问异常已全部修复，当前系统运行正常，感谢您的理解。',
-      type: 'system',
-      read: false,
-      time: '2024-01-10 18:10:00',
-    },
-    // 用户信息
-    {
-      id: '4',
-      title: '欢迎加入',
-      content: '欢迎您加入我们的系统！如有任何问题，请随时联系客服。',
+      title: 'Grace M.',
+      content: '系统提醒：别忘了今天的运动计划🏃‍♀️，保持健康，保持快乐！',
       type: 'user',
       read: false,
-      time: '2024-01-12 16:45:00',
-    },
-    {
-      id: '5',
-      title: '账户信息更新',
-      content: '您的账户信息已成功更新，请确认信息是否正确。',
-      type: 'user',
-      read: true,
-      time: '2024-01-11 11:30:00',
-    },
-    {
-      id: '6',
-      title: '登录提醒',
-      content: '您的账户在 2024-01-10 15:20:00 从新设备登录，如非本人操作，请及时修改密码。',
-      type: 'user',
-      read: true,
-      time: '2024-01-10 15:25:00',
-    },
-    // 代办事项
-    {
-      id: '7',
-      title: '待审核订单',
-      content: '您有 3 个订单待审核，请及时处理。',
-      type: 'todo',
-      read: false,
-      time: '2024-01-15 08:00:00',
-    },
-    {
-      id: '8',
-      title: '待处理任务',
-      content: '您有 5 个待处理任务，请尽快完成。',
-      type: 'todo',
-      read: false,
-      time: '2024-01-14 13:20:00',
-    },
-    {
-      id: '9',
-      title: '会议提醒',
-      content: '您有一个会议将在明天上午 10:00 开始，请提前做好准备。',
-      type: 'todo',
-      read: true,
-      time: '2024-01-13 17:00:00',
+      time: '2026-01-17 19:00:00',
+      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=GraceM',
     },
   ])
 
@@ -250,14 +271,6 @@ export const useUserStore = defineStore('user', () => {
     userMessages.value = []
   }
 
-  // 修改用户个人信息
-  const updateUserProfile = async (data: IUpdateUserProfileParams) => {
-    const { data: res } = await updateProfile(data)
-    if (res.code !== 200) return
-    getUserInfo()
-    ElMessage.success('修改个人信息成功')
-  }
-
   // 修改密码
   const updatePassword = async (data: IUpdatePasswordParams) => {
     const { data: res } = await updatePasswordRequest(data)
@@ -266,24 +279,19 @@ export const useUserStore = defineStore('user', () => {
     setTimeout(() => logout(), 1000)
   }
 
-  // 退出登录
-  const logout = () => {
-    localStorage.removeItem('token')
-    const menuStore = useMenuStore()
-    const tabsStore = useTabsStore()
-    menuStore.clearUserPermissions()
-    clearUserInfo()
-    tabsStore.clearTabs()
-    resetRouter()
-    router.replace('/login')
-  }
+  onMounted(() => {
+    getAddress()
+  })
 
   return {
     userInfo,
     roleList,
     userMessages,
     unreadCount,
-    currentMenu,
+    userRoleName,
+    address,
+    currentTab,
+    menuTabs,
     getUserInfo,
     clearUserInfo,
     getUserRoleName,
@@ -295,5 +303,6 @@ export const useUserStore = defineStore('user', () => {
     updatePassword,
     logout,
     updateAvatar,
+    deleteUserAccount,
   }
 })

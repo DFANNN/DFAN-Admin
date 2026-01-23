@@ -627,6 +627,9 @@ export const updateUserProfileHandler = http.put(
         name?: string
         phone?: string
         email?: string
+        avatar?: string
+        bio?: string
+        tags?: string
       }
 
       // 获取现有用户
@@ -651,9 +654,12 @@ export const updateUserProfileHandler = http.put(
       // 更新用户基本信息
       const updatedUser: User = {
         ...existingUser,
-        name: body.name !== undefined ? body.name : existingUser.name,
-        phone: body.phone !== undefined ? body.phone : existingUser.phone,
-        email: body.email !== undefined ? body.email : existingUser.email,
+        name: body.name,
+        phone: body.phone,
+        email: body.email,
+        avatar: body.avatar,
+        bio: body.bio,
+        tags: body.tags,
         updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
       }
 
