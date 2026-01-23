@@ -283,17 +283,11 @@ export const useUserStore = defineStore('user', () => {
     getAddress()
   })
 
-  // --------------- 个人中心 (旧的) ---------------
-
-  // 当前选择的菜单
-  const currentMenu = ref<string>('info')
-
   return {
     userInfo,
     roleList,
     userMessages,
     unreadCount,
-    currentMenu,
     userRoleName,
     address,
     currentTab,

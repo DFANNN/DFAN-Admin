@@ -36,37 +36,26 @@
         </div>
         <div class="notification-list">
           <el-scrollbar max-height="400px">
-            <TransitionGroup name="list">
-              <div
-                v-for="message in unreadMessageList"
-                :key="message.id"
-                class="notification-item"
-                @click="userStore.markAsRead(message.id)"
-              >
-                <div class="message-icon">
-                  <el-icon>
-                    <component
-                      :is="
-                        message.type === 'system'
-                          ? menuStore.iconComponents['Element:InfoFilled']
-                          : message.type === 'user'
-                            ? menuStore.iconComponents['Element:User']
-                            : menuStore.iconComponents['Element:Document']
-                      "
-                    />
-                  </el-icon>
-                </div>
-                <div class="message-content">
-                  <div class="message-title">{{ message.title }}</div>
-                  <div class="message-text">{{ message.content }}</div>
-                  <div class="message-time">{{ message.time }}</div>
-                </div>
+            <Transition name="zoom" :style="{ '--animation-duration': '0.5s' }" mode="out-in">
+              <div v-if="unreadMessageList.length === 0" class="empty-message">
+                <el-empty description="暂无消息" :image-size="80" />
               </div>
-            </TransitionGroup>
-
-            <div v-if="unreadMessageList.length === 0" class="empty-message">
-              <el-empty description="暂无消息" :image-size="80" />
-            </div>
+              <TransitionGroup name="group-slide-right" tag="div" v-else>
+                <div
+                  v-for="message in unreadMessageList"
+                  :key="message.id"
+                  class="notification-item"
+                  @click="userStore.markAsRead(message.id)"
+                >
+                  <el-avatar :size="32" :src="message.avatar" />
+                  <div class="message-content">
+                    <div class="message-title">{{ message.title }}</div>
+                    <div class="message-text">{{ message.content }}</div>
+                    <div class="message-time">{{ message.time }}</div>
+                  </div>
+                </div>
+              </TransitionGroup>
+            </Transition>
           </el-scrollbar>
         </div>
         <div class="notification-footer">
@@ -92,30 +81,12 @@ const unreadMessageList = computed(() => {
 // 跳转到个人中心
 const goToProfile = () => {
   router.push('/profile')
-  userStore.currentMenu = 'messages'
+  userStore.currentTab = 'messages'
   notificationDropdownRef.value?.handleClose()
 }
 </script>
 
 <style scoped lang="scss">
-.list-move, /* 对移动中的元素应用的过渡 */
-.list-enter-active,
-.list-leave-active {
-  transition: all 0.5s ease;
-}
-
-.list-enter-from,
-.list-leave-to {
-  opacity: 0;
-  transform: translateX(30px);
-}
-
-/* 确保将离开的元素从布局流中删除
-  以便能够正确地计算移动的动画。 */
-.list-leave-active {
-  position: absolute;
-}
-
 .notification-dropdown {
   width: 22rem;
   background: var(--el-bg-color);
@@ -138,25 +109,11 @@ const goToProfile = () => {
     max-height: 25rem;
     .notification-item {
       display: flex;
+      align-items: center;
       gap: 12px;
       padding: 1rem;
       border-bottom: 1px solid var(--el-border-color-lighter);
       cursor: pointer;
-
-      .message-icon {
-        flex-shrink: 0;
-        width: 2rem;
-        height: 2rem;
-        border-radius: 50%;
-        background: var(--el-color-primary-light-9);
-        color: var(--el-color-primary);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        .el-icon {
-          font-size: 1rem;
-        }
-      }
 
       &:hover {
         background: var(--el-fill-color-light);
