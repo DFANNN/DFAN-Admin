@@ -96,7 +96,7 @@ export const useUserStore = defineStore('user', () => {
     { key: 'projects', label: '我的项目', icon: 'HOutline:Square3Stack3DIcon' },
     { key: 'permissions', label: '我的权限', icon: 'HOutline:ShieldCheckIcon' },
     { key: 'messages', label: '我的消息', icon: 'HOutline:BellAlertIcon' },
-    { key: 'logs', label: '登录日志', icon: 'HOutline:ListBulletIcon' },
+    { key: 'logs', label: '登录日志', icon: 'HOutline:ClockIcon' },
   ])
 
   // 修改用户个人信息
