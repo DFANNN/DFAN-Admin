@@ -62,18 +62,13 @@
         </div>
       </div>
     </div>
-    <div class="mt-9 flex gap-11 justify-center xl:justify-start">
-      <div
-        v-for="item in userStore.menuTabs"
-        :key="item.id"
-        class="relative py-4 text-sm font-semibold text-(--el-text-color-regular) cursor-pointer flex items-center gap-2 hover:text-(--el-color-primary)"
-        :class="{ active: userStore.currentTab === item.id }"
-        @click="userStore.currentTab = item.id"
-      >
-        <el-icon size="18">
-          <component :is="menuStore.iconComponents[item.icon]" />
-        </el-icon>
-        <span class="hidden md:block">{{ item.name }}</span>
+    <div class="mt-9 flex justify-center xl:justify-start">
+      <div class="max-w-full">
+        <BadgeTabsMenu
+          v-model="userStore.currentTab"
+          :icon-only="menuStore.isMobile ? true : false"
+          :tabs-menu-data="userStore.menuTabs"
+        />
       </div>
     </div>
   </el-card>

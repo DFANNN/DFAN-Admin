@@ -25,7 +25,7 @@
             <el-icon size="18" v-if="tab.icon">
               <component :is="titleIconComponent(tab.icon)" />
             </el-icon>
-            <div>{{ tab.label }}</div>
+            <div v-if="!iconOnly">{{ tab.label }}</div>
           </div>
         </el-badge>
       </template>
@@ -38,17 +38,10 @@
 </template>
 
 <script setup lang="ts">
+import type { ITabsMenuData } from '@/types/profile'
+
 // 禁用自动属性继承，手动控制属性透传
 defineOptions({ inheritAttrs: false })
-
-// tab 菜单数据类型
-interface ITabsMenuData {
-  key: string // 绑定值，选中选项卡的 name
-  label: string // 标题
-  badge?: number | string // 徽标数量
-  disabled?: boolean // 是否禁用
-  icon?: string | Component // 标题前的图标名称或图标组件
-}
 
 // 组件属性
 interface IProps {
@@ -66,6 +59,8 @@ interface IProps {
   badgeType?: 'primary' | 'success' | 'warning' | 'danger' | 'info'
   // tabs menu 每一项的高度
   tabsItemHeight?: string | number
+  // 是否只显示图标
+  iconOnly?: boolean
 }
 
 // 组件事件
@@ -79,6 +74,7 @@ const props = withDefaults(defineProps<IProps>(), {
   badgeMax: 99,
   badgeShowZero: false,
   badgeType: 'danger',
+  iconOnly: false,
 })
 
 // 定义事件
@@ -142,5 +138,9 @@ const handleUpdate = (value: string | number) => {
 // 去掉底部灰线
 :deep(.el-tabs__nav-wrap::after) {
   height: 0;
+}
+
+:deep(.el-tabs__nav) {
+  padding-right: 2rem; /* 为最后一个 Badge 预留空间 */
 }
 </style>

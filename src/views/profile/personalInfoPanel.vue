@@ -177,15 +177,22 @@ const deleteUser = () => {
   })
 }
 
-onMounted(() => {
-  userInfoForm.value.avatar = userStore.userInfo?.avatar || ''
-  userInfoForm.value.username = userStore.userInfo?.username || ''
-  userInfoForm.value.name = userStore.userInfo?.name || ''
-  userInfoForm.value.phone = userStore.userInfo?.phone || ''
-  userInfoForm.value.email = userStore.userInfo?.email || ''
-  userInfoForm.value.bio = userStore.userInfo?.bio || ''
-  userInfoForm.value.tags = userStore.userInfo?.tags || ''
-})
+// 监听用户信息 赋值
+watch(
+  () => userStore.userInfo,
+  (userInfo) => {
+    userInfoForm.value.avatar = userInfo?.avatar || ''
+    userInfoForm.value.username = userInfo?.username || ''
+    userInfoForm.value.name = userInfo?.name || ''
+    userInfoForm.value.phone = userInfo?.phone || ''
+    userInfoForm.value.email = userInfo?.email || ''
+    userInfoForm.value.bio = userInfo?.bio || ''
+    userInfoForm.value.tags = userInfo?.tags || ''
+  },
+  {
+    immediate: true,
+  },
+)
 </script>
 
 <style scoped lang="scss">

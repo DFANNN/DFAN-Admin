@@ -10,7 +10,7 @@ import { useTabsStore } from './tabs'
 import defaultAvatarSvg from '@/assets/defaultAvatar.svg'
 import defaultSystemAvatar from '@/assets/images/defaultSystemAvatar.svg'
 import type { IRoleItem } from '@/types/system/role'
-import type { ICurrentTab, IMenuTab } from '@/types/profile'
+import type { ICurrentTab, ITabsMenuData } from '@/types/profile'
 import type {
   IUserItem,
   IUserMessageItem,
@@ -91,12 +91,12 @@ export const useUserStore = defineStore('user', () => {
   const currentTab = ref<ICurrentTab>('personalInfo')
 
   // 导航菜单
-  const menuTabs = ref<IMenuTab[]>([
-    { id: 'personalInfo', name: '我的资料', icon: 'HOutline:UserIcon' },
-    { id: 'projects', name: '我的项目', icon: 'HOutline:Square3Stack3DIcon' },
-    { id: 'permissions', name: '我的权限', icon: 'HOutline:ShieldCheckIcon' },
-    { id: 'messages', name: '我的消息', icon: 'HOutline:BellAlertIcon' },
-    { id: 'logs', name: '登录日志', icon: 'HOutline:ListBulletIcon' },
+  const menuTabs = ref<ITabsMenuData[]>([
+    { key: 'personalInfo', label: '我的资料', icon: 'HOutline:UserIcon' },
+    { key: 'projects', label: '我的项目', icon: 'HOutline:Square3Stack3DIcon' },
+    { key: 'permissions', label: '我的权限', icon: 'HOutline:ShieldCheckIcon' },
+    { key: 'messages', label: '我的消息', icon: 'HOutline:BellAlertIcon' },
+    { key: 'logs', label: '登录日志', icon: 'HOutline:ListBulletIcon' },
   ])
 
   // 修改用户个人信息
