@@ -63,6 +63,7 @@ export interface IUserMessageItem {
   type: MessageType
   read: boolean
   time: string
+  avatar?: string
 }
 
 // 修改用户个人信息参数

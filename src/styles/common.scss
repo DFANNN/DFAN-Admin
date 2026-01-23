@@ -40,4 +40,16 @@
   white-space: nowrap !important;
 }
 
-/* ==================== 组件样式 ==================== */
+/* ==================== 卡片向上浮动hover样式 ==================== */
+.card-float-up {
+  /* 过渡效果，让浮动更平滑 */
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* 鼠标悬停时触发浮动效果 */
+.card-float-up:hover {
+  transform: translateY(-4px); /* 向上浮动 10px，可根据需求调整 */
+  box-shadow: var(--el-box-shadow); /* 同时增加阴影，增加浮动感 */
+}

@@ -76,7 +76,7 @@
       <el-divider />
 
       <div
-        class="group mt-6 p-5 border border-solid border-(--el-border-color-light) rounded-xl transition-all duration-300 hover:bg-(--el-bg-color-page) hover:shadow-sm cursor-pointer"
+        class="card-float-up mt-6 p-5 border border-solid border-(--el-border-color-light) rounded-xl transition-all duration-300 hover:border-(--el-border-color) hover:bg-(--el-bg-color-page) cursor-pointer"
       >
         <div class="flex items-center justify-between gap-4">
           <div class="flex items-center gap-4">
@@ -103,7 +103,7 @@
       <el-divider />
 
       <div
-        class="mt-7 p-4 bg-(--el-color-danger-light-9) border border-dashed border-(--el-color-danger-light-5) rounded-xl cursor-pointer transition-all duration-300 hover:bg-(--el-color-danger-light-7) hover:border-(--el-color-danger) hover:shadow-lg"
+        class="card-float-up mt-7 p-4 bg-(--el-color-danger-light-9) border border-dashed border-(--el-color-danger-light-5) rounded-xl cursor-pointer transition-all duration-300 hover:bg-(--el-color-danger-light-7) hover:border-(--el-color-danger)"
       >
         <h4 class="mb-2 text-(--el-color-danger) font-bold">危险区域</h4>
         <div class="flex items-center justify-between gap-4">

@@ -570,3 +570,22 @@
     filter: brightness(0.5) drop-shadow(0 0 0px rgba(255, 255, 255, 0));
   }
 }
+
+/* ==================== transition group 动画 ==================== */
+
+/*  group-fade-slide - 淡入淡出 + 水平滑动 */
+/* 列表动画 */
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.4s ease;
+}
+.list-enter-from {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(20px);
+  /* 离开时绝对定位，保证列表平滑收缩 */
+  position: absolute;
+}

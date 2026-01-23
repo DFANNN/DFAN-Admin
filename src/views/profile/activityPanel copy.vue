@@ -164,8 +164,7 @@ const messageList = ref([
     userAvatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=system',
     time: '10 分钟前',
     type: '安全',
-    content:
-      '您的账号于 18:20 在新的设备登录，如非本人操作请及时修改密码。您的账号于 18:20 在新的设备登录，如非本人操作请及时修改密码。您的账号于 18:20 在新的设备登录，如非本人操作请及时修改密码。',
+    content: '您的账号于 18:20 在新的设备登录，如非本人操作请及时修改密码。',
     isRead: false,
   },
   {
