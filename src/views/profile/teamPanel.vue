@@ -1,4 +1,5 @@
 <template>
+  <!-- 核心团队 -->
   <el-card class="team-section-card" shadow="never">
     <template #header>
       <div class="flex items-center justify-between">

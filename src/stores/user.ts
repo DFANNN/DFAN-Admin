@@ -92,7 +92,7 @@ export const useUserStore = defineStore('user', () => {
 
   // 导航菜单
   const menuTabs = ref<IMenuTab[]>([
-    { id: 'personalInfo', name: '个人资料', icon: 'HOutline:UserIcon' },
+    { id: 'personalInfo', name: '我的资料', icon: 'HOutline:UserIcon' },
     { id: 'projects', name: '我的项目', icon: 'HOutline:Square3Stack3DIcon' },
     { id: 'permissions', name: '我的权限', icon: 'HOutline:ShieldCheckIcon' },
     { id: 'messages', name: '我的消息', icon: 'HOutline:BellAlertIcon' },
