@@ -1,5 +1,6 @@
 // 用户管理类型文件
 import type { ICommonResponse } from '@/types/common'
+import type { ILoginLogParams } from '@/types/login'
 
 // 用户列表项
 export interface IUserItem {
@@ -17,6 +18,7 @@ export interface IUserItem {
   updateTime?: string
   bio?: string // 个人简介
   tags?: string // 个人标签，逗号分隔
+  loginLogs?: ILoginLogParams[] // 登录日志
 }
 
 // 用户列表查询参数

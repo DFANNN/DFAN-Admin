@@ -27,6 +27,7 @@ import {
   updateUserProfileHandler,
   updateUserPasswordHandler,
   updateUserAvatarHandler,
+  addLoginLogHandler,
 } from './users'
 
 /**
@@ -61,4 +62,5 @@ export const handlers = [
   createUserHandler,
   updateUserHandler,
   deleteUserHandler,
+  addLoginLogHandler,
 ]

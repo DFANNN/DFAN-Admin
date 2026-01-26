@@ -870,3 +870,69 @@ export const updateUserAvatarHandler = http.put(`${MSW_BASE}/users/avatar`, asyn
     })
   }
 })
+
+/**
+ * 添加登录日志
+ */
+export const addLoginLogHandler = http.put(`${MSW_BASE}/users/log`, async ({ request }) => {
+  // 验证token并获取用户ID
+  const { error, userId } = verifyAuth(request)
+  if (error) {
+    return error
+  }
+  if (!userId) {
+    return HttpResponse.json({
+      code: 401,
+      message: '无法从token中获取用户ID',
+      data: null,
+    })
+  }
+
+  try {
+    // 日志消息
+    const body = (await request.json()) as {
+      id: string
+      device: string
+      browser: string
+      ip: string
+      location: string[]
+      time: string
+      status: string
+    }
+
+    body.id = `log_${Date.now()}`
+
+    // 获取现有用户
+    const existingUser = await getUserById(userId)
+
+    if (!existingUser) {
+      return HttpResponse.json({
+        code: 500,
+        message: '用户不存在',
+        data: null,
+      })
+    }
+
+    // 更新用户信息
+    const updatedUser: User = {
+      ...existingUser,
+      updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      loginLogs: [body, ...(existingUser.loginLogs || [])],
+    }
+
+    await update<User>(STORES.USERS, updatedUser)
+
+    return HttpResponse.json({
+      code: 200,
+      message: '添加登录日志成功',
+      data: null,
+    })
+  } catch (error) {
+    console.error('[MSW] 添加登录日志错误:', error)
+    return HttpResponse.json({
+      code: 500,
+      message: '服务器内部错误',
+      data: null,
+    })
+  }
+})

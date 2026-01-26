@@ -28,7 +28,19 @@ export interface User {
   isBuiltIn?: boolean // 是否为内置用户
   createTime?: string // 创建时间
   updateTime?: string // 更新时间
+  loginLogs?: Log[]
   [key: string]: unknown
+}
+
+// 日志
+export interface Log {
+  id: string
+  device: string
+  browser: string
+  ip: string
+  location: string[]
+  time: string
+  status: string
 }
 
 // 角色接口

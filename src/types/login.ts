@@ -29,3 +29,14 @@ export type ILoginMode = 'login' | 'forgot' | 'mobile' | 'qr' | 'register'
 export interface IEmits {
   (e: 'goToMode', mode: ILoginMode): void
 }
+
+// 登录接口日志参数类型
+export interface ILoginLogParams {
+  id?: string
+  device: string // 设备名称
+  browser: string // 浏览器名称
+  ip: string // IP地址
+  location: string[] // 位置
+  time: string // 时间
+  status: string // 状态
+}

@@ -89,8 +89,9 @@
 </template>
 
 <script setup lang="ts">
-import { login } from '@/api/login'
-import { ElMessage } from 'element-plus'
+import platform from 'platform'
+import { login, addLoginLog } from '@/api/login'
+import { dayjs, ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import type { ILoginMode } from '@/types/login'
 
@@ -158,6 +159,26 @@ const handleRememberChange = (value: boolean | string | number) => {
   }
 }
 
+/**
+ * 添加登录日志
+ * 使用 https://ipapi.co/json/ 获取ip 地理位置信息
+ * 使用 platform 获取浏览器信息
+ */
+const handleAddLoginLog = async () => {
+  const ipRes = await fetch('https://ipapi.co/json/').then((res) => res.json())
+
+  const logData = {
+    device: platform.os?.toString() || '未知',
+    browser: `${platform.name || '未知'} ${platform.version || '未知'}`,
+    ip: ipRes.ip || '未知',
+    location: [ipRes.country_name, ipRes.region, ipRes.city],
+    time: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+    status: 'success',
+  }
+
+  await addLoginLog(logData)
+}
+
 // 登录
 const handleLogin = async () => {
   await loginFormRef.value?.validate()
@@ -171,6 +192,8 @@ const handleLogin = async () => {
     } else {
       localStorage.removeItem(REMEMBER_USERNAME_KEY)
     }
+    // 添加登录日志
+    await handleAddLoginLog()
     ElMessage.success('登录成功')
     router.push('/')
   } finally {
