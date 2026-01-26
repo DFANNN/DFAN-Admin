@@ -4,7 +4,7 @@
 interface IExportToExcelParams {
   fileName: string // 文件名
   sheetName?: string // 工作表名称
-  data: Record<string, any>[] // 数据
+  data: Record<string, unknown>[] // 数据
   // 列名称定义
   columns: Record<string, string>
 }
