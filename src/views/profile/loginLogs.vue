@@ -27,28 +27,25 @@
 </template>
 
 <script setup lang="ts">
-import * as XLSX from 'xlsx'
+import { exportToExcel } from '@/utils/exportExcel'
 
 const userStore = useUserStore()
 
 // 导出登录日志为Excel
 const exportLoginLogsExcel = async () => {
-  const logList = userStore.userInfo?.loginLogs || []
-
-  const data = logList.map((log) => ({
-    设备型号: log.device,
-    浏览器: log.browser,
-    IP: log.ip,
-    地理位置: log.location.toString(),
-    登录时间: log.time,
-    结果: log.status === 'success' ? '成功' : '失败',
-  }))
-
-  const sheet = XLSX.utils.json_to_sheet(data)
-  const book = XLSX.utils.book_new()
-  XLSX.utils.book_append_sheet(book, sheet, '登录日志')
-
-  XLSX.writeFile(book, '登录日志.xlsx')
+  exportToExcel({
+    fileName: '登录日志.xlsx',
+    sheetName: '登录日志',
+    data: userStore.userInfo?.loginLogs || [],
+    columns: {
+      device: '设备型号',
+      browser: '浏览器/版本',
+      ip: 'IP 地址',
+      location: '地理位置',
+      time: '登录时间',
+      status: '结果',
+    },
+  })
 }
 </script>
 
