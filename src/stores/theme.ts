@@ -15,6 +15,8 @@ export const useThemeStore = defineStore('theme', () => {
     themeMode.value = newVal
     toggleDark(newVal === 'dark')
     localStorage.setItem('themeMode', newVal)
+    // 更新主题颜色变量
+    setPrimaryColor(primaryColor.value)
   }
 
   // 主题颜色预设
@@ -33,13 +35,46 @@ export const useThemeStore = defineStore('theme', () => {
   // 设置 Element Plus 主题色变量
   const setPrimaryColor = (color: string) => {
     const root = document.documentElement
+    // 判断是否是暗黑模式（通常 Element Plus 会在 html 标签加 .dark 类）
+    const isDark = themeMode.value === 'dark'
+
+    // 关键：在 Dark 模式下，Light 系列变量应该向“背景色”靠拢，而不是白色
+    // Element Plus 暗黑模式默认背景色通常是 #141414
+    const mixLightTarget = isDark ? '#141414' : '#ffffff'
+    // 关键：在 Dark 模式下，Dark-2 变量通常反而要亮一点点，用于 hover 反馈
+    const mixDarkTarget = isDark ? '#ffffff' : '#000000'
+
     root.style.setProperty('--el-color-primary', color)
-    root.style.setProperty('--el-color-primary-light-3', `color-mix(in srgb, ${color} 70%, white)`)
-    root.style.setProperty('--el-color-primary-light-5', `color-mix(in srgb, ${color} 50%, white)`)
-    root.style.setProperty('--el-color-primary-light-7', `color-mix(in srgb, ${color} 30%, white)`)
-    root.style.setProperty('--el-color-primary-light-8', `color-mix(in srgb, ${color} 20%, white)`)
-    root.style.setProperty('--el-color-primary-light-9', `color-mix(in srgb, ${color} 10%, white)`)
-    root.style.setProperty('--el-color-primary-dark-2', `color-mix(in srgb, ${color} 80%, black)`)
+
+    // 生成 light-3 到 light-9
+    // 在暗色模式下，这些会由主色逐渐淡化融入背景，不会产生刺眼的亮色
+    root.style.setProperty(
+      '--el-color-primary-light-3',
+      `color-mix(in srgb, ${color} 70%, ${mixLightTarget})`,
+    )
+    root.style.setProperty(
+      '--el-color-primary-light-5',
+      `color-mix(in srgb, ${color} 50%, ${mixLightTarget})`,
+    )
+    root.style.setProperty(
+      '--el-color-primary-light-7',
+      `color-mix(in srgb, ${color} 30%, ${mixLightTarget})`,
+    )
+    root.style.setProperty(
+      '--el-color-primary-light-8',
+      `color-mix(in srgb, ${color} 20%, ${mixLightTarget})`,
+    )
+    root.style.setProperty(
+      '--el-color-primary-light-9',
+      `color-mix(in srgb, ${color} 10%, ${mixLightTarget})`,
+    )
+
+    // Dark-2 变量处理
+    // Light 模式下变深 20%；Dark 模式下变亮 20%（符合官方交互直觉）
+    root.style.setProperty(
+      '--el-color-primary-dark-2',
+      `color-mix(in srgb, ${color} 80%, ${mixDarkTarget})`,
+    )
   }
 
   // 主题颜色

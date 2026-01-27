@@ -1,13 +1,5 @@
 <template>
-  <el-card class="update-password-card" shadow="never">
-    <template #header>
-      <div class="card-header">
-        <el-icon class="header-icon"
-          ><component :is="menuStore.iconComponents['HSolid:LockClosedIcon']"
-        /></el-icon>
-        <span class="header-title">修改密码</span>
-      </div>
-    </template>
+  <BaseDialog v-model="open" title="修改密码" width="500" @confirm="updatePassword">
     <el-form
       ref="passwordFormRef"
       :model="passwordForm"
@@ -20,7 +12,6 @@
           v-model.trim="passwordForm.oldPassword"
           type="password"
           placeholder="请输入旧密码"
-          size="large"
           show-password
           clearable
         />
@@ -30,7 +21,6 @@
           v-model.trim="passwordForm.newPassword"
           type="password"
           placeholder="请输入新密码（至少6位）"
-          size="large"
           show-password
           clearable
         />
@@ -40,46 +30,38 @@
           v-model.trim="passwordForm.confirmPassword"
           type="password"
           placeholder="请再次输入新密码"
-          size="large"
           show-password
           clearable
         />
       </el-form-item>
-      <el-form-item>
-        <el-button type="primary" size="large" :loading="passwordLoading" @click="updatePassword">
-          <el-icon class="icon-lock"><component :is="menuStore.iconComponents['Lock']" /></el-icon>
-          修改密码
-        </el-button>
-      </el-form-item>
     </el-form>
-  </el-card>
+  </BaseDialog>
 </template>
 
 <script setup lang="ts">
 import type { FormInstance } from 'element-plus'
 
 const userStore = useUserStore()
-const menuStore = useMenuStore()
 const passwordFormRef = useTemplateRef<FormInstance>('passwordFormRef')
 
+const open = ref(false)
+
+// 密码表单
 const passwordForm = ref({
   oldPassword: '',
   newPassword: '',
   confirmPassword: '',
 })
 
-const passwordLoading = ref(false)
-
+// 修改密码
 const updatePassword = async () => {
   await passwordFormRef.value?.validate()
-  passwordLoading.value = true
-  try {
-    await userStore.updatePassword(passwordForm.value)
-  } finally {
-    passwordLoading.value = false
-  }
+  await userStore.delay(1000)
+  await userStore.updatePassword(passwordForm.value)
+  open.value = false
 }
 
+// 新密码验证
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const validateNewPassword = (rule: any, value: string, callback: any) => {
   if (value.trim() === '') return callback(new Error('请输入新密码'))
@@ -87,63 +69,28 @@ const validateNewPassword = (rule: any, value: string, callback: any) => {
   callback()
 }
 
+// 确认密码验证
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const validateConfirmPassword = (rule: any, value: string, callback: any) => {
   if (value.trim() === '') return callback(new Error('请输入确认密码'))
   if (value !== passwordForm.value.newPassword) return callback(new Error('确认密码与新密码不一致'))
   callback()
 }
+
+// rules
 const passwordRules = ref({
   oldPassword: [{ required: true, message: '请输入旧密码', trigger: 'blur' }],
   newPassword: [{ required: true, validator: validateNewPassword, trigger: 'blur' }],
   confirmPassword: [{ required: true, validator: validateConfirmPassword, trigger: 'blur' }],
 })
+
+const showDialog = () => {
+  open.value = true
+}
+
+defineExpose({
+  showDialog,
+})
 </script>
 
-<style scoped lang="scss">
-:deep(.el-card__body) {
-  padding: 0;
-}
-.el-card {
-  border-radius: 1rem;
-}
-.update-password-card {
-  width: 100%;
-  height: 100%;
-  .card-header {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    .header-icon {
-      font-size: 1.7rem;
-      color: var(--el-color-primary);
-    }
-    .header-title {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: var(--el-text-color-primary);
-    }
-  }
-  .password-form {
-    padding: 2rem;
-    .el-form-item {
-      margin-bottom: 24px;
-    }
-
-    .el-button {
-      padding: 12px 24px;
-      .icon-lock {
-        margin-right: 0.5rem;
-      }
-    }
-  }
-}
-
-@media (max-width: 992px) {
-  .update-password-card {
-    .password-form {
-      padding: 1rem;
-    }
-  }
-}
-</style>
+<style></style>

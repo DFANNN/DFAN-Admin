@@ -10,6 +10,7 @@
       :rules="loginRules"
       label-position="top"
       class="login-form"
+      @keyup.enter="handleLogin"
     >
       <el-form-item>
         <el-select

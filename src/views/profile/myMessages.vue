@@ -17,7 +17,9 @@
       />
       <div class="flex items-center justify-between mt-4">
         <div class="text-xs text-(--el-text-color-secondary)">将推送给所有相关人员</div>
-        <el-button type="primary">发布消息</el-button>
+        <el-button type="primary" :disabled="!postContent.trim()" @click="sendMessage"
+          >发布消息</el-button
+        >
       </div>
     </el-card>
 
@@ -35,9 +37,16 @@
               size="1.5rem"
               iconSize="1rem"
               v-if="menuStore.isMobile"
+              :disabled="!userStore.unreadCount"
               @click="userStore.markAllAsRead()"
             />
-            <el-button type="primary" link @click="userStore.markAllAsRead()" v-else>
+            <el-button
+              type="primary"
+              link
+              :disabled="!userStore.unreadCount"
+              @click="userStore.markAllAsRead()"
+              v-else
+            >
               一键已读
             </el-button>
             <el-divider direction="vertical" />
@@ -47,10 +56,19 @@
               tooltip="清空全部"
               size="1.5rem"
               iconSize="1rem"
+              :disabled="!userStore.userMessages.length"
               v-if="menuStore.isMobile"
               @click="clearAllMessages"
             />
-            <el-button type="danger" link @click="clearAllMessages" v-else> 清空全部 </el-button>
+            <el-button
+              type="danger"
+              link
+              :disabled="!userStore.userMessages.length"
+              @click="clearAllMessages"
+              v-else
+            >
+              清空全部
+            </el-button>
           </div>
         </div>
       </template>
@@ -150,6 +168,13 @@ const messageList = computed(() => {
   }
   return userStore.userMessages
 })
+
+// 发送消息
+const sendMessage = () => {
+  userStore.sendMessage(postContent.value)
+  ElMessage.success('发送成功')
+  postContent.value = ''
+}
 
 // 清空全部消息
 const clearAllMessages = () => {

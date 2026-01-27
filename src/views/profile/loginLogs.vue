@@ -1,4 +1,5 @@
 <template>
+  <!-- 登录日志 -->
   <el-card class="login-logs-card" shadow="never">
     <el-empty v-if="!userStore.userInfo?.loginLogs?.length" description="暂无登录日志" />
     <div v-else>
@@ -10,7 +11,12 @@
           >导出日志</el-button
         >
       </div>
-      <el-table :data="userStore.userInfo?.loginLogs" class="custom-modern-table">
+      <el-table
+        :data="userStore.userInfo?.loginLogs"
+        :border="TABLE_CONFIG.border"
+        show-overflow-tooltip
+        class="custom-modern-table"
+      >
         <el-table-column prop="device" label="设备型号" min-width="150" />
         <el-table-column prop="browser" label="浏览器/版本" min-width="200" />
         <el-table-column prop="ip" label="IP 地址" min-width="150" />
@@ -27,6 +33,7 @@
 </template>
 
 <script setup lang="ts">
+import { TABLE_CONFIG } from '@/config/elementConfig'
 import { exportToExcel } from '@/utils/exportExcel'
 
 const userStore = useUserStore()
