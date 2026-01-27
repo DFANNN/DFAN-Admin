@@ -22,11 +22,6 @@
             <data>
               <IconButton icon="HOutline:CheckBadgeIcon" type="primary" tooltip="实名认证用户" />
             </data>
-            <div
-              class="shrink-0 p-3 py-1 rounded-sm text-[11px] text-(--el-color-primary) bg-(--el-color-primary-light-9)"
-            >
-              {{ userStore.userRoleName }}
-            </div>
           </div>
           <TextEllipsis
             :text="`“ ${userStore.userInfo?.bio} ”`"
