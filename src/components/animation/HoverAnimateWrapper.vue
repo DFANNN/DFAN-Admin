@@ -97,7 +97,6 @@ const hoverPresets = computed<Record<HoverAnimationName, Variant>>(() => {
     // 抬起效果 - 强调向上抬起，明显的阴影和位移
     lift: {
       y: -12 * intensity,
-      scale: 1.08 * intensity,
       transition: {
         duration,
         ease: 'easeOut',

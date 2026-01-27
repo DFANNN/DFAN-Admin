@@ -79,60 +79,66 @@
             :description="activeName === 'unread' ? '暂无未读消息' : '暂无消息'"
           />
           <TransitionGroup name="group-slide-fade-right" tag="div" v-else>
-            <div
-              v-for="message in messageList"
-              :key="message.id"
-              class="card-float-up group p-4 mb-3 flex items-center gap-4 border border-(--el-border-color-light) rounded-xl cursor-pointer hover:border-(--el-border-color) hover:bg-(--el-bg-color-page)"
-            >
-              <div class="relative">
-                <el-avatar :size="48" :src="message.avatar" />
-                <span
-                  class="absolute h-3 w-3 bottom-1.5 right-0.5 rounded-full border-3 border-(--el-bg-color) bg-(--el-color-danger)"
-                  v-if="!message.read"
-                ></span>
-              </div>
-
-              <div class="flex-1">
-                <div class="flex justify-between">
-                  <TextEllipsis :text="message.title" :clickable="false" tooltipType="none" />
-                  <div class="flex items-center opacity-100 lg:opacity-0 group-hover:opacity-100">
-                    <IconButton
-                      icon="Element:Check"
-                      type="primary"
-                      tooltip="设为已读"
-                      size="1.5rem"
-                      iconSize="1rem"
-                      @click="userStore.markAsRead(message.id)"
+            <div v-for="message in messageList" :key="message.id">
+              <HoverAnimateWrapper name="lift" intensity="light" class="w-full">
+                <div
+                  class="group p-4 mb-3 flex items-center gap-4 border border-(--el-border-color-light) rounded-xl cursor-pointer hover:border-(--el-border-color) hover:bg-(--el-bg-color-page)"
+                >
+                  <div class="relative">
+                    <el-avatar :size="48" :src="message.avatar" />
+                    <span
+                      class="absolute h-3 w-3 bottom-1.5 right-0.5 rounded-full border-3 border-(--el-bg-color) bg-(--el-color-danger)"
                       v-if="!message.read"
-                    />
-                    <el-divider direction="vertical" v-if="!message.read" />
-                    <el-popconfirm
-                      title="确定删除这条消息吗？"
-                      @confirm="
-                        (userStore.deleteMessage(message.id), ElMessage.success('删除成功'))
-                      "
+                    ></span>
+                  </div>
+
+                  <div class="flex-1">
+                    <div class="flex justify-between">
+                      <TextEllipsis :text="message.title" :clickable="false" tooltipType="none" />
+                      <div
+                        class="flex items-center opacity-100 lg:opacity-0 group-hover:opacity-100"
+                      >
+                        <IconButton
+                          icon="Element:Check"
+                          type="primary"
+                          tooltip="设为已读"
+                          size="1.5rem"
+                          iconSize="1rem"
+                          @click="userStore.markAsRead(message.id)"
+                          v-if="!message.read"
+                        />
+                        <el-divider direction="vertical" v-if="!message.read" />
+                        <el-popconfirm
+                          title="确定删除这条消息吗？"
+                          @confirm="
+                            (userStore.deleteMessage(message.id), ElMessage.success('删除成功'))
+                          "
+                        >
+                          <template #reference>
+                            <div>
+                              <IconButton
+                                icon="Element:Delete"
+                                type="danger"
+                                size="1.5rem"
+                                iconSize="1rem"
+                                tooltip="删除"
+                              />
+                            </div>
+                          </template>
+                        </el-popconfirm>
+                      </div>
+                    </div>
+                    <div
+                      class="mt-2 text-sm text-(--el-text-color-regular) leading-relaxed wrap-break-word"
                     >
-                      <template #reference>
-                        <div>
-                          <IconButton
-                            icon="Element:Delete"
-                            type="danger"
-                            size="1.5rem"
-                            iconSize="1rem"
-                            tooltip="删除"
-                          />
-                        </div>
-                      </template>
-                    </el-popconfirm>
+                      {{ message.content }}
+                    </div>
+                    <div class="text-xs text-(--el-text-color-secondary) mt-2">
+                      {{ message.time }}
+                    </div>
                   </div>
                 </div>
-                <div
-                  class="mt-2 text-sm text-(--el-text-color-regular) leading-relaxed wrap-break-word"
-                >
-                  {{ message.content }}
-                </div>
-                <div class="text-xs text-(--el-text-color-secondary) mt-2">{{ message.time }}</div>
-              </div>
+              </HoverAnimateWrapper>
             </div>
           </TransitionGroup>
         </Transition>

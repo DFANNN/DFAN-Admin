@@ -75,49 +75,52 @@
 
       <el-divider />
 
-      <div
-        class="card-float-up mt-6 p-5 border border-solid border-(--el-border-color-light) rounded-xl transition-all duration-300 hover:border-(--el-border-color) hover:bg-(--el-bg-color-page) cursor-pointer"
-      >
-        <div class="flex items-center justify-between gap-4">
-          <div class="flex items-center gap-4">
-            <div
-              class="shrink-0 flex items-center justify-center w-12 h-12 rounded-lg bg-(--el-color-info-light-7) text-(--el-color-primary) transition-colors duration-300"
-            >
-              <el-icon size="20">
-                <component :is="menuStore.iconComponents['HOutline:KeyIcon']" />
-              </el-icon>
-            </div>
+      <HoverAnimateWrapper name="lift" class="w-full">
+        <div
+          class="p-5 border border-solid border-(--el-border-color-light) rounded-xl transition-all duration-300 hover:border-(--el-border-color) hover:bg-(--el-bg-color-page) cursor-pointer"
+        >
+          <div class="flex items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+              <div
+                class="shrink-0 flex items-center justify-center w-12 h-12 rounded-lg bg-(--el-color-info-light-7) text-(--el-color-primary) transition-colors duration-300"
+              >
+                <el-icon size="20">
+                  <component :is="menuStore.iconComponents['HOutline:KeyIcon']" />
+                </el-icon>
+              </div>
 
-            <div>
-              <div class="mb-1 text-sm font-bold text-(--el-text-color-primary)">修改密码</div>
-              <div class="text-xs text-(--el-text-color-secondary)">
-                定期更换强密码能显著提升账户安全性，建议包含字母与数字。
+              <div>
+                <div class="mb-1 text-sm font-bold text-(--el-text-color-primary)">修改密码</div>
+                <div class="text-xs text-(--el-text-color-secondary)">
+                  定期更换强密码能显著提升账户安全性，建议包含字母与数字。
+                </div>
               </div>
             </div>
-          </div>
 
-          <el-button type="primary" plain @click="updatePasswordRef?.showDialog()">
-            立即修改
-          </el-button>
+            <el-button type="primary" plain @click="updatePasswordRef?.showDialog()">
+              立即修改
+            </el-button>
+          </div>
         </div>
-      </div>
+      </HoverAnimateWrapper>
 
       <el-divider />
-
-      <div
-        class="card-float-up mt-7 p-4 bg-(--el-color-danger-light-9) border border-dashed border-(--el-color-danger-light-5) rounded-xl cursor-pointer transition-all duration-300 hover:bg-(--el-color-danger-light-7) hover:border-(--el-color-danger)"
-      >
-        <h4 class="mb-2 text-(--el-color-danger) font-bold">危险区域</h4>
-        <div class="flex items-center justify-between gap-4">
-          <div>
-            <div class="mb-1 text-sm font-bold">注销账户</div>
-            <div class="text-sm text-(--el-text-color-secondary)">
-              一旦注销，所有数据将无法恢复，请谨慎操作。
+      <HoverAnimateWrapper name="lift" class="w-full">
+        <div
+          class="p-4 bg-(--el-color-danger-light-9) border border-dashed border-(--el-color-danger-light-5) rounded-xl cursor-pointer transition-all duration-300 hover:bg-(--el-color-danger-light-7) hover:border-(--el-color-danger)"
+        >
+          <h4 class="mb-2 text-(--el-color-danger) font-bold">危险区域</h4>
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <div class="mb-1 text-sm font-bold">注销账户</div>
+              <div class="text-sm text-(--el-text-color-secondary)">
+                一旦注销，所有数据将无法恢复，请谨慎操作。
+              </div>
             </div>
+            <el-button type="danger" plain @click="deleteUser">立即注销</el-button>
           </div>
-          <el-button type="danger" plain @click="deleteUser">立即注销</el-button>
         </div>
-      </div>
+      </HoverAnimateWrapper>
     </div>
 
     <SelectAvatarDialog ref="selectAvatarDialogRef" @get-avatar="getAvatar" />
