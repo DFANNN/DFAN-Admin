@@ -283,6 +283,7 @@ defineExpose({
       // 移动端优化
       @media (max-width: 992px) {
         gap: 1rem;
+        min-height: 310px;
       }
 
       .upload-drag {
