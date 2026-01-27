@@ -45,14 +45,9 @@
       </div>
       <div class="flex gap-7">
         <div v-for="stat in stats" :key="stat.label" class="flex items-center gap-5">
-          <div
-            class="flex flex-col items-center gap-1 cursor-pointer hover:text-(--el-color-primary)"
-          >
-            <span class="text-xl font-extrabold">{{ stat.value }}</span>
-            <span class="text-xs text-(--el-text-color-secondary) uppercase tracking-[1px]">{{
-              stat.label
-            }}</span>
-          </div>
+          <el-statistic :value="stat.value" :title="stat.label" class="text-center">
+            <template #suffix v-if="stat.label === '代码质量'">%</template>
+          </el-statistic>
           <el-divider direction="vertical" v-if="stat !== stats[stats.length - 1]" />
         </div>
       </div>
@@ -75,9 +70,9 @@ const menuStore = useMenuStore()
 
 // 统计数据
 const stats = ref([
-  { label: '系统工单', value: '1,284' },
-  { label: '代码质量', value: '98%' },
-  { label: '负责项目', value: '15' },
+  { label: '系统工单', value: 1284 },
+  { label: '代码质量', value: 98 },
+  { label: '负责项目', value: 15 },
 ])
 </script>
 

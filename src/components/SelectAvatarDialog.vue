@@ -5,6 +5,7 @@
     :width="menuStore.isMobile ? '90%' : '800px'"
     :close-on-click-modal="false"
     @close="close"
+    style="height: 60vh"
   >
     <div class="avatar-container" :class="{ 'is-mobile': menuStore.isMobile }">
       <div class="avatar-menu">
@@ -31,7 +32,7 @@
       </div>
       <div class="avatar-content">
         <transition name="fade-slide" mode="out-in">
-          <div :key="activeMenu">
+          <div :key="activeMenu" style="height: 100%">
             <div v-if="activeMenu === 'upload'" class="upload-container">
               <el-upload
                 drag
@@ -76,7 +77,7 @@
                 </template>
               </el-input>
 
-              <el-scrollbar :height="menuStore.isMobile ? '300' : '410'">
+              <el-scrollbar>
                 <div class="cat-avatar-list">
                   <div
                     class="cat-avatar-item"
@@ -212,14 +213,13 @@ defineExpose({
 .avatar-container {
   display: flex;
   gap: 1rem;
-  min-height: 30rem;
+  height: 100%;
 
   // 移动端布局
   &.is-mobile {
     flex-direction: column;
     gap: 0.5rem;
     min-height: auto;
-    max-height: calc(100vh - 200px);
     overflow: hidden;
 
     .avatar-menu {
@@ -468,6 +468,7 @@ defineExpose({
       display: flex;
       flex-direction: column;
       gap: 1rem;
+      height: 100%;
 
       @media (max-width: 992px) {
         gap: 0.75rem;
