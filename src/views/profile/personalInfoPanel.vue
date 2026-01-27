@@ -84,7 +84,7 @@
               class="shrink-0 flex items-center justify-center w-12 h-12 rounded-lg bg-(--el-color-info-light-7) text-(--el-color-primary) transition-colors duration-300"
             >
               <el-icon size="20">
-                <component :is="menuStore.iconComponents['HOutline:LockClosedIcon']" />
+                <component :is="menuStore.iconComponents['HOutline:KeyIcon']" />
               </el-icon>
             </div>
 
@@ -96,7 +96,9 @@
             </div>
           </div>
 
-          <el-button type="primary" plain> 立即修改 </el-button>
+          <el-button type="primary" plain @click="updatePasswordRef?.showDialog()">
+            立即修改
+          </el-button>
         </div>
       </div>
 
@@ -119,17 +121,18 @@
     </div>
 
     <SelectAvatarDialog ref="selectAvatarDialogRef" @get-avatar="getAvatar" />
+    <UpdatePassword ref="updatePasswordRef" />
   </el-card>
 </template>
 
 <script setup lang="ts">
 import { Dialog } from '@/utils/dialog'
-import SelectAvatarDialog from '@/components/SelectAvatarDialog.vue'
 
 const menuStore = useMenuStore()
 const userStore = useUserStore()
 
-const selectAvatarDialogRef = ref<InstanceType<typeof SelectAvatarDialog> | null>()
+const selectAvatarDialogRef = useTemplateRef('selectAvatarDialogRef')
+const updatePasswordRef = useTemplateRef('updatePasswordRef')
 
 // 个人资料Form
 const userInfoForm = ref({

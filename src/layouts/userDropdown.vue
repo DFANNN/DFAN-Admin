@@ -62,12 +62,11 @@
             </el-icon>
             <span>问题 & 帮助</span>
           </el-dropdown-item>
-          <el-dropdown-item divided command="lock">
+          <el-dropdown-item divided command="password">
             <el-icon>
-              <component :is="menuStore.iconComponents['HOutline:LockClosedIcon']" />
+              <component :is="menuStore.iconComponents['HOutline:KeyIcon']" />
             </el-icon>
-            <span>锁定屏幕</span>
-            <span class="shortcut">⌥ L</span>
+            <span>修改密码</span>
           </el-dropdown-item>
           <el-dropdown-item command="logout">
             <el-icon>
@@ -80,6 +79,7 @@
       </div>
     </template>
   </el-dropdown>
+  <UpdatePassword ref="updatePasswordRef" />
 </template>
 
 <script setup lang="ts">
@@ -89,6 +89,7 @@ import { Dialog } from '@/utils/dialog'
 const router = useRouter()
 const menuStore = useMenuStore()
 const userStore = useUserStore()
+const updatePasswordRef = useTemplateRef('updatePasswordRef')
 
 // 用户角色名称
 const userRoleName = computed(() => {
@@ -123,8 +124,8 @@ const handleCommand = (command: string) => {
     case 'help':
       window.open('https://github.com/DFANNN/DFAN-Admin', '_blank')
       break
-    case 'lock':
-      console.log('锁定屏幕')
+    case 'password':
+      updatePasswordRef.value?.showDialog()
       break
     case 'logout':
       showLogoutConfirm()

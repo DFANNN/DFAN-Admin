@@ -275,7 +275,7 @@ export const useUserStore = defineStore('user', () => {
   const updatePassword = async (data: IUpdatePasswordParams) => {
     const { data: res } = await updatePasswordRequest(data)
     if (res.code !== 200) return
-    ElMessage.success('修改密码成功,请重新登录')
+    ElMessage.success('修改密码成功,即将重新登录')
     setTimeout(() => logout(), 1000)
   }
 
@@ -304,5 +304,6 @@ export const useUserStore = defineStore('user', () => {
     logout,
     updateAvatar,
     deleteUserAccount,
+    delay,
   }
 })
