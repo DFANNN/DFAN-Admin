@@ -54,18 +54,7 @@
                   </div>
                 </div>
                 <div v-else class="upload-preview-content">
-                  <div class="preview-image-container">
-                    <img :src="selectedAvatar as string" alt="预览头像" class="preview-image" />
-                    <div class="preview-overlay">
-                      <el-button
-                        type="danger"
-                        :icon="menuStore.iconComponents['Delete']"
-                        circle
-                        @click.stop="selectedAvatar = null"
-                        class="clear-btn"
-                      />
-                    </div>
-                  </div>
+                  <el-avatar :size="180" :src="selectedAvatar" />
                   <div class="preview-hint">点击重新上传或拖拽替换图片</div>
                 </div>
               </el-upload>
@@ -109,7 +98,7 @@
 <script setup lang="ts">
 import { ElMessage } from 'element-plus'
 import type { UploadFile } from 'element-plus'
-import BaseDialog from './dialog/BaseDialog.vue'
+import BaseDialog from '@/components/dialog/BaseDialog.vue'
 
 defineOptions({ name: 'SelectAvatarDialog' })
 
@@ -217,6 +206,7 @@ defineExpose({
 
   // 移动端布局
   &.is-mobile {
+    height: 100%;
     flex-direction: column;
     gap: 0.5rem;
     min-height: auto;
@@ -280,6 +270,7 @@ defineExpose({
   .avatar-content {
     flex: 1;
     padding: 0.5rem;
+    height: 100%;
 
     .upload-container {
       display: flex;
@@ -291,7 +282,6 @@ defineExpose({
 
       // 移动端优化
       @media (max-width: 992px) {
-        min-height: auto;
         gap: 1rem;
       }
 
@@ -378,75 +368,6 @@ defineExpose({
 
             @media (max-width: 992px) {
               gap: 0.75rem;
-            }
-
-            .preview-image-container {
-              position: relative;
-              width: 180px;
-              height: 180px;
-              border-radius: 50%;
-              overflow: hidden;
-              border: 4px solid var(--el-border-color-lighter);
-              box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-              transition: all 0.3s ease;
-
-              @media (max-width: 992px) {
-                width: 150px;
-                height: 150px;
-                border-width: 3px;
-              }
-
-              &:hover {
-                border-color: var(--el-color-primary);
-                box-shadow: 0 6px 30px rgba(0, 0, 0, 0.15);
-
-                .preview-overlay {
-                  opacity: 1;
-                }
-              }
-
-              // 移动端优化：点击显示删除按钮
-              @media (max-width: 992px) {
-                .preview-overlay {
-                  // 移动端点击时显示
-                  opacity: 0;
-
-                  &:active {
-                    opacity: 1;
-                  }
-                }
-
-                // 点击容器时显示删除按钮
-                &:active .preview-overlay {
-                  opacity: 1;
-                }
-              }
-
-              .preview-image {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                display: block;
-              }
-
-              .preview-overlay {
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0, 0, 0, 0.5);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                opacity: 0;
-                transition: opacity 0.3s ease;
-                border-radius: 50%;
-
-                .clear-btn {
-                  backdrop-filter: blur(4px);
-                }
-              }
             }
 
             .preview-hint {
