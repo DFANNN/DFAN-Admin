@@ -244,9 +244,9 @@ export const useUserStore = defineStore('user', () => {
 
   // 发送消息
   const sendMessage = (message: string) => {
-    userMessages.value.unshift({
+    const title = userMessages.value.unshift({
       id: String(userMessages.value.length + 1),
-      title: userInfo.value?.name || userInfo.value?.username!,
+      title: userInfo.value?.name || userInfo.value?.username || '未知用户',
       content: message,
       type: 'user',
       read: false,

@@ -24,18 +24,19 @@
       </div>
       <div class="info-cell">
         <label>联系邮箱</label>
-        <span>{{ userStore.userInfo?.email || '未设置' }}</span>
+        <span>{{ userStore.userInfo?.email || '暂无邮箱~' }}</span>
       </div>
 
       <el-divider />
 
       <div>
         <div class="text-sm font-bold text-(--el-text-color-secondary) mb-2">个人标签</div>
-        <div class="flex flex-wrap gap-2">
+        <div class="flex flex-wrap gap-2" v-if="skills.length">
           <el-tag v-for="skill in skills" :key="skill.name" :type="skill.type">{{
             skill.name
           }}</el-tag>
         </div>
+        <div class="text-sm" v-else>暂无标签~</div>
       </div>
     </div>
   </el-card>
