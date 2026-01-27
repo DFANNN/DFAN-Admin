@@ -1,9 +1,10 @@
 <template>
+  <!-- 我的权限 -->
   <el-card class="my-permission-card" shadow="never">
     <div class="flex flex-col md:flex-row md:items-end justify-between mb-4">
       <div class="space-y-2">
         <div class="flex items-center gap-3">
-          <h1 class="text-2xl font-semibold text-slate-900 tracking-tight">我的权限</h1>
+          <h1 class="text-2xl font-semibold">我的权限</h1>
           <el-tag>{{ userStore.userRoleName }}</el-tag>
         </div>
         <p class="text-sm text-(--el-text-color-secondary)">

@@ -2,7 +2,6 @@ import { defineStore } from 'pinia'
 import { userInfoRequest } from '@/api/login'
 import { rolePage } from '@/api/role'
 import { updateProfile, updatePasswordRequest, updateAvatarRequest, deleteUser } from '@/api/user'
-
 import { ElMessage } from 'element-plus'
 import router, { resetRouter } from '@/router'
 import { useMenuStore } from './menu'
@@ -17,6 +16,7 @@ import type {
   IUpdateUserProfileParams,
   IUpdatePasswordParams,
 } from '@/types/system/user'
+import dayjs from 'dayjs'
 
 export const useUserStore = defineStore('user', () => {
   // 默认头像占位
@@ -242,6 +242,19 @@ export const useUserStore = defineStore('user', () => {
     },
   ])
 
+  // 发送消息
+  const sendMessage = (message: string) => {
+    userMessages.value.unshift({
+      id: String(userMessages.value.length + 1),
+      title: userInfo.value?.name || userInfo.value?.username!,
+      content: message,
+      type: 'user',
+      read: false,
+      time: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      avatar: userInfo.value?.avatar || defaultSystemAvatar,
+    })
+  }
+
   // 未读消息数量
   const unreadCount = computed(() => {
     return userMessages.value.filter((msg) => !msg.read).length
@@ -305,5 +318,6 @@ export const useUserStore = defineStore('user', () => {
     updateAvatar,
     deleteUserAccount,
     delay,
+    sendMessage,
   }
 })

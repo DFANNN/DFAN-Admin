@@ -1,4 +1,5 @@
 <template>
+  <!-- 渐变头部 -->
   <div class="w-full h-75 rounded-2xl overflow-hidden">
     <img :src="headerBanner" alt="banner" class="w-full h-full" />
   </div>
