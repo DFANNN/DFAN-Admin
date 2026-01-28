@@ -1,18 +1,6 @@
+<!-- 系统实时流水日志 -->
 <template>
-  <!-- 系统实时流水日志 -->
-  <el-card class="logs-panel-card" shadow="never">
-    <template #header>
-      <div class="flex justify-between items-center gap-3 font-bold">
-        <div class="flex items-center gap-3">
-          <el-icon>
-            <component :is="menuStore.iconComponents['HOutline:DocumentTextIcon']" />
-          </el-icon>
-          <span>系统实时流水日志</span>
-        </div>
-        <IconButton icon="HOutline:EllipsisHorizontalIcon" size="1.5rem" />
-      </div>
-    </template>
-
+  <BaseCard title="系统实时流水日志" title-icon="HOutline:DocumentTextIcon">
     <div
       class="bg-(--el-bg-color-page) p-3 rounded-2xl border border-(--el-border-color-extra-light)"
     >
@@ -32,7 +20,7 @@
         </div>
       </el-scrollbar>
     </div>
-  </el-card>
+  </BaseCard>
 </template>
 
 <script setup lang="ts">
@@ -99,18 +87,4 @@ onUnmounted(() => {
 })
 </script>
 
-<style scoped lang="scss">
-.el-icon {
-  font-size: 1.25rem;
-  color: var(--el-color-primary);
-}
-
-.logs-panel-card {
-  border: none;
-  border-radius: 1rem;
-}
-
-:deep(.el-card__header) {
-  border-bottom: 1px solid var(--el-border-color-extra-light);
-}
-</style>
+<style scoped lang="scss"></style>

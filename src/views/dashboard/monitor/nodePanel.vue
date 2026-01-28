@@ -1,21 +1,13 @@
+<!-- 服务集群健康状态 -->
 <template>
-  <!-- 系统实时流水日志 -->
-  <el-card class="node-panel-card" shadow="never">
-    <template #header>
-      <div class="flex justify-between items-center gap-3 font-bold">
-        <div class="flex items-center gap-3">
-          <el-icon>
-            <component :is="menuStore.iconComponents['HOutline:Squares2X2Icon']" />
-          </el-icon>
-          <span>服务集群健康状态</span>
-        </div>
-        <div class="text-sm font-semibold text-(--el-color-primary)">{{ nodes.length }} Nodes</div>
-      </div>
+  <BaseCard title="服务集群健康状态" title-icon="HOutline:Squares2X2Icon">
+    <template #header-right>
+      <div class="text-sm font-semibold text-(--el-color-primary)">{{ nodes.length }} Nodes</div>
     </template>
 
     <div>
-      <el-scrollbar :height="363">
-        <div class="grid grid-cols-[repeat(auto-fill,minmax(45px,1fr))] gap-2.5 py-5">
+      <el-scrollbar :height="347">
+        <div class="grid grid-cols-[repeat(auto-fill,minmax(45px,1fr))] gap-2.5">
           <div
             v-for="item in nodes"
             :key="item.id"
@@ -30,7 +22,7 @@
       </el-scrollbar>
 
       <div
-        class="pt-5 text-(--el-text-color-secondary) font-semibold flex justify-center gap-4 border-t border-dashed border-(--el-border-color-light)"
+        class="mt-4 pt-5 text-(--el-text-color-secondary) font-semibold flex justify-center gap-4 border-t border-dashed border-(--el-border-color-light)"
       >
         <span class="flex gap-2 items-center text-xs">
           <i class="w-2 h-2 rounded-full bg-(--el-color-success)"></i>
@@ -46,7 +38,7 @@
         </span>
       </div>
     </div>
-  </el-card>
+  </BaseCard>
 </template>
 
 <script setup lang="ts">
@@ -94,20 +86,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped lang="scss">
-.el-icon {
-  font-size: 1.25rem;
-  color: var(--el-color-primary);
-}
-
-.node-panel-card {
-  border: none;
-  border-radius: 1rem;
-}
-
-:deep(.el-card__header) {
-  border-bottom: 1px solid var(--el-border-color-extra-light);
-}
-
 /* 故障闪烁动画 */
 @keyframes dangerBlink {
   0% {

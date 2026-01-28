@@ -1,8 +1,8 @@
+<!-- 资源面板 -->
 <template>
-  <!-- 资源面板 -->
   <el-row :gutter="20">
     <el-col :sm="12" :lg="6" v-for="item in resourceStatsWithOption" :key="item.label" class="mt-4">
-      <el-card class="common-card" shadow="never">
+      <BaseCard>
         <div class="flex items-center justify-between">
           <div class="flex flex-col gap-3">
             <div class="text-sm font-medium text-(--el-text-color-regular)">
@@ -31,7 +31,7 @@
             <VChart :option="item.option" />
           </div>
         </div>
-      </el-card>
+      </BaseCard>
     </el-col>
   </el-row>
 </template>
@@ -136,9 +136,4 @@ onUnmounted(() => {
 })
 </script>
 
-<style scoped lang="scss">
-.common-card {
-  border: none;
-  border-radius: 1rem;
-}
-</style>
+<style scoped lang="scss"></style>

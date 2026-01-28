@@ -1,22 +1,10 @@
+<!-- API 实时吞吐量 -->
 <template>
-  <!-- API 实时吞吐量 -->
-  <el-card class="top-categories-card" shadow="never">
-    <template #header>
-      <div class="flex justify-between items-center gap-3 font-bold">
-        <div class="flex items-center gap-3">
-          <el-icon>
-            <component :is="menuStore.iconComponents['HOutline:ArrowTrendingUpIcon']" />
-          </el-icon>
-          <span>API 实时吞吐量 (Req/s)</span>
-        </div>
-        <IconButton icon="HOutline:EllipsisHorizontalIcon" size="1.5rem" />
-      </div>
-    </template>
-
+  <BaseCard title="API 实时吞吐量 (Req/s)" title-icon="HOutline:ArrowTrendingUpIcon">
     <div class="h-76">
       <VChart class="chart" :option="throughputOption" autoresize />
     </div>
-  </el-card>
+  </BaseCard>
 </template>
 
 <script setup lang="ts">
@@ -96,18 +84,4 @@ const updateColorTrigger = () => colorTrigger.value++
 defineExpose({ updateColorTrigger })
 </script>
 
-<style scoped lang="scss">
-.el-icon {
-  font-size: 1.25rem;
-  color: var(--el-color-primary);
-}
-
-.top-categories-card {
-  border: none;
-  border-radius: 1rem;
-}
-
-:deep(.el-card__header) {
-  border-bottom: 1px solid var(--el-border-color-extra-light);
-}
-</style>
+<style scoped lang="scss"></style>

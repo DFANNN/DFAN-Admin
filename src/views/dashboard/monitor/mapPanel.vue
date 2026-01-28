@@ -1,18 +1,10 @@
+<!-- 系统实时流水日志 -->
 <template>
-  <!-- 系统实时流水日志 -->
-  <el-card class="map-panel-card" shadow="never">
-    <template #header>
-      <div class="flex justify-between items-center gap-3 font-bold">
-        <div class="flex items-center gap-3">
-          <el-icon>
-            <component :is="menuStore.iconComponents['HOutline:GlobeAsiaAustraliaIcon']" />
-          </el-icon>
-          <span>全球请求实时分布</span>
-        </div>
-        <div class="flex items-center gap-2 text-(--el-color-primary) font-semibold text-sm">
-          <span class="w-2 h-2 bg-(--el-color-primary) rounded-full pulsating"></span>
-          <span>LIVE DATA</span>
-        </div>
+  <BaseCard title="全球请求实时分布" title-icon="HOutline:GlobeAsiaAustraliaIcon">
+    <template #header-right>
+      <div class="flex items-center gap-2 text-(--el-color-primary) font-semibold text-sm">
+        <span class="w-2 h-2 bg-(--el-color-primary) rounded-full pulsating"></span>
+        <span>LIVE DATA</span>
       </div>
     </template>
 
@@ -25,7 +17,7 @@
     >
       <VChart v-if="isMapRegistered" class="chart" :option="worldMapOption" autoresize />
     </div>
-  </el-card>
+  </BaseCard>
 </template>
 
 <script setup lang="ts">
@@ -143,20 +135,6 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-.el-icon {
-  font-size: 1.25rem;
-  color: var(--el-color-primary);
-}
-
-.map-panel-card {
-  border: none;
-  border-radius: 1rem;
-}
-
-:deep(.el-card__header) {
-  border-bottom: 1px solid var(--el-border-color-extra-light);
-}
-
 .pulsating {
   animation: pulse 2s infinite;
 }
