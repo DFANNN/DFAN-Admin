@@ -35,7 +35,6 @@
 </template>
 
 <script setup lang="ts">
-const menuStore = useMenuStore()
 const userStore = useUserStore()
 
 type TagType = 'success' | 'info' | 'warning' | 'danger' | 'primary'

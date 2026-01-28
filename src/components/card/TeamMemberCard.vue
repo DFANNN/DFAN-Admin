@@ -39,7 +39,7 @@ interface IProps {
   teamData: ITeamItem[] // 团队数据
 }
 
-const props = withDefaults(defineProps<IProps>(), {
+withDefaults(defineProps<IProps>(), {
   title: '团队成员',
   titleIcon: 'HOutline:UserGroupIcon',
   height: '280',

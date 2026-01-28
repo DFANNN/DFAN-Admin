@@ -42,8 +42,6 @@
 </template>
 
 <script setup lang="ts">
-const menuStore = useMenuStore()
-
 type NodeStatus = 'success' | 'warning' | 'danger'
 
 interface INodeItem {

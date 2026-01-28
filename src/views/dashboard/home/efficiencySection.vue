@@ -23,8 +23,6 @@
 <script setup lang="ts">
 import VChart from 'vue-echarts'
 
-const menuStore = useMenuStore()
-
 interface IStatItem {
   label: string
   value: string | number

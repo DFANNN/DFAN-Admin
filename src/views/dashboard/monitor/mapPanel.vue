@@ -24,8 +24,6 @@
 import { registerMap } from 'echarts/core'
 import VChart from 'vue-echarts'
 
-const menuStore = useMenuStore()
-
 // 触发器变量（仅仅用来主题或者颜色变化时触发revenueProfitOption 更新的变量）
 const colorTrigger = ref(0)
 

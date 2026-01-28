@@ -32,7 +32,6 @@ interface ILog {
   content: string
 }
 
-const menuStore = useMenuStore()
 // 定时器
 let timer: ReturnType<typeof setInterval> | null = null
 
