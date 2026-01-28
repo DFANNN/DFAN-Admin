@@ -1,7 +1,7 @@
 <!-- 基础card组件 基于el-card组件封装 -->
 <template>
   <el-card class="base-card" :shadow="shadow">
-    <template #header v-if="slots.header || title || titleIcon">
+    <template #header v-if="slots.header || title || titleIcon || slots['header-right']">
       <slot name="header">
         <div class="card-header-wrap">
           <div class="header-left">
@@ -43,6 +43,7 @@ const props = withDefaults(defineProps<IProps>(), {
 
 // 获取插槽
 const slots = useSlots()
+console.log(`output->`, slots)
 const menuStore = useMenuStore()
 
 // 计算title图标组件

@@ -1,29 +1,32 @@
+<!-- 我的权限 -->
 <template>
-  <!-- 我的权限 -->
-  <el-card class="my-permission-card" shadow="never">
-    <div class="flex flex-col md:flex-row md:items-end justify-between mb-4">
-      <div class="space-y-2">
-        <div class="flex items-center gap-3">
-          <h1 class="text-2xl font-semibold">我的权限</h1>
-          <el-tag>{{ userStore.userRoleName }}</el-tag>
+  <BaseCard>
+    <template #header>
+      <div class="flex flex-col md:flex-row md:items-end justify-between">
+        <div class="space-y-2">
+          <div class="flex items-center gap-3">
+            <h1 class="text-2xl font-semibold">我的权限</h1>
+            <el-tag>{{ userStore.userRoleName }}</el-tag>
+          </div>
+          <p class="text-sm text-(--el-text-color-secondary)">
+            查看您在系统中获准访问的菜单项与操作功能。如有权限变动，请联系系统管理员。
+          </p>
         </div>
-        <p class="text-sm text-(--el-text-color-secondary)">
-          查看您在系统中获准访问的菜单项与操作功能。如有权限变动，请联系系统管理员。
-        </p>
+
+        <div class="flex items-center justify-center gap-10 mt-6 md:mt-0 pr-4">
+          <el-statistic
+            :value="currentRolePermission?.length"
+            title="已开启权限"
+            class="text-center"
+          />
+
+          <el-divider direction="vertical" />
+
+          <el-statistic :value="authorizedCount" title="权限总数" class="text-center" />
+        </div>
       </div>
+    </template>
 
-      <div class="flex items-center justify-center gap-10 mt-6 md:mt-0 pr-4">
-        <el-statistic
-          :value="currentRolePermission?.length"
-          title="已开启权限"
-          class="text-center"
-        />
-
-        <el-divider direction="vertical" />
-
-        <el-statistic :value="authorizedCount" title="权限总数" class="text-center" />
-      </div>
-    </div>
     <el-table
       v-loading="loading"
       :data="menuList"
@@ -61,7 +64,7 @@
         </template>
       </el-table-column>
     </el-table>
-  </el-card>
+  </BaseCard>
 </template>
 
 <script setup lang="ts">
@@ -121,9 +124,4 @@ onMounted(() => {
 })
 </script>
 
-<style scoped lang="scss">
-.my-permission-card {
-  border: none;
-  border-radius: 1rem;
-}
-</style>
+<style scoped lang="scss"></style>

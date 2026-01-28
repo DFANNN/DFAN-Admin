@@ -1,5 +1,5 @@
+<!-- 我的资料 -->
 <template>
-  <!-- 我的资料 -->
   <el-row :gutter="20">
     <el-col :lg="6">
       <ArchivesPanel />

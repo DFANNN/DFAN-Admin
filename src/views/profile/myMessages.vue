@@ -1,7 +1,7 @@
+<!-- 我的消息 -->
 <template>
-  <!-- 我的消息 -->
   <div>
-    <el-card class="common-card" shadow="never">
+    <BaseCard>
       <div class="flex items-center gap-4">
         <el-avatar :size="32" :src="userStore.userInfo?.avatar" />
         <span class="text-sm font-medium text-(--el-text-color-secondary)"
@@ -21,9 +21,9 @@
           >发布消息</el-button
         >
       </div>
-    </el-card>
+    </BaseCard>
 
-    <el-card class="common-card mt-4" shadow="never">
+    <BaseCard class="mt-4">
       <template #header>
         <div class="flex items-center justify-between">
           <div class="flex-1">
@@ -78,7 +78,7 @@
             v-if="messageList.length === 0"
             :description="activeName === 'unread' ? '暂无未读消息' : '暂无消息'"
           />
-          <TransitionGroup name="group-slide-fade-right" tag="div" v-else>
+          <TransitionGroup name="group-slide-right" tag="div" v-else>
             <div v-for="message in messageList" :key="message.id">
               <HoverAnimateWrapper name="lift" intensity="light" class="w-full">
                 <div
@@ -143,7 +143,7 @@
           </TransitionGroup>
         </Transition>
       </div>
-    </el-card>
+    </BaseCard>
   </div>
 </template>
 
@@ -196,23 +196,4 @@ const clearAllMessages = () => {
 }
 </script>
 
-<style scoped lang="scss">
-.group-slide-fade-right-enter-active,
-.group-slide-fade-right-leave-active {
-  transition: all 0.5s ease;
-}
-.group-slide-fade-right-enter-from,
-.group-slide-fade-right-leave-to {
-  opacity: 0;
-  transform: translateX(30px);
-}
-
-.common-card {
-  border: none;
-  border-radius: 1rem;
-}
-
-:deep(.el-card__header) {
-  border-bottom: 1px solid var(--el-border-color-extra-light);
-}
-</style>
+<style scoped lang="scss"></style>

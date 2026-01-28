@@ -1,6 +1,6 @@
+<!-- 登录日志 -->
 <template>
-  <!-- 登录日志 -->
-  <el-card class="login-logs-card" shadow="never">
+  <BaseCard>
     <el-empty v-if="!userStore.userInfo?.loginLogs?.length" description="暂无登录日志" />
     <div v-else>
       <div class="flex justify-end mb-4">
@@ -29,7 +29,7 @@
         </el-table-column>
       </el-table>
     </div>
-  </el-card>
+  </BaseCard>
 </template>
 
 <script setup lang="ts">
@@ -56,9 +56,4 @@ const exportLoginLogsExcel = async () => {
 }
 </script>
 
-<style scoped lang="scss">
-.login-logs-card {
-  border: none;
-  border-radius: 1rem;
-}
-</style>
+<style scoped lang="scss"></style>

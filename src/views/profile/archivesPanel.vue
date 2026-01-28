@@ -1,14 +1,6 @@
+<!-- 详细档案 -->
 <template>
-  <!-- 详细档案 -->
-  <el-card shadow="never" class="archives-panel-card">
-    <template #header>
-      <div class="flex items-center gap-3">
-        <el-icon>
-          <component :is="menuStore.iconComponents['HOutline:IdentificationIcon']" />
-        </el-icon>
-        <span>详细档案</span>
-      </div>
-    </template>
+  <BaseCard title="详细档案" title-icon="HOutline:IdentificationIcon">
     <div>
       <div class="info-cell">
         <label>账号ID</label>
@@ -39,7 +31,7 @@
         <div class="text-sm" v-else>暂无标签~</div>
       </div>
     </div>
-  </el-card>
+  </BaseCard>
 </template>
 
 <script setup lang="ts">
@@ -63,20 +55,6 @@ const skills = computed(() => {
 </script>
 
 <style scoped lang="scss">
-.el-icon {
-  font-size: 1.25rem;
-  color: var(--el-color-primary);
-}
-
-.archives-panel-card {
-  border: none;
-  border-radius: 1rem;
-}
-
-:deep(.el-card__header) {
-  border-bottom: 1px solid var(--el-border-color-extra-light);
-}
-
 .info-cell {
   margin-bottom: 1.25rem;
   label {

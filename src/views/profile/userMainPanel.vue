@@ -1,6 +1,6 @@
+<!-- 用户信息面板 -->
 <template>
-  <!-- 用户信息面板 -->
-  <el-card shadow="never" class="user-main-panel">
+  <BaseCard>
     <div class="flex items-center justify-between flex-col xl:flex-row gap-8 mt-4">
       <div class="flex items-center gap-2 flex-col md:flex-row md:gap-8">
         <HoverAnimateWrapper name="flip">
@@ -61,7 +61,7 @@
         />
       </div>
     </div>
-  </el-card>
+  </BaseCard>
 </template>
 
 <script setup lang="ts">
@@ -77,10 +77,6 @@ const stats = ref([
 </script>
 
 <style scoped lang="scss">
-.user-main-panel {
-  border: none;
-  border-radius: 1rem;
-}
 .active {
   color: var(--el-color-primary);
   &::after {

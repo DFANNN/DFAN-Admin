@@ -1,60 +1,58 @@
+<!-- 我的项目 -->
 <template>
-  <!-- 我的项目 -->
-  <div>
-    <el-card class="common-card" shadow="never">
-      <div class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-5">
-        <div
-          v-for="item in projects"
-          :key="item.id"
-          class="flex flex-col gap-4 p-6 rounded-2xl bg-(--el-bg-color-page) border border-(--el-border-color-extra-light) cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
-        >
-          <div class="flex items-center gap-4">
-            <div
-              class="flex items-center justify-center w-10 h-10 rounded-xl"
-              :style="{ backgroundColor: item.color + '20' }"
-            >
-              <el-icon :style="{ color: item.color }">
-                <component :is="menuStore.iconComponents[item.icon]" />
-              </el-icon>
-            </div>
-            <div class="font-bold">{{ item.name }}</div>
+  <BaseCard>
+    <div class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-5">
+      <div
+        v-for="item in projects"
+        :key="item.id"
+        class="flex flex-col gap-4 p-6 rounded-2xl bg-(--el-bg-color-page) border border-(--el-border-color-extra-light) cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+      >
+        <div class="flex items-center gap-4">
+          <div
+            class="flex items-center justify-center w-10 h-10 rounded-xl"
+            :style="{ backgroundColor: item.color + '20' }"
+          >
+            <el-icon :style="{ color: item.color }">
+              <component :is="menuStore.iconComponents[item.icon]" />
+            </el-icon>
           </div>
-          <div class="text-sm text-(--el-text-color-secondary)">
-            <TextEllipsis :text="item.desc" :line="2" />
+          <div class="font-bold">{{ item.name }}</div>
+        </div>
+        <div class="text-sm text-(--el-text-color-secondary)">
+          <TextEllipsis :text="item.desc" :line="2" />
+        </div>
+        <div>
+          <div
+            class="flex justify-between items-center mb-2 font-semibold text-xs text-(--el-text-color-secondary)"
+          >
+            <span>完成进度</span>
+            <span>{{ item.progress }}%</span>
           </div>
-          <div>
-            <div
-              class="flex justify-between items-center mb-2 font-semibold text-xs text-(--el-text-color-secondary)"
-            >
-              <span>完成进度</span>
-              <span>{{ item.progress }}%</span>
-            </div>
-            <el-progress
-              :percentage="item.progress"
-              :color="item.color"
-              :show-text="false"
-              :stroke-width="6"
+          <el-progress
+            :percentage="item.progress"
+            :color="item.color"
+            :show-text="false"
+            :stroke-width="6"
+          />
+        </div>
+        <div class="flex justify-between items-center text-sm text-(--el-text-color-secondary)">
+          <div class="flex items-center">
+            <el-avatar
+              v-for="n in 3"
+              :key="n"
+              :size="24"
+              :src="`https://api.dicebear.com/7.x/avataaars/svg?seed=${item.name + n}`"
+              class="border-2 -ml-2.5 first:ml-0"
             />
-          </div>
-          <div class="flex justify-between items-center text-sm text-(--el-text-color-secondary)">
-            <div class="flex items-center">
-              <el-avatar
-                v-for="n in 3"
-                :key="n"
-                :size="24"
-                :src="`https://api.dicebear.com/7.x/avataaars/svg?seed=${item.name + n}`"
-                class="border-2 -ml-2.5 first:ml-0"
-              />
-              <div class="text-(--el-text-color-placeholder)">
-                +{{ Math.floor(Math.random() * 10) }}
-              </div>
+            <div class="text-(--el-text-color-placeholder)">
+              +{{ Math.floor(Math.random() * 10) }}
             </div>
-            <div class="text-(--el-text-color-placeholder)">{{ item.time }}</div>
           </div>
+          <div class="text-(--el-text-color-placeholder)">{{ item.time }}</div>
         </div>
       </div>
-    </el-card>
-  </div>
+    </div>
+  </BaseCard>
 </template>
 
 <script setup lang="ts">
@@ -125,9 +123,4 @@ const projects = ref([
 ])
 </script>
 
-<style scoped lang="scss">
-.common-card {
-  border: none;
-  border-radius: 1rem;
-}
-</style>
+<style scoped lang="scss"></style>

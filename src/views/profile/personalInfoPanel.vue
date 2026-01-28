@@ -1,16 +1,8 @@
 <template>
   <!-- 个人资料中心 -->
-  <el-card class="update-personal-card" shadow="never">
-    <template #header>
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <el-icon>
-            <component :is="menuStore.iconComponents['HOutline:UserIcon']" />
-          </el-icon>
-          <div>个人资料中心</div>
-        </div>
-        <el-button type="primary" @click="saveUser">保存全部更改</el-button>
-      </div>
+  <BaseCard title="个人资料中心" title-icon="HOutline:UserIcon">
+    <template #header-right>
+      <el-button type="primary" @click="saveUser">保存全部更改</el-button>
     </template>
     <div>
       <div class="flex items-center gap-4">
@@ -125,7 +117,7 @@
 
     <SelectAvatarDialog ref="selectAvatarDialogRef" @get-avatar="getAvatar" />
     <UpdatePassword ref="updatePasswordRef" />
-  </el-card>
+  </BaseCard>
 </template>
 
 <script setup lang="ts">
@@ -201,18 +193,4 @@ watch(
 )
 </script>
 
-<style scoped lang="scss">
-.update-personal-card {
-  border: none;
-  border-radius: 1rem;
-}
-
-:deep(.el-card__header) {
-  border-bottom: 1px solid var(--el-border-color-extra-light);
-}
-
-.el-icon {
-  font-size: 1.25rem;
-  color: var(--el-color-primary);
-}
-</style>
+<style scoped lang="scss"></style>
