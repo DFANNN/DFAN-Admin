@@ -11,3 +11,12 @@ export interface ITabsMenuData {
   disabled?: boolean // 是否禁用
   icon?: string | Component // 标题前的图标名称或图标组件
 }
+
+// 团队成员列表类型
+export interface ITeamItem {
+  id?: string
+  name: string
+  role: string
+  avatar: string
+  status: 'online' | 'offline'
+}
