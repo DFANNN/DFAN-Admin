@@ -33,10 +33,10 @@ import type { ITeamItem } from '@/types/profile'
 const menuStore = useMenuStore()
 
 interface IProps {
-  title?: string
-  titleIcon?: string | Component
-  height?: string | number
-  teamData: ITeamItem[]
+  title?: string // 标题
+  titleIcon?: string | Component // 标题图标
+  height?: string | number // 高度
+  teamData: ITeamItem[] // 团队数据
 }
 
 const props = withDefaults(defineProps<IProps>(), {

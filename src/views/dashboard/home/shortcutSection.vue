@@ -1,14 +1,6 @@
+<!-- 快捷方式 -->
 <template>
-  <!-- 快捷方式 -->
-  <el-card class="project-section-card" shadow="never">
-    <template #header>
-      <div class="flex items-center gap-3">
-        <el-icon class="header-icon">
-          <component :is="menuStore.iconComponents['HOutline:WrenchScrewdriverIcon']" />
-        </el-icon>
-        <span>便捷工具</span>
-      </div>
-    </template>
+  <BaseCard title="便捷工具" title-icon="HOutline:WrenchScrewdriverIcon">
     <div class="grid grid-cols-4 gap-4">
       <div
         v-for="item in shortcuts"
@@ -33,7 +25,7 @@
         </HoverAnimateWrapper>
       </div>
     </div>
-  </el-card>
+  </BaseCard>
 </template>
 
 <script setup lang="ts">
@@ -52,17 +44,4 @@ const shortcuts = ref([
 ])
 </script>
 
-<style scoped lang="scss">
-.header-icon {
-  font-size: 1.25rem;
-  color: var(--el-color-primary);
-}
-.project-section-card {
-  border: none;
-  border-radius: 1rem;
-}
-
-:deep(.el-card__header) {
-  border-bottom: 1px solid var(--el-border-color-extra-light);
-}
-</style>
+<style scoped lang="scss"></style>

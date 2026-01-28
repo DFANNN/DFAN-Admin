@@ -1,17 +1,6 @@
+<!-- 正在进行中的项目 -->
 <template>
-  <!-- 正在进行中的项目 -->
-  <el-card class="project-section-card" shadow="never">
-    <template #header>
-      <div class="flex justify-between items-center">
-        <div class="flex items-center gap-3">
-          <el-icon size="22">
-            <component :is="menuStore.iconComponents['HOutline:SquaresPlusIcon']" />
-          </el-icon>
-          <span>正在进行的项目</span>
-        </div>
-        <IconButton icon="HOutline:EllipsisHorizontalIcon" size="1.5rem" />
-      </div>
-    </template>
+  <BaseCard title="正在进行的项目" title-icon="HOutline:SquaresPlusIcon">
     <el-scrollbar :height="500">
       <div class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-5">
         <div
@@ -65,7 +54,7 @@
         </div>
       </div>
     </el-scrollbar>
-  </el-card>
+  </BaseCard>
 </template>
 
 <script setup lang="ts">
@@ -136,17 +125,4 @@ const projects = ref([
 ])
 </script>
 
-<style scoped lang="scss">
-.el-icon {
-  font-size: 1.25rem;
-  color: var(--el-color-primary);
-}
-.project-section-card {
-  border: none;
-  border-radius: 1rem;
-}
-
-:deep(.el-card__header) {
-  border-bottom: 1px solid var(--el-border-color-extra-light);
-}
-</style>
+<style scoped lang="scss"></style>

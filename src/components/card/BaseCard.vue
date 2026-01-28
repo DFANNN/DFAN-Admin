@@ -1,11 +1,11 @@
 <!-- 基础card组件 基于el-card组件封装 -->
 <template>
-  <el-card class="base-card">
+  <el-card class="base-card" :shadow="shadow">
     <template #header v-if="slots.header || title || titleIcon">
       <slot name="header">
         <div class="card-header-wrap">
           <div class="header-left">
-            <el-icon size="20" class="header-icon">
+            <el-icon size="20" class="header-icon" v-if="titleIcon">
               <component :is="iconComponent" />
             </el-icon>
             <span>{{ title }}</span>
@@ -31,12 +31,15 @@
 
 <script setup lang="ts">
 interface IProps {
-  title?: string
-  titleIcon?: string | Component
-  titleIconSize?: string
+  title?: string // 标题
+  titleIcon?: string | Component // 标题图标
+  titleIconSize?: string // 标题图标大小
+  shadow?: 'never' | 'always' | 'hover' // 卡片阴影
 }
 
-const props = defineProps<IProps>()
+const props = withDefaults(defineProps<IProps>(), {
+  shadow: 'never',
+})
 
 // 获取插槽
 const slots = useSlots()

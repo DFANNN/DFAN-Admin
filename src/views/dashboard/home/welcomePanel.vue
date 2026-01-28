@@ -1,5 +1,5 @@
 <template>
-  <el-card class="welcome-panel-card">
+  <BaseCard>
     <!-- 欢迎面板 -->
     <el-scrollbar :max-height="620">
       <div class="flex flex-col xl:flex-row justify-between p-6 lg:p-8">
@@ -176,7 +176,7 @@
         </div>
       </div>
     </el-scrollbar>
-  </el-card>
+  </BaseCard>
 </template>
 
 <script setup lang="ts">
@@ -275,9 +275,5 @@ onMounted(() => {
 <style scoped lang="scss">
 .el-divider--vertical {
   height: 2.5rem;
-}
-.welcome-panel-card {
-  border: none;
-  border-radius: 1rem;
 }
 </style>

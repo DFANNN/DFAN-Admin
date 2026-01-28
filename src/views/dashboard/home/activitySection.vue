@@ -1,17 +1,6 @@
+<!-- 团队动态与最新评价 -->
 <template>
-  <!-- 团队动态与最新评价 -->
-  <el-card class="activity-section-card" shadow="never">
-    <template #header>
-      <div class="flex justify-between items-center">
-        <div class="flex items-center gap-3">
-          <el-icon>
-            <component :is="menuStore.iconComponents['HOutline:SparklesIcon']" />
-          </el-icon>
-          <span>团队动态与最新评价</span>
-        </div>
-        <IconButton icon="HOutline:EllipsisHorizontalIcon" size="1.5rem" />
-      </div>
-    </template>
+  <BaseCard title="团队动态与最新评价" title-icon="HOutline:SparklesIcon">
     <el-scrollbar :height="540">
       <div
         v-for="item in activities"
@@ -59,7 +48,7 @@
         </div>
       </div>
     </el-scrollbar>
-  </el-card>
+  </BaseCard>
 </template>
 
 <script setup lang="ts">
@@ -165,16 +154,4 @@ const activities = ref<IActivity[]>([
 ])
 </script>
 
-<style scoped lang="scss">
-.el-icon {
-  font-size: 1.25rem;
-  color: var(--el-color-primary);
-}
-.activity-section-card {
-  border: none;
-  border-radius: 1rem;
-}
-:deep(.el-card__header) {
-  border-bottom: 1px solid var(--el-border-color-extra-light);
-}
-</style>
+<style scoped lang="scss"></style>

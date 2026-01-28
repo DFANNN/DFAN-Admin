@@ -1,14 +1,6 @@
+<!-- 本周工作效能 -->
 <template>
-  <!-- 本周工作效能 -->
-  <el-card class="efficiency-section-card" shadow="never">
-    <template #header>
-      <div class="flex items-center gap-3">
-        <el-icon>
-          <component :is="menuStore.iconComponents['HOutline:PresentationChartBarIcon']" />
-        </el-icon>
-        <span>本周工作效能</span>
-      </div>
-    </template>
+  <BaseCard title="本周工作效能" title-icon="HOutline:PresentationChartBarIcon">
     <div>
       <div class="h-70 w-full mb-5">
         <VChart class="chart" :option="efficiencyOption" autoresize />
@@ -25,7 +17,7 @@
         </div>
       </div>
     </div>
-  </el-card>
+  </BaseCard>
 </template>
 
 <script setup lang="ts">
@@ -83,16 +75,4 @@ const efficiencyOption = computed(() => ({
 }))
 </script>
 
-<style scoped lang="scss">
-.el-icon {
-  font-size: 1.25rem;
-  color: var(--el-color-primary);
-}
-.efficiency-section-card {
-  border: none;
-  border-radius: 1rem;
-}
-:deep(.el-card__header) {
-  border-bottom: 1px solid var(--el-border-color-extra-light);
-}
-</style>
+<style scoped lang="scss"></style>
