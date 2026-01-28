@@ -1,15 +1,10 @@
+<!-- 全球市场份额分布 -->
 <template>
-  <el-card class="market-share-card" shadow="never">
-    <template #header>
-      <div class="flex justify-between items-center gap-3 font-bold">
-        <span>全球市场份额分布</span>
-        <IconButton icon="HOutline:EllipsisHorizontalIcon" size="1.5rem" />
-      </div>
-    </template>
+  <BaseCard title="全球市场份额分布">
     <div class="h-65 w-full">
       <VChart :option="marketShareOption" autoresize />
     </div>
-  </el-card>
+  </BaseCard>
 </template>
 
 <script setup lang="ts">
@@ -96,18 +91,4 @@ const updateColorTrigger = () => colorTrigger.value++
 defineExpose({ updateColorTrigger })
 </script>
 
-<style scoped lang="scss">
-.el-icon {
-  font-size: 1.25rem;
-  color: var(--el-color-primary);
-}
-
-.market-share-card {
-  border: none;
-  border-radius: 1rem;
-}
-
-:deep(.el-card__header) {
-  border-bottom: 1px solid var(--el-border-color-extra-light);
-}
-</style>
+<style scoped lang="scss"></style>

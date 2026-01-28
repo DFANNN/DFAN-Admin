@@ -1,15 +1,10 @@
+<!-- 热销商品类目 TOP 5 -->
 <template>
-  <el-card class="top-categories-card" shadow="never">
-    <template #header>
-      <div class="flex justify-between items-center gap-3 font-bold">
-        <span>热销商品类目 TOP 5</span>
-        <IconButton icon="HOutline:EllipsisHorizontalIcon" size="1.5rem" />
-      </div>
-    </template>
+  <BaseCard title="热销商品类目 TOP 5">
     <div class="h-65 w-full">
       <VChart :option="topCategoriesOption" autoresize />
     </div>
-  </el-card>
+  </BaseCard>
 </template>
 
 <script setup lang="ts">
@@ -77,18 +72,4 @@ const updateColorTrigger = () => colorTrigger.value++
 defineExpose({ updateColorTrigger })
 </script>
 
-<style scoped lang="scss">
-.el-icon {
-  font-size: 1.25rem;
-  color: var(--el-color-primary);
-}
-
-.top-categories-card {
-  border: none;
-  border-radius: 1rem;
-}
-
-:deep(.el-card__header) {
-  border-bottom: 1px solid var(--el-border-color-extra-light);
-}
-</style>
+<style scoped lang="scss"></style>

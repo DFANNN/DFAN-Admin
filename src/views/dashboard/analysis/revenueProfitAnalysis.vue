@@ -1,5 +1,6 @@
+<!-- 年度营收与净利润增长深度分析 -->
 <template>
-  <el-card class="revenue-profit--analysis-card" shadow="never">
+  <BaseCard>
     <template #header>
       <div class="flex items-center justify-between gap-2">
         <div class="flex flex-1 items-center">
@@ -25,7 +26,7 @@
     <div class="h-113 w-full">
       <VChart :option="revenueProfitOption" autoresize />
     </div>
-  </el-card>
+  </BaseCard>
 </template>
 
 <script setup lang="ts">
@@ -231,13 +232,4 @@ const updateColorTrigger = () => colorTrigger.value++
 defineExpose({ updateColorTrigger })
 </script>
 
-<style scoped lang="scss">
-.revenue-profit--analysis-card {
-  border: none;
-  border-radius: 1rem;
-}
-
-:deep(.el-card__header) {
-  border-bottom: 1px solid var(--el-border-color-extra-light);
-}
-</style>
+<style scoped lang="scss"></style>

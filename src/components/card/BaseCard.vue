@@ -8,7 +8,7 @@
             <el-icon size="20" class="header-icon" v-if="titleIcon">
               <component :is="iconComponent" />
             </el-icon>
-            <span>{{ title }}</span>
+            <span class="header-title">{{ title }}</span>
           </div>
           <div class="header-right">
             <!-- header 操作项插槽 -->
@@ -18,7 +18,7 @@
       </slot>
     </template>
 
-    <div>
+    <div style="height: 100%">
       <!-- 内容 插槽 -->
       <slot></slot>
     </div>
@@ -69,6 +69,9 @@ const iconComponent = computed(() => {
       gap: 0.75rem;
       .header-icon {
         color: var(--el-color-primary);
+      }
+      .header-title {
+        font-weight: 700;
       }
     }
   }

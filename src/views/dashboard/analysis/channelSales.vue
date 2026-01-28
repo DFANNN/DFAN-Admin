@@ -1,13 +1,6 @@
 <template>
   <!-- 各渠道销售表现实时榜单 -->
-  <el-card class="channel-sales-card" shadow="never">
-    <template #header>
-      <div class="flex justify-between items-center gap-3 font-bold">
-        <span>各渠道销售表现实时榜单</span>
-        <IconButton icon="HOutline:EllipsisHorizontalIcon" size="1.5rem" />
-      </div>
-    </template>
-
+  <BaseCard title="各渠道销售表现实时榜单">
     <el-scrollbar :height="260">
       <el-table :data="channelSales" style="width: 100%">
         <el-table-column label="渠道名称" width="250">
@@ -43,7 +36,7 @@
         </el-table-column>
       </el-table>
     </el-scrollbar>
-  </el-card>
+  </BaseCard>
 </template>
 
 <script setup lang="ts">
@@ -89,16 +82,6 @@ const channelSales = ref([
 </script>
 
 <style scoped lang="scss">
-.el-icon {
-  font-size: 1.25rem;
-  color: var(--el-color-primary);
-}
-
-.channel-sales-card {
-  border: none;
-  border-radius: 1rem;
-}
-
 .profile-cell {
   display: flex;
   align-items: center;
@@ -121,9 +104,5 @@ const channelSales = ref([
     font-size: 12px;
     color: var(--el-text-color-secondary);
   }
-}
-
-:deep(.el-card__header) {
-  border-bottom: 1px solid var(--el-border-color-extra-light);
 }
 </style>

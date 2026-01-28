@@ -1,9 +1,9 @@
+<!-- 业务运营中心 -->
 <template>
-  <!-- 业务运营中心 -->
   <div>
     <el-row :gutter="20">
       <el-col :xs="24" :lg="9">
-        <el-card class="common-card flex-3" shadow="never">
+        <BaseCard>
           <div class="flex items-center justify-between gap-4 px-3">
             <div class="flex flex-col gap-4 py-2.5">
               <div class="text-sm font-semibold text-(--el-color-primary)">Business Overview</div>
@@ -14,7 +14,7 @@
                 <span>，建议加大对移动端大促活动的资源投入</span>
               </p>
               <div class="flex gap-4 items-center">
-                <el-button type="primary" class="btn">生成月报</el-button>
+                <el-button type="primary" round>生成月报</el-button>
                 <el-button link>业绩预测</el-button>
               </div>
             </div>
@@ -24,7 +24,7 @@
               <LottieAnimation :animationData="analysisLottie" width="100%" height="100%" />
             </div>
           </div>
-        </el-card>
+        </BaseCard>
       </el-col>
       <el-col
         :xs="24"
@@ -34,7 +34,7 @@
         :key="item.label"
         class="mt-4 min-[1200px]:mt-0"
       >
-        <el-card class="common-card" shadow="never" :class="item.type">
+        <BaseCard :class="item.type" style="height: 100%">
           <div class="h-full flex flex-col gap-2 justify-center p-5">
             <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
               <el-icon size="24">
@@ -47,7 +47,7 @@
             </div>
             <div class="text-sm opacity-80 text-white">{{ item.label }}</div>
           </div>
-        </el-card>
+        </BaseCard>
       </el-col>
     </el-row>
   </div>
@@ -88,23 +88,14 @@ const businessStats = ref([
 :deep(.el-card__body) {
   height: 100%;
 }
-.common-card {
-  height: 100%;
-  border: none;
-  border-radius: 1rem;
 
-  &.blue {
-    background: linear-gradient(135deg, #5bbff9 0%, #2563eb 100%);
-  }
-  &.orange {
-    background: linear-gradient(135deg, #f99c7d 0%, #ea580c 100%);
-  }
-  &.indigo {
-    background: linear-gradient(135deg, #818cf8 0%, #4f46e5 100%);
-  }
+.blue {
+  background: linear-gradient(135deg, #5bbff9 0%, #2563eb 100%);
 }
-.btn {
-  border-radius: 1rem;
-  padding: 0.75rem 1.5rem;
+.orange {
+  background: linear-gradient(135deg, #f99c7d 0%, #ea580c 100%);
+}
+.indigo {
+  background: linear-gradient(135deg, #818cf8 0%, #4f46e5 100%);
 }
 </style>
