@@ -31,7 +31,7 @@
         </el-table-column>
         <el-table-column prop="status" label="状态" min-width="100">
           <template #default="{ row }">
-            <el-tag :type="row.statusType" effect="dark" round>{{ row.status }}</el-tag>
+            <BaseTag :type="row.statusType" effect="dark" round :text="row.status" />
           </template>
         </el-table-column>
       </el-table>

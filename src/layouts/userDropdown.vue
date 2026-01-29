@@ -15,7 +15,8 @@
         <span class="username ellipsis-text">{{
           userStore.userInfo?.name || userStore.userInfo?.username
         }}</span>
-        <span class="user-role-badge ellipsis-text">{{ userRoleName }}</span>
+        <BaseTag :text="userRoleName" size="small" />
+        <!-- <span class="user-role-badge ellipsis-text">{{ userRoleName }}</span> -->
       </div>
     </div>
 
@@ -32,7 +33,7 @@
               <span class="user-name ellipsis-text">{{
                 userStore.userInfo?.name || userStore.userInfo?.username
               }}</span>
-              <span class="pro-badge ellipsis-text">{{ userRoleName }}</span>
+              <BaseTag :text="userRoleName" size="small" />
             </div>
             <div class="user-email">{{ userStore.userInfo?.email || '' }}</div>
           </div>

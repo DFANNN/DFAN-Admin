@@ -85,14 +85,18 @@
         />
         <el-table-column prop="isBuiltIn" label="类型" :align="TABLE_CONFIG.align">
           <template #default="{ row }">
-            <el-tag v-if="row.isBuiltIn" type="warning">内置</el-tag>
-            <el-tag v-else type="success">自定义</el-tag>
+            <BaseTag
+              :type="row.isBuiltIn ? 'warning' : 'success'"
+              :text="row.isBuiltIn ? '内置' : '自定义'"
+            />
           </template>
         </el-table-column>
         <el-table-column prop="status" label="状态" :align="TABLE_CONFIG.align">
           <template #default="{ row }">
-            <el-tag v-if="row.status === 'active'" type="success">启用</el-tag>
-            <el-tag v-else type="danger">禁用</el-tag>
+            <BaseTag
+              :type="row.status === 'active' ? 'success' : 'danger'"
+              :text="row.status === 'active' ? '启用' : '禁用'"
+            />
           </template>
         </el-table-column>
         <el-table-column

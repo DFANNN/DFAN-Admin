@@ -7,10 +7,8 @@
           <div class="text-[18px] font-bold">
             <TextEllipsis text="年度营收与净利润增长深度分析" :clickable="false" />
           </div>
-          <div
-            class="ml-4 text-xs font-semibold text-(--el-color-primary) bg-(--el-color-primary-light-7) px-2 py-1 rounded-md hidden sm:block"
-          >
-            数据已脱敏
+          <div class="ml-4 hidden sm:block">
+            <BaseTag text="数据已脱敏" />
           </div>
         </div>
         <div class="flex shrink-0 items-center sm:gap-2">

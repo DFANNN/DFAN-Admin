@@ -122,11 +122,7 @@
               <div class="text-xs font-semibold text-(--el-text-color-secondary)">团队活跃度</div>
               <div class="flex items-center gap-2">
                 <div class="text-xl font-extrabold text-(--el-color-primary)">98%</div>
-                <div
-                  class="text-xs font-semibold text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-md"
-                >
-                  High
-                </div>
+                <BaseTag text="High" type="success" />
               </div>
             </div>
           </div>
@@ -158,15 +154,10 @@
                 <span class="text-[20px] font-extrabold text-(--el-text-color-primary)">{{
                   item.value
                 }}</span>
-                <span
-                  class="text-xs font-bold px-2 py-1 rounded-md"
-                  :class="
-                    item.trendType === 'up'
-                      ? 'text-emerald-500 bg-emerald-500/10'
-                      : 'text-red-500 bg-red-500/10'
-                  "
-                  >{{ item.trend }}</span
-                >
+                <BaseTag
+                  :text="item.trend"
+                  :type="item.trendType === 'up' ? 'success' : 'danger'"
+                />
               </div>
             </div>
             <div class="w-20 h-10 opacity-60 absolute -bottom-1 -right-1">

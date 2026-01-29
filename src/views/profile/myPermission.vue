@@ -6,7 +6,7 @@
         <div class="space-y-2">
           <div class="flex items-center gap-3">
             <h1 class="text-2xl font-semibold">我的权限</h1>
-            <el-tag>{{ userStore.userRoleName }}</el-tag>
+            <BaseTag :text="userStore.userRoleName" />
           </div>
           <p class="text-sm text-(--el-text-color-secondary)">
             查看您在系统中获准访问的菜单项与操作功能。如有权限变动，请联系系统管理员。
@@ -44,9 +44,9 @@
       />
       <el-table-column prop="type" label="类型" min-width="100" :align="TABLE_CONFIG.align">
         <template #default="{ row }">
-          <el-tag v-if="row.type === 'directory'" type="info">目录</el-tag>
-          <el-tag v-else-if="row.type === 'menu'" type="primary">菜单</el-tag>
-          <el-tag v-else-if="row.type === 'button'" type="warning">按钮</el-tag>
+          <BaseTag v-if="row.type === 'directory'" type="info" text="目录" />
+          <BaseTag v-else-if="row.type === 'menu'" type="primary" text="菜单" />
+          <BaseTag v-else-if="row.type === 'button'" type="warning" text="按钮" />
         </template>
       </el-table-column>
       <el-table-column prop="path" label="菜单路径" min-width="250" :align="TABLE_CONFIG.align" />
@@ -60,7 +60,7 @@
 
       <el-table-column label="权限状态" width="150" :align="TABLE_CONFIG.align">
         <template #default="{ row }: { row: IMenuItem }">
-          <el-tag :type="getPermissionTag(row.id).type">{{ getPermissionTag(row.id).text }}</el-tag>
+          <BaseTag :type="getPermissionTag(row.id).type" :text="getPermissionTag(row.id).text" />
         </template>
       </el-table-column>
     </el-table>

@@ -32,7 +32,7 @@
             </div>
           </div>
           <div class="flex items-center justify-between">
-            <el-tag :type="item.tagType">{{ item.tag }}</el-tag>
+            <BaseTag :type="item.tagType" :text="item.tag" />
             <div
               class="group flex gap-2 items-center text-xs cursor-pointer text-(--el-text-color-placeholder) hover:text-(--el-color-primary)"
             >

@@ -70,9 +70,9 @@
         <el-table-column prop="path" label="菜单路径" min-width="250" :align="TABLE_CONFIG.align" />
         <el-table-column prop="type" label="类型" min-width="100" :align="TABLE_CONFIG.align">
           <template #default="{ row }">
-            <el-tag v-if="row.type === 'directory'" type="info">目录</el-tag>
-            <el-tag v-else-if="row.type === 'menu'" type="primary">菜单</el-tag>
-            <el-tag v-else-if="row.type === 'button'" type="warning">按钮</el-tag>
+            <BaseTag v-if="row.type === 'directory'" type="info" text="目录" />
+            <BaseTag v-else-if="row.type === 'menu'" type="primary" text="菜单" />
+            <BaseTag v-else-if="row.type === 'button'" type="warning" text="按钮" />
           </template>
         </el-table-column>
         <el-table-column prop="icon" label="图标" min-width="100" :align="TABLE_CONFIG.align">
@@ -85,8 +85,10 @@
         <el-table-column prop="order" label="排序" min-width="100" :align="TABLE_CONFIG.align" />
         <el-table-column prop="status" label="状态" min-width="100" :align="TABLE_CONFIG.align">
           <template #default="{ row }">
-            <el-tag v-if="row.status === 'active'" type="success">启用</el-tag>
-            <el-tag v-else type="danger">禁用</el-tag>
+            <BaseTag
+              :type="row.status === 'active' ? 'success' : 'danger'"
+              :text="row.status === 'active' ? '启用' : '禁用'"
+            />
           </template>
         </el-table-column>
         <el-table-column

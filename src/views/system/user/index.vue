@@ -81,20 +81,23 @@
         <el-table-column prop="email" label="邮箱" min-width="180" :align="TABLE_CONFIG.align" />
         <el-table-column prop="roleId" label="角色" min-width="150" :align="TABLE_CONFIG.align">
           <template #default="{ row }">
-            <el-tag v-if="row.roleId">{{ getRoleName(row.roleId) }}</el-tag>
+            <BaseTag v-if="row.roleId" :text="getRoleName(row.roleId)" />
             <span v-else>-</span>
           </template>
         </el-table-column>
         <el-table-column prop="isBuiltIn" label="类型" :align="TABLE_CONFIG.align">
           <template #default="{ row }">
-            <el-tag v-if="row.isBuiltIn" type="warning">内置</el-tag>
-            <el-tag v-else type="success">自定义</el-tag>
+            <BaseTag v-if="row.isBuiltIn" type="warning" text="内置" />
+            <BaseTag v-else type="success" text="自定义" />
           </template>
         </el-table-column>
         <el-table-column prop="status" label="状态" :align="TABLE_CONFIG.align">
           <template #default="{ row }">
-            <el-tag v-if="row.status === 'active'" type="success">启用</el-tag>
-            <el-tag v-else type="danger">禁用</el-tag>
+            <BaseTag
+              v-if="row.status === 'active'"
+              :type="row.status === 'active' ? 'success' : 'danger'"
+              :text="row.status === 'active' ? '启用' : '禁用'"
+            />
           </template>
         </el-table-column>
         <el-table-column

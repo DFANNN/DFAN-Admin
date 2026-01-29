@@ -24,7 +24,7 @@
         <el-table-column prop="time" label="登录时间" min-width="170" />
         <el-table-column label="结果" width="100">
           <template #default="{ row }">
-            <el-tag :type="row.status"> {{ row.status === 'success' ? '成功' : '失败' }}</el-tag>
+            <BaseTag :type="row.status" :text="row.status === 'success' ? '成功' : '失败'" />
           </template>
         </el-table-column>
       </el-table>
