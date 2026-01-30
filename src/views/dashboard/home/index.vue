@@ -10,7 +10,7 @@
       </el-col>
       <el-col :xs="24" :lg="8" class="mt-5 lg:mt-0">
         <div class="flex flex-col gap-5">
-          <ShortcutSection />
+          <ShortcutSection class="mt-4 min-[1200px]:mt-0" />
           <EfficiencySection />
           <TeamSection />
         </div>

@@ -43,7 +43,6 @@ const props = withDefaults(defineProps<IProps>(), {
 
 // 获取插槽
 const slots = useSlots()
-console.log(`output->`, slots)
 const menuStore = useMenuStore()
 
 // 计算title图标组件

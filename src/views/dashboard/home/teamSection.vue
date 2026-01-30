@@ -1,5 +1,5 @@
 <template>
-  <TeamMemberCard title="在线伙伴" :team-data="team" />
+  <TeamMemberCard title="在线伙伴" :team-data="team" :height="293" />
 </template>
 
 <script setup lang="ts">

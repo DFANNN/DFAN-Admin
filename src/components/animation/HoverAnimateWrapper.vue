@@ -8,6 +8,7 @@
       :transition="transitionConfig"
       v-bind="$attrs"
       class="animate-hover-wrapper"
+      style="height: 100%; width: 100%"
     >
       <slot />
     </Motion>

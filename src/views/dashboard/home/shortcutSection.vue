@@ -1,7 +1,7 @@
 <!-- 快捷方式 -->
 <template>
   <BaseCard title="便捷工具" title-icon="HOutline:WrenchScrewdriverIcon">
-    <div class="grid grid-cols-4 gap-4">
+    <div class="grid grid-cols-4 gap-6">
       <div
         v-for="item in shortcuts"
         :key="item.label"
