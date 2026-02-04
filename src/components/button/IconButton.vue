@@ -62,7 +62,7 @@ interface Emits {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  placement: 'bottom',
+  placement: 'top',
   effect: 'dark',
   showAfter: 200,
   size: '2rem',
