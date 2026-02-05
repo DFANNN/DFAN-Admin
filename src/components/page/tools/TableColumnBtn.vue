@@ -26,38 +26,52 @@
           </el-checkbox>
           <el-button type="primary" link @click="resetColumns">恢复默认</el-button>
         </div>
-        <div class="menu-item" v-for="item in modelValue" :key="item.prop ? item.prop : item.type">
-          <div class="menu-item-left">
-            <IconButton tooltip="拖拽排序" icon="HSolid:Bars3Icon" size="20px" icon-size="12px" />
-            <el-checkbox v-model="item.visible">{{
-              item.label ? item.label : item.type
-            }}</el-checkbox>
+        <VueDraggable v-model="columnList" :animation="150" handle=".handle">
+          <div
+            class="menu-item"
+            v-for="item in columnList"
+            :key="item.prop ? item.prop : item.type"
+          >
+            <div class="menu-item-left">
+              <div class="handle drag-wrap">
+                <el-icon>
+                  <component :is="menuStore.iconComponents['HSolid:Bars3Icon']" />
+                </el-icon>
+              </div>
+              <el-checkbox v-model="item.visible">{{
+                item.label ? item.label : item.type
+              }}</el-checkbox>
+            </div>
+            <div class="menu-item-right">
+              <div
+                class="fixed-wrap"
+                :class="{ 'is-active': item.fixed === 'left' || item.fixed === true }"
+                @click="toggleFixed(item, 'left')"
+              >
+                <el-icon>
+                  <component :is="menuStore.iconComponents['HSolid:ChevronDoubleLeftIcon']" />
+                </el-icon>
+              </div>
+              <div
+                class="fixed-wrap"
+                :class="{ 'is-active': item.fixed === 'right' }"
+                @click="toggleFixed(item, 'right')"
+              >
+                <el-icon>
+                  <component :is="menuStore.iconComponents['HSolid:ChevronDoubleRightIcon']" />
+                </el-icon>
+              </div>
+            </div>
           </div>
-          <div class="menu-item-right">
-            <IconButton
-              tooltip="固定在左侧"
-              icon="HOutline:ChevronDoubleLeftIcon"
-              :type="item.fixed === 'left' || item.fixed === true ? 'primary' : 'default'"
-              size="20px"
-              icon-size="12px"
-              @click="toggleFixed(item, 'left')"
-            />
-            <IconButton
-              tooltip="固定在右侧"
-              icon="HOutline:ChevronDoubleRightIcon"
-              :type="item.fixed === 'right' ? 'primary' : 'default'"
-              size="20px"
-              icon-size="12px"
-              @click="toggleFixed(item, 'right')"
-            />
-          </div>
-        </div>
+        </VueDraggable>
       </div>
     </template>
   </el-dropdown>
 </template>
 
 <script setup lang="ts">
+import { useVModel } from '@vueuse/core'
+import { VueDraggable } from 'vue-draggable-plus'
 import type { ITableColumns } from '@/types/components/page'
 
 interface IProps {
@@ -73,6 +87,14 @@ const props = defineProps<IProps>()
 
 const emits = defineEmits<IEmits>()
 
+const menuStore = useMenuStore()
+
+/**
+ * 使用 useVModel 代理 props.modelValue
+ * 当columnList 被重新赋值（排序）时，会自动触发 emits('update:modelValue', newValue)
+ */
+const columnList = useVModel(props, 'modelValue', emits)
+
 // 全选状态计算
 const isAllSelected = computed(() => props.modelValue.every((item) => item.visible))
 const isIndeterminate = computed(() => {
@@ -80,11 +102,14 @@ const isIndeterminate = computed(() => {
   return checkedCount > 0 && checkedCount < props.modelValue.length
 })
 
+// 全选切换
 const handleCheckAll = (val: boolean | string | number) => {
-  const newCols = props.modelValue.map((item) => ({ ...item, visible: val }))
-  emits('update:modelValue', JSON.parse(JSON.stringify(newCols)))
+  const value = val as boolean
+  const newCols = props.modelValue.map((item) => ({ ...item, visible: value }))
+  columnList.value = newCols
 }
 
+// 切换固定列
 const toggleFixed = (item: ITableColumns, direction: 'left' | 'right') => {
   const fixed = item.fixed
 
@@ -110,6 +135,7 @@ const toggleFixed = (item: ITableColumns, direction: 'left' | 'right') => {
   }
 }
 
+// 重置列
 const resetColumns = () => {
   const columns = props.originalColumns.map((item) => {
     return {
@@ -117,8 +143,7 @@ const resetColumns = () => {
       visible: true,
     }
   })
-  // 深度克隆原始配置
-  emits('update:modelValue', JSON.parse(JSON.stringify(columns)))
+  columnList.value = columns
 }
 </script>
 
@@ -144,15 +169,34 @@ const resetColumns = () => {
     .menu-item-left {
       display: flex;
       align-items: center;
-      gap: 0.25rem;
-      .drag-icon {
+      gap: 0.5rem;
+      .drag-wrap {
+        display: flex;
+        align-items: center;
         color: var(--el-text-color-secondary);
+        font-size: 1rem;
+        cursor: grab;
       }
     }
     .menu-item-right {
       display: flex;
       align-items: center;
       gap: 0.25rem;
+      .fixed-wrap {
+        display: flex;
+        align-items: center;
+        font-size: 12px;
+        padding: 0.25rem;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        &:hover {
+          background: var(--el-color-primary-light-7);
+        }
+        &.is-active {
+          background: var(--el-color-primary-light-7);
+          color: var(--el-color-primary);
+        }
+      }
     }
   }
 }
