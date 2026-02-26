@@ -63,7 +63,7 @@ const total = ref(0)
 
 const columns = ref([
   { type: 'selection' },
-  { type: 'index', label: '序号' },
+  { type: 'index', label: '序号', width: 80 },
   { prop: 'name', label: '角色名称', fixed: false },
   { prop: 'code', label: '角色编码' },
   { prop: 'status', label: '状态' },

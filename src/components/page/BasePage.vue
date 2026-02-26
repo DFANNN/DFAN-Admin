@@ -62,7 +62,7 @@
         </div>
       </div>
       <el-table :data="tableData" :border="true" :size="tableSize" v-bind="tableAttrs">
-        <template v-for="col in tableColumns" :key="col.prop">
+        <template v-for="col in tableColumns" :key="col.prop ? col.prop : col.type">
           <el-table-column v-bind="col" v-if="col.visible">
             <template #default="scope" v-if="$slots[col.prop as string]">
               <slot :name="col.prop" v-bind="scope" />

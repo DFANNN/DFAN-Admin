@@ -166,6 +166,9 @@ const resetColumns = () => {
     margin: 0 0.25rem;
     padding: 0 0.25rem;
     border-radius: 0.25rem;
+    &:hover {
+      background: var(--el-color-primary-light-7);
+    }
     .menu-item-left {
       display: flex;
       align-items: center;
