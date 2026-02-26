@@ -7,10 +7,10 @@
   >
     <div>
       <IconButton
-        icon="HOutline:AdjustmentsHorizontalIcon"
+        icon="HOutline:AdjustmentsVerticalIcon"
         tooltip="列设置"
         size="1.75rem"
-        icon-size="18px"
+        icon-size="20px"
       />
     </div>
 

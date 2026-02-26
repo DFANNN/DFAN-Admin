@@ -61,7 +61,16 @@
           </div>
         </div>
       </div>
-      <el-table :data="tableData" :border="true" :size="tableSize" v-bind="tableAttrs">
+      <el-table
+        :data="tableData"
+        v-loading="tableLoading"
+        :element-loading-text="tableLoadingText"
+        :element-loading-svg="tableLoadingSpinner"
+        element-loading-svg-view-box="-10, -10, 50, 50"
+        :border="true"
+        :size="tableSize"
+        v-bind="tableAttrs"
+      >
         <template v-for="col in tableColumns" :key="col.prop ? col.prop : col.type">
           <el-table-column v-bind="col" v-if="col.visible">
             <template #default="scope" v-if="$slots[col.prop as string]">
@@ -108,6 +117,9 @@ interface IProps {
   tableData: Record<string, unknown>[] // 表格数据
   columns: Record<string, unknown>[] // 表格列配置
   tableAttrs?: Record<string, unknown> // 表格属性  支持el-table的所有属性
+  tableLoading?: boolean // 表格加载中状态
+  tableLoadingText?: string // 表格加载中提示文本
+  tableLoadingSpinner?: string // 表格加载中图标
   // ---------------- 页码配置 --------------------
   total: number // 总条数
   pageSizes?: number[] // 分页器
@@ -134,6 +146,19 @@ const props = withDefaults(defineProps<IProps>(), {
   formCollapsible: true,
   formInitialVisibleCount: 3,
   formDefaultIsExpand: false,
+  // ---------------- 表格配置 --------------------
+  tableLoading: false,
+  tableLoadingText: '数据加载中...',
+  tableLoadingSpinner: `
+        <path class="path" d="
+          M 30 15
+          L 28 17
+          M 25.61 25.61
+          A 15 15, 0, 0, 1, 15 30
+          A 15 15, 0, 1, 1, 27.99 7.5
+          L 15 15
+        " style="stroke-width: 4px; fill: rgba(0, 0, 0, 0)"/>
+      `,
   // ---------------- 页码配置 --------------------
   paginationLayout: 'total, sizes, prev, pager, next, jumper',
   pageSizes: () => [10, 20, 30, 40, 50],
@@ -261,10 +286,7 @@ onMounted(() => {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.5rem 0.25rem;
-    border: 1px solid var(--el-border-color-lighter);
-    border-bottom: none;
-    border-radius: 0.5rem 0.5rem 0 0;
+    padding-bottom: 0.5rem;
     .operation-right {
       display: flex;
       align-items: center;

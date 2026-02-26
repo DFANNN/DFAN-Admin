@@ -5,6 +5,7 @@
       :table-data="roleList"
       :columns="columns"
       :total="total"
+      :table-loading="loading"
       @refresh="getRole"
     >
       <template #status="{ row }">
@@ -26,10 +27,13 @@
 
 <script setup lang="ts">
 import { rolePage } from '@/api/role'
+import { delay } from '@/utils/utils'
 
 defineOptions({
   name: '403View',
 })
+
+const menuStore = useMenuStore()
 
 // 表单配置类型
 interface IPageSearchConfig {
@@ -60,6 +64,7 @@ const pageSearchConfig: IPageSearchConfig[] = [
 
 const roleList = ref([])
 const total = ref(0)
+const loading = ref(false)
 
 const columns = ref([
   { type: 'selection' },
@@ -73,15 +78,21 @@ const columns = ref([
 ])
 
 const getRole = async (queryForm: unknown, page: number, pageSize: number) => {
+  loading.value = true
   const params = {
     page,
     pageSize,
   }
-  const { data: res } = await rolePage(params)
-  console.log(`output->res`, res)
-  if (res.code !== 200) return
-  roleList.value = res.data?.list || []
-  total.value = res.data?.total || 0
+  try {
+    await delay(2000)
+    const { data: res } = await rolePage(params)
+    console.log(`output->res`, res)
+    if (res.code !== 200) return
+    roleList.value = res.data?.list || []
+    total.value = res.data?.total || 0
+  } finally {
+    loading.value = false
+  }
 }
 </script>
 

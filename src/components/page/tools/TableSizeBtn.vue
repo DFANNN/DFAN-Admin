@@ -7,10 +7,10 @@
   >
     <div>
       <IconButton
-        icon="HOutline:ViewColumnsIcon"
+        icon="HOutline:QueueListIcon"
         tooltip="表格尺寸"
         size="1.75rem"
-        icon-size="18px"
+        icon-size="20px"
       />
     </div>
 
