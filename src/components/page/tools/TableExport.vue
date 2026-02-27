@@ -32,27 +32,29 @@
               <el-button type="primary" link>恢复默认</el-button>
             </div>
             <div class="fields-content">
-              <div
-                class="fields-item"
-                v-for="item in fieldsList"
-                :key="item.prop ? item.prop : item.type"
-              >
-                <div class="fields-item-left">
-                  <el-icon size="16" class="drag-wrap">
-                    <component :is="menuStore.iconComponents['HSolid:Bars3Icon']" />
-                  </el-icon>
-                  <el-checkbox v-model="item.visible"> {{ item.label }} </el-checkbox>
-                </div>
+              <VueDraggable v-model="fieldsList" :animation="150" handle=".handle">
+                <div
+                  class="fields-item"
+                  v-for="item in fieldsList"
+                  :key="item.prop ? item.prop : item.type"
+                >
+                  <div class="fields-item-left">
+                    <el-icon size="16" class="drag-wrap handle">
+                      <component :is="menuStore.iconComponents['HSolid:Bars3Icon']" />
+                    </el-icon>
+                    <el-checkbox v-model="item.visible"> {{ item.label }} </el-checkbox>
+                  </div>
 
-                <div class="fields-item-right">
-                  <el-input-number
-                    placeholder="列宽"
-                    :controls="false"
-                    size="small"
-                    style="width: 100%"
-                  />
+                  <div class="fields-item-right">
+                    <el-input-number
+                      placeholder="列宽"
+                      :controls="false"
+                      size="small"
+                      style="width: 100%"
+                    />
+                  </div>
                 </div>
-              </div>
+              </VueDraggable>
             </div>
           </div>
         </el-form-item>
@@ -63,6 +65,7 @@
 
 <script setup lang="ts">
 import { useCloned } from '@vueuse/core'
+import { VueDraggable } from 'vue-draggable-plus'
 import type { ITableColumns } from '@/types/components/page'
 
 interface IProps {
