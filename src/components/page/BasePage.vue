@@ -23,8 +23,8 @@
           </el-col>
           <el-col :xs="xs" :sm="sm" :md="md" :lg="lg" :xl="xl">
             <el-form-item label-width="0">
-              <el-button type="primary" @click="query">查询</el-button>
-              <el-button @click="reset">重置</el-button>
+              <el-button type="primary" @click="query" :loading="tableLoading">查询</el-button>
+              <el-button @click="reset" :loading="tableLoading">重置</el-button>
               <div class="expand" v-if="visibleIsExpandDiv" @click="isExpand = !isExpand">
                 <span>{{ isExpand ? '收起' : '展开' }}</span>
                 <el-icon class="expand-icon">
@@ -52,6 +52,7 @@
               tooltip="刷新"
               size="1.75rem"
               icon-size="18px"
+              :loading="tableLoading"
               @click="refresh"
             />
             <IconButton icon="HOutline:DocumentArrowDownIcon" size="1.75rem" icon-size="18px" />
