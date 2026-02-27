@@ -15,5 +15,6 @@ export interface ITableColumns {
   prop?: string
   type?: string
   fixed?: 'left' | 'right' | boolean
+  label?: string
   [key: string]: unknown
 }

@@ -55,7 +55,8 @@
               :loading="tableLoading"
               @click="refresh"
             />
-            <IconButton icon="HOutline:DocumentArrowDownIcon" size="1.75rem" icon-size="18px" />
+            <!-- <IconButton icon="HOutline:DocumentArrowDownIcon" size="1.75rem" icon-size="18px" /> -->
+            <TableExport :columns="tableColumns" />
             <IconButton icon="HOutline:PrinterIcon" size="1.75rem" icon-size="18px" />
             <TableSizeBtn v-model="tableSize" />
             <TableColumnBtn v-model="tableColumns" :original-columns="columns" />
