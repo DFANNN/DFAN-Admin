@@ -16,5 +16,6 @@ export interface ITableColumns {
   type?: string
   fixed?: 'left' | 'right' | boolean
   label?: string
+  width?: number
   [key: string]: unknown
 }

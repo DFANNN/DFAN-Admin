@@ -55,8 +55,11 @@
               :loading="tableLoading"
               @click="refresh"
             />
-            <!-- <IconButton icon="HOutline:DocumentArrowDownIcon" size="1.75rem" icon-size="18px" /> -->
-            <TableExport :columns="tableColumns" />
+            <TableExport
+              :columns="tableColumns"
+              :currentPageData="tableData"
+              :selectedData="tableSelectedList"
+            />
             <IconButton icon="HOutline:PrinterIcon" size="1.75rem" icon-size="18px" />
             <TableSizeBtn v-model="tableSize" />
             <TableColumnBtn v-model="tableColumns" :original-columns="columns" />
@@ -72,6 +75,7 @@
         :border="true"
         :size="tableSize"
         v-bind="tableAttrs"
+        @selection-change="tableSelectionChange"
       >
         <template v-for="col in tableColumns" :key="col.prop ? col.prop : col.type">
           <el-table-column v-bind="col" v-if="col.visible">
@@ -133,6 +137,8 @@ interface IProps {
 interface IEmits {
   // 刷新方法，暴露queryForm，page,pageSize
   (e: 'refresh', queryForm: Record<string, unknown>, page: number, pageSize: number): void
+  // 表格选择变化
+  (e: 'selection-change', selection: Record<string, unknown>[]): void
 }
 
 const props = withDefaults(defineProps<IProps>(), {
@@ -241,6 +247,9 @@ const tableColumns = ref<ITableColumns[]>(
   })),
 )
 
+// 表格选择的数据
+const tableSelectedList = ref<Record<string, unknown>[]>([])
+
 // 当前页码
 const currentPage = ref(1)
 // 每页条数
@@ -249,6 +258,12 @@ const pageSize = ref(props.pageSizes[0] || 10)
 // 页码改变
 const paginationChange = (page: number, pageSize: number) => {
   emits('refresh', queryForm.value, page, pageSize)
+}
+
+// 表格选择变化
+const tableSelectionChange = (selection: Record<string, unknown>[]) => {
+  tableSelectedList.value = selection
+  emits('selection-change', selection)
 }
 
 // 刷新（表格工具）
