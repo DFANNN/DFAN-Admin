@@ -60,7 +60,11 @@
               :currentPageData="tableData"
               :selectedData="tableSelectedList"
             />
-            <IconButton icon="HOutline:PrinterIcon" size="1.75rem" icon-size="18px" />
+            <TablePrint
+              :columns="tableColumns"
+              :table-data="tableData"
+              :selected-data="tableSelectedList"
+            />
             <TableSizeBtn v-model="tableSize" />
             <TableColumnBtn v-model="tableColumns" :original-columns="columns" />
           </div>

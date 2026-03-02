@@ -1,32 +1,20 @@
+<!-- 表格打印组件 -->
 <template>
   <div>
     <IconButton
-      icon="HOutline:DocumentArrowDownIcon"
+      icon="HOutline:PrinterIcon"
       size="1.75rem"
       icon-size="18px"
-      tooltip="导出"
+      tooltip="打印"
       @click="openDialog"
     />
-    <BaseDialog v-model="open" title="导出" width="500" @confirm="handleExport" @close="close">
-      <el-form
-        :model="exportForm"
-        :rules="formRules"
-        ref="exportFormRef"
-        label-width="100px"
-        label-position="right"
-      >
-        <el-form-item label="文件名称" prop="name">
-          <el-input v-model="exportForm.name" placeholder="请输入文件名称" />
-        </el-form-item>
-        <el-form-item label="导出格式" prop="format">
-          <el-select v-model="exportForm.format" placeholder="请选择导出格式">
-            <el-option label="XLSX" value=".xlsx" />
-            <el-option label="CSV" value=".csv" />
-            <el-option label="HTML" value=".html" />
-          </el-select>
+    <BaseDialog v-model="open" title="打印" width="500" @confirm="handlePrint" @close="close">
+      <el-form :model="printForm" label-width="100px" label-position="right" ref="printFormRef">
+        <el-form-item label="打印标题" prop="title">
+          <el-input v-model="printForm.title" placeholder="请输入打印标题" />
         </el-form-item>
         <el-form-item label="选择数据" prop="data">
-          <el-select v-model="exportForm.data" placeholder="请选择数据">
+          <el-select v-model="printForm.data" placeholder="请选择数据">
             <el-option label="当前页数据" value="current" />
             <el-option label="选中数据" value="selected" />
           </el-select>
@@ -56,16 +44,6 @@
                     </el-icon>
                     <el-checkbox v-model="item.visible"> {{ item.label }} </el-checkbox>
                   </div>
-
-                  <div class="fields-item-right">
-                    <el-input-number
-                      v-model="item.width"
-                      placeholder="列宽"
-                      :controls="false"
-                      size="small"
-                      style="width: 100%"
-                    />
-                  </div>
                 </div>
               </VueDraggable>
             </div>
@@ -78,37 +56,38 @@
 
 <script setup lang="ts">
 import dayjs from 'dayjs'
+import printJS from 'print-js'
 import { useCloned } from '@vueuse/core'
 import { VueDraggable } from 'vue-draggable-plus'
+import { ElMessage } from 'element-plus'
+import { formatExportExcelData } from '@/utils/exportExcel'
 import type { ITableColumns } from '@/types/components/page'
-import { type FormInstance, type FormRules } from 'element-plus'
-import { formatExportExcelData, exportToExcel, type IExportFormat } from '@/utils/exportExcel'
+import type { FormInstance } from 'element-plus'
 
 interface IProps {
   columns: ITableColumns[] // 表格列
-  currentPageData: Record<string, unknown>[] // 当前页的数据
-  selectedData: Record<string, unknown>[] // 选中的数据
+  tableData?: Record<string, unknown>[] // 当前页数据
+  selectedData?: Record<string, unknown>[] // 选中的数据
 }
 
 const props = defineProps<IProps>()
+
 const menuStore = useMenuStore()
 
-const exportFormRef = useTemplateRef<FormInstance>('exportFormRef')
+const printFormRef = useTemplateRef<FormInstance>('printFormRef')
 
-// 选择要导出的字段
-const { cloned: fieldsList } = useCloned(() =>
+// 选择要打印的字段
+const { cloned: fieldsList } = useCloned<ITableColumns[]>(() =>
   props.columns.filter((col) => col.type !== 'selection' && col.prop !== 'operation'),
 )
 
 // dialog开关
 const open = ref(false)
 
-// 导出form
-const exportForm = ref({
-  name: '',
-  format: '.xlsx',
+// 打印form
+const printForm = ref({
+  title: '',
   data: 'current',
-  fields: '',
 })
 
 // 全选状态计算
@@ -121,8 +100,7 @@ const isIndeterminate = computed(() => {
 // 全选切换
 const handleCheckAll = (val: boolean | string | number) => {
   const value = val as boolean
-  const newCols = fieldsList.value.map((item) => ({ ...item, visible: value }))
-  fieldsList.value = newCols
+  fieldsList.value = fieldsList.value.map((item) => ({ ...item, visible: value }))
 }
 
 // 恢复默认
@@ -132,53 +110,60 @@ const resetFields = () => {
   )
 }
 
-// 导出
-const handleExport = async () => {
-  await exportFormRef.value?.validate()
-
-  // 获取要导出的数据
-  let dataToExport: Record<string, unknown>[] = []
-  // 获取要导出的字段
-  const selectedFields = fieldsList.value.filter((item) => item.visible)
-  // 根据选择的数据类型获取数据
-  switch (exportForm.value.data) {
-    case 'current':
-      dataToExport = props.currentPageData
-      break
-    case 'selected':
-      console.log(`output->selected`)
-      dataToExport = props.selectedData
-      break
-  }
-  // 格式化数据
-  const { mapExcelData, colWidth } = formatExportExcelData(dataToExport, selectedFields)
-  // 导出Excel
-  exportToExcel(
-    mapExcelData,
-    exportForm.value.name,
-    exportForm.value.format as IExportFormat,
-    colWidth,
-  )
-}
-
-// 表单验证规则
-const formRules: FormRules = {
-  name: [{ required: true, message: '请输入文件名称', trigger: 'blur' }],
-}
-
-// 打开导出对话框
+// 打开打印对话框
 const openDialog = () => {
-  // 赋值默认文件名称
-  exportForm.value.name = `导出数据_${dayjs().format('YYYYMMDDHHmmss')}`
+  // 赋值默认标题
+  printForm.value.title = `打印数据_${dayjs().format('YYYY-MM-DD HH:mm:ss')}`
   open.value = true
 }
 
-// 关闭对话框
+// 关闭dialog
 const close = () => {
   // 重置表单
-  exportFormRef.value?.resetFields()
+  printFormRef.value?.resetFields()
   // 恢复默认字段选择
   resetFields()
+}
+// 打印
+const handlePrint = () => {
+  // 获取选中的字段
+  const selectedFields = fieldsList.value.filter((item) => item.visible)
+  if (selectedFields.length === 0) {
+    ElMessage.warning('请至少选择一个字段')
+    return
+  }
+
+  // 获取要打印的数据
+  let dataToPrint: Record<string, unknown>[] = []
+  switch (printForm.value.data) {
+    case 'current':
+      dataToPrint = props.tableData || []
+      break
+    case 'selected':
+      dataToPrint = props.selectedData || []
+      if (dataToPrint.length === 0) {
+        ElMessage.warning('没有选中的数据')
+        return
+      }
+      break
+  }
+
+  if (dataToPrint.length === 0) {
+    ElMessage.warning('没有可打印的数据')
+    return
+  }
+
+  // 格式化数据
+  const { mapExcelData: mapPrintData } = formatExportExcelData(dataToPrint, selectedFields)
+  // 格式化打印表格的表头
+  const printTableHeader = selectedFields.map((item) => item.label)
+  // 调用printJS打印
+  printJS({
+    printable: mapPrintData,
+    type: 'json',
+    properties: printTableHeader,
+    header: printForm.value.title,
+  })
 }
 </script>
 
@@ -196,6 +181,8 @@ const close = () => {
   }
   .fields-content {
     padding: 0.25rem 0.25rem;
+    max-height: 300px;
+    overflow-y: auto;
     .fields-item {
       display: flex;
       justify-content: space-between;
@@ -212,9 +199,6 @@ const close = () => {
         .drag-wrap {
           cursor: grab;
         }
-      }
-      .fields-item-right {
-        width: 60px;
       }
     }
   }
