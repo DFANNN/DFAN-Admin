@@ -1,45 +1,51 @@
 <template>
-  <div>
-    <BaseCard class="query-card" v-if="formConfig?.length">
-      <el-form :model="queryForm" :label-width="formLabelWidth" :label-position="formLabelPosition">
-        <el-row :gutter="gutter">
-          <el-col
-            :xs="xs"
-            :sm="sm"
-            :md="md"
-            :lg="lg"
-            :xl="xl"
-            v-for="col in visibleSearchConfig"
-            :key="col.prop"
-          >
-            <el-form-item :label="col.label">
-              <component
-                :is="componentsMap[col.type]"
-                v-model="queryForm[col.prop]"
-                v-bind="col.attrs"
-                style="width: 100%"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :xs="xs" :sm="sm" :md="md" :lg="lg" :xl="xl">
-            <el-form-item label-width="0">
-              <el-button type="primary" @click="query" :loading="tableLoading">查询</el-button>
-              <el-button @click="reset" :loading="tableLoading">重置</el-button>
-              <div class="expand" v-if="visibleIsExpandDiv" @click="isExpand = !isExpand">
-                <span>{{ isExpand ? '收起' : '展开' }}</span>
-                <el-icon class="expand-icon">
-                  <component
-                    :is="
-                      menuStore.iconComponents[isExpand ? 'Element:ArrowUp' : 'Element:ArrowDown']
-                    "
-                  />
-                </el-icon>
-              </div>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-    </BaseCard>
+  <div ref="basePageRef">
+    <Transition name="zoom-in-top">
+      <BaseCard class="query-card" v-if="formConfig?.length && queryFormVisible">
+        <el-form
+          :model="queryForm"
+          :label-width="formLabelWidth"
+          :label-position="formLabelPosition"
+        >
+          <el-row :gutter="gutter">
+            <el-col
+              :xs="xs"
+              :sm="sm"
+              :md="md"
+              :lg="lg"
+              :xl="xl"
+              v-for="col in visibleSearchConfig"
+              :key="col.prop"
+            >
+              <el-form-item :label="col.label">
+                <component
+                  :is="componentsMap[col.type]"
+                  v-model="queryForm[col.prop]"
+                  v-bind="col.attrs"
+                  style="width: 100%"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :xs="xs" :sm="sm" :md="md" :lg="lg" :xl="xl">
+              <el-form-item label-width="0">
+                <el-button type="primary" @click="query" :loading="tableLoading">查询</el-button>
+                <el-button @click="reset" :loading="tableLoading">重置</el-button>
+                <div class="expand" v-if="visibleIsExpandDiv" @click="isExpand = !isExpand">
+                  <span>{{ isExpand ? '收起' : '展开' }}</span>
+                  <el-icon class="expand-icon">
+                    <component
+                      :is="
+                        menuStore.iconComponents[isExpand ? 'Element:ArrowUp' : 'Element:ArrowDown']
+                      "
+                    />
+                  </el-icon>
+                </div>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+      </BaseCard>
+    </Transition>
 
     <BaseCard class="table-card">
       <div class="table-operation">
@@ -47,6 +53,15 @@
         <div class="operation-right">
           <div></div>
           <div class="operation-tool">
+            <IconButton
+              icon="HOutline:MagnifyingGlassIcon"
+              :tooltip="queryFormVisible ? '隐藏搜索' : '显示搜索'"
+              size="1.75rem"
+              icon-size="18px"
+              :type="queryFormVisible ? 'primary' : 'default'"
+              @click="queryFormVisible = !queryFormVisible"
+              v-if="formConfig?.length"
+            />
             <IconButton
               icon="HOutline:ArrowPathIcon"
               tooltip="刷新"
@@ -67,6 +82,15 @@
             />
             <TableSizeBtn v-model="tableSize" />
             <TableColumnBtn v-model="tableColumns" :original-columns="columns" />
+            <IconButton
+              :icon="
+                isFullscreen ? 'HOutline:ArrowsPointingInIcon' : 'HOutline:ArrowsPointingOutIcon'
+              "
+              :tooltip="isFullscreen ? '退出全屏' : '全屏'"
+              size="1.75rem"
+              icon-size="18px"
+              @click="toggle()"
+            />
           </div>
         </div>
       </div>
@@ -106,6 +130,7 @@
 </template>
 
 <script setup lang="ts">
+import { useFullscreen } from '@vueuse/core'
 import type { IFormConfig, ITableColumns } from '@/types/components/page'
 
 // props 类型
@@ -187,6 +212,12 @@ const componentsMap: Record<string, Component> = {
 }
 
 const menuStore = useMenuStore()
+const basePageRef = useTemplateRef('basePageRef')
+
+// 是否展示查询表单
+const queryFormVisible = ref(true)
+// 全屏功能
+const { isFullscreen, toggle } = useFullscreen(basePageRef)
 
 // -----------------------  表单配置 -----------------------
 
@@ -285,6 +316,7 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .query-card {
+  margin-bottom: 1rem;
   .expand {
     display: flex;
     align-items: center;
@@ -302,7 +334,6 @@ onMounted(() => {
 }
 
 .table-card {
-  margin-top: 1rem;
   .table-operation {
     display: flex;
     align-items: center;
