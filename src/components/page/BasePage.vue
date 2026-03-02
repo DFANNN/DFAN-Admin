@@ -49,9 +49,14 @@
 
     <BaseCard class="table-card">
       <div class="table-operation">
-        <div class="operation-left">1</div>
+        <div class="operation-left">
+          <slot name="tableOperationLeft" />
+        </div>
         <div class="operation-right">
-          <div></div>
+          <div>
+            <slot name="tableOperationRight" />
+          </div>
+          <el-divider direction="vertical" v-if="$slots.tableOperationRight" />
           <div class="operation-tool">
             <IconButton
               icon="HOutline:MagnifyingGlassIcon"
@@ -60,7 +65,7 @@
               icon-size="18px"
               :type="queryFormVisible ? 'primary' : 'default'"
               @click="queryFormVisible = !queryFormVisible"
-              v-if="formConfig?.length"
+              v-if="formConfig?.length && showSearchToggle"
             />
             <IconButton
               icon="HOutline:ArrowPathIcon"
@@ -69,19 +74,26 @@
               icon-size="18px"
               :loading="tableLoading"
               @click="refresh"
+              v-if="showRefresh"
             />
             <TableExport
+              v-if="showExport"
               :columns="tableColumns"
               :currentPageData="tableData"
               :selectedData="tableSelectedList"
             />
             <TablePrint
+              v-if="showPrint"
               :columns="tableColumns"
               :table-data="tableData"
               :selected-data="tableSelectedList"
             />
-            <TableSizeBtn v-model="tableSize" />
-            <TableColumnBtn v-model="tableColumns" :original-columns="columns" />
+            <TableSizeBtn v-if="showSize" v-model="tableSize" />
+            <TableColumnBtn
+              v-if="showColumn"
+              v-model="tableColumns"
+              :original-columns="columns"
+            />
           </div>
         </div>
       </div>
@@ -150,6 +162,13 @@ interface IProps {
   pageSizes?: number[] // 分页器
   paginationLayout?: string //
   paginationAttrs?: Record<string, unknown> // 分页属性  支持el-pagination的所有属性
+  // ---------------- 工具栏配置 --------------------
+  showSearchToggle?: boolean // 是否显示搜索切换按钮
+  showRefresh?: boolean // 是否显示刷新按钮
+  showExport?: boolean // 是否显示导出按钮
+  showPrint?: boolean // 是否显示打印按钮
+  showSize?: boolean // 是否显示表格密度按钮
+  showColumn?: boolean // 是否显示列设置按钮
 }
 
 // emits 类型
@@ -189,6 +208,13 @@ const props = withDefaults(defineProps<IProps>(), {
   // ---------------- 页码配置 --------------------
   paginationLayout: 'total, sizes, prev, pager, next, jumper',
   pageSizes: () => [10, 20, 30, 40, 50],
+  // ---------------- 工具栏配置 --------------------
+  showSearchToggle: true,
+  showRefresh: true,
+  showExport: true,
+  showPrint: true,
+  showSize: true,
+  showColumn: true,
 })
 
 const emits = defineEmits<IEmits>()
