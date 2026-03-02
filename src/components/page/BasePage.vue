@@ -1,5 +1,5 @@
 <template>
-  <div ref="basePageRef">
+  <div>
     <Transition name="zoom-in-top">
       <BaseCard class="query-card" v-if="formConfig?.length && queryFormVisible">
         <el-form
@@ -82,15 +82,6 @@
             />
             <TableSizeBtn v-model="tableSize" />
             <TableColumnBtn v-model="tableColumns" :original-columns="columns" />
-            <IconButton
-              :icon="
-                isFullscreen ? 'HOutline:ArrowsPointingInIcon' : 'HOutline:ArrowsPointingOutIcon'
-              "
-              :tooltip="isFullscreen ? '退出全屏' : '全屏'"
-              size="1.75rem"
-              icon-size="18px"
-              @click="toggle()"
-            />
           </div>
         </div>
       </div>
@@ -130,7 +121,6 @@
 </template>
 
 <script setup lang="ts">
-import { useFullscreen } from '@vueuse/core'
 import type { IFormConfig, ITableColumns } from '@/types/components/page'
 
 // props 类型
@@ -212,12 +202,9 @@ const componentsMap: Record<string, Component> = {
 }
 
 const menuStore = useMenuStore()
-const basePageRef = useTemplateRef('basePageRef')
 
 // 是否展示查询表单
 const queryFormVisible = ref(true)
-// 全屏功能
-const { isFullscreen, toggle } = useFullscreen(basePageRef)
 
 // -----------------------  表单配置 -----------------------
 
