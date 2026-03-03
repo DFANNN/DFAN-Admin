@@ -136,18 +136,27 @@ const resetFields = () => {
 const handleExport = async () => {
   await exportFormRef.value?.validate()
 
-  // 获取要导出的数据
-  let dataToExport: Record<string, unknown>[] = []
   // 获取要导出的字段
   const selectedFields = fieldsList.value.filter((item) => item.visible)
+  if (selectedFields.length === 0) {
+    ElMessage.warning('请至少选择一个字段')
+    return
+  }
+
+  // 获取要导出的数据
+  let dataToExport: Record<string, unknown>[] = []
+
   // 根据选择的数据类型获取数据
   switch (exportForm.value.data) {
     case 'current':
       dataToExport = props.currentPageData
       break
     case 'selected':
-      console.log(`output->selected`)
-      dataToExport = props.selectedData
+      dataToExport = props.selectedData || []
+      if (dataToExport.length === 0) {
+        ElMessage.warning('没有选中的数据')
+        return
+      }
       break
   }
   // 格式化数据

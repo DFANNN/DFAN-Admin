@@ -25,10 +25,10 @@ export interface IUserItem {
 export interface IUserListParams {
   page: number
   pageSize: number
-  username: string
-  name: string
+  username?: string
+  name?: string
   status?: 'active' | 'inactive'
-  sortOrder: 'asc' | 'desc'
+  sortOrder?: 'asc' | 'desc'
 }
 
 // 创建/更新用户参数

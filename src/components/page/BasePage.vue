@@ -28,8 +28,8 @@
             </el-col>
             <el-col :xs="xs" :sm="sm" :md="md" :lg="lg" :xl="xl">
               <el-form-item label-width="0">
-                <el-button type="primary" @click="query" :loading="tableLoading">查询</el-button>
-                <el-button @click="reset" :loading="tableLoading">重置</el-button>
+                <el-button type="primary" @click="query" :loading="delayedLoading">查询</el-button>
+                <el-button @click="reset" :loading="delayedLoading">重置</el-button>
                 <div class="expand" v-if="visibleIsExpandDiv" @click="isExpand = !isExpand">
                   <span>{{ isExpand ? '收起' : '展开' }}</span>
                   <el-icon class="expand-icon">
@@ -72,7 +72,7 @@
               tooltip="刷新"
               size="1.75rem"
               icon-size="18px"
-              :loading="tableLoading"
+              :loading="delayedLoading"
               @click="refresh"
               v-if="showRefresh"
             />
@@ -89,22 +89,19 @@
               :selected-data="tableSelectedList"
             />
             <TableSizeBtn v-if="showSize" v-model="tableSize" />
-            <TableColumnBtn
-              v-if="showColumn"
-              v-model="tableColumns"
-              :original-columns="columns"
-            />
+            <TableColumnBtn v-if="showColumn" v-model="tableColumns" :original-columns="columns" />
           </div>
         </div>
       </div>
       <el-table
         :data="tableData"
-        v-loading="tableLoading"
+        v-loading="delayedLoading"
         :element-loading-text="tableLoadingText"
         :element-loading-svg="tableLoadingSpinner"
         element-loading-svg-view-box="-10, -10, 50, 50"
         :border="true"
         :size="tableSize"
+        show-overflow-tooltip
         v-bind="tableAttrs"
         @selection-change="tableSelectionChange"
       >
@@ -155,6 +152,7 @@ interface IProps {
   columns: Record<string, unknown>[] // 表格列配置
   tableAttrs?: Record<string, unknown> // 表格属性  支持el-table的所有属性
   tableLoading?: boolean // 表格加载中状态
+  loadingDelay?: number // loading 延迟显示时间（毫秒），避免闪屏
   tableLoadingText?: string // 表格加载中提示文本
   tableLoadingSpinner?: string // 表格加载中图标
   // ---------------- 页码配置 --------------------
@@ -194,6 +192,7 @@ const props = withDefaults(defineProps<IProps>(), {
   formDefaultIsExpand: false,
   // ---------------- 表格配置 --------------------
   tableLoading: false,
+  loadingDelay: 300,
   tableLoadingText: '数据加载中...',
   tableLoadingSpinner: `
         <path class="path" d="
@@ -231,6 +230,31 @@ const menuStore = useMenuStore()
 
 // 是否展示查询表单
 const queryFormVisible = ref(true)
+
+// 延迟显示 loading，避免闪屏
+const delayedLoading = ref(false)
+let loadingTimer: ReturnType<typeof setTimeout> | null = null
+
+// 监听 tableLoading 变化，实现延迟显示
+watch(
+  () => props.tableLoading,
+  (newVal) => {
+    if (newVal) {
+      // 开始 loading，延迟显示
+      loadingTimer = setTimeout(() => {
+        delayedLoading.value = true
+      }, props.loadingDelay)
+    } else {
+      // 结束 loading，立即隐藏并清除定时器
+      if (loadingTimer) {
+        clearTimeout(loadingTimer)
+        loadingTimer = null
+      }
+      delayedLoading.value = false
+    }
+  },
+  { immediate: true },
+)
 
 // -----------------------  表单配置 -----------------------
 
@@ -318,6 +342,68 @@ const tableSelectionChange = (selection: Record<string, unknown>[]) => {
 const refresh = () => {
   emits('refresh', queryForm.value, currentPage.value, pageSize.value)
 }
+
+/**
+ * 刷新当前页（保持当前页码和查询条件）
+ * 用于：编辑操作后刷新
+ */
+const refreshCurrentPage = () => {
+  emits('refresh', queryForm.value, currentPage.value, pageSize.value)
+}
+
+/**
+ * 智能刷新（删除操作专用）
+ * @param deleteCount 删除的数据条数，默认为1
+ * 逻辑：
+ * 1. 计算删除后当前页剩余数据量
+ * 2. 如果当前页数据会被删空且不是第1页，则回到上一页
+ * 3. 否则刷新当前页
+ * 用于：删除操作后刷新
+ */
+const refreshAfterDelete = (deleteCount: number = 1) => {
+  // 计算删除后当前页剩余的数据量
+  const remainingCount = props.tableData.length - deleteCount
+
+  // 如果删除后当前页没有数据了，且不是第1页，则回到上一页
+  if (remainingCount <= 0 && currentPage.value > 1) {
+    currentPage.value = currentPage.value - 1
+    emits('refresh', queryForm.value, currentPage.value, pageSize.value)
+  } else {
+    // 否则刷新当前页
+    emits('refresh', queryForm.value, currentPage.value, pageSize.value)
+  }
+}
+
+/**
+ * 刷新到第一页（保持查询条件）
+ * 用于：新增成功后刷新
+ */
+const refreshToFirstPage = () => {
+  currentPage.value = 1
+  emits('refresh', queryForm.value, currentPage.value, pageSize.value)
+}
+
+/**
+ * 重置并刷新（清空查询条件，回到第一页）
+ * 用于：重置搜索
+ */
+const resetAndRefresh = () => {
+  initForm()
+  currentPage.value = 1
+  emits('refresh', queryForm.value, currentPage.value, pageSize.value)
+}
+
+// 暴露方法给父组件使用
+defineExpose({
+  refreshCurrentPage, // 刷新当前页（编辑后使用）
+  refreshAfterDelete, // 智能刷新（删除后使用）
+  refreshToFirstPage, // 刷新到第一页（新增后使用）
+  resetAndRefresh, // 重置并刷新
+  queryForm, // 查询表单数据
+  currentPage, // 当前页码
+  pageSize, // 每页条数
+  tableSelectedList, // 表格选择的数据
+})
 
 onMounted(() => {
   // 初始化form
