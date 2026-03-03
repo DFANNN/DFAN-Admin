@@ -105,9 +105,9 @@ const handleCheckAll = (val: boolean | string | number) => {
 
 // 恢复默认
 const resetFields = () => {
-  fieldsList.value = props.columns.filter(
-    (col) => col.type !== 'selection' && col.prop !== 'operation',
-  )
+  fieldsList.value = props.columns
+    .filter((col) => col.type !== 'selection' && col.prop !== 'operation')
+    .map((col) => ({ ...col }))
 }
 
 // 打开打印对话框

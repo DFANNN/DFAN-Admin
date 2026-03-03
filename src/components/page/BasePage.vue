@@ -104,6 +104,7 @@
         show-overflow-tooltip
         v-bind="tableAttrs"
         @selection-change="tableSelectionChange"
+        @sort-change="tableSortChange"
       >
         <template v-for="col in tableColumns" :key="col.prop ? col.prop : col.type">
           <el-table-column v-bind="col" v-if="col.visible">
@@ -171,8 +172,15 @@ interface IProps {
 
 // emits 类型
 interface IEmits {
-  // 刷新方法，暴露queryForm，page,pageSize
-  (e: 'refresh', queryForm: Record<string, unknown>, page: number, pageSize: number): void
+  // 刷新方法，暴露queryForm，page,pageSize,sortField,sortOrder
+  (
+    e: 'refresh',
+    queryForm: Record<string, unknown>,
+    page: number,
+    pageSize: number,
+    sortField: string,
+    sortOrder: 'asc' | 'desc' | '',
+  ): void
   // 表格选择变化
   (e: 'selection-change', selection: Record<string, unknown>[]): void
 }
@@ -297,13 +305,27 @@ const initForm = () => {
 }
 
 const query = () => {
-  emits('refresh', queryForm.value, currentPage.value, pageSize.value)
+  emits(
+    'refresh',
+    queryForm.value,
+    currentPage.value,
+    pageSize.value,
+    sortField.value,
+    sortOrder.value,
+  )
 }
 
 const reset = () => {
   // 重置表单
   initForm()
-  emits('refresh', queryForm.value, currentPage.value, pageSize.value)
+  emits(
+    'refresh',
+    queryForm.value,
+    currentPage.value,
+    pageSize.value,
+    sortField.value,
+    sortOrder.value,
+  )
 }
 
 // -----------------------  表格和页码配置 -----------------------
@@ -326,10 +348,14 @@ const tableSelectedList = ref<Record<string, unknown>[]>([])
 const currentPage = ref(1)
 // 每页条数
 const pageSize = ref(props.pageSizes[0] || 10)
+// 排序字段
+const sortField = ref('')
+// 排序顺序
+const sortOrder = ref<'asc' | 'desc' | ''>('')
 
 // 页码改变
 const paginationChange = (page: number, pageSize: number) => {
-  emits('refresh', queryForm.value, page, pageSize)
+  emits('refresh', queryForm.value, page, pageSize, sortField.value, sortOrder.value)
 }
 
 // 表格选择变化
@@ -338,9 +364,30 @@ const tableSelectionChange = (selection: Record<string, unknown>[]) => {
   emits('selection-change', selection)
 }
 
+// 表格排序变化
+const tableSortChange = ({
+  prop,
+  order,
+}: {
+  prop: string
+  order: 'ascending' | 'descending' | null
+}) => {
+  sortField.value = prop || ''
+  sortOrder.value = order === 'ascending' ? 'asc' : order === 'descending' ? 'desc' : ''
+
+  emits('refresh', queryForm.value, 1, pageSize.value, sortField.value, sortOrder.value)
+}
+
 // 刷新（表格工具）
 const refresh = () => {
-  emits('refresh', queryForm.value, currentPage.value, pageSize.value)
+  emits(
+    'refresh',
+    queryForm.value,
+    currentPage.value,
+    pageSize.value,
+    sortField.value,
+    sortOrder.value,
+  )
 }
 
 /**
@@ -348,7 +395,14 @@ const refresh = () => {
  * 用于：编辑操作后刷新
  */
 const refreshCurrentPage = () => {
-  emits('refresh', queryForm.value, currentPage.value, pageSize.value)
+  emits(
+    'refresh',
+    queryForm.value,
+    currentPage.value,
+    pageSize.value,
+    sortField.value,
+    sortOrder.value,
+  )
 }
 
 /**
@@ -367,10 +421,24 @@ const refreshAfterDelete = (deleteCount: number = 1) => {
   // 如果删除后当前页没有数据了，且不是第1页，则回到上一页
   if (remainingCount <= 0 && currentPage.value > 1) {
     currentPage.value = currentPage.value - 1
-    emits('refresh', queryForm.value, currentPage.value, pageSize.value)
+    emits(
+      'refresh',
+      queryForm.value,
+      currentPage.value,
+      pageSize.value,
+      sortField.value,
+      sortOrder.value,
+    )
   } else {
     // 否则刷新当前页
-    emits('refresh', queryForm.value, currentPage.value, pageSize.value)
+    emits(
+      'refresh',
+      queryForm.value,
+      currentPage.value,
+      pageSize.value,
+      sortField.value,
+      sortOrder.value,
+    )
   }
 }
 
@@ -380,7 +448,14 @@ const refreshAfterDelete = (deleteCount: number = 1) => {
  */
 const refreshToFirstPage = () => {
   currentPage.value = 1
-  emits('refresh', queryForm.value, currentPage.value, pageSize.value)
+  emits(
+    'refresh',
+    queryForm.value,
+    currentPage.value,
+    pageSize.value,
+    sortField.value,
+    sortOrder.value,
+  )
 }
 
 /**
@@ -390,7 +465,14 @@ const refreshToFirstPage = () => {
 const resetAndRefresh = () => {
   initForm()
   currentPage.value = 1
-  emits('refresh', queryForm.value, currentPage.value, pageSize.value)
+  emits(
+    'refresh',
+    queryForm.value,
+    currentPage.value,
+    pageSize.value,
+    sortField.value,
+    sortOrder.value,
+  )
 }
 
 // 暴露方法给父组件使用
@@ -403,13 +485,22 @@ defineExpose({
   currentPage, // 当前页码
   pageSize, // 每页条数
   tableSelectedList, // 表格选择的数据
+  sortField, // 排序字段
+  sortOrder, // 排序顺序
 })
 
 onMounted(() => {
   // 初始化form
   initForm()
   // 当组件挂载时，直接触发一次refresh事件
-  emits('refresh', queryForm.value, currentPage.value, pageSize.value)
+  emits(
+    'refresh',
+    queryForm.value,
+    currentPage.value,
+    pageSize.value,
+    sortField.value,
+    sortOrder.value,
+  )
 })
 </script>
 

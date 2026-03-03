@@ -127,47 +127,59 @@ const handleCheckAll = (val: boolean | string | number) => {
 
 // 恢复默认
 const resetFields = () => {
-  fieldsList.value = props.columns.filter(
-    (col) => col.type !== 'selection' && col.prop !== 'operation',
-  )
+  // 使用深拷贝，避免引用原始数据
+  fieldsList.value = props.columns
+    .filter((col) => col.type !== 'selection' && col.prop !== 'operation')
+    .map((col) => ({ ...col }))
 }
 
 // 导出
 const handleExport = async () => {
-  await exportFormRef.value?.validate()
+    await exportFormRef.value?.validate()
 
-  // 获取要导出的字段
-  const selectedFields = fieldsList.value.filter((item) => item.visible)
-  if (selectedFields.length === 0) {
-    ElMessage.warning('请至少选择一个字段')
-    return
-  }
+    // 获取要导出的字段
+    const selectedFields = fieldsList.value.filter((item) => item.visible)
+    if (selectedFields.length === 0) {
+      ElMessage.warning('请至少选择一个字段')
+      return
+    }
 
-  // 获取要导出的数据
-  let dataToExport: Record<string, unknown>[] = []
+    // 获取要导出的数据
+    let dataToExport: Record<string, unknown>[] = []
 
-  // 根据选择的数据类型获取数据
-  switch (exportForm.value.data) {
-    case 'current':
-      dataToExport = props.currentPageData
-      break
-    case 'selected':
-      dataToExport = props.selectedData || []
-      if (dataToExport.length === 0) {
-        ElMessage.warning('没有选中的数据')
-        return
-      }
-      break
-  }
-  // 格式化数据
-  const { mapExcelData, colWidth } = formatExportExcelData(dataToExport, selectedFields)
-  // 导出Excel
-  exportToExcel(
-    mapExcelData,
-    exportForm.value.name,
-    exportForm.value.format as IExportFormat,
-    colWidth,
-  )
+    // 根据选择的数据类型获取数据
+    switch (exportForm.value.data) {
+      case 'current':
+        dataToExport = props.currentPageData
+        break
+      case 'selected':
+        dataToExport = props.selectedData || []
+        if (dataToExport.length === 0) {
+          ElMessage.warning('没有选中的数据')
+          return
+        }
+        break
+    }
+
+    if (dataToExport.length === 0) {
+      ElMessage.warning('没有可导出的数据')
+      return
+    }
+
+    // 格式化数据
+    const { mapExcelData, colWidth } = formatExportExcelData(dataToExport, selectedFields)
+    // 导出Excel
+    await exportToExcel(
+      mapExcelData,
+      exportForm.value.name,
+      exportForm.value.format as IExportFormat,
+      colWidth,
+    )
+
+    // 导出成功
+    ElMessage.success('导出成功')
+    // 关闭对话框
+    open.value = false
 }
 
 // 表单验证规则

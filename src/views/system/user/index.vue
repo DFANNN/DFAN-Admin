@@ -132,7 +132,7 @@ const columns = ref([
   { prop: 'roleId', label: '角色', minWidth: 150 },
   { prop: 'isBuiltIn', label: '类型' },
   { prop: 'status', label: '状态' },
-  { prop: 'createTime', label: '创建时间', minWidth: 180 },
+  { prop: 'createTime', label: '创建时间', minWidth: 180, sortable: 'custom' },
   { prop: 'updateTime', label: '更新时间', minWidth: 180 },
   { prop: 'operation', label: '操作', width: 150, fixed: 'right' },
 ])
@@ -172,12 +172,20 @@ const getRoleList = async () => {
   roleList.value = res.data?.list || []
 }
 // 获取用户列表
-const getUserList = async (queryForm: Record<string, unknown>, page: number, pageSize: number) => {
+const getUserList = async (
+  queryForm: Record<string, unknown>,
+  page: number,
+  pageSize: number,
+  sortField?: string,
+  sortOrder?: 'asc' | 'desc' | '',
+) => {
   loading.value = true
   const params: IUserListParams = {
     ...queryForm,
     page,
     pageSize,
+    sortField,
+    sortOrder,
   }
   try {
     await delay(1000)

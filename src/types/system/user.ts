@@ -28,7 +28,8 @@ export interface IUserListParams {
   username?: string
   name?: string
   status?: 'active' | 'inactive'
-  sortOrder?: 'asc' | 'desc'
+  sortOrder?: 'asc' | 'desc' | ''
+  sortField?: string
 }
 
 // 创建/更新用户参数
