@@ -18,24 +18,14 @@
           v-permission="['user:add']"
           >新增用户</el-button
         >
-        <el-popconfirm
-          title="确定要删除选中的用户吗？"
-          :placement="POPCONFIRM_CONFIG.placement"
-          :width="POPCONFIRM_CONFIG.width"
-          @confirm="deleteUserHandle(deleteUserIds)"
+        <el-button
+          type="danger"
+          :icon="menuStore.iconComponents.Delete"
+          :disabled="!useButtonPermission(['user:delete'], [() => !!deleteUserIds.length]).value"
+          @click="openDeleteDialog"
         >
-          <template #reference>
-            <el-button
-              type="danger"
-              :icon="menuStore.iconComponents.Delete"
-              :disabled="
-                !useButtonPermission(['user:delete'], [() => !!deleteUserIds.length]).value
-              "
-            >
-              批量删除
-            </el-button>
-          </template>
-        </el-popconfirm>
+          批量删除
+        </el-button>
       </template>
       <template #roleId="{ row }">
         <BaseTag v-if="row.roleId" :text="getRoleName(row.roleId)" />
@@ -54,13 +44,13 @@
       <template #operation="{ row }">
         <el-button
           type="primary"
-          :icon="menuStore.iconComponents.Edit"
           link
           @click="userCreateRef?.showDialog(row.id)"
           v-permission="['user:edit']"
         >
           编辑
         </el-button>
+        <el-divider direction="vertical" />
         <el-popconfirm
           title="确定要删除选中的用户吗？"
           :placement="POPCONFIRM_CONFIG.placement"
@@ -68,14 +58,7 @@
           @confirm="deleteUserHandle([row.id])"
         >
           <template #reference>
-            <el-button
-              type="danger"
-              :icon="menuStore.iconComponents.Delete"
-              link
-              v-permission="['user:delete']"
-            >
-              删除
-            </el-button>
+            <el-button type="danger" link v-permission="['user:delete']"> 删除 </el-button>
           </template>
         </el-popconfirm>
       </template>
@@ -85,6 +68,8 @@
 </template>
 
 <script setup lang="ts">
+import { Dialog } from '@/utils/dialog'
+import { delay } from '@/utils/utils'
 import { rolePage } from '@/api/role'
 import { userPage, deleteUser } from '@/api/user'
 import UserCreate from '@/views/system/user/create.vue'
@@ -94,8 +79,6 @@ import type { IRoleItem } from '@/types/system/role'
 import type { IUserItem } from '@/types/system/user'
 import type { IFormConfig } from '@/types/components/page'
 import type { IUserListParams } from '@/types/system/user'
-
-import { delay } from '@/utils/utils'
 
 defineOptions({ name: 'UserView' })
 
@@ -130,7 +113,7 @@ const columns = ref([
   { prop: 'phone', label: '手机号', minWidth: 120 },
   { prop: 'email', label: '邮箱', minWidth: 180 },
   { prop: 'roleId', label: '角色', minWidth: 150 },
-  { prop: 'isBuiltIn', label: '类型' },
+  { prop: 'isBuiltIn', label: '类型', width: 100 },
   { prop: 'status', label: '状态' },
   { prop: 'createTime', label: '创建时间', minWidth: 180, sortable: 'custom' },
   { prop: 'updateTime', label: '更新时间', minWidth: 180 },
@@ -196,6 +179,19 @@ const getUserList = async (
   } finally {
     loading.value = false
   }
+}
+
+// 批量删除用户dialog
+const openDeleteDialog = () => {
+  Dialog.confirm({
+    title: '删除确认',
+    content: `确定要删除选中的 ${deleteUserIds.value.length} 条数据吗？删除后无法恢复，请谨慎操作！`,
+    confirmText: '确认删除',
+    cancelText: '再想想',
+    onConfirm: async () => {
+      await deleteUserHandle(deleteUserIds.value)
+    },
+  })
 }
 
 // 删除用户
