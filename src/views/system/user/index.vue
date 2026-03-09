@@ -50,7 +50,6 @@
         >
           编辑
         </el-button>
-        <el-divider direction="vertical" />
         <el-popconfirm
           title="确定要删除选中的用户吗？"
           :placement="POPCONFIRM_CONFIG.placement"
