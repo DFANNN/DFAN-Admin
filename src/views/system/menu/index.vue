@@ -6,6 +6,8 @@
       :table-data="menuList"
       :columns="columns"
       :show-pagination="false"
+      :show-export="false"
+      :show-print="false"
       :table-loading="loading"
       :tableAttrs="{
         rowKey: 'id',
