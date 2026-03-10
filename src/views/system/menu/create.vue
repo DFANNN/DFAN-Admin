@@ -197,15 +197,6 @@ const rules: FormRules = {
   status: [{ required: true, message: '请选择状态', trigger: 'blur' }],
 }
 
-// const rules = computed(() => {
-//   return {
-//     type: [{ required: true, message: '请选择菜单类型', trigger: 'blur' }],
-//     title: [{ required: true, message: `请输入${titleLabel.value}`, trigger: 'blur' }],
-//     path: [{ required: true, message: '请输入菜单路径', trigger: 'blur' }],
-//     status: [{ required: true, message: '请选择状态', trigger: 'blur' }],
-//   } as FormRules
-// })
-
 defineExpose({
   showDialog,
 })
