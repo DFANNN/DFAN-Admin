@@ -115,7 +115,7 @@
         </template>
       </el-table>
 
-      <div class="pagination-wrap">
+      <div class="pagination-wrap" v-if="showPagination">
         <el-pagination
           v-model:current-page="currentPage"
           v-model:page-size="pageSize"
@@ -157,7 +157,7 @@ interface IProps {
   tableLoadingText?: string // 表格加载中提示文本
   tableLoadingSpinner?: string // 表格加载中图标
   // ---------------- 页码配置 --------------------
-  total: number // 总条数
+  total?: number // 总条数
   pageSizes?: number[] // 分页器
   paginationLayout?: string //
   paginationAttrs?: Record<string, unknown> // 分页属性  支持el-pagination的所有属性
@@ -168,6 +168,7 @@ interface IProps {
   showPrint?: boolean // 是否显示打印按钮
   showSize?: boolean // 是否显示表格密度按钮
   showColumn?: boolean // 是否显示列设置按钮
+  showPagination?: boolean // 是否显示分页器
 }
 
 // emits 类型
@@ -213,6 +214,7 @@ const props = withDefaults(defineProps<IProps>(), {
         " style="stroke-width: 4px; fill: rgba(0, 0, 0, 0)"/>
       `,
   // ---------------- 页码配置 --------------------
+  total:0,
   paginationLayout: 'total, sizes, prev, pager, next, jumper',
   pageSizes: () => [10, 20, 30, 40, 50],
   // ---------------- 工具栏配置 --------------------
@@ -222,6 +224,7 @@ const props = withDefaults(defineProps<IProps>(), {
   showPrint: true,
   showSize: true,
   showColumn: true,
+  showPagination: true,
 })
 
 const emits = defineEmits<IEmits>()

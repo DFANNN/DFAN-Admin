@@ -5,7 +5,7 @@
       :formConfig="searchFormConfig"
       :table-data="menuList"
       :columns="columns"
-      :total="total"
+      :show-pagination="false"
       :table-loading="loading"
       :tableAttrs="{
         rowKey: 'id',
@@ -130,15 +130,14 @@ const columns = ref([
 
 // 菜单列表
 const menuList = ref<IMenuItem[]>([])
-const total = ref(0)
 const loading = ref(false)
+
 // 获取菜单列表
 const getMenuList = async (queryForm: Record<string, unknown>) => {
-  console.log(queryForm)
   loading.value = true
   try {
     await delay(1000)
-    const { data: res } = await menuPage()
+    const { data: res } = await menuPage(queryForm)
     if (res.code !== 200) return
     menuList.value = res.data || []
   } finally {

@@ -4,6 +4,14 @@ import type { ICommonResponse } from '@/types/common'
 // 菜单类型
 export type IMenuType = 'directory' | 'menu' | 'button'
 
+// 获取菜单列表的参数类型
+export interface IMenuParams {
+  title?:string,
+  path?:string,
+  type?:IMenuType,
+  status?:string
+}
+
 // 菜单列表项
 export interface IMenuItem {
   id: string

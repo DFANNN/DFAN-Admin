@@ -13,6 +13,7 @@ import {
   menuPathExists,
   hasChildren,
   buildMenuTree,
+  getMenuAncestors,
   type Menu,
   type MenuType,
 } from '../db/index'
@@ -21,6 +22,7 @@ import dayjs from 'dayjs'
 
 /**
  * 获取菜单列表（树形结构）
+ * 支持后端搜索过滤
  */
 export const getMenuListHandler = http.get(
   `${APP_CONFIG.listenMSWPath}/menus`,
@@ -32,11 +34,55 @@ export const getMenuListHandler = http.get(
     }
 
     try {
+      // 获取查询参数
+      const url = new URL(request.url)
+      const title = url.searchParams.get('title')?.trim() || ''
+      const path = url.searchParams.get('path')?.trim() || ''
+      const type = url.searchParams.get('type')?.trim() || ''
+      const status = url.searchParams.get('status')?.trim() || ''
+
       // 获取所有菜单（包括按钮）
       const allMenus = await getAll<Menu>(STORES.MENUS)
 
+      let filteredMenus = allMenus
+
+      // 后端搜索过滤
+      if (title || path || type || status) {
+        // 先过滤出匹配的菜单
+        const matchedMenus = allMenus.filter((menu) => {
+          // 标题模糊匹配
+          if (title && !menu.title.toLowerCase().includes(title.toLowerCase())) {
+            return false
+          }
+          // 路径模糊匹配
+          if (path && !menu.path?.toLowerCase().includes(path.toLowerCase())) {
+            return false
+          }
+          // 类型精确匹配
+          if (type && menu.type !== type) {
+            return false
+          }
+          // 状态精确匹配
+          if (status && menu.status !== status) {
+            return false
+          }
+          return true
+        })
+
+        // 收集所有匹配菜单及其祖先菜单的ID
+        const menuIdsToInclude = new Set<string>()
+        matchedMenus.forEach((menu) => {
+          // 获取该菜单的所有祖先（包括自己）
+          const ancestors = getMenuAncestors(menu.id, allMenus)
+          ancestors.forEach((id) => menuIdsToInclude.add(id))
+        })
+
+        // 根据收集的ID过滤菜单
+        filteredMenus = allMenus.filter((menu) => menuIdsToInclude.has(menu.id))
+      }
+
       // 构建完整的菜单树（包含 directory、menu 和 button 类型）
-      const menuTree = buildMenuTree(allMenus)
+      const menuTree = buildMenuTree(filteredMenus)
 
       return HttpResponse.json({
         code: 200,
