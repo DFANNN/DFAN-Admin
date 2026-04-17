@@ -1,17 +1,12 @@
 import request from '@/utils/request'
 import type { ICommonResponse } from '@/types/common'
-import type {
-  IMenuParams,
-  IMenuItem,
-  IMenuListResponse,
-  ICreateOrUpdateMenuParams,
-} from '@/types/system/menu'
+import type { IMenuParams, IMenuItem, ICreateOrUpdateMenuParams } from '@/types/system/menu'
 
 /**
  * 获取菜单列表（树形结构）
  */
 export const menuPage = (params?: IMenuParams) => {
-  return request.get<IMenuListResponse>('/menus', { params })
+  return request.get<ICommonResponse<IMenuItem[]>>('/menus', { params })
 }
 
 /**

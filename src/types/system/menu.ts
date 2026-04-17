@@ -1,15 +1,14 @@
 // 菜单管理类型文件
-import type { ICommonResponse } from '@/types/common'
 
 // 菜单类型
 export type IMenuType = 'directory' | 'menu' | 'button'
 
 // 获取菜单列表的参数类型
 export interface IMenuParams {
-  title?:string,
-  path?:string,
-  type?:IMenuType,
-  status?:string
+  title?: string
+  path?: string
+  type?: IMenuType
+  status?: string
 }
 
 // 菜单列表项
@@ -28,9 +27,6 @@ export interface IMenuItem {
   updateTime?: string
   children?: IMenuItem[]
 }
-
-// 菜单列表响应
-export type IMenuListResponse = ICommonResponse<IMenuItem[]>
 
 // 创建/更新菜单参数
 export interface ICreateOrUpdateMenuParams {

@@ -1,17 +1,12 @@
 import request from '@/utils/request'
-import type {
-  IRoleListParams,
-  IRoleListResponse,
-  ICreateOrUpdateRoleParams,
-  IRoleDetailResponse,
-} from '@/types/system/role'
-import type { ICommonResponse } from '@/types/common'
+import type { IRoleListParams, ICreateOrUpdateRoleParams, IRoleItem } from '@/types/system/role'
+import type { ICommonResponse, ICommonPageResponse } from '@/types/common'
 
 /**
  * 获取角色列表分页
  */
 export const rolePage = (params?: IRoleListParams) => {
-  return request.get<IRoleListResponse>('/roles', { params })
+  return request.get<ICommonPageResponse<IRoleItem[]>>('/roles', { params })
 }
 
 /**
@@ -25,7 +20,7 @@ export const createRole = (data: ICreateOrUpdateRoleParams) => {
  * 根据ID获取角色详情
  */
 export const roleInfo = (id: string) => {
-  return request.get<IRoleDetailResponse>(`/roles/${id}`)
+  return request.get<ICommonResponse<IRoleItem>>(`/roles/${id}`)
 }
 
 /**

@@ -1,5 +1,4 @@
 // 用户管理类型文件
-import type { ICommonResponse } from '@/types/common'
 import type { ILoginLogParams } from '@/types/login'
 
 // 用户列表项
@@ -43,17 +42,6 @@ export interface ICreateOrUpdateUserParams {
   roleId?: string // 用户角色ID（单角色）
   status: 'active' | 'inactive'
 }
-
-// 用户列表响应
-export type IUserListResponse = ICommonResponse<{
-  list: IUserItem[]
-  total: number
-  page: number
-  pageSize: number
-}>
-
-// 用户详情响应
-export type IUserDetailResponse = ICommonResponse<IUserItem>
 
 // 消息类型
 export type MessageType = 'system' | 'user' | 'todo'

@@ -1,20 +1,19 @@
 import request from '@/utils/request'
 import type {
   IUserListParams,
-  IUserListResponse,
   ICreateOrUpdateUserParams,
-  IUserDetailResponse,
   IUpdateUserProfileParams,
   IUpdatePasswordParams,
   IUpdateUserAvatarParams,
+  IUserItem,
 } from '@/types/system/user'
-import type { ICommonResponse } from '@/types/common'
+import type { ICommonResponse, ICommonPageResponse } from '@/types/common'
 
 /**
  * 获取用户列表分页
  */
 export const userPage = (params?: IUserListParams) => {
-  return request.get<IUserListResponse>('/users', { params })
+  return request.get<ICommonPageResponse<IUserItem[]>>('/users', { params })
 }
 
 /**
@@ -28,7 +27,7 @@ export const createUser = (data: ICreateOrUpdateUserParams) => {
  * 根据ID获取用户详情
  */
 export const userInfo = (id: string) => {
-  return request.get<IUserDetailResponse>(`/users/${id}`)
+  return request.get<ICommonResponse<IUserItem>>(`/users/${id}`)
 }
 
 /**

@@ -1,5 +1,4 @@
 // 角色管理类型文件
-import type { ICommonResponse } from '@/types/common'
 
 // 角色列表项
 export interface IRoleItem {
@@ -33,14 +32,3 @@ export interface ICreateOrUpdateRoleParams {
   status: 'active' | 'inactive'
   menuIds?: string[] // 菜单权限ID列表
 }
-
-// 角色列表响应
-export type IRoleListResponse = ICommonResponse<{
-  list: IRoleItem[]
-  total: number
-  page: number
-  pageSize: number
-}>
-
-// 角色详情响应
-export type IRoleDetailResponse = ICommonResponse<IRoleItem>

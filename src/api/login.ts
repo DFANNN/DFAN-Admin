@@ -1,11 +1,12 @@
 import request from '@/utils/request'
-import type { IUserDetailResponse } from '@/types/system/user'
 import type {
   ILoginParams,
   ILoginResponse,
   IUserPermissionsResponse,
   ILoginLogParams,
 } from '@/types/login'
+import type { ICommonResponse } from '@/types/common'
+import type { IUserItem } from '@/types/system/user'
 
 export const login = (params: ILoginParams) => {
   return request.post<ILoginResponse>('/login', params)
@@ -22,7 +23,7 @@ export const userPermissions = () => {
  * 获取用户信息
  */
 export const userInfoRequest = () => {
-  return request.get<IUserDetailResponse>('/users/info')
+  return request.get<ICommonResponse<IUserItem>>('/users/info')
 }
 
 // 记录用户登录日志

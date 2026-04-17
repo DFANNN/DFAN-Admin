@@ -17,7 +17,7 @@
       <template #description="{ row }">
         <div>{{ row.description ? row.description : '/' }}</div>
       </template>
-      <template #operation="{ row }">
+      <template #operation>
         <el-button type="primary" link>编辑</el-button>
         <el-button type="danger" link>删除</el-button>
       </template>
@@ -28,12 +28,11 @@
 <script setup lang="ts">
 import { rolePage } from '@/api/role'
 import { delay } from '@/utils/utils'
+import type { IRoleItem } from '@/types/system/role'
 
 defineOptions({
   name: '403View',
 })
-
-const menuStore = useMenuStore()
 
 // 表单配置类型
 interface IPageSearchConfig {
@@ -62,7 +61,7 @@ const pageSearchConfig: IPageSearchConfig[] = [
   },
 ]
 
-const roleList = ref([])
+const roleList = ref<IRoleItem[]>([])
 const total = ref(0)
 const loading = ref(false)
 
@@ -77,7 +76,7 @@ const columns = ref([
   { prop: 'operation', label: '操作', width: 150, fixed: 'right' },
 ])
 
-const getRole = async (queryForm: unknown, page: number, pageSize: number) => {
+const getRole = async (_queryForm: unknown, page: number, pageSize: number) => {
   loading.value = true
   const params = {
     page,
@@ -86,7 +85,6 @@ const getRole = async (queryForm: unknown, page: number, pageSize: number) => {
   try {
     await delay(2000)
     const { data: res } = await rolePage(params)
-    console.log(`output->res`, res)
     if (res.code !== 200) return
     roleList.value = res.data?.list || []
     total.value = res.data?.total || 0
