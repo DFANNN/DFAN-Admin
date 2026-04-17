@@ -27,6 +27,16 @@ export const APP_CONFIG: AppConfig = {
   // MSW 监听的请求路径
   listenMSWPath: '/DFAN-admin-api',
 
+  // Mock / IndexedDB 默认初始化配置
+  mock: {
+    // 默认菜单
+    defaultMenuTreeData: DEFAULT_MENU_TREE_DATA,
+    // 默认角色
+    defaultRoles: DEFAULT_ROLES,
+    // 默认用户
+    defaultUsers: DEFAULT_USERS,
+  },
+
   // 项目名称
   name: 'DFAN Admin',
 
@@ -39,13 +49,24 @@ export const APP_CONFIG: AppConfig = {
   // 是否展示主题配置
   showThemeConfig: true,
 
-  // Mock / IndexedDB 默认初始化配置
-  mock: {
-    // 默认菜单
-    defaultMenuTreeData: DEFAULT_MENU_TREE_DATA,
-    // 默认角色
-    defaultRoles: DEFAULT_ROLES,
-    // 默认用户
-    defaultUsers: DEFAULT_USERS,
-  },
+  // 主题配置默认 JSON
+  themeConfig: {},
+
+  // 是否展示全屏/退出全屏按钮
+  showFullscreen: true,
+
+  // 是否展示国际化
+  showI18n: true,
+
+  // 国际化默认语言
+  defaultLanguage: 'zh-CN',
+
+  // 是否展示消息通知
+  showNotification: true,
+
+  // 登录页面是否展示手机号登录
+  showPhoneLogin: true,
+
+  // 登录页面是否展示扫码登录
+  showQrLogin: true,
 }
