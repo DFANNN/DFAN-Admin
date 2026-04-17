@@ -57,10 +57,18 @@ export const useTabsStore = defineStore('tabs', () => {
       }
     }
 
-    // 检查标签页是否已存在
-    const existTab = tabs.value.find((tab) => tab.path === route.path)
+    // 优先基于路由 name 判断是否为同一个标签页，避免动态路由（如 /user/detail/:id）生成多个标签页
+    const existTab = route.name
+      ? tabs.value.find((tab) => tab.name === route.name)
+      : tabs.value.find((tab) => tab.path === route.path)
+
     if (existTab) {
-      // 如果已存在，只更新激活状态
+      // 已存在时，同步更新到当前访问的实际路径和 fullPath
+      existTab.path = route.path
+      existTab.fullPath = route.fullPath
+      existTab.title = (route.meta?.title as string) || route.name?.toString() || '未命名'
+      existTab.icon = route.meta?.icon as string | undefined
+      existTab.name = route.name
       activePath.value = route.path
       return
     }
