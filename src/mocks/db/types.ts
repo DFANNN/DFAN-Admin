@@ -74,5 +74,6 @@ export interface Menu {
   isBuiltIn?: boolean // 是否为内置菜单
   createTime?: string // 创建时间
   updateTime?: string // 更新时间
+  children?: Menu[]
   [key: string]: unknown
 }
