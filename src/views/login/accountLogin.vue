@@ -55,14 +55,18 @@
     </el-form>
 
     <!-- 其他登录方式 -->
-    <div class="divider">
+    <div class="divider" v-if="APP_CONFIG.showPhoneLogin || APP_CONFIG.showQrLogin">
       <el-divider>
         <span class="divider-text">或使用以下方式登录</span>
       </el-divider>
     </div>
 
     <div class="social-login">
-      <el-button class="social-btn" @click="emits('goToMode', 'mobile')">
+      <el-button
+        class="social-btn"
+        @click="emits('goToMode', 'mobile')"
+        v-if="APP_CONFIG.showPhoneLogin"
+      >
         <template #icon>
           <el-icon>
             <component :is="menuStore.iconComponents['Element:Iphone']" />
@@ -70,7 +74,7 @@
         </template>
         手机号登录
       </el-button>
-      <el-button class="social-btn" @click="emits('goToMode', 'qr')">
+      <el-button class="social-btn" @click="emits('goToMode', 'qr')" v-if="APP_CONFIG.showQrLogin">
         <template #icon>
           <el-icon>
             <component :is="menuStore.iconComponents['Element:FullScreen']" />
@@ -80,7 +84,7 @@
       </el-button>
     </div>
 
-    <p class="register-link">
+    <p class="register-link" v-if="APP_CONFIG.showRegister">
       <span>还没有账号？</span>
       <el-link type="primary" :underline="false" @click="emits('goToMode', 'register')"
         >立即注册</el-link
@@ -90,6 +94,7 @@
 </template>
 
 <script setup lang="ts">
+import { APP_CONFIG } from '@/config/app.config'
 import platform from 'platform'
 import { login, addLoginLog } from '@/api/login'
 import { dayjs, ElMessage } from 'element-plus'

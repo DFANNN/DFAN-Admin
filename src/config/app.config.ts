@@ -14,6 +14,12 @@ interface AppConfig {
   faviconSrc: string
   logoSrc: string
   showThemeConfig: boolean
+  showI18n: boolean
+  showFullscreen: boolean
+  showNotification: boolean
+  showPhoneLogin: boolean
+  showQrLogin: boolean
+  showRegister: boolean
   mock: {
     defaultMenuTreeData: Menu[]
     defaultRoles: Role[]
@@ -29,11 +35,11 @@ export const APP_CONFIG: AppConfig = {
 
   // Mock / IndexedDB 默认初始化配置
   mock: {
-    // 默认菜单
+    //  IndexedDB数据库默认菜单
     defaultMenuTreeData: DEFAULT_MENU_TREE_DATA,
-    // 默认角色
+    // IndexedDB数据库默认角色
     defaultRoles: DEFAULT_ROLES,
-    // 默认用户
+    // IndexedDB数据库默认用户
     defaultUsers: DEFAULT_USERS,
   },
 
@@ -49,7 +55,7 @@ export const APP_CONFIG: AppConfig = {
   // 是否展示主题配置
   showThemeConfig: true,
 
-  // 主题配置默认 JSON
+  // 主题配置默认 JSON默认值
   themeConfig: {},
 
   // 是否展示全屏/退出全屏按钮
@@ -69,4 +75,7 @@ export const APP_CONFIG: AppConfig = {
 
   // 登录页面是否展示扫码登录
   showQrLogin: true,
+
+  // 登录页面是否展示注册账号
+  showRegister: true,
 }

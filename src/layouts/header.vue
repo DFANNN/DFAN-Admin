@@ -26,7 +26,7 @@
     <div class="header-right">
       <div class="action-buttons">
         <!-- 主题配置 -->
-        <HoverAnimateWrapper name="rotate">
+        <HoverAnimateWrapper name="rotate" v-if="APP_CONFIG.showThemeConfig">
           <IconButton
             icon="HOutline:Cog6ToothIcon"
             tooltip="主题配置"
@@ -35,7 +35,7 @@
         </HoverAnimateWrapper>
 
         <!-- 全屏 -->
-        <HoverAnimateWrapper name="pulse">
+        <HoverAnimateWrapper name="pulse" v-if="APP_CONFIG.showFullscreen">
           <IconButton
             :tooltip="isFullscreen ? '退出全屏' : '全屏'"
             :icon="
@@ -46,10 +46,10 @@
         </HoverAnimateWrapper>
 
         <!-- 国际化 -->
-        <I18nDropdown />
+        <I18nDropdown v-if="APP_CONFIG.showI18n" />
 
         <!-- 消息通知 -->
-        <NotificationDropdown />
+        <NotificationDropdown v-if="APP_CONFIG.showNotification" />
       </div>
 
       <!-- 用户下拉菜单 -->
@@ -59,6 +59,7 @@
 </template>
 
 <script setup lang="ts">
+import { APP_CONFIG } from '@/config/app.config'
 import MenuView from '@/layouts/menu.vue'
 import UserDropdown from '@/layouts/userDropdown.vue'
 import BreadcrumbView from '@/layouts/breadcrumb.vue'

@@ -15,8 +15,8 @@
           </div>
           <!-- 操作按钮 -->
           <div class="top-actions">
-            <I18nDropdown />
-            <HoverAnimateWrapper name="rotate">
+            <I18nDropdown v-if="APP_CONFIG.showI18n" />
+            <HoverAnimateWrapper name="rotate" v-if="APP_CONFIG.showThemeConfig">
               <IconButton
                 icon="HOutline:Cog6ToothIcon"
                 tooltip="主题配置"
