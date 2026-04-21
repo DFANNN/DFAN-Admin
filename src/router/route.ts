@@ -1,6 +1,8 @@
 /**
  * name: 路由名称, 也用于keepAlive缓存，需要与组件名称一致
- * meta.keepAlive: 是否需要缓存
+ * meta.title: 菜单名称
+ * meta.icon: 菜单图标 (使用heroIcon图标库，图标名称格式为：图标集名称:图标名称，例如：HOutline:UserCircleIcon)
+ * meta.keepAlive: 是否需要缓存, 如果需要缓存，name必须与组件名称一致,动态路由组件名称生成规则是 路径最后一段首字母大写加View，例如：/system/user -> UserView
  *
  */
 export const staticRoutes = [

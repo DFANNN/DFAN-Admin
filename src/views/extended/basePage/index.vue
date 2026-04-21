@@ -328,7 +328,7 @@ const refreshHandle = (type: 'create' | 'update' | 'delete', deleteCount?: numbe
 import { ElMessage } from 'element-plus'
 import type { IFormConfig } from '@/types/components/page'
 
-defineOptions({ name: 'BasePageDocView' })
+defineOptions({ name: 'BasePageView' })
 
 interface IUserItem {
   id: number
