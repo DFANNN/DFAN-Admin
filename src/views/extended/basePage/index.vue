@@ -46,13 +46,14 @@
           </template>
 
           <template #tableOperationRight>
-            <el-tag type="info">已选 {{ selectedIds.length }} 项</el-tag>
+            <BaseTag type="info" :text="`已选 ${selectedIds.length} 项`" />
           </template>
 
           <template #status="{ row }">
-            <el-tag :type="row.status === 'active' ? 'success' : 'danger'">
-              {{ row.status === 'active' ? '启用' : '禁用' }}
-            </el-tag>
+            <BaseTag
+              :type="row.status === 'active' ? 'success' : 'danger'"
+              :text="row.status === 'active' ? '启用' : '禁用'"
+            />
           </template>
 
           <template #operation="{ row }">

@@ -8,13 +8,15 @@ export interface IAppConfig {
   name: string // 项目名称
   faviconSrc: string // Favicon src - 根据环境动态设置 base path
   logoSrc: string // Logo src
+  mobileBreakpoint: number // 小于该宽度时按移动端布局渲染
   showThemeConfig: boolean // 是否展示主题配置
   showI18n: boolean // 是否展示国际化
+  defaultLanguage: string // 国际化默认语言
   showFullscreen: boolean // 是否展示全屏/退出全屏按钮
   showNotification: boolean // 是否展示消息通知
   showPhoneLogin: boolean // 登录页面是否展示手机号登录
   showQrLogin: boolean // 登录页面是否展示扫码登录
-  showRegister: boolean // 登录页面是否展示注册账号
+  showRegister: boolean // 是否展示注册账号
   themeConfig: IThemeConfig // 主题配置默认 JSON默认值
   mock: {
     defaultMenuTreeData: Menu[] // IndexedDB数据库默认菜单

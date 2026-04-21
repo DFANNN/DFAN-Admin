@@ -32,6 +32,9 @@ export const APP_CONFIG: IAppConfig = {
   // Logo src
   logoSrc: new URL('@/assets/logo.svg', import.meta.url).href,
 
+  // 移动端断点、小于该宽度时按移动端布局渲染（单位px）
+  mobileBreakpoint: 992,
+
   // 是否展示主题配置
   showThemeConfig: true,
 

@@ -3,6 +3,7 @@ import * as ElIcons from '@element-plus/icons-vue'
 import * as HeroOutlineIcons from '@heroicons/vue/24/outline'
 import * as HeroSolidIcons from '@heroicons/vue/24/solid'
 import { useWindowSize } from '@vueuse/core'
+import { APP_CONFIG } from '@/config/app.config'
 import { userPermissions } from '@/api/login'
 import type { IMenuItem } from '@/types/system/menu'
 
@@ -43,7 +44,7 @@ export const useMenuStore = defineStore('menu', () => {
   // 响应式监听窗口宽度
   const { width } = useWindowSize()
   // 是否为手机模式
-  const isMobile = computed(() => width.value < 992)
+  const isMobile = computed(() => width.value < APP_CONFIG.mobileBreakpoint)
 
   // 如果是手机模式,菜单不折叠
   watchEffect(() => {
