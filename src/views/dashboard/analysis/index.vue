@@ -46,7 +46,7 @@ const revenueProfitAnalysisRef = useTemplateRef<InstanceType<typeof RevenueProfi
 
 //  监听主题色和主题模式变化，更新图表颜色
 watch(
-  [() => themeStore.themeMode, () => themeStore.primaryColor],
+  [() => themeStore.themeConfig.themeMode, () => themeStore.themeConfig.primaryColor],
   async () => {
     await nextTick()
     marketShareRef.value?.updateColorTrigger()

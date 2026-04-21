@@ -76,7 +76,7 @@ const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
 
 // 显示顶部菜单
 const showTopMenu = computed(() => {
-  return themeStore.layout === 'topMode' && !menuStore.isMobile
+  return themeStore.themeConfig.layout === 'topMode' && !menuStore.isMobile
 })
 
 // 处理菜单切换

@@ -12,7 +12,7 @@
       :class="{ '--menu-border': menuStore.isMobile }"
     >
       <Transition name="bounce">
-        <el-menu-item class="logo" v-if="themeStore.showLogo">
+        <el-menu-item class="logo" v-if="themeStore.themeConfig.showLogo">
           <img :src="APP_CONFIG.logoSrc" alt="logo" class="logo-img" />
           <span class="logo-title" :style="{ color: logoTitleColor }">{{ APP_CONFIG.name }}</span>
         </el-menu-item>
@@ -39,29 +39,29 @@ const activeMenu = computed(() => route.path)
 // 菜单模式
 const menuMode = computed(() => {
   if (menuStore.isMobile) return 'vertical'
-  return themeStore.layout === 'topMode' ? 'horizontal' : 'vertical'
+  return themeStore.themeConfig.layout === 'topMode' ? 'horizontal' : 'vertical'
 })
 
 // 菜单颜色配置
 const menuBackgroundColor = computed(() => {
-  if (themeStore.themeMode === 'dark') return '#141414'
-  if (themeStore.layout === 'topMode') return '#ffffff'
-  return themeStore.sidebarMode === 'dark' ? '#141414' : '#ffffff'
+  if (themeStore.themeConfig.themeMode === 'dark') return '#141414'
+  if (themeStore.themeConfig.layout === 'topMode') return '#ffffff'
+  return themeStore.themeConfig.sidebarMode === 'dark' ? '#141414' : '#ffffff'
 })
 
 const menuTextColor = computed(() => {
-  if (themeStore.themeMode === 'dark') return '#e5e7eb'
-  if (themeStore.layout === 'topMode') return '#303133'
-  return themeStore.sidebarMode === 'dark' ? '#e5e7eb' : '#303133'
+  if (themeStore.themeConfig.themeMode === 'dark') return '#e5e7eb'
+  if (themeStore.themeConfig.layout === 'topMode') return '#303133'
+  return themeStore.themeConfig.sidebarMode === 'dark' ? '#e5e7eb' : '#303133'
 })
 
 const menuActiveTextColor = computed(() => {
-  return themeStore.primaryColor
+  return themeStore.themeConfig.primaryColor
 })
 
 const logoTitleColor = computed(() => {
-  if (themeStore.layout === 'topMode') return ''
-  if (themeStore.sidebarMode === 'dark') return '#ffffff'
+  if (themeStore.themeConfig.layout === 'topMode') return ''
+  if (themeStore.themeConfig.sidebarMode === 'dark') return '#ffffff'
   return ''
 })
 

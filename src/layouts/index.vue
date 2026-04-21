@@ -1,6 +1,6 @@
 <template>
   <div class="layout-container">
-    <LeftMode v-if="themeStore.layout === 'leftMode'" />
+    <LeftMode v-if="themeStore.themeConfig.layout === 'leftMode'" />
     <TopMode v-else />
     <ThemeConfig />
 

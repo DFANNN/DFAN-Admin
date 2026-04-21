@@ -4,7 +4,7 @@
       <HeaderView />
     </el-header>
     <Transition name="fade-slide" mode="out-in">
-      <TabsView v-if="themeStore.showTabs" />
+      <TabsView v-if="themeStore.themeConfig.showTabs" />
     </Transition>
     <el-scrollbar>
       <el-main class="main">

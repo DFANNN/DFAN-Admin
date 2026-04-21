@@ -157,7 +157,7 @@ export const useTableHeight = (
     const headerHeight = isFullscreen ? 0 : 50
 
     // 4. Tabs 高度（全屏时为 0，否则根据配置显示）
-    const tabsHeight = isFullscreen ? 0 : themeStore.showTabs ? 40 : 0
+    const tabsHeight = isFullscreen ? 0 : themeStore.themeConfig.showTabs ? 40 : 0
 
     // 5. Main 容器的 padding（全屏时为 0，否则上下各 16px，共 32px）
     const mainPadding = isFullscreen ? 0 : 32

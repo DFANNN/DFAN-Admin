@@ -5,29 +5,9 @@
 import { DEFAULT_MENU_TREE_DATA } from '@/config/defaultSeeds/menus'
 import { DEFAULT_ROLES } from '@/config/defaultSeeds/roles'
 import { DEFAULT_USERS } from '@/config/defaultSeeds/users'
-import type { Role, User, Menu } from '@/mocks/db/types'
+import type { IAppConfig } from '@/types/app.config'
 
-interface AppConfig {
-  enableMSW: boolean
-  listenMSWPath: string
-  name: string
-  faviconSrc: string
-  logoSrc: string
-  showThemeConfig: boolean
-  showI18n: boolean
-  showFullscreen: boolean
-  showNotification: boolean
-  showPhoneLogin: boolean
-  showQrLogin: boolean
-  showRegister: boolean
-  mock: {
-    defaultMenuTreeData: Menu[]
-    defaultRoles: Role[]
-    defaultUsers: User[]
-  }
-}
-
-export const APP_CONFIG: AppConfig = {
+export const APP_CONFIG: IAppConfig = {
   // 是否启用 MSW
   enableMSW: true,
   // MSW 监听的请求路径
@@ -56,7 +36,14 @@ export const APP_CONFIG: AppConfig = {
   showThemeConfig: true,
 
   // 主题配置默认 JSON默认值
-  themeConfig: {},
+  themeConfig: {
+    themeMode: 'light',
+    primaryColor: '#8B5CF6',
+    layout: 'leftMode',
+    sidebarMode: 'light',
+    showLogo: true,
+    showTabs: true,
+  },
 
   // 是否展示全屏/退出全屏按钮
   showFullscreen: true,

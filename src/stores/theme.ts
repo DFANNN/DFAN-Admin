@@ -1,25 +1,17 @@
 import { defineStore } from 'pinia'
 import { useDark, useToggle } from '@vueuse/core'
+import { APP_CONFIG } from '@/config/app.config'
+import { STORAGE_KEYS, storage } from '@/utils/storage'
+import { useClipboard } from '@vueuse/core'
+import { ElMessage } from 'element-plus'
+import type { IThemeConfig, IThemeMode, ILayoutMode, ISidebarMode } from '@/types/themeConfig'
 
 export const useThemeStore = defineStore('theme', () => {
-  const themeConfig = ref({})
-
   const isDark = useDark()
   const toggleDark = useToggle(isDark)
 
-  // 主题模式: light, dark
-  const themeMode = ref<'light' | 'dark'>(
-    (localStorage.getItem('themeMode') as 'light' | 'dark') || 'light',
-  )
-
-  // 切换主题模式
-  const toggleThemeMode = (newVal: 'light' | 'dark') => {
-    themeMode.value = newVal
-    toggleDark(newVal === 'dark')
-    localStorage.setItem('themeMode', newVal)
-    // 更新主题颜色变量
-    setPrimaryColor(primaryColor.value)
-  }
+  // 主题配置抽屉的开关状态
+  const themeConfigDrawerOpen = ref(false)
 
   // 主题颜色预设
   const primaryColorOptions = [
@@ -38,7 +30,7 @@ export const useThemeStore = defineStore('theme', () => {
   const setPrimaryColor = (color: string) => {
     const root = document.documentElement
     // 判断是否是暗黑模式（通常 Element Plus 会在 html 标签加 .dark 类）
-    const isDark = themeMode.value === 'dark'
+    const isDark = themeConfig.value.themeMode === 'dark'
 
     // 关键：在 Dark 模式下，Light 系列变量应该向“背景色”靠拢，而不是白色
     // Element Plus 暗黑模式默认背景色通常是 #141414
@@ -79,58 +71,84 @@ export const useThemeStore = defineStore('theme', () => {
     )
   }
 
-  // 主题颜色
-  const primaryColor = ref(localStorage.getItem('theme-color-primary') || '#8B5CF6')
-  setPrimaryColor(primaryColor.value)
+  // 主题配置(默认读取 localStorage，如果没有则使用 app.config.ts 中的默认值)
+  const themeConfig = ref<IThemeConfig>(
+    storage.get<IThemeConfig>(STORAGE_KEYS.THEME_CONFIG) ||
+      JSON.parse(JSON.stringify(APP_CONFIG.themeConfig)),
+  )
+  // 初始化时根据主题模式设置主题色变量
+  setPrimaryColor(themeConfig.value.primaryColor)
+
+  // 切换主题模式
+  const toggleThemeMode = (newVal: IThemeMode) => {
+    themeConfig.value.themeMode = newVal
+    toggleDark(newVal === 'dark')
+    // 更新主题颜色变量
+    setPrimaryColor(themeConfig.value.primaryColor)
+  }
+
+  //  切换布局方式
+  const toggleLayout = (newVal: ILayoutMode) => {
+    themeConfig.value.layout = newVal
+  }
 
   // 切换主题颜色
   const togglePrimaryColor = (colorValue: string) => {
-    primaryColor.value = colorValue
-    localStorage.setItem('theme-color-primary', colorValue)
+    themeConfig.value.primaryColor = colorValue
     setPrimaryColor(colorValue)
   }
 
-  // 布局方式: leftMode, topMode
-  const layout = ref<'leftMode' | 'topMode'>(
-    (localStorage.getItem('layout') as 'leftMode' | 'topMode') || 'leftMode',
-  )
-  const toggleLayout = (newVal: 'leftMode' | 'topMode') => {
-    layout.value = newVal
-    localStorage.setItem('layout', newVal)
+  // 切换侧边栏配色
+  const toggleSidebarMode = (newVal: ISidebarMode) => {
+    themeConfig.value.sidebarMode = newVal
   }
 
-  // 侧边栏配色
-  const sidebarMode = ref<'light' | 'dark'>(
-    (localStorage.getItem('sidebarMode') as 'light' | 'dark') || 'light',
-  )
-  const toggleSidebarMode = (newVal: 'light' | 'dark') => {
-    sidebarMode.value = newVal
-    localStorage.setItem('sidebarMode', newVal)
-  }
-
-  // 布局元素
-  const showLogo = ref(JSON.parse(localStorage.getItem('showLogo') || 'true'))
+  // 切换是否显示 Logo
   const toggleShowLogo = (value: boolean) => {
-    showLogo.value = value
-    localStorage.setItem('showLogo', JSON.stringify(showLogo.value))
+    themeConfig.value.showLogo = value
   }
-  const showTabs = ref(true)
 
-  const themeConfigDrawerOpen = ref(false)
+  // 切换是否显示标签页
+  const toggleShowTabs = (value: boolean) => {
+    themeConfig.value.showTabs = value
+  }
+
+  const { copy } = useClipboard()
+  // 复制当前主题配置到剪贴板
+  const copyThemeConfig = async () => {
+    await copy(JSON.stringify(themeConfig.value, null, 2))
+    ElMessage.success('主题配置已复制，请到 src/config/app.config.ts 的 themeConfig 中替换默认值')
+  }
+
+  // 重置主题配置为默认值
+  const resetThemeConfig = () => {
+    themeConfig.value = JSON.parse(JSON.stringify(APP_CONFIG.themeConfig)) // 深拷贝默认配置
+    toggleDark(themeConfig.value.themeMode === 'dark')
+    setPrimaryColor(themeConfig.value.primaryColor)
+    ElMessage.success('已恢复默认主题配置')
+  }
+
+  // 监听 themeConfig 的变化，实时保存到 localStorage
+  watch(
+    themeConfig,
+    (newConfig) => {
+      console.log(`output->themeConfig更新了`, newConfig)
+      storage.set(STORAGE_KEYS.THEME_CONFIG, newConfig)
+    },
+    { deep: true, immediate: true },
+  )
 
   return {
-    layout,
-    themeMode,
-    primaryColor,
-    sidebarMode,
-    showLogo,
-    showTabs,
+    themeConfig,
     themeConfigDrawerOpen,
     primaryColorOptions,
     toggleThemeMode,
-    toggleLayout,
     togglePrimaryColor,
     toggleSidebarMode,
+    toggleLayout,
     toggleShowLogo,
+    toggleShowTabs,
+    copyThemeConfig,
+    resetThemeConfig,
   }
 })

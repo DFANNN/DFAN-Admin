@@ -1,5 +1,5 @@
 <template>
-  <el-drawer v-model="themeStore.themeConfigDrawerOpen" :size="360" title="主题配置">
+  <el-drawer v-model="themeStore.themeConfigDrawerOpen" :size="380" title="主题配置">
     <!-- 主题模式 -->
     <div class="config-section">
       <div class="section-title">
@@ -10,7 +10,7 @@
         <div class="mode-chip-group">
           <div
             class="mode-chip"
-            :class="{ active: themeStore.themeMode === 'light' }"
+            :class="{ active: themeStore.themeConfig.themeMode === 'light' }"
             @click="themeStore.toggleThemeMode('light')"
           >
             <el-icon><Sunny /></el-icon>
@@ -18,7 +18,7 @@
           </div>
           <div
             class="mode-chip"
-            :class="{ active: themeStore.themeMode === 'dark' }"
+            :class="{ active: themeStore.themeConfig.themeMode === 'dark' }"
             @click="themeStore.toggleThemeMode('dark')"
           >
             <el-icon><Moon /></el-icon>
@@ -38,7 +38,7 @@
         <div class="layout-preview-group">
           <div
             class="layout-preview-item"
-            :class="{ active: themeStore.layout === 'leftMode' }"
+            :class="{ active: themeStore.themeConfig.layout === 'leftMode' }"
             @click="themeStore.toggleLayout('leftMode')"
           >
             <div class="layout-preview left-layout">
@@ -52,7 +52,7 @@
           </div>
           <div
             class="layout-preview-item"
-            :class="{ active: themeStore.layout === 'topMode' }"
+            :class="{ active: themeStore.themeConfig.layout === 'topMode' }"
             @click="(themeStore.toggleLayout('topMode'), (menuStore.isCollapse = false))"
           >
             <div class="layout-preview top-layout">
@@ -77,7 +77,7 @@
             v-for="color in themeStore.primaryColorOptions"
             :key="color.value"
             class="color-chip"
-            :class="{ active: themeStore.primaryColor === color.value }"
+            :class="{ active: themeStore.themeConfig.primaryColor === color.value }"
             @click="themeStore.togglePrimaryColor(color.value)"
           >
             <span class="chip-dot" :style="{ backgroundColor: color.value }"></span>
@@ -87,7 +87,7 @@
         <div class="custom-color">
           <span>自定义</span>
           <el-color-picker
-            v-model="themeStore.primaryColor"
+            v-model="themeStore.themeConfig.primaryColor"
             show-alpha
             @change="(value: string | null) => themeStore.togglePrimaryColor(value as string)"
           />
@@ -99,7 +99,9 @@
     <Transition name="slide-left">
       <div
         class="config-section"
-        v-if="themeStore.themeMode !== 'dark' && themeStore.layout !== 'topMode'"
+        v-if="
+          themeStore.themeConfig.themeMode !== 'dark' && themeStore.themeConfig.layout !== 'topMode'
+        "
       >
         <div class="section-title">
           <el-icon><Menu /></el-icon>
@@ -107,13 +109,9 @@
         </div>
         <div class="section-content">
           <div class="dual-item">
-            <el-radio-group v-model="themeStore.sidebarMode" class="mode-radio-group">
-              <el-radio-button value="light" @click="themeStore.toggleSidebarMode('light')">
-                浅色
-              </el-radio-button>
-              <el-radio-button value="dark" @click="themeStore.toggleSidebarMode('dark')">
-                深色
-              </el-radio-button>
+            <el-radio-group v-model="themeStore.themeConfig.sidebarMode" class="mode-radio-group">
+              <el-radio-button value="light"> 浅色 </el-radio-button>
+              <el-radio-button value="dark"> 深色 </el-radio-button>
             </el-radio-group>
           </div>
         </div>
@@ -129,14 +127,31 @@
       <div class="section-content toggles-row">
         <div class="toggle-item">
           <span>显示 Logo</span>
-          <el-switch v-model="themeStore.showLogo" @change="themeStore.toggleShowLogo as any" />
+          <el-switch v-model="themeStore.themeConfig.showLogo" />
         </div>
         <div class="toggle-item">
           <span>显示标签页</span>
-          <el-switch v-model="themeStore.showTabs" />
+          <el-switch v-model="themeStore.themeConfig.showTabs" />
         </div>
       </div>
     </div>
+
+    <template #footer>
+      <div class="config-footer">
+        <el-tooltip placement="top">
+          <template #content>
+            复制当前主题配置 JSON<br />
+            可粘贴到 src/config/app.config.ts 的 themeConfig 中替换默认值<br />
+            需要清空localStorage 中的主题配置才能生效
+          </template>
+          <el-button type="primary" plain @click="themeStore.copyThemeConfig">复制主题</el-button>
+        </el-tooltip>
+
+        <el-tooltip content="恢复为项目默认主题配置" placement="top">
+          <el-button type="info" plain @click="themeStore.resetThemeConfig">重置主题</el-button>
+        </el-tooltip>
+      </div>
+    </template>
   </el-drawer>
 </template>
 
@@ -445,5 +460,12 @@ const menuStore = useMenuStore()
   border-radius: 6px;
   background: var(--el-bg-color-overlay);
   transition: all 0.3s;
+}
+
+.config-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 </style>
