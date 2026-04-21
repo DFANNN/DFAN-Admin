@@ -71,7 +71,6 @@ const confirm = async () => {
   await submitFormRef.value?.validate()
   // 深拷贝数据
   const { cloned } = useCloned(submitForm.value)
-  console.log(cloned.value)
   emits('refresh', submitForm.value.id ? 'update' : 'create', cloned.value)
   ElMessage.success(submitForm.value.id ? '编辑成功' : '新增成功')
   close()

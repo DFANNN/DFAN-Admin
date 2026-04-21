@@ -132,7 +132,6 @@ export const useThemeStore = defineStore('theme', () => {
   watch(
     themeConfig,
     (newConfig) => {
-      console.log(`output->themeConfig更新了`, newConfig)
       storage.set(STORAGE_KEYS.THEME_CONFIG, newConfig)
     },
     { deep: true, immediate: true },

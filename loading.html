@@ -9,8 +9,8 @@
   // 检测 dark 模式并应用到 loading
   ;(function () {
     // 从 localStorage 读取主题模式
-    const themeMode = localStorage.getItem('themeMode') || 'light'
-    const isDark = themeMode === 'dark'
+    const themeConfig = JSON.parse(localStorage.getItem('themeConfig') || '{}')
+    const isDark = themeConfig.themeMode === 'dark'
 
     // 如果 html 标签已经有 dark 类，也认为是 dark 模式
     const htmlHasDark = document.documentElement.classList.contains('dark')
