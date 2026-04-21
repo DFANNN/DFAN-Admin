@@ -291,7 +291,7 @@
 </template>
 
 <script setup lang="ts">
-defineOptions({ name: '404Exception' })
+defineOptions({ name: '404View' })
 </script>
 
 <style scoped lang="scss">

@@ -260,7 +260,7 @@ const tagPropsTableData = [
   {
     name: 'type',
     type: "'success' | 'info' | 'warning' | 'danger' | 'primary'",
-    default: "''",
+    default: "'primary'",
     description: '标签类型，继承自 el-tag',
   },
   {
@@ -402,8 +402,7 @@ const tagEventsTableData = [
 
         code {
           color: var(--el-text-color-primary);
-          font-family:
-            'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+          font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
         }
       }
     }
