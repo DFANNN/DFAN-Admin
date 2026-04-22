@@ -74,16 +74,13 @@ export const useUserStore = defineStore('user', () => {
   }
 
   // 获取地址信息
-  const getAddress = () => {
-    fetch('https://ipapi.co/json/')
-      .then((res) => res.json())
-      .then((data) => {
-        address.value = {
-          country: data.country_name,
-          region: data.region,
-          city: data.city,
-        }
-      })
+  const getAddress = async () => {
+    const ipRes = await fetch('https://ipapi.co/json/').then((res) => res.json())
+    address.value = {
+      country: ipRes.country_name,
+      region: ipRes.region,
+      city: ipRes.city,
+    }
   }
 
   // --------------- 个人中心 ---------------

@@ -198,10 +198,10 @@ const handleLogin = async () => {
     } else {
       localStorage.removeItem(REMEMBER_USERNAME_KEY)
     }
-    // 添加登录日志
-    await handleAddLoginLog()
     ElMessage.success('登录成功')
     router.push('/')
+    // 添加登录日志
+    await handleAddLoginLog()
   } finally {
     loading.value = false
   }
