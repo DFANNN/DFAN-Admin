@@ -11,5 +11,8 @@
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "cSpell.words": ["DFAN", "echart", "echarts", "POPCONFIRM", "Shenzhen", "VITE", "vueuse"],
-  "i18n-ally.localesPaths": ["src/i18n", "src/i18n/lang"]
+  "i18n-ally.sortKeys": true,
+  "i18n-ally.sourceLanguage": "zh-CN",
+  "i18n-ally.keystyle": "nested",
+  "i18n-ally.localesPaths": ["src/i18n", "src/i18n/langs"]
 }

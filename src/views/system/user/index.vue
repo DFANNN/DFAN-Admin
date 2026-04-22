@@ -16,7 +16,7 @@
           :icon="menuStore.iconComponents.Plus"
           @click="userCreateRef?.showDialog(undefined)"
           v-permission="['user:add']"
-          >新增用户</el-button
+          >{{ $t('button.addUser') }}</el-button
         >
         <el-button
           type="danger"
@@ -24,7 +24,7 @@
           :disabled="!useButtonPermission(['user:delete'], [() => !!deleteUserIds.length]).value"
           @click="openDeleteDialog"
         >
-          批量删除
+          {{ $t('button.batchDelete') }}
         </el-button>
       </template>
       <template #roleId="{ row }">
@@ -48,7 +48,7 @@
           @click="userCreateRef?.showDialog(row.id)"
           v-permission="['user:edit']"
         >
-          编辑
+          {{ $t('button.edit') }}
         </el-button>
         <el-popconfirm
           title="确定要删除选中的用户吗？"
@@ -57,7 +57,9 @@
           @confirm="deleteUserHandle([row.id])"
         >
           <template #reference>
-            <el-button type="danger" link v-permission="['user:delete']"> 删除 </el-button>
+            <el-button type="danger" link v-permission="['user:delete']">
+              {{ $t('button.delete') }}
+            </el-button>
           </template>
         </el-popconfirm>
       </template>

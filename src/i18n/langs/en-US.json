@@ -1,0 +1,10 @@
+{
+  "button": {
+    "addUser": "Add new user",
+    "batchDelete": "Batch delete",
+    "delete": "delete",
+    "edit": "edit",
+    "query": "Query",
+    "reset": "reset"
+  }
+}
