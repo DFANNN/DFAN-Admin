@@ -1,11 +1,12 @@
-// 统一管理所有 localStorage 的 key
+// 统一管理所有 localStorage 的 key，避免业务代码中散落魔法字符串。
 
 // localStorage 的 key
 export const STORAGE_KEYS = {
   THEME_CONFIG: 'themeConfig', // 主题配置
+  LANG: 'lang', // 当前语言
 }
 
-// 定义 StorageKey 类型，限制只能使用 STORAGE_KEYS 中的 key
+// 定义 StorageKey 类型，限制只能使用 STORAGE_KEYS 中声明过的 key。
 type StorageKey = (typeof STORAGE_KEYS)[keyof typeof STORAGE_KEYS]
 
 export const storage = {
@@ -32,7 +33,6 @@ export const storage = {
   set: <T>(key: StorageKey, value: T): void => localStorage.setItem(key, JSON.stringify(value)),
 
   /**
-   *
    * 删除指定 localStorage 条目
    * @param key 存储键名
    */

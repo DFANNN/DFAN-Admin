@@ -1,6 +1,7 @@
 // app.config的类型定义文件
 import type { Role, User, Menu } from '@/mocks/db/types'
 import type { IThemeConfig } from '@/types/themeConfig'
+import type { ILangCode } from '@/types/lang'
 
 export interface IAppConfig {
   enableMSW: boolean // 是否启用 MSW
@@ -11,7 +12,7 @@ export interface IAppConfig {
   mobileBreakpoint: number // 小于该宽度时按移动端布局渲染
   showThemeConfig: boolean // 是否展示主题配置
   showI18n: boolean // 是否展示国际化
-  defaultLanguage: string // 国际化默认语言
+  defaultLang: ILangCode // 国际化默认语言
   showFullscreen: boolean // 是否展示全屏/退出全屏按钮
   showNotification: boolean // 是否展示消息通知
   showPhoneLogin: boolean // 登录页面是否展示手机号登录

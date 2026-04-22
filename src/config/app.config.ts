@@ -55,7 +55,7 @@ export const APP_CONFIG: IAppConfig = {
   showI18n: true,
 
   // 国际化默认语言
-  defaultLanguage: 'zh-CN',
+  defaultLang: 'zh-CN',
 
   // 是否展示消息通知
   showNotification: true,

@@ -1,10 +1,6 @@
+<!-- 国际化下拉菜单 -->
 <template>
-  <el-dropdown
-    trigger="click"
-    :show-arrow="false"
-    ref="notificationDropdownRef"
-    popper-class="i18n-dropdown-popper"
-  >
+  <el-dropdown trigger="click" :show-arrow="false" popper-class="i18n-dropdown-popper">
     <HoverAnimateWrapper name="rotate">
       <IconButton icon="HOutline:GlobeAltIcon" />
     </HoverAnimateWrapper>
@@ -12,25 +8,14 @@
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item
-          :class="{ 'is-active': currentLanguage === 'CN' }"
-          @click="currentLanguage = 'CN'"
+          v-for="item in langStore.langOptions"
+          :key="item.code"
+          :class="{ 'is-active': langStore.currentLang === item.code }"
+          @click="langStore.setLang(item.code)"
         >
-          <span class="language-code">CN</span>
-          <span class="language-name">简体中文</span>
-        </el-dropdown-item>
-        <el-dropdown-item
-          :class="{ 'is-active': currentLanguage === 'HK' }"
-          @click="currentLanguage = 'HK'"
-        >
-          <span class="language-code">HK</span>
-          <span class="language-name">繁体中文</span>
-        </el-dropdown-item>
-        <el-dropdown-item
-          :class="{ 'is-active': currentLanguage === 'EN' }"
-          @click="currentLanguage = 'EN'"
-        >
-          <span class="language-code">EN</span>
-          <span class="language-name">English</span>
+          <!-- shortCode 仅用于展示，不作为真实语言参数使用 -->
+          <span class="language-code">{{ item.shortCode }}</span>
+          <span class="language-name">{{ item.label }}</span>
         </el-dropdown-item>
       </el-dropdown-menu>
     </template>
@@ -38,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-const currentLanguage = ref<string>('CN')
+const langStore = useLangStore()
 </script>
 
 <style scoped lang="scss">

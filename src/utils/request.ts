@@ -1,6 +1,7 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios'
 import { ElMessage } from 'element-plus'
 import router from '@/router'
+import { useLangStore } from '@/stores/lang'
 
 // 创建 axios 实例
 const service: AxiosInstance = axios.create({
@@ -15,9 +16,19 @@ const service: AxiosInstance = axios.create({
 service.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token') || ''
+    const langStore = useLangStore()
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
+
+    // 将当前应用语言统一传给后端
+    // Accept-Language 是标准 HTTP 头，后端通常可以直接识别。
+    // X-Locale 是额外补充的业务头，便于后端在需要时做更明确的自定义处理。
+    // 这里统一传递 langStore.currentLang，避免请求层与 i18n 层使用不同的语言参数。
+    config.headers['Accept-Language'] = langStore.currentLang
+    config.headers['X-Locale'] = langStore.currentLang
+
     return config
   },
   (error) => {

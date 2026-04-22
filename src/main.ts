@@ -12,10 +12,11 @@ import VXETablePlugin from '@/plugins/vxeTable' // VXE Table 插件
 import '@/plugins/echarts' // ECharts 插件
 import { createApp, nextTick } from 'vue'
 import { createPinia } from 'pinia'
+import { i18n } from '@/i18n'
 import App from '@/App.vue'
 import router from '@/router/index'
 
-//  动态设置favicon和项目名称
+// 动态设置 favicon 和项目名称。
 const initAppConfig = () => {
   document.title = APP_CONFIG.name
 
@@ -28,7 +29,7 @@ const initAppConfig = () => {
   faviconLink.href = APP_CONFIG.faviconSrc
 }
 
-// 启动 MSW 并初始化 IndexedDB 数据
+// 启动 MSW 并初始化 IndexedDB 数据。
 const startMocksIfEnabled = async () => {
   if (!APP_CONFIG.enableMSW) return
 
@@ -50,7 +51,7 @@ const startMocksIfEnabled = async () => {
   await initData()
 }
 
-// 启动应用
+// 启动应用。
 const startApp = async () => {
   await startMocksIfEnabled()
 
@@ -60,7 +61,12 @@ const startApp = async () => {
   // 注册 VXE Table 插件
   VXETablePlugin(app)
 
+  // 先注册 pinia，再注册依赖 store 或全局状态的插件。
   app.use(createPinia())
+
+  // 注册 vue-i18n
+  app.use(i18n)
+
   app.use(router)
 
   // 注册 Motion 动画插件
@@ -70,7 +76,8 @@ const startApp = async () => {
   app.directive('permission', permissionDirective)
 
   app.mount('#app')
-  // 动态设置favicon和项目名称
+
+  // 动态设置 favicon 和项目名称
   initAppConfig()
 
   // 等待路由完全准备好（包括动态路由加载）
