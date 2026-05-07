@@ -1,7 +1,9 @@
 <template>
   <div class="form-content-inner">
-    <h2 class="title">扫码登录</h2>
-    <p class="subtitle">请使用 {{ APP_CONFIG.name }} App 扫描二维码</p>
+    <h2 class="title">{{ $t('button.scanLogin') }}</h2>
+    <p class="subtitle">
+      {{ $t('login.scanTip') }} {{ APP_CONFIG.name }} {{ $t('login.scanAction') }}
+    </p>
 
     <div class="qr-container">
       <div class="qr-placeholder">
@@ -9,15 +11,17 @@
           <component :is="menuStore.iconComponents['Element:FullScreen']" />
         </el-icon>
         <div class="qr-mask" v-if="qrExpired">
-          <p>二维码已失效</p>
-          <el-button type="primary" link @click="qrExpired = false">点击刷新</el-button>
+          <p>{{ $t('login.expired') }}</p>
+          <el-button type="primary" link @click="qrExpired = false">{{
+            $t('button.refresh')
+          }}</el-button>
         </div>
       </div>
-      <p class="qr-tip">打开 App 扫一扫，快速安全登录</p>
+      <p class="qr-tip">{{ $t('login.scanLoginDescription') }}</p>
       <div class="back-link">
         <el-link :underline="false" @click="emits('goToMode', 'login')">
           <el-icon><component :is="menuStore.iconComponents['Element:ArrowLeft']" /></el-icon>
-          返回登录
+          {{ $t('login.backToLogin') }}
         </el-link>
       </div>
     </div>

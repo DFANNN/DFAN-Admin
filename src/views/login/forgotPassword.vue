@@ -1,17 +1,19 @@
 <template>
   <div class="form-content-inner">
-    <h2 class="title">找回密码</h2>
-    <p class="subtitle">请输入您的邮箱地址来重置密码</p>
+    <h2 class="title">{{ $t('login.forgotPasswordTitle') }}</h2>
+    <p class="subtitle">{{ $t('login.forgotPasswordSubtitle') }}</p>
 
     <el-form :model="forgotPasswordForm" label-position="top" class="forgot-password-form">
       <el-form-item>
-        <el-input v-model="forgotPasswordForm.email" placeholder="请输入注册时的邮箱地址" />
+        <el-input v-model="forgotPasswordForm.email" :placeholder="$t('login.emailPlaceholder')" />
       </el-form-item>
-      <el-button type="primary" class="submit-btn" @click="handleAction"> 发送重置链接 </el-button>
+      <el-button type="primary" class="submit-btn" @click="handleAction">{{
+        $t('login.sendResetLink')
+      }}</el-button>
       <div class="back-link">
         <el-link :underline="false" @click="emits('goToMode', 'login')">
           <el-icon><component :is="menuStore.iconComponents['Element:ArrowLeft']" /></el-icon>
-          返回登录
+          {{ $t('login.backToLogin') }}
         </el-link>
       </div>
     </el-form>
@@ -20,8 +22,10 @@
 
 <script setup lang="ts">
 import { ElMessage } from 'element-plus'
+import { useI18n } from 'vue-i18n'
 import type { IEmits } from '@/types/login'
 
+const { t } = useI18n()
 const emits = defineEmits<IEmits>()
 const menuStore = useMenuStore()
 
@@ -30,7 +34,7 @@ const forgotPasswordForm = ref({
 })
 
 const handleAction = () => {
-  ElMessage.success('敬请期待👀')
+  ElMessage.success(t('login.comingSoon'))
 }
 </script>
 

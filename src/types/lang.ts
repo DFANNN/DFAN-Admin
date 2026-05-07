@@ -1,7 +1,7 @@
 // 国际化的类型
 
 // 本地语言code
-export type ILangCode = 'zh-CN' | 'zh-TW' | 'en-US'
+export type ILangCode = 'zhCN' | 'zhTW' | 'enUS'
 // Element Plus 语言包key
 export type IElementLocale = 'EN' | 'zhCN' | 'zhTW'
 

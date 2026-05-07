@@ -15,7 +15,7 @@
       <el-form-item>
         <el-select
           v-model="rolePreset"
-          :placeholder="$t('placeholder.loginRole')"
+          :placeholder="$t('login.loginRolePlaceholder')"
           class="preset-select"
           @change="applyPreset"
         >
@@ -28,7 +28,7 @@
         </el-select>
       </el-form-item>
       <el-form-item prop="username">
-        <el-input v-model="loginForm.username" :placeholder="$t('placeholder.username')" />
+        <el-input v-model="loginForm.username" :placeholder="$t('login.usernamePlaceholder')" />
       </el-form-item>
 
       <el-form-item prop="password">
@@ -36,7 +36,7 @@
           v-model="loginForm.password"
           type="password"
           show-password
-          :placeholder="$t('placeholder.password')"
+          :placeholder="$t('login.passwordPlaceholder')"
         />
       </el-form-item>
 
@@ -98,6 +98,7 @@ import { APP_CONFIG } from '@/config/app.config'
 import platform from 'platform'
 import { login, addLoginLog } from '@/api/login'
 import { dayjs, ElMessage } from 'element-plus'
+import { useI18n } from 'vue-i18n'
 import type { FormInstance, FormRules } from 'element-plus'
 import type { ILoginMode } from '@/types/login'
 
@@ -107,6 +108,7 @@ interface IEmits {
 
 const emits = defineEmits<IEmits>()
 
+const { t } = useI18n()
 const router = useRouter()
 const menuStore = useMenuStore()
 const loginFormRef = useTemplateRef<FormInstance>('loginFormRef')
@@ -131,9 +133,13 @@ const roleOptions: Array<{
   value: RolePreset
   preset: { username: string; password: string }
 }> = [
-  { label: '超级管理员', value: 'super_admin', preset: { username: 'admin', password: 'admin' } },
-  { label: '普通用户', value: 'normal', preset: { username: 'user2', password: 'user2' } },
-  { label: '无权限用户', value: 'noperm', preset: { username: 'user3', password: 'user3' } },
+  {
+    label: t('login.superAdmin'),
+    value: 'super_admin',
+    preset: { username: 'admin', password: 'admin' },
+  },
+  { label: t('login.admin'), value: 'normal', preset: { username: 'user2', password: 'user2' } },
+  { label: t('login.guest'), value: 'noperm', preset: { username: 'user3', password: 'user3' } },
 ]
 
 // 切换角色
@@ -198,7 +204,7 @@ const handleLogin = async () => {
     } else {
       localStorage.removeItem(REMEMBER_USERNAME_KEY)
     }
-    ElMessage.success('登录成功')
+    ElMessage.success(t('login.loginSuccess'))
     router.push('/')
     // 添加登录日志
     await handleAddLoginLog()
@@ -208,8 +214,8 @@ const handleLogin = async () => {
 }
 
 const loginRules = reactive<FormRules>({
-  username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-  password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+  username: [{ required: true, message: t('login.usernamePlaceholder'), trigger: 'blur' }],
+  password: [{ required: true, message: t('login.passwordPlaceholder'), trigger: 'blur' }],
 })
 
 onMounted(() => {

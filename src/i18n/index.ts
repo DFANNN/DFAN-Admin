@@ -12,9 +12,9 @@ import type { ILangCode } from '@/types/lang'
  * 否则 store、请求头、Element Plus 和 vue-i18n 之间会出现不一致问题。
  */
 export const messages = {
-  'zh-CN': zhCN,
-  'zh-TW': zhTW,
-  'en-US': enUS,
+  zhCN,
+  zhTW,
+  enUS,
 } as const
 
 /**

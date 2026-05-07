@@ -9,16 +9,16 @@
     "login": "登录",
     "logout": "退出登录",
     "phoneLogin": "手机号登录",
-    "scanLogin": "扫码登录"
+    "scanLogin": "扫码登录",
+    "verifyAndLogin": "验证并登录",
+    "getCode": "获取验证码",
+    "refresh": "刷新",
+    "registerNow": "立即注册"
   },
   "tooltip": {
     "themeConfig": "主题配置"
   },
-  "placeholder": {
-    "loginRole": "请选择登录身份",
-    "username": "请输入用户名/邮箱",
-    "password": "请输入密码"
-  },
+  "placeholder": {},
   "login": {
     "title": "欢迎回来",
     "subtitle": "请输入用户名和密码登录",
@@ -26,6 +26,34 @@
     "rememberMe": "记住我",
     "forgotPassword": "忘记密码？",
     "noAccount": "还没有账号？",
-    "registerNow": "立即注册"
+    "registerNow": "立即注册",
+    "forgotPasswordTitle": "找回密码",
+    "forgotPasswordSubtitle": "请输入您的邮箱地址来重置密码",
+    "sendResetLink": "发送重置链接",
+    "backToLogin": "返回登录",
+    "mobileLoginSubtitle": "使用您的移动设备快速登录系统",
+    "scanTip": "请使用",
+    "scanAction": "App 扫描二维码",
+    "expired": "二维码已失效",
+    "scanLoginDescription": "打开 App 扫一扫，快速安全登录",
+    "createAccountTitle": "创建账号",
+    "createAccountJoin": "加入",
+    "createAccountSlogan": "，开始您的管理之旅",
+    "haveAccount": "已有账号？",
+    "loginRolePlaceholder": "请选择登录身份",
+    "usernamePlaceholder": "请输入用户名/邮箱",
+    "passwordPlaceholder": "请输入密码",
+    "emailPlaceholder": "请输入注册时的邮箱地址",
+    "phonePlaceholder": "请输入手机号码",
+    "codePlaceholder": "请输入验证码",
+    "registerUsernamePlaceholder": "设置用户名",
+    "registerEmailPlaceholder": "输入电子邮箱",
+    "registerPasswordPlaceholder": "设置登录密码",
+    "confirmPasswordPlaceholder": "确认您的密码",
+    "superAdmin": "超级管理员",
+    "admin": "管理员",
+    "guest": "无权限用户",
+    "loginSuccess": "登录成功",
+    "comingSoon": "敬请期待👀"
   }
 }

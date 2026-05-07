@@ -1,25 +1,27 @@
 <template>
   <div class="form-content-inner">
-    <h2 class="title">手机号登录</h2>
-    <p class="subtitle">使用您的移动设备快速登录系统</p>
+    <h2 class="title">{{ $t('button.phoneLogin') }}</h2>
+    <p class="subtitle">{{ $t('login.mobileLoginSubtitle') }}</p>
 
     <el-form :model="mobileLoginForm" label-position="top" class="mobile-login-form">
       <el-form-item>
-        <el-input v-model="mobileLoginForm.phone" placeholder="请输入手机号码">
+        <el-input v-model="mobileLoginForm.phone" :placeholder="$t('login.phonePlaceholder')">
           <template #prepend>+86</template>
         </el-input>
       </el-form-item>
       <el-form-item>
         <div class="code-input">
-          <el-input v-model="mobileLoginForm.code" placeholder="验证码" />
-          <el-button class="send-code-btn" @click="sendCode">获取验证码</el-button>
+          <el-input v-model="mobileLoginForm.code" :placeholder="$t('login.codePlaceholder')" />
+          <el-button class="send-code-btn" @click="sendCode">{{ $t('button.getCode') }}</el-button>
         </div>
       </el-form-item>
-      <el-button type="primary" class="submit-btn" @click="handleLogin"> 验证并登录 </el-button>
+      <el-button type="primary" class="submit-btn" @click="handleLogin">{{
+        $t('button.verifyAndLogin')
+      }}</el-button>
       <div class="back-link">
         <el-link :underline="false" @click="emits('goToMode', 'login')">
           <el-icon><component :is="menuStore.iconComponents['Element:ArrowLeft']" /></el-icon>
-          返回登录
+          {{ $t('login.backToLogin') }}
         </el-link>
       </div>
     </el-form>
@@ -28,8 +30,10 @@
 
 <script setup lang="ts">
 import { ElMessage } from 'element-plus'
+import { useI18n } from 'vue-i18n'
 import type { IEmits } from '@/types/login'
 
+const { t } = useI18n()
 const emits = defineEmits<IEmits>()
 const menuStore = useMenuStore()
 
@@ -39,11 +43,11 @@ const mobileLoginForm = ref({
 })
 
 const sendCode = () => {
-  ElMessage.success('敬请期待👀')
+  ElMessage.success(t('login.comingSoon'))
 }
 
 const handleLogin = () => {
-  ElMessage.success('敬请期待👀')
+  ElMessage.success(t('login.comingSoon'))
 }
 </script>
 

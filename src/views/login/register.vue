@@ -1,21 +1,29 @@
 <template>
   <div class="form-content-inner">
-    <h2 class="title">创建账号</h2>
-    <p class="subtitle">加入 {{ APP_CONFIG.name }}，开始您的管理之旅</p>
+    <h2 class="title">{{ $t('login.createAccountTitle') }}</h2>
+    <p class="subtitle">
+      {{ $t('login.createAccountJoin') }} {{ APP_CONFIG.name }}{{ $t('login.createAccountSlogan') }}
+    </p>
 
     <el-form :model="registerForm" label-position="top" class="register-form">
       <el-form-item>
-        <el-input v-model="registerForm.username" placeholder="设置用户名" />
+        <el-input
+          v-model="registerForm.username"
+          :placeholder="$t('login.registerUsernamePlaceholder')"
+        />
       </el-form-item>
       <el-form-item>
-        <el-input v-model="registerForm.email" placeholder="输入电子邮箱" />
+        <el-input
+          v-model="registerForm.email"
+          :placeholder="$t('login.registerEmailPlaceholder')"
+        />
       </el-form-item>
       <el-form-item>
         <el-input
           v-model="registerForm.password"
           type="password"
           show-password
-          placeholder="设置登录密码"
+          :placeholder="$t('login.registerPasswordPlaceholder')"
         />
       </el-form-item>
       <el-form-item>
@@ -23,15 +31,17 @@
           v-model="registerForm.confirmPassword"
           type="password"
           show-password
-          placeholder="确认您的密码"
+          :placeholder="$t('login.confirmPasswordPlaceholder')"
         />
       </el-form-item>
-      <el-button type="primary" class="submit-btn" @click="handleRegister"> 立即注册 </el-button>
+      <el-button type="primary" class="submit-btn" @click="handleRegister">
+        {{ $t('button.registerNow') }}
+      </el-button>
       <div class="back-link">
-        <span class="have-account">已有账号？</span>
+        <span class="have-account">{{ $t('login.noAccount') }}</span>
         <el-link :underline="false" @click="emits('goToMode', 'login')">
           <el-icon><component :is="menuStore.iconComponents['Element:ArrowLeft']" /></el-icon>
-          返回登录
+          {{ $t('login.backToLogin') }}
         </el-link>
       </div>
     </el-form>
@@ -41,10 +51,12 @@
 <script setup lang="ts">
 import { APP_CONFIG } from '@/config/app.config'
 import { ElMessage } from 'element-plus'
+import { useI18n } from 'vue-i18n'
 import type { IEmits } from '@/types/login'
 
 defineOptions({ name: 'RegisterComponent' })
 
+const { t } = useI18n()
 const emits = defineEmits<IEmits>()
 const menuStore = useMenuStore()
 
@@ -56,7 +68,7 @@ const registerForm = ref({
 })
 
 const handleRegister = () => {
-  ElMessage.success('敬请期待👀')
+  ElMessage.success(t('login.comingSoon'))
 }
 </script>
 

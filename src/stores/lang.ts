@@ -16,19 +16,19 @@ export const useLangStore = defineStore('lang', () => {
   // 国际化options
   const langOptions: ILangOption[] = [
     {
-      code: 'zh-CN',
+      code: 'zhCN',
       shortCode: 'CN',
       label: '简体中文',
       elementLocale: 'zhCN',
     },
     {
-      code: 'zh-TW',
+      code: 'zhTW',
       shortCode: 'TW',
       label: '繁體中文',
       elementLocale: 'zhTW',
     },
     {
-      code: 'en-US',
+      code: 'enUS',
       shortCode: 'EN',
       label: 'English',
       elementLocale: 'EN',
