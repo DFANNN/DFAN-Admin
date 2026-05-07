@@ -1,7 +1,7 @@
 <template>
   <div class="form-content-inner">
-    <h2 class="title">欢迎回来</h2>
-    <p class="subtitle">请输入您的账号信息登录系统</p>
+    <h2 class="title">{{ $t('login.title') }}</h2>
+    <p class="subtitle">{{ $t('login.subtitle') }}</p>
 
     <!-- 登录表单 -->
     <el-form
@@ -15,7 +15,7 @@
       <el-form-item>
         <el-select
           v-model="rolePreset"
-          placeholder="请选择登录身份"
+          :placeholder="$t('placeholder.loginRole')"
           class="preset-select"
           @change="applyPreset"
         >
@@ -28,7 +28,7 @@
         </el-select>
       </el-form-item>
       <el-form-item prop="username">
-        <el-input v-model="loginForm.username" placeholder="请输入用户名/邮箱" />
+        <el-input v-model="loginForm.username" :placeholder="$t('placeholder.username')" />
       </el-form-item>
 
       <el-form-item prop="password">
@@ -36,28 +36,28 @@
           v-model="loginForm.password"
           type="password"
           show-password
-          placeholder="请输入密码"
+          :placeholder="$t('placeholder.password')"
         />
       </el-form-item>
 
       <div class="form-options">
-        <el-checkbox v-model="loginForm.remember" @change="handleRememberChange"
-          >记住我</el-checkbox
-        >
-        <el-link type="primary" :underline="false" @click="emits('goToMode', 'forgot')"
-          >忘记密码？</el-link
-        >
+        <el-checkbox v-model="loginForm.remember" @change="handleRememberChange">{{
+          $t('login.rememberMe')
+        }}</el-checkbox>
+        <el-link type="primary" :underline="false" @click="emits('goToMode', 'forgot')">{{
+          $t('login.forgotPassword')
+        }}</el-link>
       </div>
 
       <el-button type="primary" class="submit-btn" :loading="loading" @click="handleLogin">
-        登录
+        {{ $t('button.login') }}
       </el-button>
     </el-form>
 
     <!-- 其他登录方式 -->
     <div class="divider" v-if="APP_CONFIG.showPhoneLogin || APP_CONFIG.showQrLogin">
       <el-divider>
-        <span class="divider-text">或使用以下方式登录</span>
+        <span class="divider-text">{{ $t('login.orUseOtherMethods') }}</span>
       </el-divider>
     </div>
 
@@ -72,7 +72,7 @@
             <component :is="menuStore.iconComponents['Element:Iphone']" />
           </el-icon>
         </template>
-        手机号登录
+        {{ $t('button.phoneLogin') }}
       </el-button>
       <el-button class="social-btn" @click="emits('goToMode', 'qr')" v-if="APP_CONFIG.showQrLogin">
         <template #icon>
@@ -80,15 +80,15 @@
             <component :is="menuStore.iconComponents['Element:FullScreen']" />
           </el-icon>
         </template>
-        扫码登录
+        {{ $t('button.scanLogin') }}
       </el-button>
     </div>
 
     <p class="register-link" v-if="APP_CONFIG.showRegister">
-      <span>还没有账号？</span>
-      <el-link type="primary" :underline="false" @click="emits('goToMode', 'register')"
-        >立即注册</el-link
-      >
+      <span>{{ $t('login.noAccount') }}</span>
+      <el-link type="primary" :underline="false" @click="emits('goToMode', 'register')">{{
+        $t('login.registerNow')
+      }}</el-link>
     </p>
   </div>
 </template>

@@ -1,0 +1,31 @@
+{
+  "button": {
+    "addUser": "新增用户",
+    "delete": "删除",
+    "batchDelete": "批量删除",
+    "edit": "编辑",
+    "query": "查询",
+    "reset": "重置",
+    "login": "登录",
+    "logout": "退出登录",
+    "phoneLogin": "手机号登录",
+    "scanLogin": "扫码登录"
+  },
+  "tooltip": {
+    "themeConfig": "主题配置"
+  },
+  "placeholder": {
+    "loginRole": "请选择登录身份",
+    "username": "请输入用户名/邮箱",
+    "password": "请输入密码"
+  },
+  "login": {
+    "title": "欢迎回来",
+    "subtitle": "请输入用户名和密码登录",
+    "orUseOtherMethods": "或使用以下方式登录",
+    "rememberMe": "记住我",
+    "forgotPassword": "忘记密码？",
+    "noAccount": "还没有账号？",
+    "registerNow": "立即注册"
+  }
+}

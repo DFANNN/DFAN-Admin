@@ -19,7 +19,7 @@
             <HoverAnimateWrapper name="rotate" v-if="APP_CONFIG.showThemeConfig">
               <IconButton
                 icon="HOutline:Cog6ToothIcon"
-                tooltip="主题配置"
+                :tooltip="$t('tooltip.themeConfig')"
                 @click="themeStore.themeConfigDrawerOpen = true"
               />
             </HoverAnimateWrapper>

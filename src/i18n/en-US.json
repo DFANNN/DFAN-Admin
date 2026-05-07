@@ -1,0 +1,31 @@
+{
+  "button": {
+    "addUser": "Add new user",
+    "batchDelete": "Batch delete",
+    "delete": "delete",
+    "edit": "edit",
+    "login": "Log in",
+    "logout": "Log out",
+    "phoneLogin": "Mobile phone number login",
+    "query": "Query",
+    "reset": "reset",
+    "scanLogin": "Scan code to log in"
+  },
+  "login": {
+    "forgotPassword": "forget the password?",
+    "noAccount": "Don’t have an account yet?",
+    "orUseOtherMethods": "Or log in using",
+    "registerNow": "Register now",
+    "rememberMe": "remember me",
+    "subtitle": "Please enter username and password to log in",
+    "title": "welcome back"
+  },
+  "placeholder": {
+    "loginRole": "Please select login identity",
+    "password": "Please enter password",
+    "username": "Please enter username/email"
+  },
+  "tooltip": {
+    "themeConfig": "Theme configuration"
+  }
+}
