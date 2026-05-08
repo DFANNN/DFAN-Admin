@@ -4,7 +4,7 @@
       <IconButton
         icon="HOutline:ChevronLeftIcon"
         size="1.75rem"
-        tooltip="向左滑动"
+        :tooltip="$t('layout.swipeLeft')"
         @click="slideLeft"
       />
     </HoverAnimateWrapper>
@@ -36,7 +36,7 @@
       <IconButton
         icon="HOutline:ChevronRightIcon"
         size="1.75rem"
-        tooltip="向右滑动"
+        :tooltip="$t('layout.swipeRight')"
         @click="slideRight"
       />
     </HoverAnimateWrapper>
@@ -59,25 +59,25 @@
               :icon="menuStore.iconComponents['HOutline:MinusCircleIcon']"
               @click="tabsStore.closeOtherTabs(tabsStore.activePath)"
             >
-              关闭其他标签页
+              {{ $t('layout.closeOtherTabs') }}
             </el-dropdown-item>
             <el-dropdown-item
               :icon="menuStore.iconComponents['HOutline:TrashIcon']"
               @click="(tabsStore.closeAllTabs(), router.push(tabsStore.activePath))"
             >
-              关闭所有标签页
+              {{ $t('layout.closeAllTabs') }}
             </el-dropdown-item>
             <el-dropdown-item
               :icon="menuStore.iconComponents['HOutline:ChevronDoubleRightIcon']"
               @click="tabsStore.closeRightTabs(tabsStore.activePath)"
             >
-              关闭右侧标签页
+              {{ $t('layout.closeRightTabs') }}
             </el-dropdown-item>
             <el-dropdown-item
               :icon="menuStore.iconComponents['HOutline:ChevronDoubleLeftIcon']"
               @click="tabsStore.closeLeftTabs(tabsStore.activePath)"
             >
-              关闭左侧标签页
+              {{ $t('layout.closeLeftTabs') }}
             </el-dropdown-item>
           </el-dropdown-menu>
         </template>

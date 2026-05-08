@@ -13,12 +13,53 @@
     "verifyAndLogin": "验证并登录",
     "getCode": "获取验证码",
     "refresh": "刷新",
-    "registerNow": "立即注册"
+    "registerNow": "立即注册",
+    "cancel": "取消",
+    "confirm": "确认"
   },
   "tooltip": {
-    "themeConfig": "主题配置"
+    "themeConfig": "主题配置",
+    "expandMenu": "展开菜单",
+    "collapseMenu": "收起菜单",
+    "fullScreen": "全屏",
+    "exitFullScreen": "退出全屏"
   },
-  "placeholder": {},
+  "tag": {
+    "builtIn": "内置",
+    "custom": "自定义",
+    "enabled": "启用",
+    "disabled": "禁用"
+  },
+  "placeholder": {
+    "select": "请选择",
+    "input": "请输入"
+  },
+  "message": {
+    "deleteSuccess": "删除成功",
+    "deleteFailed": "删除失败",
+    "addSuccess": "新增成功",
+    "editSuccess": "编辑成功"
+  },
+  "layout": {
+    "profile": "个人中心",
+    "documentation": "文档",
+    "help": "问题 & 帮助",
+    "changePassword": "修改密码",
+    "logout": "退出登录",
+    "logoutContent": "要开溜？退出后得重新刷卡进来，真要现在溜走吗？",
+    "logoutConfirmText": "我要溜🌶",
+    "logoutCancelText": "再待会儿",
+    "notification": "消息通知",
+    "allRead": "全部已读",
+    "noMessage": "暂无消息",
+    "viewAll": "查看全部消息",
+    "swipeLeft": "向左滑动",
+    "swipeRight": "向右滑动",
+    "closeOtherTabs": "关闭其他标签页",
+    "closeAllTabs": "关闭所有标签页",
+    "closeRightTabs": "关闭右侧标签页",
+    "closeLeftTabs": "关闭左侧标签页"
+  },
   "login": {
     "title": "欢迎回来",
     "subtitle": "请输入用户名和密码登录",
@@ -55,5 +96,34 @@
     "guest": "无权限用户",
     "loginSuccess": "登录成功",
     "comingSoon": "敬请期待👀"
+  },
+  "user": {
+    "username": "用户名",
+    "name": "姓名",
+    "status": "状态",
+    "index": "序号",
+    "email": "邮箱",
+    "phone": "手机号",
+    "role": "角色",
+    "type": "类型",
+    "createdAt": "创建时间",
+    "updatedAt": "更新时间",
+    "actions": "操作",
+    "deleteUserPopconfirm": "确定要删除选中的用户吗？",
+    "deleteUserDialogTitle": "删除确认",
+    "deleteUserDialogContent1": "确定要删除选中的",
+    "deleteUserDialogContent2": "条数据吗？删除后无法恢复，请谨慎操作！",
+    "deleteUserConfirmText": "确认删除",
+    "deleteUserCancelText": "再想想",
+    "addUser": "新增用户",
+    "editUser": "编辑用户",
+    "usernamePlaceholder": "请输入用户名（不允许中文）",
+    "password": "密码",
+    "passwordPlaceholder": "请输入密码",
+    "namePlaceholder": "请输入姓名",
+    "emailPlaceholder": "请输入邮箱地址",
+    "phonePlaceholder": "请输入手机号",
+    "rolePlaceholder": "请选择用户角色",
+    "statusPlaceholder": "请选择用户状态"
   }
 }

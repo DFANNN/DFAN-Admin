@@ -2,6 +2,8 @@
   "button": {
     "addUser": "新增用戶",
     "batchDelete": "大量刪除",
+    "cancel": "取消",
+    "confirm": "確認",
     "delete": "刪除",
     "edit": "編輯",
     "getCode": "取得驗證碼",
@@ -14,6 +16,26 @@
     "reset": "重置",
     "scanLogin": "掃碼登入",
     "verifyAndLogin": "驗證並登入"
+  },
+  "layout": {
+    "allRead": "全部已讀",
+    "changePassword": "修改密碼",
+    "closeAllTabs": "關閉所有標籤頁",
+    "closeLeftTabs": "關閉左側標籤頁",
+    "closeOtherTabs": "關閉其他標籤頁",
+    "closeRightTabs": "關閉右側標籤頁",
+    "documentation": "文件",
+    "help": "問題",
+    "logout": "登出登入",
+    "logoutCancelText": "再待會兒",
+    "logoutConfirmText": "我要溜🌶",
+    "logoutContent": "要開溜？\n退出後得重新刷卡進來，真要現在溜走嗎？",
+    "noMessage": "暫無訊息",
+    "notification": "訊息通知",
+    "profile": "個人中心",
+    "swipeLeft": "向左滑動",
+    "swipeRight": "向右滑動",
+    "viewAll": "查看全部訊息"
   },
   "login": {
     "admin": "管理員",
@@ -52,7 +74,56 @@
     "title": "歡迎回來",
     "usernamePlaceholder": "請輸入使用者名稱/信箱"
   },
+  "message": {
+    "addSuccess": "新增成功",
+    "deleteFailed": "刪除失敗",
+    "deleteSuccess": "刪除成功",
+    "editSuccess": "編輯成功"
+  },
+  "placeholder": {
+    "input": "請輸入",
+    "select": "請選擇"
+  },
+  "tag": {
+    "builtIn": "內建",
+    "custom": "自訂",
+    "disabled": "停用",
+    "enabled": "啟用"
+  },
   "tooltip": {
+    "collapseMenu": "收起選單",
+    "exitFullScreen": "退出全螢幕",
+    "expandMenu": "展開選單",
+    "fullScreen": "全螢幕",
     "themeConfig": "主題配置"
+  },
+  "user": {
+    "actions": "操作",
+    "addUser": "新增用戶",
+    "createdAt": "創建時間",
+    "deleteUserCancelText": "再想想",
+    "deleteUserConfirmText": "確認刪除",
+    "deleteUserDialogContent1": "確定要刪除選取的",
+    "deleteUserDialogContent2": "條數據嗎？\n刪除後無法恢復，請謹慎操作！",
+    "deleteUserDialogTitle": "刪除確認",
+    "deleteUserPopconfirm": "確定要刪除選取的使用者嗎？",
+    "editUser": "編輯使用者",
+    "email": "信箱",
+    "emailPlaceholder": "請輸入郵件地址",
+    "index": "序號",
+    "name": "姓名",
+    "namePlaceholder": "請輸入姓名",
+    "password": "密碼",
+    "passwordPlaceholder": "請輸入密碼",
+    "phone": "手機號",
+    "phonePlaceholder": "請輸入手機號",
+    "role": "角色",
+    "rolePlaceholder": "請選擇使用者角色",
+    "status": "狀態",
+    "statusPlaceholder": "請選擇使用者狀態",
+    "type": "類型",
+    "updatedAt": "更新時間",
+    "username": "使用者名稱",
+    "usernamePlaceholder": "請輸入使用者名稱（不允許中文）"
   }
 }

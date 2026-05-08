@@ -1,7 +1,7 @@
 <template>
   <BaseDialog
     v-model="open"
-    :title="submitForm.id ? '编辑用户' : '新增用户'"
+    :title="submitForm.id ? $t('user.editUser') : $t('user.addUser')"
     width="600"
     @close="close"
   >
@@ -12,55 +12,64 @@
       label-width="100px"
       label-position="right"
     >
-      <el-form-item label="用户名" prop="username">
+      <el-form-item :label="$t('user.username')" prop="username">
         <el-input
           v-model="submitForm.username"
-          placeholder="请输入用户名（不允许中文）"
+          :placeholder="$t('user.usernamePlaceholder')"
           :disabled="!!submitForm.id"
         />
       </el-form-item>
-      <el-form-item label="密码" prop="password">
+      <el-form-item :label="$t('user.password')" prop="password">
         <el-input
           v-model="submitForm.password"
           type="password"
-          placeholder="请输入密码"
+          :placeholder="$t('user.passwordPlaceholder')"
           show-password
         />
       </el-form-item>
-      <el-form-item label="姓名" prop="name">
-        <el-input v-model="submitForm.name" placeholder="请输入姓名" />
+      <el-form-item :label="$t('user.name')" prop="name">
+        <el-input v-model="submitForm.name" :placeholder="$t('user.namePlaceholder')" />
       </el-form-item>
-      <el-form-item label="手机号" prop="phone">
-        <el-input v-model="submitForm.phone" placeholder="请输入手机号" />
+      <el-form-item :label="$t('user.phone')" prop="phone">
+        <el-input v-model="submitForm.phone" :placeholder="$t('user.phonePlaceholder')" />
       </el-form-item>
-      <el-form-item label="邮箱" prop="email">
-        <el-input v-model="submitForm.email" placeholder="请输入邮箱" />
+      <el-form-item :label="$t('user.email')" prop="email">
+        <el-input v-model="submitForm.email" :placeholder="$t('user.emailPlaceholder')" />
       </el-form-item>
-      <el-form-item label="用户角色" prop="roleId">
-        <el-select v-model="submitForm.roleId" placeholder="请选择用户角色" style="width: 100%">
+      <el-form-item :label="$t('user.role')" prop="roleId">
+        <el-select
+          v-model="submitForm.roleId"
+          :placeholder="$t('user.rolePlaceholder')"
+          style="width: 100%"
+        >
           <el-option v-for="role in roleList" :key="role.id" :label="role.name" :value="role.id" />
         </el-select>
       </el-form-item>
-      <el-form-item label="状态" prop="status">
+      <el-form-item :label="$t('user.status')" prop="status">
         <el-radio-group v-model="submitForm.status">
-          <el-radio label="active">启用</el-radio>
-          <el-radio label="inactive">禁用</el-radio>
+          <el-radio label="active">{{ $t('tag.enabled') }}</el-radio>
+          <el-radio label="inactive">{{ $t('tag.disabled') }}</el-radio>
         </el-radio-group>
       </el-form-item>
     </el-form>
 
     <template #footer>
-      <el-button @click="close">取消</el-button>
-      <el-button type="primary" :loading="submitLoading" @click="confirm">确定</el-button>
+      <el-button @click="close">{{ $t('button.cancel') }}</el-button>
+      <el-button type="primary" :loading="submitLoading" @click="confirm">{{
+        $t('button.confirm')
+      }}</el-button>
     </template>
   </BaseDialog>
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import { rolePage } from '@/api/role'
 import { createUser, userInfo, updateUser } from '@/api/user'
 import type { IRoleItem } from '@/types/system/role'
 import { type FormInstance, type FormRules } from 'element-plus'
+
+const { t } = useI18n()
 
 defineOptions({ name: 'UserCreate' })
 
@@ -105,7 +114,7 @@ const confirm = async () => {
     ? await updateUser(submitForm.value)
     : await createUser(submitForm.value)
   if (res.code !== 200) return
-  ElMessage.success(submitForm.value.id ? '编辑成功' : '新增成功')
+  ElMessage.success(submitForm.value.id ? t('message.editSuccess') : t('message.addSuccess'))
   emits('refresh', submitForm.value.id ? 'update' : 'create')
   close()
 }
@@ -143,29 +152,29 @@ const getUserInfo = async () => {
 // 表单验证规则
 const formRules: FormRules = {
   username: [
-    { required: true, message: '请输入用户名', trigger: 'blur' },
+    { required: true, message: t('user.usernamePlaceholder'), trigger: 'blur' },
     {
       pattern: /^[^\u4e00-\u9fa5]+$/,
-      message: '用户名不允许输入中文',
+      message: t('user.usernamePlaceholder'),
       trigger: 'blur',
     },
   ],
   password: [
     {
       required: true,
-      message: '请输入密码',
+      message: t('user.passwordPlaceholder'),
       trigger: 'blur',
       validator: (rule, value, callback) => {
         // 新增时必填，编辑时可选
         if (!submitForm.value.id && !value) {
-          callback(new Error('请输入密码'))
+          callback(new Error(t('user.passwordPlaceholder')))
         } else {
           callback()
         }
       },
     },
   ],
-  status: [{ required: true, message: '请选择状态', trigger: 'change' }],
+  status: [{ required: true, message: t('user.statusPlaceholder'), trigger: 'change' }],
 }
 
 // 显示对话框

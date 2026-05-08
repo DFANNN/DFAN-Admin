@@ -15,7 +15,7 @@
                 ? 'HOutline:Bars3BottomRightIcon'
                 : 'HOutline:Bars3BottomLeftIcon'
           "
-          :tooltip="menuStore.isMobile ? '展开菜单' : '折叠菜单'"
+          :tooltip="menuStore.isMobile ? $t('tooltip.expandMenu') : $t('tooltip.collapseMenu')"
           @click="handleMenuToggle"
         />
       </HoverAnimateWrapper>
@@ -29,7 +29,7 @@
         <HoverAnimateWrapper name="rotate" v-if="APP_CONFIG.showThemeConfig">
           <IconButton
             icon="HOutline:Cog6ToothIcon"
-            tooltip="主题配置"
+            :tooltip="$t('tooltip.themeConfig')"
             @click="themeStore.themeConfigDrawerOpen = true"
           />
         </HoverAnimateWrapper>
@@ -37,7 +37,7 @@
         <!-- 全屏 -->
         <HoverAnimateWrapper name="pulse" v-if="APP_CONFIG.showFullscreen">
           <IconButton
-            :tooltip="isFullscreen ? '退出全屏' : '全屏'"
+            :tooltip="isFullscreen ? $t('tooltip.exitFullScreen') : $t('tooltip.fullScreen')"
             :icon="
               isFullscreen ? 'HOutline:ArrowsPointingInIcon' : 'HOutline:ArrowsPointingOutIcon'
             "

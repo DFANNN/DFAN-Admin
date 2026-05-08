@@ -45,13 +45,13 @@
             <el-icon>
               <component :is="menuStore.iconComponents['HOutline:UserCircleIcon']" />
             </el-icon>
-            <span>个人中心</span>
+            <span>{{ $t('layout.profile') }}</span>
           </el-dropdown-item>
           <el-dropdown-item command="docs">
             <el-icon>
               <component :is="menuStore.iconComponents['HOutline:DocumentTextIcon']" />
             </el-icon>
-            <span>文档</span>
+            <span>{{ $t('layout.documentation') }}</span>
           </el-dropdown-item>
           <el-dropdown-item command="github">
             <el-icon><IconGithub /></el-icon>
@@ -61,19 +61,19 @@
             <el-icon>
               <component :is="menuStore.iconComponents['HOutline:QuestionMarkCircleIcon']" />
             </el-icon>
-            <span>问题 & 帮助</span>
+            <span>{{ $t('layout.help') }}</span>
           </el-dropdown-item>
           <el-dropdown-item divided command="password">
             <el-icon>
               <component :is="menuStore.iconComponents['HOutline:KeyIcon']" />
             </el-icon>
-            <span>修改密码</span>
+            <span>{{ $t('layout.changePassword') }}</span>
           </el-dropdown-item>
           <el-dropdown-item command="logout">
             <el-icon>
               <component :is="menuStore.iconComponents['HOutline:ArrowRightOnRectangleIcon']" />
             </el-icon>
-            <span>退出登录</span>
+            <span>{{ $t('layout.logout') }}</span>
             <span class="shortcut">⌥ Q</span>
           </el-dropdown-item>
         </el-dropdown-menu>
@@ -84,9 +84,11 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import IconGithub from '@/components/icons/IconGithub.vue'
 import { Dialog } from '@/utils/dialog'
 
+const { t } = useI18n()
 const router = useRouter()
 const menuStore = useMenuStore()
 const userStore = useUserStore()
@@ -101,9 +103,9 @@ const userRoleName = computed(() => {
 const showLogoutConfirm = () => {
   Dialog.info({
     showCancelButton: true,
-    content: '要开溜？退出后得重新刷卡进来，真要现在溜走吗？',
-    confirmText: '我要溜🌶',
-    cancelText: '再待会儿',
+    content: t('layout.logoutContent'),
+    confirmText: t('layout.logoutConfirmText'),
+    cancelText: t('layout.logoutCancelText'),
     onConfirm: () => {
       userStore.logout()
     },

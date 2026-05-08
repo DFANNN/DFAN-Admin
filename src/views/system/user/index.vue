@@ -32,13 +32,13 @@
         <span v-else>-</span>
       </template>
       <template #isBuiltIn="{ row }">
-        <BaseTag v-if="row.isBuiltIn" type="warning" text="内置" />
-        <BaseTag v-else type="success" text="自定义" />
+        <BaseTag v-if="row.isBuiltIn" type="warning" :text="$t('tag.builtIn')" />
+        <BaseTag v-else type="success" :text="$t('tag.custom')" />
       </template>
       <template #status="{ row }">
         <BaseTag
           :type="row.status === 'active' ? 'success' : 'danger'"
-          :text="row.status === 'active' ? '启用' : '禁用'"
+          :text="row.status === 'active' ? $t('tag.enabled') : $t('tag.disabled')"
         />
       </template>
       <template #operation="{ row }">
@@ -51,7 +51,7 @@
           {{ $t('button.edit') }}
         </el-button>
         <el-popconfirm
-          title="确定要删除选中的用户吗？"
+          :title="$t('user.deleteUserPopconfirm')"
           :placement="POPCONFIRM_CONFIG.placement"
           :width="POPCONFIRM_CONFIG.width"
           @confirm="deleteUserHandle([row.id])"
@@ -69,6 +69,7 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import { Dialog } from '@/utils/dialog'
 import { delay } from '@/utils/utils'
 import { rolePage } from '@/api/role'
@@ -83,23 +84,34 @@ import type { IUserListParams } from '@/types/system/user'
 
 defineOptions({ name: 'UserView' })
 
+const { t } = useI18n()
 const menuStore = useMenuStore()
 const userCreateRef = useTemplateRef<InstanceType<typeof UserCreate>>('userCreateRef')
 const basePageRef = useTemplateRef('basePageRef')
 
 // 搜索form配置
 const searchFormConfig = ref<IFormConfig[]>([
-  { label: '用户名', prop: 'username', type: 'elInput', attrs: { placeholder: '请输入' } },
-  { label: '姓名', prop: 'name', type: 'elInput', attrs: { placeholder: '请输入' } },
   {
-    label: '状态',
+    label: t('user.username'),
+    prop: 'username',
+    type: 'elInput',
+    attrs: { placeholder: t('placeholder.input') },
+  },
+  {
+    label: t('user.name'),
+    prop: 'name',
+    type: 'elInput',
+    attrs: { placeholder: t('placeholder.input') },
+  },
+  {
+    label: t('user.status'),
     prop: 'status',
     type: 'elSelect',
     attrs: {
-      placeholder: '请选择',
+      placeholder: t('placeholder.select'),
       options: [
-        { label: '启用', value: 'active' },
-        { label: '禁用', value: 'inactive' },
+        { label: t('tag.enabled'), value: 'active' },
+        { label: t('tag.disabled'), value: 'inactive' },
       ],
     },
   },
@@ -108,17 +120,17 @@ const searchFormConfig = ref<IFormConfig[]>([
 // 表格列配置
 const columns = ref([
   { type: 'selection', width: 55 },
-  { type: 'index', label: '序号', width: 55, fixed: 'left' },
-  { prop: 'username', label: '用户名', minWidth: 160 },
-  { prop: 'name', label: '姓名', minWidth: 120 },
-  { prop: 'phone', label: '手机号', minWidth: 120 },
-  { prop: 'email', label: '邮箱', minWidth: 180 },
-  { prop: 'roleId', label: '角色', minWidth: 150 },
-  { prop: 'isBuiltIn', label: '类型', width: 100 },
-  { prop: 'status', label: '状态' },
-  { prop: 'createTime', label: '创建时间', minWidth: 180, sortable: 'custom' },
-  { prop: 'updateTime', label: '更新时间', minWidth: 180 },
-  { prop: 'operation', label: '操作', width: 150, fixed: 'right' },
+  { type: 'index', label: t('user.index'), width: 55, fixed: 'left' },
+  { prop: 'username', label: t('user.username'), minWidth: 160 },
+  { prop: 'name', label: t('user.name'), minWidth: 120 },
+  { prop: 'phone', label: t('user.phone'), minWidth: 120 },
+  { prop: 'email', label: t('user.email'), minWidth: 180 },
+  { prop: 'roleId', label: t('user.role'), minWidth: 150 },
+  { prop: 'isBuiltIn', label: t('user.type'), width: 100 },
+  { prop: 'status', label: t('user.status') },
+  { prop: 'createTime', label: t('user.createdAt'), minWidth: 180, sortable: 'custom' },
+  { prop: 'updateTime', label: t('user.updatedAt'), minWidth: 180 },
+  { prop: 'operation', label: t('user.actions'), width: 150, fixed: 'right' },
 ])
 
 // 角色列表（用于显示角色名称）
@@ -185,10 +197,10 @@ const getUserList = async (
 // 批量删除用户dialog
 const openDeleteDialog = () => {
   Dialog.confirm({
-    title: '删除确认',
-    content: `确定要删除选中的 ${deleteUserIds.value.length} 条数据吗？删除后无法恢复，请谨慎操作！`,
-    confirmText: '确认删除',
-    cancelText: '再想想',
+    title: t('user.deleteUserDialogTitle'),
+    content: `${t('user.deleteUserDialogContent1')} ${deleteUserIds.value.length} ${t('user.deleteUserDialogContent2')}`,
+    confirmText: t('user.deleteUserConfirmText'),
+    cancelText: t('user.deleteUserCancelText'),
     onConfirm: async () => {
       await deleteUserHandle(deleteUserIds.value)
     },
@@ -199,7 +211,7 @@ const openDeleteDialog = () => {
 const deleteUserHandle = async (ids: string[]) => {
   const { data: res } = await deleteUser(ids)
   if (res.code !== 200) return
-  ElMessage.success('删除成功')
+  ElMessage.success(t('message.deleteSuccess'))
   refreshHandle('delete', ids.length)
 }
 

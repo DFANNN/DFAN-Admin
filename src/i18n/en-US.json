@@ -2,6 +2,8 @@
   "button": {
     "addUser": "Add new user",
     "batchDelete": "Batch delete",
+    "cancel": "Cancel",
+    "confirm": "confirm",
     "delete": "delete",
     "edit": "edit",
     "getCode": "Get verification code",
@@ -14,6 +16,26 @@
     "reset": "reset",
     "scanLogin": "Scan code to log in",
     "verifyAndLogin": "Verify and log in"
+  },
+  "layout": {
+    "allRead": "All read",
+    "changePassword": "Change password",
+    "closeAllTabs": "Close all tabs",
+    "closeLeftTabs": "Close left tab",
+    "closeOtherTabs": "Close other tabs",
+    "closeRightTabs": "Close the tab on the right",
+    "documentation": "document",
+    "help": "question",
+    "logout": "Log out",
+    "logoutCancelText": "wait a little longer",
+    "logoutConfirmText": "I want to slip away🌶",
+    "logoutContent": "Want to run away? \nAfter logging out, you have to swipe your card back in again. Do you really want to sneak out now?",
+    "noMessage": "No news yet",
+    "notification": "Message notification",
+    "profile": "Personal Center",
+    "swipeLeft": "swipe left",
+    "swipeRight": "swipe right",
+    "viewAll": "View all messages"
   },
   "login": {
     "admin": "administrator",
@@ -52,7 +74,56 @@
     "title": "welcome back",
     "usernamePlaceholder": "Please enter username/email"
   },
+  "message": {
+    "addSuccess": "Added successfully",
+    "deleteFailed": "Delete failed",
+    "deleteSuccess": "Delete successfully",
+    "editSuccess": "Edited successfully"
+  },
+  "placeholder": {
+    "input": "Please enter",
+    "select": "Please select"
+  },
+  "tag": {
+    "builtIn": "built-in",
+    "custom": "Customize",
+    "disabled": "Disable",
+    "enabled": "enable"
+  },
   "tooltip": {
+    "collapseMenu": "Close menu",
+    "exitFullScreen": "Exit full screen",
+    "expandMenu": "Expand menu",
+    "fullScreen": "full screen",
     "themeConfig": "Theme configuration"
+  },
+  "user": {
+    "actions": "operate",
+    "addUser": "Add new user",
+    "createdAt": "creation time",
+    "deleteUserCancelText": "Think again",
+    "deleteUserConfirmText": "Confirm deletion",
+    "deleteUserDialogContent1": "Are you sure you want to delete the selected",
+    "deleteUserDialogContent2": "piece of data? \nDeletion cannot be restored, please proceed with caution!",
+    "deleteUserDialogTitle": "Delete confirmation",
+    "deleteUserPopconfirm": "Are you sure you want to delete the selected user?",
+    "editUser": "Edit user",
+    "email": "Mail",
+    "emailPlaceholder": "Please enter your email address",
+    "index": "serial number",
+    "name": "Name",
+    "namePlaceholder": "Please enter name",
+    "password": "password",
+    "passwordPlaceholder": "Please enter password",
+    "phone": "Phone number",
+    "phonePlaceholder": "Please enter mobile phone number",
+    "role": "Role",
+    "rolePlaceholder": "Please select a user role",
+    "status": "state",
+    "statusPlaceholder": "Please select user status",
+    "type": "type",
+    "updatedAt": "Update time",
+    "username": "username",
+    "usernamePlaceholder": "Please enter your username (Chinese is not allowed)"
   }
 }
