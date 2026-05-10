@@ -16,7 +16,7 @@
           :icon="menuStore.iconComponents.Plus"
           @click="roleCreateRef?.showDialog(undefined)"
           v-permission="['role:add']"
-          >新增角色</el-button
+          >{{ $t('role.addRole') }}</el-button
         >
         <el-button
           type="danger"
@@ -24,19 +24,19 @@
           :disabled="!useButtonPermission(['role:delete'], [() => !!deleteRoleIds.length]).value"
           @click="openDeleteDialog"
         >
-          批量删除
+          {{ $t('button.batchDelete') }}
         </el-button>
       </template>
       <template #isBuiltIn="{ row }">
         <BaseTag
           :type="row.isBuiltIn ? 'warning' : 'success'"
-          :text="row.isBuiltIn ? '内置' : '自定义'"
+          :text="row.isBuiltIn ? $t('tag.builtIn') : $t('tag.custom')"
         />
       </template>
       <template #status="{ row }">
         <BaseTag
           :type="row.status === 'active' ? 'success' : 'danger'"
-          :text="row.status === 'active' ? '启用' : '禁用'"
+          :text="row.status === 'active' ? $t('tag.enabled') : $t('tag.disabled')"
         />
       </template>
       <template #operation="{ row }">
@@ -47,10 +47,10 @@
           @click="roleCreateRef?.showDialog(row.id)"
           v-permission="['role:edit']"
         >
-          编辑
+          {{ $t('button.edit') }}
         </el-button>
         <el-popconfirm
-          title="确定要删除选中的角色吗？"
+          :title="$t('role.deleteRolePopconfirm')"
           :placement="POPCONFIRM_CONFIG.placement"
           :width="POPCONFIRM_CONFIG.width"
           @confirm="deleteRoleHandle([row.id])"
@@ -62,7 +62,7 @@
               link
               v-permission="['role:delete']"
             >
-              删除
+              {{ $t('button.delete') }}
             </el-button>
           </template>
         </el-popconfirm>
@@ -74,6 +74,7 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import { Dialog } from '@/utils/dialog'
 import { delay } from '@/utils/utils'
 import { rolePage, deleteRole } from '@/api/role'
@@ -84,23 +85,34 @@ import type { IRoleItem } from '@/types/system/role'
 import type { IFormConfig } from '@/types/components/page'
 
 defineOptions({ name: 'RoleView' })
+const { t } = useI18n()
 const menuStore = useMenuStore()
 const basePageRef = useTemplateRef('basePageRef')
 const roleCreateRef = useTemplateRef('roleCreateRef')
 
 // 搜索form配置
 const searchFromConfig = ref<IFormConfig[]>([
-  { label: '角色名称', prop: 'name', type: 'elInput', attrs: { placeholder: '请输入角色名称' } },
-  { label: '角色编码', prop: 'code', type: 'elInput', attrs: { placeholder: '请输入角色编码' } },
   {
-    label: '状态',
+    label: t('role.name'),
+    prop: 'name',
+    type: 'elInput',
+    attrs: { placeholder: t('role.namePlaceholder') },
+  },
+  {
+    label: t('role.code'),
+    prop: 'code',
+    type: 'elInput',
+    attrs: { placeholder: t('role.codePlaceholder') },
+  },
+  {
+    label: t('role.status'),
     prop: 'status',
     type: 'elSelect',
     attrs: {
-      placeholder: '请选择状态',
+      placeholder: t('role.statusPlaceholder'),
       options: [
-        { label: '启用', value: 'active' },
-        { label: '禁用', value: 'inactive' },
+        { label: t('tag.enabled'), value: 'active' },
+        { label: t('tag.disabled'), value: 'inactive' },
       ],
     },
   },
@@ -109,14 +121,14 @@ const searchFromConfig = ref<IFormConfig[]>([
 // 表格列配置
 const columns = ref([
   { type: 'selection', width: 55 },
-  { type: 'index', label: '序号', width: 55, fixed: 'left' },
-  { prop: 'name', label: '角色名称', minWidth: 160 },
-  { prop: 'code', label: '角色编码', minWidth: 160 },
-  { prop: 'isBuiltIn', label: '类型' },
-  { prop: 'status', label: '状态' },
-  { prop: 'createTime', label: '创建时间', minWidth: 180, sortable: 'custom' },
-  { prop: 'updateTime', label: '更新时间', minWidth: 180 },
-  { prop: 'operation', label: '操作', width: 150, fixed: 'right' },
+  { type: 'index', label: t('user.index'), width: 55, fixed: 'left' },
+  { prop: 'name', label: t('role.name'), minWidth: 160 },
+  { prop: 'code', label: t('role.code'), minWidth: 160 },
+  { prop: 'isBuiltIn', label: t('role.type') },
+  { prop: 'status', label: t('role.status') },
+  { prop: 'createTime', label: t('user.createdAt'), minWidth: 180, sortable: 'custom' },
+  { prop: 'updateTime', label: t('user.updatedAt'), minWidth: 180 },
+  { prop: 'operation', label: t('user.actions'), width: 150, fixed: 'right' },
 ])
 
 // 角色列表
@@ -160,10 +172,10 @@ const getRoleList = async (
 // 批量删除用户dialog
 const openDeleteDialog = () => {
   Dialog.confirm({
-    title: '删除确认',
-    content: `确定要删除选中的 ${deleteRoleIds.value.length} 条数据吗？删除后无法恢复，请谨慎操作！`,
-    confirmText: '确认删除',
-    cancelText: '再想想',
+    title: t('role.deleteRoleDialogTitle'),
+    content: `${t('role.deleteRoleDialogContent1')} ${deleteRoleIds.value.length} ${t('role.deleteRoleDialogContent2')}`,
+    confirmText: t('role.deleteRoleConfirmText'),
+    cancelText: t('role.deleteRoleCancelText'),
     onConfirm: async () => {
       await deleteRoleHandle(deleteRoleIds.value)
     },
@@ -173,7 +185,7 @@ const openDeleteDialog = () => {
 const deleteRoleHandle = async (ids: string[]) => {
   const { data: res } = await deleteRole(ids)
   if (res.code !== 200) return
-  ElMessage.success('删除成功')
+  ElMessage.success(t('message.deleteSuccess'))
   refreshHandle('delete', ids.length)
 }
 

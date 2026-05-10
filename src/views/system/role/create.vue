@@ -1,7 +1,7 @@
 <template>
   <BaseDialog
     v-model="open"
-    :title="submitForm.id ? '编辑角色' : '新增角色'"
+    :title="submitForm.id ? $t('role.editRole') : $t('role.addRole')"
     width="600"
     @close="close"
     style="height: 60vh"
@@ -14,31 +14,31 @@
         label-width="100px"
         label-position="right"
       >
-        <el-form-item label="角色名称" prop="name">
-          <el-input v-model="submitForm.name" placeholder="请输入角色名称" />
+        <el-form-item :label="$t('role.name')" prop="name">
+          <el-input v-model="submitForm.name" :placeholder="$t('role.namePlaceholder')" />
         </el-form-item>
-        <el-form-item label="角色编码" prop="code">
+        <el-form-item :label="$t('role.code')" prop="code">
           <el-input
             v-model="submitForm.code"
-            placeholder="请输入角色编码"
+            :placeholder="$t('role.codePlaceholder')"
             :disabled="!!submitForm.id"
           />
         </el-form-item>
-        <el-form-item label="角色描述" prop="description">
+        <el-form-item :label="$t('role.description')" prop="description">
           <el-input
             v-model="submitForm.description"
             type="textarea"
             :rows="3"
-            placeholder="请输入角色描述"
+            :placeholder="$t('role.descriptionPlaceholder')"
           />
         </el-form-item>
-        <el-form-item label="状态" prop="status">
+        <el-form-item :label="$t('role.status')" prop="status">
           <el-radio-group v-model="submitForm.status">
-            <el-radio label="active">启用</el-radio>
-            <el-radio label="inactive">禁用</el-radio>
+            <el-radio label="active">{{ $t('tag.enabled') }}</el-radio>
+            <el-radio label="inactive">{{ $t('tag.disabled') }}</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="菜单权限" prop="menuIds">
+        <el-form-item :label="$t('role.menuPermissions')" prop="menuIds">
           <el-tree
             ref="menuTreeRef"
             :data="menuList"
@@ -54,13 +54,16 @@
     </el-scrollbar>
 
     <template #footer>
-      <el-button @click="close">取消</el-button>
-      <el-button type="primary" :loading="submitLoading" @click="confirm">确定</el-button>
+      <el-button @click="close">{{ $t('button.cancel') }}</el-button>
+      <el-button type="primary" :loading="submitLoading" @click="confirm">{{
+        $t('button.confirm')
+      }}</el-button>
     </template>
   </BaseDialog>
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import { createRole, roleInfo, updateRole } from '@/api/role'
 import { menuPage } from '@/api/menu'
 import { type FormInstance, type FormRules, type ElTree } from 'element-plus'
@@ -68,6 +71,7 @@ import type { IMenuItem } from '@/types/system/menu'
 
 defineOptions({ name: 'RoleCreate' })
 
+const { t } = useI18n()
 const emits = defineEmits(['refresh'])
 
 const submitFormRef = useTemplateRef<FormInstance>('submitFormRef')
@@ -108,7 +112,7 @@ const confirm = async () => {
     ? await updateRole(submitForm.value)
     : await createRole(submitForm.value)
   if (res.code !== 200) return
-  ElMessage.success(submitForm.value.id ? '编辑成功' : '新增成功')
+  ElMessage.success(submitForm.value.id ? t('message.editSuccess') : t('message.addSuccess'))
   emits('refresh', submitForm.value.id ? 'update' : 'create')
   close()
 }
@@ -146,16 +150,16 @@ const handleMenuCheck = (
 
 // 表单验证规则
 const formRules: FormRules = {
-  name: [{ required: true, message: '请输入角色名称', trigger: 'blur' }],
+  name: [{ required: true, message: t('role.namePlaceholder'), trigger: 'blur' }],
   code: [
-    { required: true, message: '请输入角色编码', trigger: 'blur' },
+    { required: true, message: t('role.codePlaceholder'), trigger: 'blur' },
     {
       pattern: /^[a-zA-Z][a-zA-Z0-9_]*$/,
-      message: '角色编码只能包含字母、数字和下划线，且以字母开头',
+      message: t('role.codePatternMessage'),
       trigger: 'blur',
     },
   ],
-  status: [{ required: true, message: '请选择状态', trigger: 'change' }],
+  status: [{ required: true, message: t('role.statusPlaceholder'), trigger: 'change' }],
 }
 
 // 显示对话框

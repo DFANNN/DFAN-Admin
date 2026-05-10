@@ -22,13 +22,13 @@
           :icon="menuStore.iconComponents.Plus"
           @click="menuCreateRef?.showDialog(undefined)"
           v-permission="['menu:add']"
-          >新增菜单</el-button
+          >{{ $t('menu.addMenu') }}</el-button
         >
       </template>
       <template #type="{ row }">
-        <BaseTag v-if="row.type === 'directory'" type="info" text="目录" />
-        <BaseTag v-else-if="row.type === 'menu'" type="primary" text="菜单" />
-        <BaseTag v-else-if="row.type === 'button'" type="warning" text="按钮" />
+        <BaseTag v-if="row.type === 'directory'" type="info" :text="$t('menu.directory')" />
+        <BaseTag v-else-if="row.type === 'menu'" type="primary" :text="$t('menu.menu')" />
+        <BaseTag v-else-if="row.type === 'button'" type="warning" :text="$t('menu.button')" />
       </template>
       <template #icon="{ row }">
         <el-icon v-if="row.icon">
@@ -38,7 +38,7 @@
       <template #status="{ row }">
         <BaseTag
           :type="row.status === 'active' ? 'success' : 'danger'"
-          :text="row.status === 'active' ? '启用' : '禁用'"
+          :text="row.status === 'active' ? $t('tag.enabled') : $t('tag.disabled')"
         />
       </template>
       <template #operation="{ row }">
@@ -48,10 +48,10 @@
           :icon="menuStore.iconComponents.Edit"
           @click="menuCreateRef?.showDialog(row.id)"
           v-permission="['menu:edit']"
-          >编辑</el-button
+          >{{ $t('button.edit') }}</el-button
         >
         <el-popconfirm
-          title="确定要删除选中的菜单吗？"
+          title="{{ $t('menu.deleteMenuPopconfirm') }}"
           :placement="POPCONFIRM_CONFIG.placement"
           :width="POPCONFIRM_CONFIG.width"
           @confirm="deleteMenuHandle(row.id)"
@@ -63,7 +63,7 @@
               :icon="menuStore.iconComponents.Delete"
               v-permission="['menu:delete']"
             >
-              删除
+              {{ $t('button.delete') }}
             </el-button>
           </template>
         </el-popconfirm>
@@ -75,6 +75,7 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import { delay } from '@/utils/utils'
 import { menuPage, deleteMenu } from '@/api/menu'
 import MenuCreate from '@/views/system/menu/create.vue'
@@ -83,36 +84,47 @@ import type { IMenuItem } from '@/types/system/menu'
 import type { IFormConfig } from '@/types/components/page'
 
 defineOptions({ name: 'UserView' })
+const { t } = useI18n()
 const menuStore = useMenuStore()
 const basePageRef = useTemplateRef('basePageRef')
 const menuCreateRef = useTemplateRef('menuCreateRef')
 
 // 搜索form配置
 const searchFormConfig = ref<IFormConfig[]>([
-  { label: '菜单标题', prop: 'title', type: 'elInput', attrs: { placeholder: '请输入' } },
-  { label: '菜单路径', prop: 'path', type: 'elInput', attrs: { placeholder: '请输入' } },
   {
-    label: '类型',
+    label: t('menu.title'),
+    prop: 'title',
+    type: 'elInput',
+    attrs: { placeholder: t('placeholder.input') },
+  },
+  {
+    label: t('menu.path'),
+    prop: 'path',
+    type: 'elInput',
+    attrs: { placeholder: t('placeholder.input') },
+  },
+  {
+    label: t('menu.type'),
     prop: 'type',
     type: 'elSelect',
     attrs: {
-      placeholder: '请选择',
+      placeholder: t('placeholder.select'),
       options: [
-        { label: '目录', value: 'directory' },
-        { label: '菜单', value: 'menu' },
-        { label: '按钮', value: 'button' },
+        { label: t('menu.directory'), value: 'directory' },
+        { label: t('menu.menu'), value: 'menu' },
+        { label: t('menu.button'), value: 'button' },
       ],
     },
   },
   {
-    label: '状态',
+    label: t('menu.status'),
     prop: 'status',
     type: 'elSelect',
     attrs: {
-      placeholder: '请选择',
+      placeholder: t('placeholder.select'),
       options: [
-        { label: '启用', value: 'active' },
-        { label: '禁用', value: 'inactive' },
+        { label: t('tag.enabled'), value: 'active' },
+        { label: t('tag.disabled'), value: 'inactive' },
       ],
     },
   },
@@ -120,14 +132,14 @@ const searchFormConfig = ref<IFormConfig[]>([
 
 // 表格列配置
 const columns = ref([
-  { label: '菜单标题', prop: 'title', minWidth: 200 },
-  { label: '菜单路径', prop: 'path', minWidth: 250 },
-  { label: '类型', prop: 'type', minWidth: 100 },
-  { label: '图标', prop: 'icon', minWidth: 100 },
-  { label: '排序', prop: 'order', minWidth: 100 },
-  { label: '状态', prop: 'status', minWidth: 100 },
-  { label: '创建时间', prop: 'createTime', minWidth: 180 },
-  { label: '操作', prop: 'operation', width: 150, fixed: 'right' },
+  { label: t('menu.title'), prop: 'title', minWidth: 200 },
+  { label: t('menu.path'), prop: 'path', minWidth: 250 },
+  { label: t('menu.type'), prop: 'type', minWidth: 100 },
+  { label: t('menu.icon'), prop: 'icon', minWidth: 100 },
+  { label: t('menu.sort'), prop: 'order', minWidth: 100 },
+  { label: t('menu.status'), prop: 'status', minWidth: 100 },
+  { label: t('user.createdAt'), prop: 'createTime', minWidth: 180 },
+  { label: t('user.actions'), prop: 'operation', width: 150, fixed: 'right' },
 ])
 
 // 菜单列表
@@ -151,7 +163,7 @@ const getMenuList = async (queryForm: Record<string, unknown>) => {
 const deleteMenuHandle = async (id: string) => {
   const { data: res } = await deleteMenu(id)
   if (res.code !== 200) return
-  ElMessage.success('删除成功')
+  ElMessage.success(t('message.deleteSuccess'))
   refreshHandle()
 }
 

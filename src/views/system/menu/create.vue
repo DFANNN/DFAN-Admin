@@ -1,7 +1,7 @@
 <template>
   <BaseDialog
     v-model="open"
-    :title="submitForm.id ? '编辑菜单' : '新增菜单'"
+    :title="submitForm.id ? $t('menu.editMenu') : $t('menu.addMenu')"
     width="600"
     @close="close"
   >
@@ -12,35 +12,42 @@
       label-width="100px"
       label-position="right"
     >
-      <el-form-item label="菜单类型" prop="type">
+      <el-form-item :label="$t('menu.type')" prop="type">
         <el-radio-group v-model="submitForm.type" @change="submitFormRef?.clearValidate()">
-          <el-radio label="directory">目录</el-radio>
-          <el-radio label="menu">菜单</el-radio>
-          <el-radio label="button">按钮</el-radio>
+          <el-radio label="directory">{{ $t('menu.directory') }}</el-radio>
+          <el-radio label="menu">{{ $t('menu.menu') }}</el-radio>
+          <el-radio label="button">{{ $t('menu.button') }}</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="父级菜单" prop="parentId">
+      <el-form-item :label="$t('menu.parentMenu')" prop="parentId">
         <el-tree-select
           v-model="submitForm.parentId"
           :data="menuList"
           :props="{ label: 'title', value: 'id', children: 'children' }"
-          placeholder="请选择父菜单（不选则为顶级菜单）"
+          :placeholder="$t('menu.parentMenuPlaceholder')"
           clearable
           check-strictly
         />
       </el-form-item>
       <el-form-item :label="titleLabel" prop="title">
-        <el-input v-model="submitForm.title" :placeholder="`请输入${titleLabel}`" />
+        <el-input
+          v-model="submitForm.title"
+          :placeholder="`${$t('placeholder.input')}${titleLabel}`"
+        />
       </el-form-item>
-      <el-form-item label="菜单路径" prop="path" v-if="submitForm.type === 'menu'">
-        <el-input v-model="submitForm.path" placeholder="请输入菜单路径" />
+      <el-form-item :label="$t('menu.path')" prop="path" v-if="submitForm.type === 'menu'">
+        <el-input v-model="submitForm.path" :placeholder="$t('menu.pathPlaceholder')" />
       </el-form-item>
-      <el-form-item v-if="submitForm.type === 'button'" label="权限标识" prop="permission">
-        <el-input v-model="submitForm.permission" placeholder="请输入权限标识" />
+      <el-form-item
+        v-if="submitForm.type === 'button'"
+        :label="$t('menu.permission')"
+        prop="permission"
+      >
+        <el-input v-model="submitForm.permission" :placeholder="$t('menu.permissionPlaceholder')" />
       </el-form-item>
-      <el-form-item label="图标" prop="icon" v-if="submitForm.type !== 'button'">
+      <el-form-item :label="$t('menu.icon')" prop="icon" v-if="submitForm.type !== 'button'">
         <div class="icon-selector-wrapper">
-          <el-input v-model="submitForm.icon" placeholder="请选择图标或输入图标名称" clearable>
+          <el-input v-model="submitForm.icon" :placeholder="$t('menu.iconPlaceholder')" clearable>
             <template #prefix>
               <el-icon v-if="submitForm.icon && menuStore.iconComponents[submitForm.icon]">
                 <component :is="menuStore.iconComponents[submitForm.icon]" />
@@ -55,20 +62,22 @@
           </el-button>
         </div>
       </el-form-item>
-      <el-form-item label="排序" prop="order">
+      <el-form-item :label="$t('menu.sort')" prop="order">
         <el-input-number v-model="submitForm.order" :min="0" :max="999" style="width: 100%" />
       </el-form-item>
-      <el-form-item label="状态" prop="status">
+      <el-form-item :label="$t('menu.status')" prop="status">
         <el-radio-group v-model="submitForm.status">
-          <el-radio label="active">启用</el-radio>
-          <el-radio label="inactive">禁用</el-radio>
+          <el-radio label="active">{{ $t('tag.enabled') }}</el-radio>
+          <el-radio label="inactive">{{ $t('tag.disabled') }}</el-radio>
         </el-radio-group>
       </el-form-item>
     </el-form>
 
     <template #footer>
-      <el-button @click="close">取消</el-button>
-      <el-button type="primary" :loading="submitLoading" @click="confirm">确定</el-button>
+      <el-button @click="close">{{ $t('button.cancel') }}</el-button>
+      <el-button type="primary" :loading="submitLoading" @click="confirm">{{
+        $t('button.confirm')
+      }}</el-button>
     </template>
   </BaseDialog>
 
@@ -76,6 +85,7 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import { menuPage, createMenu, updateMenu, menuInfo } from '@/api/menu'
 import IconSelectorDialog from '@/components/dialog/IconSelectorDialog.vue'
 import type { FormInstance, FormRules } from 'element-plus'
@@ -83,6 +93,7 @@ import type { IMenuItem, IMenuType } from '@/types/system/menu'
 
 defineOptions({ name: 'MenuCreate' })
 
+const { t } = useI18n()
 const menuStore = useMenuStore()
 const emits = defineEmits(['refresh'])
 const submitFormRef = useTemplateRef<FormInstance>('submitFormRef')
@@ -95,10 +106,10 @@ const submitLoading = ref(false)
 const menuList = ref<IMenuItem[]>([])
 
 const titleLabel = computed(() => {
-  if (submitForm.value.type === 'directory') return '目录标题'
-  if (submitForm.value.type === 'menu') return '菜单标题'
-  if (submitForm.value.type === 'button') return '按钮标题'
-  return '菜单标题'
+  if (submitForm.value.type === 'directory') return t('menu.directoryTitle')
+  if (submitForm.value.type === 'menu') return t('menu.menuTitle')
+  if (submitForm.value.type === 'button') return t('menu.buttonTitle')
+  return t('menu.menuTitle')
 })
 
 const submitForm = ref({
@@ -141,7 +152,7 @@ const confirm = async () => {
       : await createMenu(submitForm.value)
 
     if (res.code !== 200) return
-    ElMessage.success(submitForm.value.id ? '编辑成功' : '新增成功')
+    ElMessage.success(submitForm.value.id ? t('message.editSuccess') : t('message.addSuccess'))
     emits('refresh')
     close()
   } finally {
@@ -184,17 +195,17 @@ const titleValidator = (
   callback: (error?: string | Error | undefined) => void,
 ) => {
   if (value === '') {
-    callback(new Error(`请输入${titleLabel.value}`))
+    callback(new Error(`${t('placeholder.input')}${titleLabel.value}`))
   } else {
     callback()
   }
 }
 
 const rules: FormRules = {
-  type: [{ required: true, message: '请选择菜单类型', trigger: 'blur' }],
+  type: [{ required: true, message: t('menu.typePlaceholder'), trigger: 'blur' }],
   title: [{ required: true, validator: titleValidator, trigger: 'blur' }],
-  path: [{ required: true, message: '请输入菜单路径', trigger: 'blur' }],
-  status: [{ required: true, message: '请选择状态', trigger: 'blur' }],
+  path: [{ required: true, message: t('menu.pathPlaceholder'), trigger: 'blur' }],
+  status: [{ required: true, message: t('menu.statusPlaceholder'), trigger: 'blur' }],
 }
 
 defineExpose({
