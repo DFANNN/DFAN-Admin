@@ -116,7 +116,7 @@ const loginFormRef = useTemplateRef<FormInstance>('loginFormRef')
 const loading = ref(false)
 
 // 记住我的 localStorage key
-const REMEMBER_USERNAME_KEY = 'remember_username'
+const REMEMBER_LOGIN_KEY = 'remember_login_info'
 
 const loginForm = ref({
   username: '',
@@ -143,7 +143,20 @@ const roleOptions: Array<{
   { label: t('login.guest'), value: 'noperm', preset: { username: 'user3', password: 'user3' } },
 ]
 
-// 切换角色
+/**
+ * 检查是否为内置用户
+ * @param username 用户名
+ * @returns 如果是内置用户返回对应的角色，否则返回 null
+ */
+const getBuiltInRole = (username: string): RolePreset | null => {
+  const role = roleOptions.find((item) => item.preset.username === username)
+  return role ? role.value : null
+}
+
+/**
+ * 切换角色预设
+ * 自动填充对应角色的用户名和密码
+ */
 const applyPreset = (value: RolePreset) => {
   const target = roleOptions.find((item) => item.value === value)
   if (!target) return
@@ -151,24 +164,41 @@ const applyPreset = (value: RolePreset) => {
   loginForm.value.password = target.preset.password
 }
 
-// 从 localStorage 读取记住的用户名
-const loadRememberedUsername = () => {
-  const rememberedUsername = localStorage.getItem(REMEMBER_USERNAME_KEY)
-  if (rememberedUsername) {
-    loginForm.value.username = rememberedUsername
+/**
+ * 从 localStorage 读取记住的登录信息
+ * 包括角色选择和用户名
+ */
+const loadRememberedLoginInfo = () => {
+  const rememberedInfo = localStorage.getItem(REMEMBER_LOGIN_KEY)
+  if (!rememberedInfo) return
+
+  try {
+    const { role, username } = JSON.parse(rememberedInfo)
+    
+    // 如果记住的是内置用户，恢复角色选择和完整信息
+    if (role && getBuiltInRole(username) === role) {
+      rolePreset.value = role
+      applyPreset(role)
+    } else {
+      // 如果是自定义账号，只恢复用户名
+      loginForm.value.username = username
+    }
+    
     loginForm.value.remember = true
+  } catch (error) {
+    console.error('解析记住的登录信息失败:', error)
+    localStorage.removeItem(REMEMBER_LOGIN_KEY)
   }
 }
 
-// 保存或清除记住的用户名
+/**
+ * 保存或清除记住的登录信息
+ * @param value 是否记住
+ */
 const handleRememberChange = (value: boolean | string | number) => {
   const remember = Boolean(value)
-  if (remember) {
-    if (loginForm.value.username) {
-      localStorage.setItem(REMEMBER_USERNAME_KEY, loginForm.value.username)
-    }
-  } else {
-    localStorage.removeItem(REMEMBER_USERNAME_KEY)
+  if (!remember) {
+    localStorage.removeItem(REMEMBER_LOGIN_KEY)
   }
 }
 
@@ -192,7 +222,10 @@ const handleAddLoginLog = async () => {
   await addLoginLog(logData)
 }
 
-// 登录
+/**
+ * 处理登录
+ * 登录成功后保存记住的登录信息
+ */
 const handleLogin = async () => {
   await loginFormRef.value?.validate()
   loading.value = true
@@ -200,11 +233,19 @@ const handleLogin = async () => {
     const { data: res } = await login(loginForm.value)
     if (res.code !== 200) return
     storage.set(STORAGE_KEYS.TOKEN, res.data.token)
+    
+    // 如果勾选了记住我，保存登录信息
     if (loginForm.value.remember) {
-      localStorage.setItem(REMEMBER_USERNAME_KEY, loginForm.value.username)
+      const builtInRole = getBuiltInRole(loginForm.value.username)
+      const loginInfo = {
+        role: builtInRole || rolePreset.value, // 内置用户保存角色，自定义账号保存当前选择的角色
+        username: loginForm.value.username,
+      }
+      localStorage.setItem(REMEMBER_LOGIN_KEY, JSON.stringify(loginInfo))
     } else {
-      localStorage.removeItem(REMEMBER_USERNAME_KEY)
+      localStorage.removeItem(REMEMBER_LOGIN_KEY)
     }
+    
     ElMessage.success(t('login.loginSuccess'))
     router.push('/')
     // 添加登录日志
@@ -220,8 +261,11 @@ const loginRules = reactive<FormRules>({
 })
 
 onMounted(() => {
-  loadRememberedUsername()
-  applyPreset(rolePreset.value)
+  loadRememberedLoginInfo()
+  // 如果没有记住的信息，应用默认角色
+  if (!loginForm.value.remember) {
+    applyPreset(rolePreset.value)
+  }
 })
 </script>
 
