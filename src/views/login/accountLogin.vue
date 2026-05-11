@@ -99,6 +99,7 @@ import platform from 'platform'
 import { login, addLoginLog } from '@/api/login'
 import { dayjs, ElMessage } from 'element-plus'
 import { useI18n } from 'vue-i18n'
+import { STORAGE_KEYS, storage } from '@/utils/storage'
 import type { FormInstance, FormRules } from 'element-plus'
 import type { ILoginMode } from '@/types/login'
 
@@ -198,7 +199,7 @@ const handleLogin = async () => {
   try {
     const { data: res } = await login(loginForm.value)
     if (res.code !== 200) return
-    localStorage.setItem('token', res.data.token)
+    storage.set(STORAGE_KEYS.TOKEN, res.data.token)
     if (loginForm.value.remember) {
       localStorage.setItem(REMEMBER_USERNAME_KEY, loginForm.value.username)
     } else {

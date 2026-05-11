@@ -17,6 +17,7 @@ import type {
   IUpdatePasswordParams,
 } from '@/types/system/user'
 import dayjs from 'dayjs'
+import { storage, STORAGE_KEYS } from '@/utils/storage'
 
 export const useUserStore = defineStore('user', () => {
   // 默认头像占位
@@ -117,7 +118,7 @@ export const useUserStore = defineStore('user', () => {
 
   // 退出登录
   const logout = () => {
-    localStorage.removeItem('token')
+    storage.remove(STORAGE_KEYS.TOKEN)
     const menuStore = useMenuStore()
     const tabsStore = useTabsStore()
     menuStore.clearUserPermissions()

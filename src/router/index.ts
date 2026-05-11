@@ -3,6 +3,7 @@ import { staticRoutes } from '@/router/route'
 import { menuToRoute } from '@/utils/menuToRoute'
 import { useTabsStore } from '@/stores/tabs'
 import NProgress from 'nprogress'
+import { storage, STORAGE_KEYS } from '@/utils/storage'
 
 // 配置 NProgress
 NProgress.configure({
@@ -23,7 +24,7 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
   NProgress.start()
-  const token = localStorage.getItem('token')
+  const token = storage.get<string>(STORAGE_KEYS.TOKEN)
 
   // 未登录：跳转到登录页面
   if (!token) {
