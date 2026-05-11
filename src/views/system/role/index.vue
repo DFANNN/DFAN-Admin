@@ -29,14 +29,14 @@
       </template>
       <template #isBuiltIn="{ row }">
         <BaseTag
-          :type="row.isBuiltIn ? 'warning' : 'success'"
-          :text="row.isBuiltIn ? $t('tag.builtIn') : $t('tag.custom')"
+          :type="getColorByValue(TYPE_OPTIONS, row.isBuiltIn)"
+          :text="getLabelByValue(TYPE_OPTIONS, row.isBuiltIn)"
         />
       </template>
       <template #status="{ row }">
         <BaseTag
-          :type="row.status === 'active' ? 'success' : 'danger'"
-          :text="row.status === 'active' ? $t('tag.enabled') : $t('tag.disabled')"
+          :type="getColorByValue(STATUS_OPTIONS, row.status)"
+          :text="getLabelByValue(STATUS_OPTIONS, row.status)"
         />
       </template>
       <template #operation="{ row }">
@@ -80,6 +80,7 @@ import { delay } from '@/utils/utils'
 import { rolePage, deleteRole } from '@/api/role'
 import { POPCONFIRM_CONFIG } from '@/config/elementConfig'
 import { useButtonPermission } from '@/composables/useButtonPermission'
+import { STATUS_OPTIONS, TYPE_OPTIONS, getLabelByValue, getColorByValue } from '@/constants/dict'
 import RoleCreate from '@/views/system/role/create.vue'
 import type { IRoleItem } from '@/types/system/role'
 import type { IFormConfig } from '@/types/components/page'
@@ -110,10 +111,7 @@ const searchFromConfig = ref<IFormConfig[]>([
     type: 'elSelect',
     attrs: {
       placeholder: t('role.statusPlaceholder'),
-      options: [
-        { label: t('tag.enabled'), value: 'active' },
-        { label: t('tag.disabled'), value: 'inactive' },
-      ],
+      options: STATUS_OPTIONS,
     },
   },
 ])

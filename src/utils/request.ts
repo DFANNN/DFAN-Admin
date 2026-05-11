@@ -2,6 +2,7 @@ import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse 
 import { ElMessage } from 'element-plus'
 import router from '@/router'
 import { useLangStore } from '@/stores/lang'
+import { STORAGE_KEYS, storage } from '@/utils/storage'
 
 // 创建 axios 实例
 const service: AxiosInstance = axios.create({
@@ -15,7 +16,7 @@ const service: AxiosInstance = axios.create({
 // 请求拦截器
 service.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token') || ''
+    const token = storage.get<string>(STORAGE_KEYS.TOKEN)
     const langStore = useLangStore()
 
     if (token) {

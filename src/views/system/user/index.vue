@@ -32,13 +32,15 @@
         <span v-else>-</span>
       </template>
       <template #isBuiltIn="{ row }">
-        <BaseTag v-if="row.isBuiltIn" type="warning" :text="$t('tag.builtIn')" />
-        <BaseTag v-else type="success" :text="$t('tag.custom')" />
+        <BaseTag
+          :type="getColorByValue(TYPE_OPTIONS, row.isBuiltIn)"
+          :text="getLabelByValue(TYPE_OPTIONS, row.isBuiltIn)"
+        />
       </template>
       <template #status="{ row }">
         <BaseTag
-          :type="row.status === 'active' ? 'success' : 'danger'"
-          :text="row.status === 'active' ? $t('tag.enabled') : $t('tag.disabled')"
+          :type="getColorByValue(STATUS_OPTIONS, row.status)"
+          :text="getLabelByValue(STATUS_OPTIONS, row.status)"
         />
       </template>
       <template #operation="{ row }">
@@ -77,6 +79,7 @@ import { userPage, deleteUser } from '@/api/user'
 import UserCreate from '@/views/system/user/create.vue'
 import { useButtonPermission } from '@/composables/useButtonPermission'
 import { POPCONFIRM_CONFIG } from '@/config/elementConfig'
+import { STATUS_OPTIONS, TYPE_OPTIONS, getLabelByValue, getColorByValue } from '@/constants/dict'
 import type { IRoleItem } from '@/types/system/role'
 import type { IUserItem } from '@/types/system/user'
 import type { IFormConfig } from '@/types/components/page'
@@ -109,10 +112,7 @@ const searchFormConfig = ref<IFormConfig[]>([
     type: 'elSelect',
     attrs: {
       placeholder: t('placeholder.select'),
-      options: [
-        { label: t('tag.enabled'), value: 'active' },
-        { label: t('tag.disabled'), value: 'inactive' },
-      ],
+      options: STATUS_OPTIONS,
     },
   },
 ])

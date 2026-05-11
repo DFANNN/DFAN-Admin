@@ -37,8 +37,8 @@
       </template>
       <template #status="{ row }">
         <BaseTag
-          :type="row.status === 'active' ? 'success' : 'danger'"
-          :text="row.status === 'active' ? $t('tag.enabled') : $t('tag.disabled')"
+          :type="getColorByValue(STATUS_OPTIONS, row.status)"
+          :text="getLabelByValue(STATUS_OPTIONS, row.status)"
         />
       </template>
       <template #operation="{ row }">
@@ -80,6 +80,7 @@ import { delay } from '@/utils/utils'
 import { menuPage, deleteMenu } from '@/api/menu'
 import MenuCreate from '@/views/system/menu/create.vue'
 import { POPCONFIRM_CONFIG } from '@/config/elementConfig'
+import { STATUS_OPTIONS, getLabelByValue, getColorByValue } from '@/constants/dict'
 import type { IMenuItem } from '@/types/system/menu'
 import type { IFormConfig } from '@/types/components/page'
 

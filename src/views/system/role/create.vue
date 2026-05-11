@@ -34,8 +34,9 @@
         </el-form-item>
         <el-form-item :label="$t('role.status')" prop="status">
           <el-radio-group v-model="submitForm.status">
-            <el-radio label="active">{{ $t('tag.enabled') }}</el-radio>
-            <el-radio label="inactive">{{ $t('tag.disabled') }}</el-radio>
+            <el-radio v-for="item in STATUS_OPTIONS" :key="item.value" :label="item.value">
+              {{ item.label }}
+            </el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item :label="$t('role.menuPermissions')" prop="menuIds">
@@ -66,6 +67,7 @@
 import { useI18n } from 'vue-i18n'
 import { createRole, roleInfo, updateRole } from '@/api/role'
 import { menuPage } from '@/api/menu'
+import { STATUS_OPTIONS } from '@/constants/dict'
 import { type FormInstance, type FormRules, type ElTree } from 'element-plus'
 import type { IMenuItem } from '@/types/system/menu'
 

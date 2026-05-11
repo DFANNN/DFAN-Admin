@@ -4,7 +4,7 @@
 export const STORAGE_KEYS = {
   THEME_CONFIG: 'themeConfig', // 主题配置
   LANG: 'lang', // 当前语言
-  TOKEN: 'token', // 用户登录 token
+  TOKEN: 'Authorization', // 用户登录 token
 }
 
 // 定义 StorageKey 类型，限制只能使用 STORAGE_KEYS 中声明过的 key。
